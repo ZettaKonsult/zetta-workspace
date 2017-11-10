@@ -1,0 +1,7 @@
+.{
+  "private": true,
+  "name": "zetta-workspace",
+  "workspaces": [
+    "packages/*"
+  ]
+}
