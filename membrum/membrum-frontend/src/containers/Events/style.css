@@ -1,0 +1,14 @@
+.Flagged {
+  background-color: var(--danger-light);
+  border: 1px solid lightgrey;
+  padding: 1em;
+  text-align: center;
+}
+
+.Flagged:hover {
+  background-color: var(--danger);
+}
+
+.Flagged span {
+  margin: 0.5em;
+}

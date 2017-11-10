@@ -1,0 +1,45 @@
+:root {
+  --primary: #337ab7;
+
+  --danger: #f44336;
+  --danger-light: #ffdddd;
+
+  --success: #4caf50;
+  --success-light: rgb(200, 255, 200);
+
+  --info: #2196f3;
+  --info-light: #e7f3fe;
+
+  --warning: #ff9800;
+  --warning-light: #ffffcc;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+}
+
+#root {
+  height: 100%;
+}
+
+.ButtonGroup > button {
+  margin: 0.5em;
+}
+
+.InputGroup {
+  display: flex;
+  flex-flow: column nowrap;
+  margin: 1em 2em;
+  justify-content: center;
+}
+
+.InputGroup > div {
+  margin: 0.5em;
+}

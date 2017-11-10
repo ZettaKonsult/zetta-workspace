@@ -1,0 +1,17 @@
+Reservatio
+
+ADMIN:
+Access key ID: AKIAI76EJH7VQ3MAG6PA
+Secret access key: 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
+
+User pool: booking-user-pool
+Pool Id us-east-2_k7G6V35dQ
+Pool ARN arn:aws:cognito-idp:us-east-2:460056602695:userpool/us-east-2_k7G6V35dQ
+
+App client id: 1qk6gbl5ue4qhh2730jr9mat0q
+
+Identity pool ID
+us-east-2:889d9bab-943a-4207-9638-a4b8f2b7f799
+
+
+http://hotel-booking-app.s3-website-us-west-1.amazonaws.com/

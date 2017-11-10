@@ -1,0 +1,10 @@
+{
+  "body": "{\"roomId\":\"1\",\"beds\":\"1\",\"maxOccupancy\":\"1\",\"costPerNight\":\"100\"}",
+  "requestContext": {
+    "authorizer": {
+      "claims": {
+        "sub": "USER-SUB-1234"
+      }
+    }
+  }
+}

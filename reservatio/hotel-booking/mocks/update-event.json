@@ -1,0 +1,13 @@
+{
+  "body": "{\"beds\":\"2\",\"maxOccupancy\":\"2\",\"costPerNight\":\"3100\"}",
+  "pathParameters": {
+    "id": "1"
+  },
+  "requestContext": {
+    "authorizer": {
+      "claims": {
+        "sub": "USER-SUB-1234"
+      }
+    }
+  }
+}

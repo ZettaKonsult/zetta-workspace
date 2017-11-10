@@ -1,0 +1,16 @@
+language: node_js
+
+node_js:
+  - 8
+
+script:
+  - npm install -g serverless
+  - yarn travis-deploy
+
+cache:
+  yarn: true
+  directories:
+    - node_modules
+
+env:
+  - NODE_PATH=src

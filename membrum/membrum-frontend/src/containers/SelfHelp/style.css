@@ -1,0 +1,48 @@
+.selfHelp {
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  align-content: center;
+}
+
+.QuestionTree {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.QuestionTreeForm {
+  background: var(--primary);
+  border: 1px solid black;
+  border-radius: 10px;
+  display: flex;
+  flex-flow: column nowrap;
+  max-width: 800px;
+  color: white;
+}
+
+.Question {
+  flex: 1 0 auto;
+  font-size: 1.5em;
+  padding: 1em;
+}
+
+.Answear {
+  background-color: var(--info-light);
+  border-top: 1px solid black;
+  flex: 1 0 auto;
+  padding: 1em 10em;
+
+  color: black;
+}
+
+.Answear.Selected {
+  background-color: var(--success-light);
+}
+.Answear:last-child {
+  border-bottom: 1px solid black;
+}
+
+.Answear:hover {
+  background-color: var(--success-light);
+}

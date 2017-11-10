@@ -1,0 +1,34 @@
+.PlansContainer {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.PlansShow {
+  display: flex;
+  flex-flow: column nowrap;
+}
+
+.PlanObject {
+  flex: 1 0 auto;
+  margin: 10px;
+}
+
+.PlanName{
+  border: 1px solid black;
+  padding: 10px;
+}
+
+.PlanName:hover {
+  background-color: var(--info);
+}
+
+.deleteCross {
+  font-size: 2em;
+  margin: 0 0 0 0.1em;
+  color: black;
+}
+
+.deleteCross:hover {
+  color: rgba(0, 0, 0, 0.5);
+}

@@ -1,0 +1,84 @@
+.AdminDashboardLayout {
+  margin: 10px;
+  display: grid;
+  grid-gap: 10px;
+  grid-template-columns: repeat(1, 1fr);
+}
+
+.DashboardTitle {
+  margin-left: 1em;
+  text-align: left;
+}
+
+.AdminActionsMenu {
+  border: 1px solid rgb(221, 221, 221);
+  border-radius: 5px;
+  display: flex;
+  flex: 0 1 auto;
+  flex-flow: column nowrap;
+  margin: 1em;
+  text-align: left;
+}
+
+.AdminActionsHeader {
+  background-color: rgb(221, 221, 221);
+  padding: 0.5em;
+}
+.AdminActionIcon {
+  padding: 0.2em;
+}
+
+.AdminAction {
+  border: 1px solid rgb(221, 221, 221);
+  color: #555;
+  margin: 0 0.5em;
+  padding: 0.5em;
+  text-decoration: none;
+}
+.AdminAction:hover {
+  color: black;
+}
+
+.AdminAction:nth-child(2) {
+  border-radius: 10px 10px 0 0;
+  margin-top: 0.7em;
+}
+
+.AdminAction:last-child {
+  border-radius: 0 0 10px 10px;
+  margin-bottom: 0.7em;
+}
+
+@media (min-width: 800px) {
+  .AdminDashboardLayout {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1000px) {
+  .AdminDashboardLayout {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  .AdminStatistic {
+    grid-column: 1/4;
+  }
+}
+
+@supports:not (display: grid) {
+  .AdminCards {
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: space-around;
+  }
+  @media (min-width: 1000px) {
+    .AdminCards {
+      flex-flow: row wrap;
+    }
+    .AdminRow {
+      flex-flow: row nowrap;
+    }
+    .AdminStatistic {
+      order: 0;
+    }
+  }
+}
