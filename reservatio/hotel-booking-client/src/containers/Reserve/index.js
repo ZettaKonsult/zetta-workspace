@@ -5,13 +5,14 @@ import { invokeApig } from '../../libs/awslib'
 import LoaderButton from '../../components/LoaderButton'
 import InputField from '../../components/InputField'
 import SelectField from '../../components/SelectField'
-import toggleDate, { bookingMode } from './actions'
+import toggleDate, { bookingMode, isDatesConcurrent } from './actions'
 import { editMode } from './editMode'
 
 class Reserve extends Component {
   constructor(props) {
     super(props)
     this.state = {
+      error: '',
       isLoading: null,
       room: null,
       selectedDates: [],
@@ -70,6 +71,11 @@ class Reserve extends Component {
     event.preventDefault()
     this.setState({ isLoading: true })
 
+    if (!isDatesConcurrent(this.state.selectedDates)) {
+      this.setState({error: 'Can only save concurrent dates.', isLoading: false})
+      return
+    }
+
     const mode =
       this.getEdit !== null
         ? editMode(this.state.room, this.getEdit())
@@ -109,6 +115,7 @@ class Reserve extends Component {
   render() {
     return (
       <div>
+        {this.state.error}
         {this.state.room &&
           <Calendar
             header

@@ -48,7 +48,6 @@ class Overview extends Component {
         {dates.map((dates, i) =>
           <Calendar
             key={i}
-            oneRow
             header
             weekdays
             reservedDates={dates}
