@@ -4,6 +4,7 @@ import Calendar from '../../components/Calendar/'
 import { invokeApig } from '../../libs/awslib'
 import LoaderButton from '../../components/LoaderButton'
 import InputField from '../../components/InputField'
+import { Message } from '../../components/Message'
 import SelectField from '../../components/SelectField'
 import toggleDate, { bookingMode, isDatesConcurrent } from './actions'
 import { editMode } from './editMode'
@@ -68,31 +69,42 @@ class Reserve extends Component {
   }
 
   handleSubmit = async event => {
+    const {email, name, phone, selectedDates, paid, room} = this.state
     event.preventDefault()
     this.setState({ isLoading: true })
 
-    if (!isDatesConcurrent(this.state.selectedDates)) {
+    if (selectedDates.length === 0) {
+      this.setState({error: 'No dates are selected.', isLoading: false})
+      return
+    }
+
+    if (!isDatesConcurrent(selectedDates)) {
       this.setState({error: 'Can only save concurrent dates.', isLoading: false})
+      return
+    }
+
+    if (name.length === 0 || email.length === 0 || phone.length === 0) {
+      this.setState({error: 'Please fill in all fields.', isLoading: false})
       return
     }
 
     const mode =
       this.getEdit !== null
-        ? editMode(this.state.room, this.getEdit())
-        : bookingMode(this.state.room)
+        ? editMode(room, this.getEdit())
+        : bookingMode(room)
 
     const newReservation = {
-      name: this.state.name,
-      email: this.state.email,
-      phone: this.state.phone,
-      dates: [...this.state.selectedDates],
-      paid: this.state.paid
+      name: name,
+      email: email,
+      phone: phone,
+      dates: [...selectedDates],
+      paid: paid
     }
     const reserved = [...mode.getBookings(), newReservation]
 
     try {
       await this.saveReservation({
-        ...this.state.room,
+        ...room,
         reserved
       })
       this.props.history.push('/')
@@ -103,10 +115,12 @@ class Reserve extends Component {
   }
 
   handleChange = e => {
+    this.setState({error: ''})
     this.setState({ [e.target.id]: e.target.value })
   }
 
   handleDate(e) {
+    this.setState({error: ''})
     this.setState({
       selectedDates: toggleDate(e.target.id, this.state.selectedDates)
     })
@@ -115,7 +129,11 @@ class Reserve extends Component {
   render() {
     return (
       <div>
-        {this.state.error}
+        {this.state.error &&
+          <div style={{marginBottom:'1em'}}><Message>
+            {this.state.error}
+          </Message></div>
+        }
         {this.state.room &&
           <Calendar
             header
