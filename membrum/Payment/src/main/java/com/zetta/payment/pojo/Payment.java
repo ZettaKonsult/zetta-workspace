@@ -1,4 +1,4 @@
-package com.zetta.payment.payment;
+package com.zetta.payment.pojo;
 
 import java.io.Serializable;
 
@@ -22,7 +22,7 @@ public class Payment implements Serializable {
         this.id = id;
     }
 
-    @DynamoDBHashKey(attributeName="Id")
+    @DynamoDBHashKey(attributeName=ID_INDEX)
     public String getId() {
         return id;
     }

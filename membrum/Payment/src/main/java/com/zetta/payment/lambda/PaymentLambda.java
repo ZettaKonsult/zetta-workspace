@@ -6,11 +6,11 @@ import java.util.Optional;
 import org.apache.log4j.Logger;
 
 import com.amazonaws.services.lambda.runtime.Context;
-import com.zetta.payment.dao.DynamoPaymentDAO;
+import com.zetta.payment.db.dynamo.DynamoPaymentDAO;
 import com.zetta.payment.form.Form;
 import com.zetta.payment.form.TRFForm;
-import com.zetta.payment.payment.Payment;
 import com.zetta.payment.pojo.FormData;
+import com.zetta.payment.pojo.Payment;
 
 /**
  * The public functions in this class are Lambda handlers.
@@ -38,7 +38,7 @@ public class PaymentLambda {
     public List<Payment> getAllPayments() {
 
         log.info("Scanning table for all payments.");
-        List<Payment> payments = paymentDAO.findAllPayments();
+        List<Payment> payments = paymentDAO.getAll();
         log.info("Found " + payments.size() + " payments:\n    " + payments);
         for (Payment payment : payments) {
             System.out.println("A payment: " + payment.toString());
@@ -49,7 +49,7 @@ public class PaymentLambda {
     public Optional<Payment> getPayment(String id) {
 
         log.info("Querying table for payment " + id + ".");
-        Optional<Payment> payment = paymentDAO.getPayment(id);
+        Optional<Payment> payment = paymentDAO.get(id);
         if (payment.isPresent()) {
             log.info("Payment existed.");
         } else {
@@ -66,7 +66,7 @@ public class PaymentLambda {
         }
 
         log.info("Saving or updating payment " + payment.getId() + ".");
-        paymentDAO.savePayment(payment);
+        paymentDAO.save(payment);
         log.info("Successfully saved payment.");
     }
 
@@ -78,7 +78,7 @@ public class PaymentLambda {
         }
 
         log.info("Deleting payment " + payment.getId() + ".");
-        paymentDAO.deletePayment(payment.getId());
+        paymentDAO.delete(payment.getId());
         log.info("Successfully deleted event");
     }
 

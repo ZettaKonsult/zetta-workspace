@@ -3,7 +3,7 @@
     <input type="hidden" name="amount" value="100">
     <input type="hidden" name="callbackurl" value="https://www.yourdomain.com/callback">
     <input type="hidden" name="cancelurl" value="https://www.yourdomain.com/payment_cancelled">
-    <input type="hidden" name="currency" value="DKK">
+    <input type="hidden" name="currency" value="SEK">
     <input type="hidden" name="decorator" value="responsive">
     <input type="hidden" name="ip" value="32.64.128.256">
     <input type="hidden" name="lang" value="en">
