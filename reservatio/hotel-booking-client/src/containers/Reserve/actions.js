@@ -1,7 +1,7 @@
 const toggleDate = (id, selectedDates) => {
   const i = selectedDates.indexOf(id)
   let arrayCopy = [...selectedDates]
-  
+
   if (i === -1) {
     let pos = arrayCopy.findIndex(isDateLaterThan(id))
     pos = pos === -1 ? arrayCopy.length : pos
@@ -30,24 +30,8 @@ export const isDatesConcurrent = (dates) => {
   return true
 }
 
-export const bookingMode = room => ({
-  reserved: [...room.reserved],
+export const removeDatesFromArray = (array, datesToRemove) => array.filter((date1) => datesToRemove.findIndex((date2) => isDateEqual(date1, date2)) === -1)
 
-  getReservedDates() {
-    let reservedDates = []
-    for (let i = 0; i < this.reserved.length; i++) {
-      reservedDates = [...reservedDates, ...this.reserved[i].dates]
-    }
-    return reservedDates
-  },
-
-  getBookings() {
-    return this.reserved
-  },
-
-  getReservation() {
-    return {}
-  }
-})
+export const isDateEqual = (date1, date2) => new Date(date1).getTime() === new Date(date2).getTime()
 
 export default toggleDate
