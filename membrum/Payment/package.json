@@ -1,0 +1,34 @@
+{
+  "name": "Payment",
+  "version": "1.0.0",
+  "description": "Module managing payments.",
+  "scripts": {
+    "build": "mvn install",
+    "deploy": "serverless deploy",
+    "test": "mvn clean test",
+    "update": "yarn test && yarn build && yarn deploy"
+  },
+  "pre-commit": [
+    "test"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ZettaKonsult/zetta-workspace/Membrum/Payment"
+  },
+  "keywords": [],
+  "author": "Zimon Kuhs",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ZettaKonsult/zetta-workspace/issues"
+  },
+  "homepage": "https://github.com/ZettaKonsult/zetta-workspace/tree/master/membrum#readme",
+  "devDependencies": {
+    "pre-commit": "^1.2.2",
+    "serverless-webpack": "^3.1.2"
+  },
+  "standard": {
+    "ignore": [
+      "*.spec*"
+    ]
+  }
+}

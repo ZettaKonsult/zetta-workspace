@@ -1,0 +1,30 @@
+service: payment
+
+frameworkVersion: ">=1.2.0 <2.0.0"
+
+provider:
+  name: aws
+  runtime: java8
+  stage: prod
+  region: eu-central-1
+
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:Scan
+      Resource: "arn:aws:dynamodb:eu-central-1:460056602695:table/TRFPayment-Test"
+
+package:
+  artifact: target/PaymentLambda.jar
+
+functions:
+  listAll:
+    handler: com.zetta.payment.lambda.PaymentLambda::getAllPayments
+    events:
+      - http:
+          path: list
+          method: get
+          cors: true
+          authorizer: aws_iam
