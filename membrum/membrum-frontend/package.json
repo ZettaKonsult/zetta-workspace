@@ -14,21 +14,28 @@
     "react-router-dom": "^4.2.2"
   },
   "devDependencies": {
-    "eslint-config-prettier": "^2.6.0",
-    "eslint-plugin-prettier": "^2.3.1",
-    "flow-bin": "^0.58.0",
-    "prettier": "^1.7.4",
-    "react-scripts": "1.0.15"
+    "flow-bin": "^0.59.0",
+    "husky": "^0.14.3",
+    "lint-staged": "^5.0.0",
+    "prettier": "^1.8.2",
+    "react-scripts": "1.0.17"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
+    "test": "react-scripts test --env=jsdom --watch",
     "eject": "react-scripts eject",
     "clean": "rm -rf ./build",
     "flow": "flow",
     "mock-db": "json-server -p 4000 --watch ./src/mocks/db.json",
-    "deploy": "yarn build && aws s3 sync build/ s3://membrum-client && yarn clean",
-    "postdeploy": "aws cloudfront create-invalidation --distribution-id E2O9SBWDRR4JZS --paths /*"
+    "deploy":
+      "yarn build && aws s3 sync build/ s3://membrum-client && yarn clean",
+    "postdeploy":
+      "aws cloudfront create-invalidation --distribution-id E2O9SBWDRR4JZS --paths /*",
+    "pretty": "prettier --write --no-semi \"src/**/*.js\"",
+    "precommit": "lint-staged && yarn test"
+  },
+  "lint-staged": {
+    "*.js": ["yarn run pretty", "git add"]
   }
 }

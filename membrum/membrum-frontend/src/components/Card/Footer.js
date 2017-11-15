@@ -1,5 +1,5 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React from "react"
+import { Link } from "react-router-dom"
 
 const Footer = props => (
   <Link to={props.link}>
@@ -13,6 +13,6 @@ const Footer = props => (
 )
 
 Footer.defaultProps = {
-  link: '/'
+  link: "/"
 }
 export default Footer

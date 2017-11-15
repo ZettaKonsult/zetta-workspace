@@ -1,12 +1,12 @@
-import React, { Component } from 'react'
+import React, { Component } from "react"
 
-import config from '../../config'
-import ChangeWindow from './ChangeWindow'
+import config from "../../config"
+import ChangeWindow from "./ChangeWindow"
 
-import FadedLine from '../../components/FadedLine'
-import Button from '../../components/Button'
+import FadedLine from "../../components/FadedLine"
+import Button from "../../components/Button"
 
-import './style.css'
+import "./style.css"
 
 export default class UploadMembers extends Component {
   constructor(props) {
@@ -28,7 +28,7 @@ export default class UploadMembers extends Component {
     event.preventDefault()
 
     if (this.file && this.file.size > config.MAX_ATTACHMENT_SIZE) {
-      alert('Please pick a file smaller than 5MB')
+      alert("Please pick a file smaller than 5MB")
       return
     }
 

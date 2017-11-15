@@ -1,13 +1,13 @@
-import React, { Component } from 'react'
+import React, { Component } from "react"
 
-import Card from '../../components/Card'
-import FadedLine from '../../components/FadedLine'
-import NavLink from '../../components/NavLink'
+import Card from "../../components/Card"
+import FadedLine from "../../components/FadedLine"
+import NavLink from "../../components/NavLink"
 
-import { Line } from 'react-chartjs-2'
-import mock from '../../mocks/statisticsMock'
+import { Line } from "react-chartjs-2"
+import mock from "../../mocks/statisticsMock"
 
-import './style.css'
+import "./style.css"
 
 export default class AdminDashborad extends Component {
   constructor(props) {

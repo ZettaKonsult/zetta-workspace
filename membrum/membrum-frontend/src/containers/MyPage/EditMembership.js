@@ -1,43 +1,43 @@
-import React, { Component } from 'react'
+import React, { Component } from "react"
 
-import Button from '../../components/Button'
-import FadedLine from '../../components/FadedLine'
-import Select from '../../components/Select'
+import Button from "../../components/Button"
+import FadedLine from "../../components/FadedLine"
+import Select from "../../components/Select"
 
-import './style.css'
+import "./style.css"
 
 //TODO fetch sub from dbSubscription
 export default class EditMembership extends Component {
   constructor(props) {
     super(props)
-    this.plansGroup = ['obligatory', 'nations', 'unions']
+    this.plansGroup = ["obligatory", "nations", "unions"]
     this.plans = {}
     this.state = {
-      obligatory: ['trfPlan'],
-      nations: ['undefinedPlan'],
-      unions: ['unionPlan']
+      obligatory: ["trfPlan"],
+      nations: ["undefinedPlan"],
+      unions: ["unionPlan"]
     }
   }
 
   async componentWillMount() {
-    this.plans['obligatory'] = this.props.Database.getItemsByAttribute(
-      'group',
-      'obligatory'
+    this.plans["obligatory"] = this.props.Database.getItemsByAttribute(
+      "group",
+      "obligatory"
     )
-    this.plans['nations'] = this.props.Database.getItemsByAttribute(
-      'group',
-      'nations'
+    this.plans["nations"] = this.props.Database.getItemsByAttribute(
+      "group",
+      "nations"
     )
-    this.plans['unions'] = this.props.Database.getItemsByAttribute(
-      'group',
-      'unions'
+    this.plans["unions"] = this.props.Database.getItemsByAttribute(
+      "group",
+      "unions"
     )
   }
 
   wrapState = () => [
-    { group: 'obligatory', organisations: this.state.obligatory },
-    { group: 'nations', organisations: this.state.nations },
-    { group: 'unions', organisations: this.state.unions }
+    { group: "obligatory", organisations: this.state.obligatory },
+    { group: "nations", organisations: this.state.nations },
+    { group: "unions", organisations: this.state.unions }
   ]
 
   onChange = (e, groupName, index) =>
@@ -50,7 +50,7 @@ export default class EditMembership extends Component {
     })
 
   addToGroup = group =>
-    this.setState({ [group]: [...this.state[group], 'Undefined Nation'] })
+    this.setState({ [group]: [...this.state[group], "Undefined Nation"] })
 
   removeFromGroup = (group, index) =>
     this.setState({

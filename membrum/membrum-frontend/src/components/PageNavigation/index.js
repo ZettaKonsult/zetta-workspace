@@ -1,8 +1,8 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import './style.css'
+import React from "react"
+import PropTypes from "prop-types"
+import "./style.css"
 
-import NavLink from '../NavLink'
+import NavLink from "../NavLink"
 
 const Navigation = ({ activeState, pages, root, onClick }) => (
   <div className="PageNavigation">
@@ -11,7 +11,7 @@ const Navigation = ({ activeState, pages, root, onClick }) => (
         to={`${root}/${item}`}
         id={item}
         key={item + i}
-        className={activeState === item ? 'selectedPage' : ''}
+        className={activeState === item ? "selectedPage" : ""}
         label={item}
         onClick={() => onClick(item)}
       />

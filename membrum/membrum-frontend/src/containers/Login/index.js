@@ -1,24 +1,24 @@
-import React, { Component } from 'react'
+import React, { Component } from "react"
 
-import LoginForm from './LoginForm'
-import ResetPassword from './ResetPassword'
+import LoginForm from "./LoginForm"
+import ResetPassword from "./ResetPassword"
 
-import Loader from '../../components/Loader'
+import Loader from "../../components/Loader"
 
-import login from '../../libs/awsLogin'
+import login from "../../libs/awsLogin"
 
-import config from '../../config'
+import config from "../../config"
 
-import './style.css'
+import "./style.css"
 
 export default class Login extends Component {
   constructor(props) {
     super(props)
-    this.redirectPage = '/admindashboard'
+    this.redirectPage = "/admindashboard"
     this.state = {
       error: null,
-      ssn: '',
-      password: '',
+      ssn: "",
+      password: "",
       resetPassword: false,
       loading: false
     }
@@ -40,7 +40,7 @@ export default class Login extends Component {
     event.preventDefault()
     const { ssn, password } = this.state
     if (!this.validateForm(ssn, password)) {
-      this.setState({ error: 'fill in the form' })
+      this.setState({ error: "fill in the form" })
       return
     }
     try {

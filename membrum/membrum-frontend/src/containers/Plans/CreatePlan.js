@@ -1,10 +1,10 @@
-import React from 'react'
+import React from "react"
 
-import Input from '../../components/Input'
-import Button from '../../components/Button'
-import Select from '../../components/Select'
+import Input from "../../components/Input"
+import Button from "../../components/Button"
+import Select from "../../components/Select"
 
-const interval_values = ['day', 'week', 'month', 'year']
+const interval_values = ["day", "week", "month", "year"]
 
 const CreatePlan = ({ onChange, onSubmit, plan }) => (
   <form className="InputGroup">

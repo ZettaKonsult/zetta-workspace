@@ -1,9 +1,9 @@
-import React from 'react'
+import React from "react"
 
-import Button from '../../components/Button'
+import Button from "../../components/Button"
 
 export default ({ plans, readPlan, deletePlan, createPlan }) => {
-  const groups = filterUniqueAttributes(plans, 'group')
+  const groups = filterUniqueAttributes(plans, "group")
 
   let result = groups.map(group => {
     let filtered = plans.filter(item => item.group === group)
@@ -43,7 +43,9 @@ const PlanGroup = props => (
 
 const PlanRow = ({ plan, showPlan, deletePlan }) => (
   <span className="PlanObject">
-    <span className="PlanName"  id={plan.id} onClick={showPlan}>{plan.name}</span>
+    <span className="PlanName" id={plan.id} onClick={showPlan}>
+      {plan.name}
+    </span>
     <DeleteCross id={plan.id} onClick={deletePlan} />
   </span>
 )

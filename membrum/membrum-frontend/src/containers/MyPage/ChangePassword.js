@@ -1,19 +1,19 @@
-import React, { Component } from 'react'
+import React, { Component } from "react"
 
-import { changePassword } from '../../libs/awsPassword'
+import { changePassword } from "../../libs/awsPassword"
 
-import { validateChangePassword } from '../../libs/Validation'
+import { validateChangePassword } from "../../libs/Validation"
 
-import './changePassword.css'
+import "./changePassword.css"
 
 export default class ChangePassword extends Component {
   constructor(props) {
     super(props)
 
     this.state = {
-      oldPassword: '',
-      newPassword: '',
-      newPasswordConfirm: '',
+      oldPassword: "",
+      newPassword: "",
+      newPasswordConfirm: "",
       isSuccess: null
     }
   }

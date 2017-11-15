@@ -1,6 +1,6 @@
-import React from 'react'
+import React from "react"
 
-import Button from '../../components/Button'
+import Button from "../../components/Button"
 
 export default ({ getRecipt, getMembershipVerification }) => (
   <div className="paymentStatus approvedPayment">

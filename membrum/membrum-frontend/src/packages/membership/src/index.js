@@ -1,4 +1,4 @@
-import Plan from './Plan'
-import Subscription from './Subscription'
+import Plan from "./Plan"
+import Subscription from "./Subscription"
 
-export {Plan, Subscription}
+export { Plan, Subscription }

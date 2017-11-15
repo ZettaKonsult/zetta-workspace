@@ -1,11 +1,24 @@
+/* @flow */
+import uuid from "uuid"
+
+type validInterval = "month" | "year"
+
 export default class Plan {
+  id: string
+  name: string
+  amount: string
+  interval: validInterval
+  intervalCount: number
+  labels: string[]
+  group: string[]
+
   constructor(
     {
-      id,
-      name = '',
+      id = uuid.v1(),
+      name = "",
       amount = 0,
-      interval = 'day',
-      intervalCount = '6',
+      interval = "month",
+      intervalCount = 6,
       labels = [],
       group = []
     } = {}
@@ -20,13 +33,13 @@ export default class Plan {
   }
 
   verifyMonthInterval = () =>
-    this.interval === 'month' &&
-    this.intervalCount < '7' &&
-    this.intervalCount !== '5' &&
+    this.interval === "month" &&
+    this.isEvenDivisableOnYear(this.intervalCount) &&
     this.isPositiveInterval()
 
   isPositiveInterval = () => this.intervalCount > 0
+  isEvenDivisableOnYear = (number: number) => 12 % number === 0
 
-  comparePlanInterval = plan =>
+  comparePlanInterval = (plan: Plan): boolean =>
     this.interval === plan.interval && this.intervalCount === plan.intervalCount
 }

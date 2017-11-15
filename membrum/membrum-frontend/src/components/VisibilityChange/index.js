@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react"
 
 export default function VisibilityChange(Component) {
   return class VisibilityChange extends React.Component {
@@ -10,15 +10,15 @@ export default function VisibilityChange(Component) {
       }
     }
     componentDidMount() {
-      document.addEventListener('visibilitychange', this.isPageVisible)
+      document.addEventListener("visibilitychange", this.isPageVisible)
     }
 
     componentWillUnmount() {
-      document.removeEventListener('visibilitychange', this.isPageVisible)
+      document.removeEventListener("visibilitychange", this.isPageVisible)
     }
 
     isPageVisible = () => {
-      if (document.visibilityState === 'visible') {
+      if (document.visibilityState === "visible") {
         this.setState(visible)
       } else {
         this.setState(invisible)

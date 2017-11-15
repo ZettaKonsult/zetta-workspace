@@ -1,8 +1,8 @@
-import React, { Component } from 'react'
+import React, { Component } from "react"
 
-import EditMembership from './EditMembership'
+import EditMembership from "./EditMembership"
 
-import Button from '../../components/Button'
+import Button from "../../components/Button"
 
 export default class Membership extends Component {
   constructor() {

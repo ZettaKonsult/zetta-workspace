@@ -1,19 +1,19 @@
 // @flow
 
-import * as React from 'react';
+import * as React from "react"
 
-import * as actions from './actions'
+import * as actions from "./actions"
 
 // import ConfirmModal from '../../components/Modal/ConfirmModal'
-import CreatePlan from './CreatePlan'
-import ShowPlans from './ShowPlans'
+import CreatePlan from "./CreatePlan"
+import ShowPlans from "./ShowPlans"
 
-import './style.css'
+import "./style.css"
 
 type State = {
   readPlan: boolean,
   plan: Object,
-  data: Object[],
+  data: Object[]
 }
 
 export default class Plans extends React.Component<{}, State> {
@@ -27,11 +27,11 @@ export default class Plans extends React.Component<{}, State> {
     }
   }
 
-  componentDidMount(){
+  componentDidMount() {
     this.setState(actions.fetchPlans)
   }
 
-  onChangePlan = (e) => {
+  onChangePlan = e => {
     this.setState(actions.changePlan(e.target.id, e.target.value))
   }
   toggleCreateMode = e => {
@@ -43,22 +43,22 @@ export default class Plans extends React.Component<{}, State> {
   savePlan = e => {
     this.setState(actions.savePlan)
   }
-  deletePlan = (e) => {
+  deletePlan = e => {
     this.setState(actions.deletePlan(e.target.id))
   }
 
   render() {
-    const {data} = this.state
+    const { data } = this.state
     return (
       <div>
-        {this.state.showPlans ?  (
+        {this.state.showPlans ? (
           <ShowPlans
             plans={data}
             readPlan={this.toggleReadMode}
             deletePlan={this.deletePlan}
             createPlan={this.toggleCreateMode}
           />
-        ): (
+        ) : (
           <CreatePlan
             plan={this.state.plan}
             onSubmit={this.savePlan}

@@ -1,22 +1,22 @@
-import React, { Component } from 'react'
+import React, { Component } from "react"
 
-import VisibilityChange from '../../components/VisibilityChange'
+import VisibilityChange from "../../components/VisibilityChange"
 
-import StatisticsView from './Statistics'
-import Menu from './Menu'
-import mock from './mock'
+import StatisticsView from "./Statistics"
+import Menu from "./Menu"
+import mock from "./mock"
 
-import './style.css'
+import "./style.css"
 
 class Statistics extends Component {
   constructor(props) {
     super(props)
-    this.filters = ['all', 'mail', 'members', 'payment']
+    this.filters = ["all", "mail", "members", "payment"]
     this.updateInterval = 2000
 
     this.state = {
       isLoading: true,
-      filter: 'all',
+      filter: "all",
       intervalId: false
     }
   }

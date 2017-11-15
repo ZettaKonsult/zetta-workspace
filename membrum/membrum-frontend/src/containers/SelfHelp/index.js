@@ -1,8 +1,8 @@
-import React, { Component } from 'react'
+import React, { Component } from "react"
 
-import Button from '../../components/Button'
+import Button from "../../components/Button"
 
-import './style.css'
+import "./style.css"
 
 export default class SelfHelp extends Component {
   constructor(props) {
@@ -18,7 +18,7 @@ export default class SelfHelp extends Component {
 
   onClick = e => this.setState({ selectedAnswear: e.target.id })
   getClassName = id =>
-    this.state.selectedAnswear === id ? 'Answear Selected' : 'Answear'
+    this.state.selectedAnswear === id ? "Answear Selected" : "Answear"
   render() {
     return (
       <div className="selfHelp">
@@ -31,21 +31,21 @@ export default class SelfHelp extends Component {
               </div>
               <span
                 id="0"
-                className={this.getClassName('0')}
+                className={this.getClassName("0")}
                 onClick={this.onClick}
               >
                 digital card won't update
               </span>
               <span
                 id="1"
-                className={this.getClassName('1')}
+                className={this.getClassName("1")}
                 onClick={this.onClick}
               >
                 Don't have the travel logos for discount
               </span>
               <span
                 id="2"
-                className={this.getClassName('2')}
+                className={this.getClassName("2")}
                 onClick={this.onClick}
               >
                 Can't register for a card

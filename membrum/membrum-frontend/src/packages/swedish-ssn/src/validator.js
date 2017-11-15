@@ -1,4 +1,4 @@
-import { transformToApprovedFormat } from './utils'
+import { transformToApprovedFormat } from "./utils"
 
 export const validateSwedishSsn = ssn => {
   if (!ssn || ssn.length < 10 || ssn.length > 13) return false
@@ -6,7 +6,7 @@ export const validateSwedishSsn = ssn => {
   //Handle LADOK numbers which contains letters
   let match = /([A-z*])/.exec(ssn)
   if (match) {
-    ssn = ssn.substr(0, match.index) + '1' + ssn.substr(match.index + 1)
+    ssn = ssn.substr(0, match.index) + "1" + ssn.substr(match.index + 1)
   }
 
   let cleanedssn = transformToApprovedFormat(ssn)
@@ -18,10 +18,10 @@ export const validateSwedishSsn = ssn => {
 
   // Remove - || + before calculations
   if (/-/.exec(cleanedssn)) {
-    cleanedssn = cleanedssn.replace('-', '')
+    cleanedssn = cleanedssn.replace("-", "")
   }
   if (/\+/.exec(cleanedssn)) {
-    cleanedssn = cleanedssn.replace('+', '')
+    cleanedssn = cleanedssn.replace("+", "")
   }
 
   // Check luhn algorithm
@@ -29,7 +29,8 @@ export const validateSwedishSsn = ssn => {
 }
 
 const luhnAlgorithm = ssn => {
-  let sum = 0, parity = ssn.length % 2
+  let sum = 0,
+    parity = ssn.length % 2
   for (let i = 0; i < ssn.length; i++) {
     let digit = parseInt(ssn.charAt(i), 10)
     if (i % 2 === parity) digit *= 2

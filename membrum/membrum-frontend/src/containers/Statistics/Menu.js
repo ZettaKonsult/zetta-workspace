@@ -1,7 +1,7 @@
-import React from 'react'
+import React from "react"
 
-const style = { display: 'inline', padding: '10px', userSelect: 'none' }
-const selectedStyle = Object.assign({}, { background: 'rebeccapurple' }, style)
+const style = { display: "inline", padding: "10px", userSelect: "none" }
+const selectedStyle = Object.assign({}, { background: "rebeccapurple" }, style)
 const styleCheck = (item, selected) =>
   item === selected ? selectedStyle : style
 

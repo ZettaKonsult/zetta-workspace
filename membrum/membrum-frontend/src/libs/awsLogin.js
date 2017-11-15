@@ -2,7 +2,7 @@ import {
   CognitoUserPool,
   AuthenticationDetails,
   CognitoUser
-} from 'amazon-cognito-identity-js'
+} from "amazon-cognito-identity-js"
 
 const login = (username, password, cognito) => {
   const userPool = new CognitoUserPool({

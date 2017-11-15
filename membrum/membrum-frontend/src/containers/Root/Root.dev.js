@@ -1,10 +1,10 @@
-import React, { Component } from 'react'
-import Routes from './Routes'
-import { withRouter } from 'react-router-dom'
+import React, { Component } from "react"
+import Routes from "./Routes"
+import { withRouter } from "react-router-dom"
 
-import { authUser, signOutUser } from '../../libs/awslib'
+import { authUser, signOutUser } from "../../libs/awslib"
 
-import App from '../App'
+import App from "../App"
 
 // import dbPlans from '../../mocks/Database'
 // import dbSubscription from '../../mocks/Database'
@@ -39,7 +39,7 @@ class Root extends Component {
   handleLogout = event => {
     signOutUser()
     this.userHasAuthenticated(false)
-    this.props.history.push('/login')
+    this.props.history.push("/login")
   }
 
   render() {

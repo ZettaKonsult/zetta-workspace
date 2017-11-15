@@ -1,17 +1,17 @@
-import { CognitoUserAttribute } from 'amazon-cognito-identity-js'
+import { CognitoUserAttribute } from "amazon-cognito-identity-js"
 
-import { getUserToken, authUser, getCurrentUser } from './awslib'
+import { getUserToken, authUser, getCurrentUser } from "./awslib"
 
 export const verifyAttribute = async () => {
   if (!await authUser()) {
-    throw new Error('User is not logged in')
+    throw new Error("User is not logged in")
   }
 
   const cognitoUser = getCurrentUser()
   getUserToken(cognitoUser)
 
-  var verificationCode = prompt('Please input verification code: ', '')
-  const result = cognitoUser.verifyAttribute('email', verificationCode, {
+  var verificationCode = prompt("Please input verification code: ", "")
+  const result = cognitoUser.verifyAttribute("email", verificationCode, {
     onSuccess: result => console.log(result)
   })
   console.log(result)
@@ -19,7 +19,7 @@ export const verifyAttribute = async () => {
 
 export async function updateUserAttributes(attributesArray) {
   if (!await authUser()) {
-    throw new Error('User is not logged in')
+    throw new Error("User is not logged in")
   }
 
   const cognitoUser = getCurrentUser()
@@ -42,15 +42,15 @@ export async function updateUserAttributes(attributesArray) {
 
 export const getAttributeVerificationCode = async () => {
   if (!await authUser()) {
-    throw new Error('User is not logged in')
+    throw new Error("User is not logged in")
   }
 
   const cognitoUser = getCurrentUser()
   getUserToken(cognitoUser)
 
-  cognitoUser.getAttributeVerificationCode('email', {
+  cognitoUser.getAttributeVerificationCode("email", {
     onSuccess: function(result) {
-      console.log('call result: ' + result)
+      console.log("call result: " + result)
     },
     onFailure: function(err) {
       alert(err)
@@ -61,7 +61,7 @@ export const getAttributeVerificationCode = async () => {
 
 export async function getUserAttributes() {
   if (!await authUser()) {
-    throw new Error('User is not logged in')
+    throw new Error("User is not logged in")
   }
 
   const cognitoUser = getCurrentUser()

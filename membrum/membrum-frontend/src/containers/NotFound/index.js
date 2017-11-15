@@ -1,6 +1,6 @@
-import React from 'react'
-import './NotFound.css'
-import { Link } from 'react-router-dom'
+import React from "react"
+import "./NotFound.css"
+import { Link } from "react-router-dom"
 
 export default () => (
   <div className="NotFound">

@@ -1,8 +1,8 @@
-import React, { Component } from 'react'
-import Routes from './Routes'
-import { withRouter } from 'react-router-dom'
+import React, { Component } from "react"
+import Routes from "./Routes"
+import { withRouter } from "react-router-dom"
 
-import { authUser, signOutUser } from '../../libs/awslib'
+import { authUser, signOutUser } from "../../libs/awslib"
 
 class App extends Component {
   constructor(props) {
@@ -33,7 +33,7 @@ class App extends Component {
   handleLogout = event => {
     signOutUser()
     this.userHasAuthenticated(false)
-    this.props.history.push('/login')
+    this.props.history.push("/login")
   }
 
   render() {

@@ -1,6 +1,6 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import './style.css'
+import React from "react"
+import PropTypes from "prop-types"
+import "./style.css"
 
 const Input = ({ name, value, onChange, id, type, label }) => (
   <div className="InputField">
@@ -24,8 +24,8 @@ Input.propTypes = {
 }
 
 Input.defaultProps = {
-  name: 'default',
-  type: 'text'
+  name: "default",
+  type: "text"
 }
 
 export default Input

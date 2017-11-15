@@ -1,11 +1,11 @@
-import { CognitoUserPool, CognitoUser } from 'amazon-cognito-identity-js'
+import { CognitoUserPool, CognitoUser } from "amazon-cognito-identity-js"
 
-import { getUserToken, authUser, getCurrentUser } from './awslib'
-import config from '../config'
+import { getUserToken, authUser, getCurrentUser } from "./awslib"
+import config from "../config"
 
 export async function changePassword(oldPassword, newPassword) {
   if (!await authUser()) {
-    throw new Error('User is not logged in')
+    throw new Error("User is not logged in")
   }
 
   const cognitoUser = getCurrentUser()
@@ -16,7 +16,7 @@ export async function changePassword(oldPassword, newPassword) {
       console.log(err)
       return err
     }
-    console.log('call result: ' + result)
+    console.log("call result: " + result)
   })
 }
 
@@ -33,14 +33,14 @@ export const forgotPassword = userId => {
 
   cognitoUser.forgotPassword({
     onSuccess: function(result) {
-      console.log('call result: ' + result)
+      console.log("call result: " + result)
     },
     onFailure: function(err) {
       alert(err)
     },
     inputVerificationCode() {
-      var verificationCode = prompt('Please input verification code ', '')
-      var newPassword = prompt('Enter new password ', '')
+      var verificationCode = prompt("Please input verification code ", "")
+      var newPassword = prompt("Enter new password ", "")
       cognitoUser.confirmPassword(verificationCode, newPassword, this)
     }
   })

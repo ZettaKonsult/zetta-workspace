@@ -1,9 +1,9 @@
-import React from 'react'
+import React from "react"
 
-import Message from '../../components/Message'
+import Message from "../../components/Message"
 
-import Input from '../../components/Input'
-import Button from '../../components/Button'
+import Input from "../../components/Input"
+import Button from "../../components/Button"
 
 //TODO move onChange, closeMessage, ssn and password to this and make class
 //TODO add &#x1f441; to password and have onclick for toggling visility

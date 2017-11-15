@@ -1,16 +1,16 @@
-import React, { Component } from 'react'
+import React, { Component } from "react"
 
 import {
   verifyAttribute,
   getAttributeVerificationCode
-} from '../../libs/awsAttributes'
+} from "../../libs/awsAttributes"
 
 export default class ForgottenPassword extends Component {
   constructor() {
     super()
 
     this.state = {
-      code: ''
+      code: ""
     }
   }
 

@@ -1,21 +1,21 @@
 // @flow
-import db from '../../mocks/db.json';
+import db from "../../mocks/db.json"
 
 type State = {
   readPlan: boolean,
-  plan: Object,
+  plan: Object
 }
 type Props = {}
 
 const defaultPlan = {
-  name: '',
-  amount: '',
-  interval: 'month',
-  intervalCount: '6',
-  group: ''
+  name: "",
+  amount: "",
+  interval: "month",
+  intervalCount: "6",
+  group: ""
 }
 
-export const fetchPlans = (): Object => ({data: db.plans})
+export const fetchPlans = (): Object => ({ data: db.plans })
 
 export function fetchOnePlan(id: String) {
   return { plan: fetchPlans().data.find(item => item.id === id) }
@@ -23,7 +23,9 @@ export function fetchOnePlan(id: String) {
 
 export const toggleReadMode = (id: String) => {
   return function(state: State, props: Props) {
-      return { showPlans: false, ...fetchOnePlan(id)
+    return {
+      showPlans: false,
+      ...fetchOnePlan(id)
     }
   }
 }
@@ -34,7 +36,7 @@ export const toggleCreateMode = (state: State, props: Props) => {
 
 //TODO send state.plan to api
 export const savePlan = (state: State, props: Props) => {
-    return {showPlans: true, plan: defaultPlan}
+  return { showPlans: true, plan: defaultPlan }
 }
 
 export function changePlan(key: String, value: String) {
@@ -48,13 +50,13 @@ export function changePlan(key: String, value: String) {
 }
 
 //TODO send id for plan to be deleted to api
-export function deletePlan(id:String) {
-  return function(state: State, props: Props){
-    const {data} = fetchPlans()
-    const index = data.findIndex((item) => item.id === id)
-    if(index !== -1){
-      return {data: [...data.slice(0, index), ...data.slice(index+1)]}
+export function deletePlan(id: String) {
+  return function(state: State, props: Props) {
+    const { data } = fetchPlans()
+    const index = data.findIndex(item => item.id === id)
+    if (index !== -1) {
+      return { data: [...data.slice(0, index), ...data.slice(index + 1)] }
     }
-    return {data: data}
+    return { data: data }
   }
 }

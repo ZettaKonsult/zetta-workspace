@@ -1,7 +1,7 @@
-import React from 'react'
-import PropTypes from 'prop-types'
+import React from "react"
+import PropTypes from "prop-types"
 
-import './style.css'
+import "./style.css"
 
 const Select = ({ onChange, name, value, option }) => (
   <div className="SelectField">

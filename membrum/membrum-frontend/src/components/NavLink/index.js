@@ -1,6 +1,6 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import { Route, Link } from 'react-router-dom'
+import React from "react"
+import PropTypes from "prop-types"
+import { Route, Link } from "react-router-dom"
 
 const NavLink = ({ label, to, activeOnlyWhenExact, className, onClick }) => (
   <Route
@@ -8,7 +8,7 @@ const NavLink = ({ label, to, activeOnlyWhenExact, className, onClick }) => (
     exact={activeOnlyWhenExact}
     children={({ match }) => (
       <Link
-        className={`${className} ${match ? 'active' : ''}`}
+        className={`${className} ${match ? "active" : ""}`}
         to={to}
         onClick={onClick}
       >
@@ -26,8 +26,8 @@ NavLink.propTypes = {
 }
 
 NavLink.defaultProps = {
-  to: '/',
-  label: 'Default Text',
+  to: "/",
+  label: "Default Text",
   activeOnlyWhenExact: false
 }
 

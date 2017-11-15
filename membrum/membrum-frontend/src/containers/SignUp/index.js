@@ -1,13 +1,13 @@
-import React, { Component } from 'react'
+import React, { Component } from "react"
 import {
   AuthenticationDetails,
   CognitoUserPool
-} from 'amazon-cognito-identity-js'
-import config from '../../config'
-import SignupForm from './SignupForm'
-import ConfirmationForm from './ConfirmationForm'
-import * as is from './Validation'
-import './style.css'
+} from "amazon-cognito-identity-js"
+import config from "../../config"
+import SignupForm from "./SignupForm"
+import ConfirmationForm from "./ConfirmationForm"
+import * as is from "./Validation"
+import "./style.css"
 
 export default class Signup extends Component {
   constructor(props) {
@@ -15,11 +15,11 @@ export default class Signup extends Component {
 
     this.state = {
       isLoading: false,
-      ssn: '',
-      email: '',
-      password: '',
-      confirmPassword: '',
-      confirmationCode: '',
+      ssn: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+      confirmationCode: "",
       newUser: null
     }
   }
@@ -73,7 +73,7 @@ export default class Signup extends Component {
       )
 
       this.props.userHasAuthenticated(true)
-      this.props.history.push('/')
+      this.props.history.push("/")
     } catch (e) {
       alert(e)
       this.setState({ isLoading: false })
@@ -90,7 +90,7 @@ export default class Signup extends Component {
       userPool.signUp(
         ssn,
         password,
-        [{ Name: 'email', Value: email }],
+        [{ Name: "email", Value: email }],
         null,
         (err, result) => {
           if (err) {

@@ -1,17 +1,17 @@
-import AWS from 'aws-sdk'
-import { CognitoUserPool } from 'amazon-cognito-identity-js'
-import sigV4Client from './sigV4Client'
-import config from '../config'
+import AWS from "aws-sdk"
+import { CognitoUserPool } from "amazon-cognito-identity-js"
+import sigV4Client from "./sigV4Client"
+import config from "../config"
 
 export async function invokeApig({
   path,
-  method = 'GET',
+  method = "GET",
   headers = {},
   queryParams = {},
   body
 }) {
   if (!await authUser()) {
-    throw new Error('User is not logged in')
+    throw new Error("User is not logged in")
   }
 
   const signedRequest = sigV4Client
@@ -101,8 +101,9 @@ export function getCurrentUser() {
 }
 
 function getAwsCredentials(userToken) {
-  const authenticator = `cognito-idp.${config.cognito
-    .REGION}.amazonaws.com/${config.cognito.USER_POOL_ID}`
+  const authenticator = `cognito-idp.${config.cognito.REGION}.amazonaws.com/${
+    config.cognito.USER_POOL_ID
+  }`
 
   AWS.config.update({ region: config.cognito.REGION })
 

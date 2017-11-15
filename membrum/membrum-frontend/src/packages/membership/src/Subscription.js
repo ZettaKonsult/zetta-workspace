@@ -1,10 +1,27 @@
+/* @flow */
+
+import Plan from "./Plan"
+import * as utilDate from "./DateUtility"
+
 export default class Subscription {
-  constructor() {
-    this.plans = []
-    this.startDate = '*-01-01'
+  plans: Plan[]
+  isPeriodical: boolean
+  lastPaid: number
+  payments: number[]
+
+  constructor(
+    plans: Plan[] = [],
+    isPeriodical: boolean = true,
+    lastPaid: number = 0,
+    payments: number[] = []
+  ) {
+    this.plans = plans
+    this.isPeriodical = isPeriodical
+    this.lastPaid = lastPaid
+    this.payments = payments
   }
 
-  addPlan = plan => {
+  addPlan = (plan: Plan) => {
     if (this.plans.length === 0) {
       this.plans = [...this.plans, plan]
       return true
@@ -18,7 +35,7 @@ export default class Subscription {
     return false
   }
 
-  updatePlan = (existingPlan, newPlan) => {
+  updatePlan = (existingPlan: Plan, newPlan: Plan) => {
     const existingPlanIndex = this.findPlanIndex(existingPlan)
     if (existingPlanIndex === -1) {
       return false
@@ -36,7 +53,7 @@ export default class Subscription {
     return true
   }
 
-  removePlan = plan => {
+  removePlan = (plan: Plan) => {
     const planIndex = this.findPlanIndex(plan)
     if (planIndex === -1) {
       return false
@@ -48,25 +65,48 @@ export default class Subscription {
     ]
   }
 
-  //TODO use this.startDate to determine if the subscription should be billed
-  isSubscriptionBillable = today => {
-    const todayDate = new Date()
-    let array = this.startDate.split('/')
+  isSubscriptionBillable = (
+    epoxString: number = new Date().getTime()
+  ): boolean => {
+    return this.getNextPayDate() < epoxString
+  }
 
-    for (let i = 0; i < array.length; i++) {
-      if (array[i].inclues('*')) {
-        array[i] = array[i].replace('*', todayDate.getFullYear())
-      }
+  getNextPayDate = (): number => {
+    if (!this.isPeriodical) {
+      return this.getNextSequentialPayDate()
+    } else {
+      return this.getNextPeriodicalPayDate()
     }
+  }
 
-    // const startDate = new Date(array[0], array[1], array[2])
+  getNextSequentialPayDate = (): number => {
+    const { interval, intervalCount } = this.plans[0]
+
+    if (interval === "day") {
+      return utilDate.incrementDateBy(this.lastPaid, intervalCount)
+    }
+    if (interval === "month") {
+      return utilDate.incrementMonthBy(this.lastPaid, intervalCount)
+    }
+    if (interval === "year") {
+      return utilDate.incrementYearBy(this.lastPaid, intervalCount)
+    }
+  }
+
+  getNextPeriodicalPayDate = () => {
+    const { interval, intervalCount } = this.plans[0]
+
+    if (interval === "month") {
+      return utilDate.incrementToNextLowerBound(this.lastPaid, intervalCount)
+    }
   }
 
   getNumberOfPlans = () => this.plans.length
 
-  findPlanIndex = plan => this.plans.findIndex(p => p.id === plan.id)
+  findPlanIndex = (plan: Plan) => this.plans.findIndex(p => p.id === plan.id)
+
   getTotalPlanCost = () =>
     this.plans.reduce((total, p2) => total + Number(p2.amount), 0)
 
-  comparePlanInterval = plan => this.plans[0].comparePlanInterval(plan)
+  comparePlanInterval = (plan: Plan) => this.plans[0].comparePlanInterval(plan)
 }
