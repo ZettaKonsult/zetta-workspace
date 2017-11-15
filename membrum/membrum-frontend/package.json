@@ -33,7 +33,7 @@
     "postdeploy":
       "aws cloudfront create-invalidation --distribution-id E2O9SBWDRR4JZS --paths /*",
     "pretty": "prettier --write --no-semi \"src/**/*.js\"",
-    "precommit": "lint-staged && yarn test"
+    "precommit": "lint-staged"
   },
   "lint-staged": {
     "*.js": ["yarn run pretty", "git add"]
