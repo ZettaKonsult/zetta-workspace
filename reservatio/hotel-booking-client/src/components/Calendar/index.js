@@ -3,7 +3,7 @@ import DateTile from './DateTile'
 import MonthHeader from './MonthHeader'
 import WeekDays from './WeekDays'
 
-import Span from './Span'
+import {DateSpan, WeekDaySpan} from './Span'
 import GRID from './GRID'
 
 class Calendar extends Component {
@@ -34,33 +34,38 @@ class Calendar extends Component {
     })
   }
 
-  renderWeekDays() {
-    return WeekDays({
-      date: this.state.currentDate,
-      oneRow: this.props.oneRow
-    }).map((day, i) =>
-      <Span key={i} backgroundColor="LightSkyBlue">
-        {this.props.oneRow ? day[0] : day}
-      </Span>
-    )
+  weekDayLabel(day) {
+    return (this.props.oneRow || window.matchMedia( "(max-width: 700px)" )) ?
+      day[0] : day
   }
 
-  renderDates() {
-    const array = DateTile({
-      oneRow: this.props.oneRow,
-      date: this.state.currentDate
-    })
-    return array.map((day, i) =>
-      <Span
-        id={day.toDateString()}
-        key={i}
-        backgroundColor={this.dateBackgroundColor(day, i)}
-        onClick={this.props.select}
-      >
-        {day.getDate()}
-      </Span>
-    )
-  }
+renderWeekDays() {
+  return WeekDays({
+    date: this.state.currentDate,
+    oneRow: this.props.oneRow
+  }).map((day, i) =>
+    <WeekDaySpan key={i} backgroundColor="LightSkyBlue">
+      {this.weekDayLabel(day)}
+    </WeekDaySpan>
+  )
+}
+
+renderDates() {
+  const array = DateTile({
+    oneRow: this.props.oneRow,
+    date: this.state.currentDate
+  })
+  return array.map((day, i) =>
+    <DateSpan
+      id={day.toDateString()}
+      key={i}
+      backgroundColor={this.dateBackgroundColor(day, i)}
+      onClick={this.props.select}
+    >
+      {day.getDate()}
+    </DateSpan>
+  )
+}
 
   isDateInCurrentMonth = (day, i) =>
     !((i < 7 && day.getDate() > 24) || (i > 20 && day.getDate() < 7))

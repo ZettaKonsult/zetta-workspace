@@ -109,7 +109,7 @@ function getUserToken(currentUser) {
 }
 
 function getCurrentUser() {
-  const userPool = new CognitoUserPool({
+  const userPool = new AWS.CognitoUserPool({
     UserPoolId: config.cognito.USER_POOL_ID,
     ClientId: config.cognito.APP_CLIENT_ID
   });
