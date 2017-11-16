@@ -15,21 +15,12 @@ public class TRFForm extends Form {
         values.put("uniqueoid", "yes");
         return values;
     }
-    
+
     @Override
     protected String[] formNames() {
         return new String[] {
-                "accepturl",
-                "amount",
-                "callbackurl",
-                "cancelurl",
-                "currency",
-                "decorator",
-                "ip",
-                "lang",
-                "merchant",
-                "orderid",
-                "test",
+                "accepturl", "amount", "callbackurl", "cancelurl", "currency",
+                "decorator", "ip", "lang", "merchant", "orderid", "test",
                 "uniqueoid"
         };
     }
@@ -37,4 +28,5 @@ public class TRFForm extends Form {
     public static void main(String[] args) {
         System.out.println(new TRFForm().asJSon());
     }
+
 }

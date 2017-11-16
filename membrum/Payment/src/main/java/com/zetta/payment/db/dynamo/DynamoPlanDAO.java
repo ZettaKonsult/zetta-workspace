@@ -3,20 +3,14 @@ package com.zetta.payment.db.dynamo;
 import java.util.List;
 import java.util.Optional;
 
-import org.apache.log4j.Logger;
-
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
-import com.zetta.payment.db.DynamoDBManager;
 import com.zetta.payment.db.dao.PlanDAO;
 import com.zetta.payment.exception.MethodNotImplemented;
 import com.zetta.payment.pojo.Plan;
-import com.zetta.payment.pojo.User;
 
 public class DynamoPlanDAO implements PlanDAO {
 
-    private static final Logger log = Logger.getLogger(DynamoPlanDAO.class);
-    private static final DynamoDBMapper mapper = DynamoDBManager.mapper();
+    // private static final Logger log = Logger.getLogger(DynamoPlanDAO.class);
+    // private static final DynamoDBMapper mapper = DynamoDBManager.mapper();
     private static volatile DynamoPlanDAO instance;
 
     private DynamoPlanDAO() {}

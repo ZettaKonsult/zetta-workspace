@@ -23,6 +23,7 @@
   },
   "homepage": "https://github.com/ZettaKonsult/zetta-workspace/tree/master/membrum#readme",
   "devDependencies": {
+    "flow-bin": "^0.59.0",
     "pre-commit": "^1.2.2",
     "serverless-webpack": "^3.1.2"
   },

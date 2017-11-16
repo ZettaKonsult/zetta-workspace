@@ -35,6 +35,11 @@ public class PaymentLambda {
         return form.asJSon();
     }
 
+    public String dibsResponse(String response, Context context) {
+        log.info("Received response:\n" + response);
+        return response;
+    }
+
     public List<Payment> getAllPayments() {
 
         log.info("Scanning table for all payments.");
