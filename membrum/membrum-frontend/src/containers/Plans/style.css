@@ -1,6 +1,7 @@
 .PlansContainer {
   display: flex;
   align-items: flex-start;
+  flex-flow: row wrap;
   justify-content: center;
 }
 
@@ -9,26 +10,16 @@
   flex-flow: column nowrap;
 }
 
-.PlanObject {
-  flex: 1 0 auto;
-  margin: 10px;
+.ShowPlansTitle {
+  text-transform: capitalize;
 }
 
-.PlanName{
+.PlanName {
   border: 1px solid black;
   padding: 10px;
+  margin: 0.5em;
 }
 
 .PlanName:hover {
-  background-color: var(--info);
-}
-
-.deleteCross {
-  font-size: 2em;
-  margin: 0 0 0 0.1em;
-  color: black;
-}
-
-.deleteCross:hover {
-  color: rgba(0, 0, 0, 0.5);
+  background-color: var(--info-light);
 }

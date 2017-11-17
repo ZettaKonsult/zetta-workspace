@@ -1,9 +1,3 @@
-.btn.btn-primary {
-  color: #fff;
-  background-color: var(--button-theme);
-  border-color: #2e6da4;
-}
-
 .btn.btn-lg {
   padding: 10px 16px;
   font-size: 18px;
@@ -13,6 +7,10 @@
 
 .btn {
   --button-theme: var(--primary);
+  color: #fff;
+  background-color: var(--button-theme);
+  border-color: var(--button-theme);
+
   display: inline-block;
   padding: 6px 12px;
   margin-bottom: 0;

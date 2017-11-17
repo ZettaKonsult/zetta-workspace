@@ -1,4 +1,5 @@
-// @flow
+/* @flow */
+
 import db from "../../mocks/db.json"
 
 type State = {

@@ -18,7 +18,7 @@ const Select = ({ onChange, name, value, option }) => (
 
 Select.propTypes = {
   onChange: PropTypes.func,
-  option: PropTypes.array,
+  option: PropTypes.array.isRequired,
   value: PropTypes.string,
   name: PropTypes.string
 }

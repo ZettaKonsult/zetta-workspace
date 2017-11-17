@@ -9,11 +9,11 @@
 
 .Card a {
   text-decoration: none;
-  color: black;
+  color: rgba(0, 0, 0, 0.7);
 }
 
 .Card a:hover {
-  color: var(--primary);
+  color: rgb(0, 0, 0);
 }
 
 .CardContent {
@@ -30,7 +30,7 @@
 
 .CardFooter {
   background-color: #f5f5f5;
-  border: 1px solid var(--theme-color);
+  border: 1px solid black;
   border-radius: 0 0 5px 5px;
   display: flex;
   justify-content: space-between;

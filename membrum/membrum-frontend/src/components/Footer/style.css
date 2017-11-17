@@ -1,5 +1,5 @@
 .Footer {
-  background-color: black;
+  background-color: dimgrey;
   color: white;
   display: flex;
   flex-flow: row nowrap;
@@ -7,6 +7,8 @@
 }
 
 .FooterCopyRight {
+  user-select: none;
+  margin-left: 0.5em;
   align-self: center;
 }
 .FooterContent {

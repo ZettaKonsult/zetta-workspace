@@ -9,16 +9,13 @@ import IsPaid from "./IsPaid"
 import IsNotPaid from "./IsNotPaid"
 import ContactInfo from "./ContactInfo"
 import ChangePassword from "./ChangePassword"
-import Membership from "./Membership"
+import Membership from "./Membership/Membership"
 
 import "./style.css"
 
 import PageNavigation from "../../components/PageNavigation"
 import Message from "../../components/Message"
 
-/*
-TODO, create modal for editing memberships
-*/
 export default class MyPage extends Component {
   constructor(props) {
     super(props)
