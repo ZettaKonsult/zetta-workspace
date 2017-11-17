@@ -4,7 +4,7 @@ import "./style.css"
 
 const Button = props => (
   <button
-    className={props.large ? "btn btn-lg btn-primary" : "btn btn-primary"}
+    className={props.large ? "btn btn-lg" : "btn"}
     type="button"
     disabled={props.disabled}
     onClick={props.onClick}
