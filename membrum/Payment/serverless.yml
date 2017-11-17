@@ -26,19 +26,12 @@ package:
   artifact: target/PaymentLambda.jar
 
 functions:
-  listPayments:
-    handler: com.zetta.payment.lambda.PaymentLambda::getAllPayments
+  confirmPayment:
+    handler: com.zetta.payment.lambda.PaymentLambda::dibsResponse
     events:
       - http:
-          path: list
-          method: get
+          path: confirm
+          method: post
           cors: true
-          authorizer: aws_iam
-  listUsers:
-    handler: com.zetta.payment.lambda.UserLambda::getAllUsers
-    events:
-      - http:
-          path: list
-          method: get
-          cors: true
-          authorizer: aws_iam
+          private: false
+ 

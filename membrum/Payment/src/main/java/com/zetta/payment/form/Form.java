@@ -1,8 +1,12 @@
 package com.zetta.payment.form;
 
 import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.StringJoiner;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -67,4 +71,13 @@ public abstract class Form implements Serializable {
         return string.append("}").toString();
     }
 
+    public byte[] bytes() throws UnsupportedEncodingException {
+        StringJoiner sj = new StringJoiner("&");
+        for (Map.Entry<String, String> entry : values.entrySet()) {
+            sj.add(URLEncoder.encode(entry.getKey(), "UTF-8") + "="
+                    + URLEncoder.encode(entry.getValue(), "UTF-8"));
+        }
+        System.out.println(sj.toString());
+        return sj.toString().getBytes(StandardCharsets.UTF_8);
+    }
 }
