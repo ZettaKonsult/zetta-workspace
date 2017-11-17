@@ -1,15 +1,23 @@
 import React from "react"
 
 import Button from "../../components/Button"
+import Dropdown from "../../components/Select"
 
-export default ({ plans, readPlan, deletePlan, createPlan }) => {
-  const groups = filterUniqueAttributes(plans, "group")
+export default ({
+  plans,
+  readPlan,
+  deletePlan,
+  createPlan,
+  attributeToSort,
+  changeSort
+}) => {
+  const groups = filterUniqueAttributes(plans, attributeToSort)
 
-  let result = groups.map(group => {
-    let filtered = plans.filter(item => item.group === group)
+  let result = groups.map(value => {
+    let filtered = getItemsWithAttributeValue(plans, attributeToSort, value)
 
     return (
-      <PlanGroup title={group} key={group}>
+      <PlanGroup title={value} key={value}>
         {filtered.map(item => (
           <PlanRow
             key={item.id}
@@ -25,6 +33,11 @@ export default ({ plans, readPlan, deletePlan, createPlan }) => {
   return (
     <div>
       <div className="ButtonGroup">
+        <Dropdown
+          onChange={e => changeSort(e.target.value)}
+          option={Object.keys(plans[0])}
+          value={attributeToSort}
+        />
         <Button large onClick={createPlan}>
           Create Plan
         </Button>
@@ -36,30 +49,40 @@ export default ({ plans, readPlan, deletePlan, createPlan }) => {
 
 const PlanGroup = props => (
   <div className="PlansShow">
-    <h1>{props.title}</h1>
+    <h3 className="ShowPlansTitle">{props.title}</h3>
     {props.children}
   </div>
 )
 
 const PlanRow = ({ plan, showPlan, deletePlan }) => (
-  <span className="PlanObject">
-    <span className="PlanName" id={plan.id} onClick={showPlan}>
-      {plan.name}
-    </span>
-    <DeleteCross id={plan.id} onClick={deletePlan} />
+  <span className="PlanName" onClick={e => showPlan(plan.id)}>
+    {plan.name}
   </span>
 )
 
-const DeleteCross = ({ onClick, id }) => (
-  <span id={id} className="deleteCross" onClick={onClick}>
-    &times;
-  </span>
-)
-
+//TODO move to subscription, this is way to much insight into how the class/module works
 function filterUniqueAttributes(array, attribute) {
-  let f = []
-  let result = array.filter(
-    item => f.indexOf(item[attribute]) === -1 && f.push(item[attribute])
+  const flatten = array.reduce(
+    (result, item) =>
+      Array.isArray(item[attribute])
+        ? result.concat(flattenArray(item[attribute]))
+        : result.concat(item[attribute]),
+    []
   )
-  return result.map(item => item[attribute])
+  return flatten.filter((item, index, self) => self.indexOf(item) === index)
 }
+
+const flattenArray = array =>
+  array.reduce(
+    (result, item) =>
+      result.concat(Array.isArray(item) ? flattenArray(item) : item),
+    []
+  )
+
+const getItemsWithAttributeValue = (array, attribute, value) =>
+  array.filter(
+    item =>
+      Array.isArray(item[attribute])
+        ? item[attribute].findIndex(v => v === value) !== -1
+        : item[attribute] === value
+  )

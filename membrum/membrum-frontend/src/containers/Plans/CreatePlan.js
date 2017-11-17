@@ -6,7 +6,7 @@ import Select from "../../components/Select"
 
 const interval_values = ["day", "week", "month", "year"]
 
-const CreatePlan = ({ onChange, onSubmit, plan }) => (
+const CreatePlan = ({ onChange, onCancel, onSubmit, onDelete, plan }) => (
   <form className="InputGroup">
     <Input name="amount" label="Fee" onChange={onChange} value={plan.amount} />
     <Select
@@ -28,6 +28,12 @@ const CreatePlan = ({ onChange, onSubmit, plan }) => (
     <Input name="group" label="Group" onChange={onChange} value={plan.group} />
     <div className="ButtonGroup">
       <Button onClick={onSubmit}>Submit</Button>
+      <Button onClick={onCancel}>Cancel</Button>
+      {plan.id && (
+        <Button onClick={e => onDelete(plan.id)} type="danger">
+          Delete Plan
+        </Button>
+      )}
     </div>
   </form>
 )
