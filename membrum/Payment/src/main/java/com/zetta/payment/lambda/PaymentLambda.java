@@ -1,16 +1,25 @@
 package com.zetta.payment.lambda;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.apache.log4j.Logger;
 
 import com.amazonaws.services.lambda.runtime.Context;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zetta.payment.db.dynamo.DynamoPaymentDAO;
-import com.zetta.payment.form.Form;
+import com.zetta.payment.form.BasicForm;
 import com.zetta.payment.form.TRFForm;
 import com.zetta.payment.pojo.FormData;
 import com.zetta.payment.pojo.Payment;
+import com.zetta.payment.util.JSONUtil;
 
 /**
  * The public functions in this class are Lambda handlers.
@@ -25,7 +34,7 @@ public class PaymentLambda {
             .instance();
 
     public String getForm(FormData data, Context context) {
-        Form form = new TRFForm();
+        BasicForm form = new TRFForm();
 
         System.out.println(data);
         // Get user (orderid)
@@ -33,6 +42,72 @@ public class PaymentLambda {
         // Get plan (amount)
 
         return form.asJSon();
+    }
+
+    public void dibsConfirmation(InputStream is, OutputStream os,
+            Context context) {
+
+        log.info("DIBS executed callback.");
+
+        Map<String, String> headers = new LinkedHashMap<String, String>();
+        headers.put("content-type", "*/*");
+        Response response = new Response(500, headers, "");
+
+        Map<?, ?> json = Collections.<String, String>emptyMap();
+        try {
+            json = JSONUtil.parse(is);
+            //log.info("Received json with parameters:\n"
+            //        + JSONUtil.prettyPrint(json, "    "));
+            log.info("{");
+            for (Object key : json.keySet()) {
+                log.info("[" + key.getClass().getSimpleName() + "]    "
+                        + key.toString() + " = " + json.get(key));
+            }
+            log.info("}");
+
+            response = new Response(200, headers, json.get("body"));
+
+        } catch (IOException e) {
+            log.error("Error receiving DIBS response:\n   " + e.getMessage());
+        }
+
+        log.info("Writing response:\n    " + response.toString());
+        try {
+            os.write(response.asJson().getBytes());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void main(String[] args) {
+        new PaymentLambda().dibsConfirmation(null, null, null);
+    }
+
+    private static class Response {
+        private Map<String, Object> values;
+
+        public Response(int code, Map<String, String> headers, Object body) {
+            this.values = new LinkedHashMap<String, Object>();
+
+            values.put("statusCode", Integer.toString(code));
+            values.put("headers", headers);
+            values.put("body", body.toString());
+        }
+
+        public String asJson() {
+            String json = "";
+            try {
+                json = new ObjectMapper().writeValueAsString(this.values);
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+            return json;
+        }
+
+        @Override
+        public String toString() {
+            return asJson();
+        }
     }
 
     public String dibsResponse(String response, Context context) {

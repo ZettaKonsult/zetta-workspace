@@ -22,7 +22,7 @@ public class Payment implements Serializable {
         this.id = id;
     }
 
-    @DynamoDBHashKey(attributeName=ID_INDEX)
+    @DynamoDBHashKey(attributeName = ID_INDEX)
     public String getId() {
         return id;
     }
@@ -33,6 +33,6 @@ public class Payment implements Serializable {
 
     @Override
     public String toString() {
-        return "Payment ID: " + id;
+        return "Payment ID: " + (id.equals("") ? "<undefined>" : id);
     }
 }

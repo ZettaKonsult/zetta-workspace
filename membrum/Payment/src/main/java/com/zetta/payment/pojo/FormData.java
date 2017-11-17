@@ -10,21 +10,21 @@ public class FormData implements Serializable {
     public FormData() {
         this("");
     }
-    
+
     private FormData(String id) {
         this.id = id;
     }
 
-    public String getID() {
+    public String getId() {
         return id;
     }
 
-    public void setID(String id) {
+    public void setId(String id) {
         this.id = id;
     }
 
     @Override
     public String toString() {
-        return "ID: " + id;
+        return "User ID: " + (id.equals("") ? "<undefined>" : id);
     }
 }

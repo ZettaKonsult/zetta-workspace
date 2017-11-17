@@ -69,6 +69,13 @@ public class User implements Serializable {
         return points;
     }
 
+    public double getPoints(String key) {
+        if (!points.containsKey(key)) {
+            return -1.0;
+        }
+        return points.get(key);
+    }
+
     public void setPoints(Map<String, Double> points) {
         this.points = new LinkedHashMap<String, Double>(points);
     }
@@ -79,7 +86,15 @@ public class User implements Serializable {
         string.append("\n    Id:     " + id);
         string.append("\n    Name:   " + name);
         string.append("\n    Email:  " + email);
-        string.append("\n    Points: " + points);
-        return string.toString();
+        string.append("\n    Points: {");
+
+        String prefix = "\n";
+        for (Map.Entry<String, Double> entry : points.entrySet()) {
+            string.append(prefix + "        " + entry.getKey() + " = "
+                    + entry.getValue());
+            prefix = ",\n";
+        }
+        return string.append((prefix.equals("\n") ? "" : "\n    ") + "}")
+                .toString();
     }
 }

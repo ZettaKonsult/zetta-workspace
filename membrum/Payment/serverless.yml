@@ -1,37 +1,18 @@
 service: payment
 
-frameworkVersion: ">=1.2.0 <2.0.0"
-
 provider:
   name: aws
   runtime: java8
   stage: prod
   region: eu-central-1
 
-  iamRoleStatements:
-    - Effect: Allow
-      Action:
-        - dynamodb:GetItem
-        - dynamodb:PutItem
-        - dynamodb:Scan
-      Resource: "arn:aws:dynamodb:eu-central-1:460056602695:table/MembrumPayment-Test"
-    - Effect: Allow
-      Action:
-        - dynamodb:GetItem
-        - dynamodb:PutItem
-        - dynamodb:Scan
-      Resource: "arn:aws:dynamodb:eu-central-1:460056602695:table/MembrumUser-Test"
-
 package:
   artifact: target/PaymentLambda.jar
 
 functions:
   confirmPayment:
-    handler: com.zetta.payment.lambda.PaymentLambda::dibsResponse
+    handler: com.zetta.payment.lambda.PaymentLambda::dibsConfirmation
     events:
       - http:
           path: confirm
           method: post
-          cors: true
-          private: false
- 
