@@ -1,0 +1,26 @@
+.Footer {
+  background-color: dimgrey;
+  color: white;
+  display: flex;
+  flex-flow: row nowrap;
+  flex: 0 0 auto;
+}
+
+.FooterCopyRight {
+  user-select: none;
+  margin-left: 0.5em;
+  align-self: center;
+}
+.FooterContent {
+  flex: 1 0 auto;
+}
+
+.FooterSocialMedia {
+  align-self: flex-end;
+  color: black;
+}
+
+.FooterSocialMediaIcon {
+  align-self: flex-end;
+  color: black;
+}

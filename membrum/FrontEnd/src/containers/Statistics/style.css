@@ -1,0 +1,29 @@
+.statistics {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.statisticsGroup {
+  background-color: rgb(200, 200, 200);
+  background-color: rgba(200, 200, 200, 0.4);
+  width: 100%;
+  margin: 2em;
+}
+
+.statisticsView {
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  justify-content: center;
+}
+.Chart {
+  margin: 2em;
+  max-height: 500px;
+}
+
+@media (max-width: 600px) {
+  .statisticsView {
+    flex-flow: column nowrap;
+  }
+}

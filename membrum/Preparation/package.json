@@ -1,0 +1,64 @@
+{
+  "name": "ladok-parser",
+  "version": "1.0.0",
+  "description": "Module for parsing Ladok files",
+  "main": "src/index.js",
+  "scripts": {
+    "deploy": "npm run test && serverless deploy",
+    "js-standard": "standard --fix",
+    "js-prettier": "prettier --write",
+    "test": "jest src/* --color",
+    "test-watch": "npm run test --watch",
+    "travis-deploy": "npm run deploy",
+    "travis-test": "npm run test"
+  },
+  "pre-commit": [
+    "js-standard",
+    "test"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ZettaKonsult/ladok-parser.git"
+  },
+  "keywords": [],
+  "author": "Zimon Kuhs",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ZettaKonsult/ladok-parser/issues"
+  },
+  "homepage": "https://github.com/ZettaKonsult/ladok-parser#readme",
+  "dependencies": {
+    "array-equal": "^1.0.0",
+    "babel-runtime": "^6.26.0",
+    "common-js-utils": "^1.5.0",
+    "source-map-support": "^0.5.0",
+    "uuid": "^3.1.0",
+    "zk-csv-parser": "^2.1.4"
+  },
+  "devDependencies": {
+    "aws-sdk": "^2.146.0",
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.0",
+    "babel-eslint": "^8.0.2",
+    "babel-loader": "^7.1.2",
+    "babel-plugin-source-map-support": "^1.0.0",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-stage-3": "^6.24.1",
+    "flow-bin": "^0.59.0",
+    "jest": "^20.0.4",
+    "jest-cli": "^20.0.4",
+    "object-size": "^0.1.1",
+    "pre-commit": "^1.2.2",
+    "prettier": "^1.8.0",
+    "serverless-webpack": "^3.1.2",
+    "standard": "^10.0.3",
+    "webpack": "^3.7.1",
+    "webpack-node-externals": "^1.6.0"
+  },
+  "standard": {
+    "ignore": [
+      "*.spec*"
+    ]
+  }
+}

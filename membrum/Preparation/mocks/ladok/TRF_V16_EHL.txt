@@ -1,0 +1,14 @@
+UB01;2016-08-12;132659;HANS;Registreringsvillkor;
+Antal personer: 4734
+S�kvillkor:
+From termin: 20161
+Tom termin: 20161
+Kurs: *
+Kurstyp: ALLA
+Lokal serie: OMR
+Lokal klass: EHL
+Registreringspo�ng-intervall: 1.0 - 99.0
+
+Pnr;Namn;Epostadress;Registrerade po�ng;
+9105040035;FREDRIK PALMQUIST;dat11fpa@student.lu.se; 35,5;
+9006211537;ZIMON KUHS;eng08zku@student.lu.se; 21,5;
