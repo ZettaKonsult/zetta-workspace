@@ -3,7 +3,6 @@ package com.zetta.payment.lambda;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,11 +14,13 @@ import com.amazonaws.services.lambda.runtime.Context;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zetta.payment.db.dynamo.DynamoPaymentDAO;
-import com.zetta.payment.form.BasicForm;
+import com.zetta.payment.exception.InvalidInput;
+import com.zetta.payment.form.Form;
 import com.zetta.payment.form.TRFForm;
 import com.zetta.payment.pojo.FormData;
 import com.zetta.payment.pojo.Payment;
 import com.zetta.payment.util.JSONUtil;
+import com.zetta.payment.util.URLUtil;
 
 /**
  * The public functions in this class are Lambda handlers.
@@ -28,50 +29,60 @@ import com.zetta.payment.util.JSONUtil;
  */
 public class PaymentLambda {
 
-    private static final Logger log = Logger.getLogger(PaymentLambda.class);
+    private static Logger log = Logger.getLogger(PaymentLambda.class);
 
-    private static final DynamoPaymentDAO paymentDAO = DynamoPaymentDAO
-            .instance();
+    private static final DynamoPaymentDAO paymentDAO = DynamoPaymentDAO.instance();
 
-    public String getForm(FormData data, Context context) {
-        BasicForm form = new TRFForm();
+    public String getURL(FormData data, Context context) {
 
-        System.out.println(data);
+        log.info("Received:\n" + data);
+
+        boolean isPaid = false;
+
         // Get user (orderid)
         // Get merchant (merchId)
         // Get plan (amount)
+        // Check if order is payed.
 
-        return form.asJSon();
+        String amount = "";
+        String orderid = "";
+
+        Form form = new TRFForm(orderid, amount);
+        Map<String, Object> json = new LinkedHashMap<String, Object>();
+        json.put("url", isPaid ? "" : form.url());
+        json.put("status", isPaid);
+
+        String response = "";
+        try {
+            response = JSONUtil.prettyPrint(json);
+        } catch (JsonProcessingException e) {
+            response = "{\"error\": \"" + e.getMessage() + "\"}";
+        }
+        return response;
     }
 
-    public void dibsConfirmation(InputStream is, OutputStream os,
-            Context context) {
+    public void dibsConfirmation(InputStream is, OutputStream os, Context context) {
 
         log.info("DIBS executed callback.");
 
         Map<String, String> headers = new LinkedHashMap<String, String>();
         headers.put("content-type", "*/*");
-        Response response = new Response(500, headers, "");
+        Response response = new Response(500, headers, "Unexpected error.");
 
-        Map<?, ?> json = Collections.<String, String>emptyMap();
         try {
-            json = JSONUtil.parse(is);
-            //log.info("Received json with parameters:\n"
-            //        + JSONUtil.prettyPrint(json, "    "));
-            log.info("{");
-            for (Object key : json.keySet()) {
-                log.info("[" + key.getClass().getSimpleName() + "]    "
-                        + key.toString() + " = " + json.get(key));
+            String status = URLUtil.decode(getBody(is)).get("statuscode");
+
+            if (status.equals("2")) {
+                response.setStatus(200);
+                response.setBody("Transaction completed.");
+            } else {
+                response.setBody("Transaction not completed, status code: " + status + ".");
             }
-            log.info("}");
-
-            response = new Response(200, headers, json.get("body"));
-
-        } catch (IOException e) {
-            log.error("Error receiving DIBS response:\n   " + e.getMessage());
+        } catch (InvalidInput e) {
+            response.setBody(e.getMessage());
         }
 
-        log.info("Writing response:\n    " + response.toString());
+        log.info("Sending response:\n    " + response.toString());
         try {
             os.write(response.asJson().getBytes());
         } catch (IOException e) {
@@ -79,8 +90,19 @@ public class PaymentLambda {
         }
     }
 
-    public static void main(String[] args) {
-        new PaymentLambda().dibsConfirmation(null, null, null);
+    private String getBody(InputStream is) throws InvalidInput {
+        try {
+            Map<?, ?> json = JSONUtil.parse(is);
+            log.info("Received json with parameters:\n" + JSONUtil.prettyPrint(json));
+
+            if (!json.containsKey("body")) {
+                throw new InvalidInput("No \"body\" key in object.");
+            }
+
+            return json.get("body").toString();
+        } catch (IOException e) {
+            throw new InvalidInput("Error parsing JSON object:\n" + e.getMessage().split("\n at")[0] + ".");
+        }
     }
 
     private static class Response {
@@ -89,9 +111,9 @@ public class PaymentLambda {
         public Response(int code, Map<String, String> headers, Object body) {
             this.values = new LinkedHashMap<String, Object>();
 
-            values.put("statusCode", Integer.toString(code));
+            setStatus(code);
             values.put("headers", headers);
-            values.put("body", body.toString());
+            setBody(body);
         }
 
         public String asJson() {
@@ -104,15 +126,18 @@ public class PaymentLambda {
             return json;
         }
 
+        public void setBody(Object body) {
+            values.put("body", body.toString());
+        }
+
+        public void setStatus(int code) {
+            values.put("statusCode", Integer.toString(code));
+        }
+
         @Override
         public String toString() {
             return asJson();
         }
-    }
-
-    public String dibsResponse(String response, Context context) {
-        log.info("Received response:\n" + response);
-        return response;
     }
 
     public List<Payment> getAllPayments() {

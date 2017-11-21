@@ -1,1 +1,0 @@
-https://payment.architrade.com/paymentweb/start.action?accepturl=&amount=1&callbackurl=https%3A%2F%2Fqe3bzqhdu8.execute-api.eu-central-1.amazonaws.com%2Fprod%2Fconfirm&cancelurl=&currency=SEK&decorator=responsive&ip=&lang=&merchant=90234620&orderid=1a2cd5cf-506c-43bc-8f71-f923c53064f4&test=1&uniqueoid=yes

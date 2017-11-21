@@ -22,13 +22,13 @@ public class TestFormData {
 
     @Test
     public void emptyPayment() {
-        assertEquals("", data.getId());
+        assertEquals("", data.getUserId());
     }
 
     @Test
     public void id() {
-        data.setId("ID");
-        assertEquals("ID", data.getId());
+        data.setUserId("ID");
+        assertEquals("ID", data.getUserId());
     }
 
     @Test
@@ -38,7 +38,7 @@ public class TestFormData {
 
     @Test
     public void string() {
-        data.setId("ID");
+        data.setUserId("ID");
         assertEquals("User ID: ID", data.toString());
     }
 }
