@@ -19,6 +19,7 @@ import com.zetta.payment.form.Form;
 import com.zetta.payment.form.TRFForm;
 import com.zetta.payment.pojo.FormData;
 import com.zetta.payment.pojo.Payment;
+import com.zetta.payment.util.CollectionUtil;
 import com.zetta.payment.util.JSONUtil;
 import com.zetta.payment.util.URLUtil;
 
@@ -33,7 +34,7 @@ public class PaymentLambda {
 
     private static final DynamoPaymentDAO paymentDAO = DynamoPaymentDAO.instance();
 
-    public String getURL(FormData data, Context context) {
+    public String getDIBSUrl(FormData data, Context context) {
 
         log.info("Received:\n" + data);
 
@@ -44,20 +45,26 @@ public class PaymentLambda {
         // Get plan (amount)
         // Check if order is payed.
 
-        String amount = "";
-        String orderid = "";
+        String amount = "1";    // Fix.
+        String orderid = "";    // Should be generated already.
 
         Form form = new TRFForm(orderid, amount);
         Map<String, Object> json = new LinkedHashMap<String, Object>();
         json.put("url", isPaid ? "" : form.url());
         json.put("status", isPaid);
 
+        log.info("Using the following parameters:\n" + CollectionUtil.mapString(json));
+
         String response = "";
         try {
             response = JSONUtil.prettyPrint(json);
         } catch (JsonProcessingException e) {
+            log.error("Error during JSON printing:\n" + e.getMessage());
             response = "{\"error\": \"" + e.getMessage() + "\"}";
         }
+
+        log.info("Replying:\n" + response);
+
         return response;
     }
 
@@ -70,13 +77,18 @@ public class PaymentLambda {
         Response response = new Response(500, headers, "Unexpected error.");
 
         try {
-            String status = URLUtil.decode(getBody(is)).get("statuscode");
+            Map<String, String> parameters = URLUtil.decode(getBody(is));
+            String status = parameters.get("statuscode");
 
-            if (status.equals("2")) {
+            if (status == null) {
+                response.setBody("Erroneous callback format, no 'statuscode' parameter.");
+
+            } else if (status.equals("2")) {
                 response.setStatus(200);
                 response.setBody("Transaction completed.");
+
             } else {
-                response.setBody("Transaction not completed, status code: " + status + ".");
+                response.setBody("Transaction not completed, status code: " + parameters.get(status) + ".");
             }
         } catch (InvalidInput e) {
             response.setBody(e.getMessage());
