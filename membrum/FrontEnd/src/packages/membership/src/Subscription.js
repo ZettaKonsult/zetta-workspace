@@ -97,9 +97,11 @@ export default class Subscription {
         intervalCount
       )
     }
+
+    throw new notImplementedError("Not yet implemented")
   }
 
-  getLastPaid = (): number => this.payments[this.payments.length]
+  getLastPaid = (): number => this.payments[this.payments.length - 1]
 
   getNumberOfPlans = (): number => this.plans.length
 
@@ -110,3 +112,5 @@ export default class Subscription {
 
   comparePlanInterval = (plan: Plan) => this.plans[0].comparePlanInterval(plan)
 }
+
+class notImplementedError extends Error {}
