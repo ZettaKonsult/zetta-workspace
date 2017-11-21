@@ -110,7 +110,8 @@ export default class Subscription {
   getTotalPlanCost = () =>
     this.plans.reduce((total, p2) => total + Number(p2.amount), 0)
 
-  comparePlanInterval = (plan: Plan) => this.plans[0].comparePlanInterval(plan)
+  comparePlanInterval = (plan: Plan) =>
+    this.plans.length > 0 ? this.plans[0].comparePlanInterval(plan) : true
 }
 
 class notImplementedError extends Error {}
