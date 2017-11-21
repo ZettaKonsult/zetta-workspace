@@ -12,7 +12,7 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
-/* eslint max-len: ["error", 100] */
+/* eslint max-len: ["error", 100]*/
 
 import SHA256 from "crypto-js/sha256"
 import encHex from "crypto-js/enc-hex"
@@ -217,7 +217,8 @@ sigV4Client.newClient = function(config) {
       body = JSON.stringify(body)
     }
 
-    // If there is no body remove the content-type header so it is not included in SigV4 calculation
+    // If there is no body remove the content-type header so it is not
+    // included in SigV4 calculation
     if (body === "" || body === undefined || body === null) {
       delete headers["Content-Type"]
     }

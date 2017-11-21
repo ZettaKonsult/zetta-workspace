@@ -5,10 +5,6 @@ import FadedLine from "../../../components/FadedLine"
 import Select from "../../../components/Select"
 
 export default class EditMembership extends Component {
-  constructor(props) {
-    super(props)
-  }
-
   render() {
     return (
       <div>
@@ -18,6 +14,7 @@ export default class EditMembership extends Component {
         <EditableMembership
           membership={this.props.membership}
           option={this.props.plans}
+          onChange={this.props.onChange}
         />
         <div className="ButtonGroup">
           <Button onClick={this.props.onSubmit} large>
@@ -34,5 +31,10 @@ export default class EditMembership extends Component {
 
 const EditableMembership = props =>
   props.membership.map((item, i) => (
-    <Select key={i} value={item.name} option={props.option} />
+    <Select
+      key={item.id}
+      value={item.name}
+      option={props.option}
+      onChange={e => props.onChange(item.id, e.target.value)}
+    />
   ))

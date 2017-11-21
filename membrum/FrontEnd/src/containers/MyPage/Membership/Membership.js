@@ -6,6 +6,8 @@ import NoMembership from "./NoMembership"
 import Button from "../../../components/Button"
 import db from "../../../mocks/db.json"
 
+import "./membership.css"
+
 export default class Membership extends Component {
   constructor() {
     super()
@@ -32,6 +34,10 @@ export default class Membership extends Component {
       isSuccess: true
     })
 
+  onPlanChange = (id, newId) => {
+    this.setState(onPlanChange(id, newId))
+  }
+
   render() {
     const { editMembership } = this.state
 
@@ -42,6 +48,7 @@ export default class Membership extends Component {
           membership={this.state.membership}
           onSubmit={this.submitEditMembership}
           cancel={this.editMembership}
+          onChange={this.onPlanChange}
         />
       )
     }
@@ -74,9 +81,25 @@ export default class Membership extends Component {
   }
 }
 
+const onPlanChange = (id, newId) => (state, props) => {
+  const index = state.membership.findIndex(item => item.id === id)
+  return {
+    membership: [
+      ...state.membership.slice(0, index),
+      findPlanAttribute("name", newId),
+      ...state.membership.slice(index + 1)
+    ]
+  }
+}
+
 const findPlan = id => db.plans.find(item => item.id === id)
+
+const findPlanAttribute = (attribute, value) =>
+  db.plans.find(item => item[attribute] === value)
+
 const getPlans = () =>
   db.plans.reduce((result, plan) => [...result, plan.name], [])
+
 const getMembership = ssn => {
   const membership = db.members.find(item => item.ssn === ssn).membership
   const plans = membership.map(id => findPlan(id))
