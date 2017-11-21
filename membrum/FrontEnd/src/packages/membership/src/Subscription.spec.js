@@ -65,30 +65,30 @@ describe("Subscription", () => {
     })
   })
 
-  describe("isSubscriptionBillable()", () => {
+  describe("isBillable()", () => {
     const lastPaid = Date.UTC(2017, 2)
     const timeToPay = Date.UTC(2017, 11)
     const notPayDate = Date.UTC(2017, 3)
 
     describe("not periodical", () => {
       it("true if the payment date + intervalCount has passed", () => {
-        sub = new Subscription([planEqual], false, lastPaid)
-        expect(sub.isSubscriptionBillable(timeToPay)).toBeTruthy()
+        sub = new Subscription([planEqual], false, [lastPaid])
+        expect(sub.isBillable(timeToPay)).toBeTruthy()
       })
       it("false if the payment date + intervalCount has not passed", () => {
-        sub = new Subscription([planEqual], false, lastPaid)
-        expect(sub.isSubscriptionBillable(notPayDate)).toBeFalsy()
+        sub = new Subscription([planEqual], false, [lastPaid])
+        expect(sub.isBillable(notPayDate)).toBeFalsy()
       })
     })
 
     describe("periodical", () => {
       it("true if the payment date has passed the upperBound of the plan intervalCount", () => {
-        sub = new Subscription([planEqual], true, lastPaid)
-        expect(sub.isSubscriptionBillable(timeToPay)).toBeTruthy()
+        sub = new Subscription([planEqual], true, [lastPaid])
+        expect(sub.isBillable(timeToPay)).toBeTruthy()
       })
       it("false if the payment has not passed upperBound of the plan intervalCount", () => {
-        sub = new Subscription([planEqual], true, lastPaid)
-        expect(sub.isSubscriptionBillable(notPayDate)).toBeFalsy()
+        sub = new Subscription([planEqual], true, [lastPaid])
+        expect(sub.isBillable(notPayDate)).toBeFalsy()
       })
     })
   })
@@ -97,31 +97,31 @@ describe("Subscription", () => {
     const paidDate = Date.UTC(2017, 1, 1)
 
     it("returns the upperbound for the subscription based on interval and intervalConut", () => {
-      sub = new Subscription([planEqual], true, paidDate, [paidDate])
+      sub = new Subscription([planEqual], true, [paidDate])
       expect(sub.getNextPayDate()).toBe(Date.UTC(2017, 6, 1))
     })
 
     it("returns the upperbound for the subscription based on interval and intervalConut", () => {
       const plan = new Plan({ interval: "month", intervalCount: 4 })
-      sub = new Subscription([plan], true, paidDate, [paidDate])
+      sub = new Subscription([plan], true, [paidDate])
       expect(sub.getNextPayDate()).toBe(Date.UTC(2017, 4, 1))
     })
 
     it("returns the upperbound for the subscription based on interval and intervalConut", () => {
       const plan = new Plan({ interval: "month", intervalCount: 3 })
-      sub = new Subscription([plan], true, paidDate, [paidDate])
+      sub = new Subscription([plan], true, [paidDate])
       expect(sub.getNextPayDate()).toBe(Date.UTC(2017, 3, 1))
     })
 
     it("returns the upperbound for the subscription based on interval and intervalConut", () => {
       const plan = new Plan({ interval: "month", intervalCount: 2 })
-      sub = new Subscription([plan], true, paidDate, [paidDate])
+      sub = new Subscription([plan], true, [paidDate])
       expect(sub.getNextPayDate()).toBe(Date.UTC(2017, 2, 1))
     })
 
     it("returns the upperbound for the subscription based on interval and intervalConut", () => {
       const plan = new Plan({ interval: "month", intervalCount: 1 })
-      sub = new Subscription([plan], true, paidDate, [paidDate])
+      sub = new Subscription([plan], true, [paidDate])
       expect(sub.getNextPayDate()).toBe(Date.UTC(2017, 2, 1))
     })
   })
@@ -131,18 +131,18 @@ describe("Subscription", () => {
 
     it("get epoxTime + 1 day", () => {
       const plan = new Plan({ interval: "day", intervalCount: 1 })
-      sub = new Subscription([plan], false, paidDate, [paidDate])
+      sub = new Subscription([plan], false, [paidDate])
       expect(sub.getNextSequentialPayDate()).toBe(Date.UTC(2017, 1, 2))
     })
 
     it("get epoxTime + 1 month", () => {
       const plan = new Plan({ interval: "month", intervalCount: 1 })
-      sub = new Subscription([plan], false, paidDate, [paidDate])
+      sub = new Subscription([plan], false, [paidDate])
       expect(sub.getNextSequentialPayDate()).toBe(Date.UTC(2017, 2, 1))
     })
     it("get epoxTime + 1 year", () => {
       const plan = new Plan({ interval: "year", intervalCount: 1 })
-      sub = new Subscription([plan], false, paidDate, [paidDate])
+      sub = new Subscription([plan], false, [paidDate])
       expect(sub.getNextSequentialPayDate()).toBe(Date.UTC(2018, 1, 1))
     })
   })

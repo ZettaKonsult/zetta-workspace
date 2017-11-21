@@ -6,18 +6,15 @@ import * as utilDate from "./DateUtility"
 export default class Subscription {
   plans: Plan[]
   isPeriodical: boolean
-  lastPaid: number
   payments: number[]
 
   constructor(
     plans: Plan[] = [],
     isPeriodical: boolean = true,
-    lastPaid: number = 0,
     payments: number[] = []
   ) {
     this.plans = plans
     this.isPeriodical = isPeriodical
-    this.lastPaid = lastPaid
     this.payments = payments
   }
 
@@ -65,9 +62,7 @@ export default class Subscription {
     ]
   }
 
-  isSubscriptionBillable = (
-    epoxString: number = new Date().getTime()
-  ): boolean => {
+  isBillable = (epoxString: number = new Date().getTime()): boolean => {
     return this.getNextPayDate() < epoxString
   }
 
@@ -83,13 +78,13 @@ export default class Subscription {
     const { interval, intervalCount } = this.plans[0]
 
     if (interval === "day") {
-      return utilDate.incrementDateBy(this.lastPaid, intervalCount)
+      return utilDate.incrementDateBy(this.getLastPaid(), intervalCount)
     }
     if (interval === "month") {
-      return utilDate.incrementMonthBy(this.lastPaid, intervalCount)
+      return utilDate.incrementMonthBy(this.getLastPaid(), intervalCount)
     }
     if (interval === "year") {
-      return utilDate.incrementYearBy(this.lastPaid, intervalCount)
+      return utilDate.incrementYearBy(this.getLastPaid(), intervalCount)
     }
   }
 
@@ -97,11 +92,16 @@ export default class Subscription {
     const { interval, intervalCount } = this.plans[0]
 
     if (interval === "month") {
-      return utilDate.incrementToNextLowerBound(this.lastPaid, intervalCount)
+      return utilDate.incrementToNextLowerBound(
+        this.getLastPaid(),
+        intervalCount
+      )
     }
   }
 
-  getNumberOfPlans = () => this.plans.length
+  getLastPaid = (): number => this.payments[this.payments.length]
+
+  getNumberOfPlans = (): number => this.plans.length
 
   findPlanIndex = (plan: Plan) => this.plans.findIndex(p => p.id === plan.id)
 
