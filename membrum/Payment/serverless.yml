@@ -14,5 +14,48 @@ functions:
     handler: com.zetta.payment.lambda.PaymentLambda::dibsConfirmation
     events:
       - http:
-          path: confirm
           method: post
+          path: confirm
+  generateDibsUrl:
+    handler: com.zetta.payment.lambda.PaymentLambda::getDIBSUrl
+    events:
+      - http:
+         method: get
+         path: url
+         role: paymentDatabaseManager
+         cors: true
+
+resources:
+  Resources:
+    paymentDatabaseManager:
+      Type: AWS::IAM::Role
+      Properties:
+        RoleName: paymentDatabaseManager
+        Path: "/"
+        AssumeRolePolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Principal:
+                Service:
+                  - lambda.amazonaws.com
+              Action: sts:AssumeRole
+        Policies:
+            - PolicyName: ManagePaymentTable
+              PolicyDocument:
+                Version: '2012-10-17'
+                Statement:
+                  - Effect: Allow
+                    Action:
+                      - dynamodb:DeleteItem
+                      - dynamodb:GetItem
+                      - dynamodb:PutItem
+                      - dynamodb:UpdateItem
+                    Resource: arn:aws:dynamodb:eu-central-1:460056602695:table/MembrumPayment-Test
+                  - Effect: Allow
+                    Action:
+                      - dynamodb:DeleteItem
+                      - dynamodb:GetItem
+                      - dynamodb:PutItem
+                      - dynamodb:UpdateItem
+                    Resource: arn:aws:dynamodb:eu-central-1:460056602695:table/MembrumUser-Test
