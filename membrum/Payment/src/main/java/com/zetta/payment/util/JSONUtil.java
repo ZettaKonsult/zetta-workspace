@@ -11,18 +11,16 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public final class JSONUtil {
 
-    private JSONUtil() {}
+    private JSONUtil() {
+    }
 
-    public static Map<?, ?> parse(InputStream input)
-            throws JsonParseException, JsonMappingException, IOException {
+    public static Map<?, ?> parse(InputStream input) throws JsonParseException, JsonMappingException, IOException {
 
         return new ObjectMapper().readValue(input, Map.class);
     }
 
-    public static String prettyPrint(Map<?, ?> json, String string)
-            throws JsonProcessingException {
+    public static String prettyPrint(Map<?, ?> json) throws JsonProcessingException {
 
-        return new ObjectMapper().writerWithDefaultPrettyPrinter()
-                .writeValueAsString(json);
+        return new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(json);
     }
 }

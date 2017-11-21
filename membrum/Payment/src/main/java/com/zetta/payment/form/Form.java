@@ -21,6 +21,12 @@ public interface Form {
 
     byte[] bytes() throws UnsupportedEncodingException;
 
-    String url() throws UnsupportedEncodingException;
+    String baseUrl();
+
+    String url();
+
+    String urlParameters() throws UnsupportedEncodingException;
+
+    Map<String, String> presetValues();
 
 }

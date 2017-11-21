@@ -20,10 +20,16 @@ public abstract class BasicForm implements Form, Serializable {
         for (String name : names()) {
             values.put(name, "");
         }
+        for (Map.Entry<String, String> entry : presetValues().entrySet()) {
+            set(entry.getKey(), entry.getValue());
+        }
     }
 
     @Override
     public abstract String[] names();
+
+    @Override
+    public abstract Map<String, String> presetValues();
 
     @Override
     public String get(String name) {
@@ -33,8 +39,7 @@ public abstract class BasicForm implements Form, Serializable {
     @Override
     public void set(String name, String value) {
         if (!values.containsKey(name)) {
-            throw new IllegalArgumentException("Could not set tag '" + name
-                    + "', it does not exist in the form.");
+            throw new IllegalArgumentException("Could not set tag '" + name + "', it does not exist in the form.");
         }
         values.put(name, value);
     }
@@ -70,13 +75,21 @@ public abstract class BasicForm implements Form, Serializable {
     }
 
     @Override
-    public String url() throws UnsupportedEncodingException {
+    public String urlParameters() throws UnsupportedEncodingException {
         StringJoiner sj = new StringJoiner("&");
         for (Map.Entry<String, String> entry : values.entrySet()) {
-            sj.add(URLEncoder.encode(entry.getKey(), "UTF-8") + "="
-                    + URLEncoder.encode(entry.getValue(), "UTF-8"));
+            sj.add(URLEncoder.encode(entry.getKey(), "UTF-8") + "=" + URLEncoder.encode(entry.getValue(), "UTF-8"));
         }
         return sj.toString();
+    }
+
+    @Override
+    public String url() {
+        try {
+            return baseUrl() + "?" + urlParameters();
+        } catch (UnsupportedEncodingException e) {
+            throw new IllegalStateException("Incorrect form setup:\n    " + e.getMessage());
+        }
     }
 
     @Override
@@ -91,8 +104,7 @@ public abstract class BasicForm implements Form, Serializable {
 
         for (Map.Entry<String, String> pair : values.entrySet()) {
             String value = pair.getValue();
-            string.append(prefix + "    " + pair.getKey() + ": "
-                    + (value.equals("") ? "<empty>" : value));
+            string.append(prefix + "    " + pair.getKey() + ": " + (value.equals("") ? "<empty>" : value));
             prefix = ",\n";
         }
         return string.append(prefix.replaceAll(",", "") + "}").toString();
