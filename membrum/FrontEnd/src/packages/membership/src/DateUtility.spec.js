@@ -126,25 +126,27 @@ describe("DateUtility", () => {
   })
 
   describe("incrementToNextLowerBound()", () => {
-    it("returns 6===july for interval 6 when date is before july", () => {
-      const date = Date.UTC(2017, 2, 2)
-      const expected = Date.UTC(2017, 6, 1)
-      const result = util.incrementToNextLowerBound(date, 6)
-      expect(result).toBe(expected)
-    })
+    describe("Should return the month that is the first for the next given interval", () => {
+      it("returns 6===july for interval 6 when date is before july", () => {
+        const date = Date.UTC(2017, 2, 2)
+        const expected = Date.UTC(2017, 6, 1)
+        const result = util.incrementToNextLowerBound(date, 6)
+        expect(result).toBe(expected)
+      })
 
-    it("returns 4===may for interval 4 when date is before may", () => {
-      const date = Date.UTC(2017, 3, 2)
-      const expected = Date.UTC(2017, 4, 1)
-      const result = util.incrementToNextLowerBound(date, 4)
-      expect(result).toBe(expected)
-    })
+      it("returns 4===may for interval 4 when date is before may", () => {
+        const date = Date.UTC(2017, 3, 2)
+        const expected = Date.UTC(2017, 4, 1)
+        const result = util.incrementToNextLowerBound(date, 4)
+        expect(result).toBe(expected)
+      })
 
-    it("returns 3===april for interval 3 when date is before april", () => {
-      const date = Date.UTC(2017, 2, 2)
-      const expected = Date.UTC(2017, 3, 1)
-      const result = util.incrementToNextLowerBound(date, 3)
-      expect(result).toBe(expected)
+      it("returns 3===april for interval 3 when date is before april", () => {
+        const date = Date.UTC(2017, 2, 2)
+        const expected = Date.UTC(2017, 3, 1)
+        const result = util.incrementToNextLowerBound(date, 3)
+        expect(result).toBe(expected)
+      })
     })
   })
 })
