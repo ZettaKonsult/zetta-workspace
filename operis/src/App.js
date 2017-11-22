@@ -12,7 +12,7 @@ class App extends Component {
         <header className="App-header">
           <h1 className="App-title">Operis</h1>
         </header>
-        <AdminDashboard />
+        <ReportForm />
       </div>
     );
   }
