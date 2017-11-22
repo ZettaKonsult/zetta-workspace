@@ -1,0 +1,16 @@
+.AdminDashboard{
+  display: flex;
+  flex-flow: column nowrap;
+  margin: 0 0.5em;
+}
+.AdminDashboardList{
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.AdminDashboardList li {
+  border: 1px solid black;
+  padding: 1em;
+  margin-bottom: 0.5em;
+}

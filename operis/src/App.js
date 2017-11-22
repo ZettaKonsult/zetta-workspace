@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import ReportForm from './Container/Report/Report'
 import Mypage from './Container/Mypage/Mypage'
+import AdminDashboard from './Container/AdminDashboard/AdminDashboard'
 import './App.css';
 
 class App extends Component {
@@ -11,7 +12,7 @@ class App extends Component {
         <header className="App-header">
           <h1 className="App-title">Operis</h1>
         </header>
-        <ReportForm />
+        <AdminDashboard />
       </div>
     );
   }
