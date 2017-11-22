@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import ReportForm from './Container/Report/Report'
 import Mypage from './Container/Mypage/Mypage'
+import AdminDashboard from './Container/AdminDashboard/AdminDashboard'
 import './App.css';
 
 class App extends Component {
