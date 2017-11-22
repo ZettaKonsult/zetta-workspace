@@ -34,18 +34,20 @@ const ReportStore = {
     getReport(id) {
       return ReportStore.data.reports.find(report => report.id === id)
     },
-    getWorkerReports(id) {
-      return ReportStore.data.reports.filter(report => report.workerId === id)
+    getWorkerReports(workerId) {
+      return ReportStore.data.reports.filter(
+        report => report.workerId === workerId
+      )
     },
     getReportSubmittedBy(workerId) {
       return ReportStore.data.reports.filter(
         report => report.submittedBy === workerId
       )
     },
-    getAllEditableReports(id) {
+    getAllEditableReports(workerId) {
       return [
-        ...ReportStore.methods.getWorkerReports(id),
-        ...ReportStore.methods.getReportSubmittedBy(id)
+        ...ReportStore.methods.getWorkerReports(workerId),
+        ...ReportStore.methods.getReportSubmittedBy(workerId)
       ]
     }
   }
