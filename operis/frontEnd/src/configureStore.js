@@ -1,6 +1,6 @@
 import { createStore } from 'redux'
-import { loadState, saveState } from './localStorage'
 
+import { loadState, saveState } from './localStorage'
 import rootReducer from './reducers'
 
 const addLoggingToDispatch = store => {
@@ -14,12 +14,13 @@ const addLoggingToDispatch = store => {
     console.log('%c action', 'color: blue', action)
     const returnValue = rawDispatch(action)
     console.log('%c next state', 'color: green', store.getState())
-    console.groupEnd(action.typ)
+    console.groupEnd(action.type)
     return returnValue
   }
 }
 
 const configureStore = () => {
+  //TODO uncomment when ready
   /*const persistedState = loadState()
   const store = createStore(rootReducer, persistedState)*/
 
