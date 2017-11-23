@@ -82,7 +82,7 @@ public class User implements Serializable {
 
     @Override
     public String toString() {
-        StringBuilder string = new StringBuilder("Payment:");
+        StringBuilder string = new StringBuilder("Order:");
         string.append("\n    Id:     " + id);
         string.append("\n    Name:   " + name);
         string.append("\n    Email:  " + email);

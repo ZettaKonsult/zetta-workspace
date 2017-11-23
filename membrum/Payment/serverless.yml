@@ -24,6 +24,14 @@ functions:
          path: url
          role: paymentDatabaseManager
          cors: true
+  getOrder:
+    handler: com.zetta.payment.lambda.PaymentLambda::lambdaGetOrder
+    events:
+      - http:
+         method: get
+         path: getOrder
+         role: paymentDatabaseManager
+         cors: true
 
 resources:
   Resources:

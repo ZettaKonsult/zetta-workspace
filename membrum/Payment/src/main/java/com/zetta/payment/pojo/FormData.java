@@ -27,4 +27,9 @@ public class FormData implements Serializable {
     public String toString() {
         return "User ID: " + (userId.equals("") ? "<undefined>" : userId);
     }
+
+    public String getPlanId() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }

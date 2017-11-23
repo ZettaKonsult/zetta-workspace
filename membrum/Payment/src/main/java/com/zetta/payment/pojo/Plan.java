@@ -24,4 +24,9 @@ public class Plan {
     public void setId(String id) {
         this.id = id;
     }
+
+    public String getAmount() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }

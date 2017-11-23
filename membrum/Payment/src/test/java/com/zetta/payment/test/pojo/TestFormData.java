@@ -21,7 +21,7 @@ public class TestFormData {
     }
 
     @Test
-    public void emptyPayment() {
+    public void emptyUser() {
         assertEquals("", data.getUserId());
     }
 

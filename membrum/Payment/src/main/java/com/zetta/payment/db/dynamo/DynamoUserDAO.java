@@ -32,21 +32,21 @@ public class DynamoUserDAO implements UserDAO {
 
     @Override
     public void delete(String id) {
-        Optional<User> paymentToDelete = get(id);
+        Optional<User> userToDelete = get(id);
 
-        if (!paymentToDelete.isPresent()) {
-            log.error("Unable to delete payment " + id
-                    + ", no such payment exists.");
+        if (!userToDelete.isPresent()) {
+            log.error("Unable to delete user " + id
+                    + ", no such user exists.");
             throw new IllegalArgumentException(
                     "Unable to delete non-existent payment.");
         }
 
-        mapper.delete(paymentToDelete);
+        mapper.delete(userToDelete);
     }
 
     @Override
-    public void delete(User payment) {
-        delete(payment.getId());
+    public void delete(User user) {
+        delete(user.getId());
     }
 
     @Override
@@ -56,18 +56,18 @@ public class DynamoUserDAO implements UserDAO {
 
     @Override
     public Optional<User> get(String id) {
-        User payment = mapper.load(User.class, id);
-        return Optional.ofNullable(payment);
+        User user = mapper.load(User.class, id);
+        return Optional.ofNullable(user);
     }
 
     @Override
-    public void save(User payment) {
-        mapper.save(payment);
+    public void save(User user) {
+        mapper.save(user);
     }
 
     @Override
-    public Optional<User> get(User t) {
-        return get(t.getId());
+    public Optional<User> get(User user) {
+        return get(user.getId());
     }
 
 }

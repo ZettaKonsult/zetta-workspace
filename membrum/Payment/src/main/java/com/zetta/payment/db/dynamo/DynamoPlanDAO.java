@@ -47,7 +47,7 @@ public class DynamoPlanDAO implements PlanDAO {
     }
 
     @Override
-    public void save(Plan payment) {
+    public void save(Plan plan) {
         throw new MethodNotImplemented();
     }
 

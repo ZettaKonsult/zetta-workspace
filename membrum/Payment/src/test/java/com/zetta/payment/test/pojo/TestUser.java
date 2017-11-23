@@ -68,7 +68,7 @@ public class TestUser {
 
     @Test
     public void emptyString() {
-        assertEquals("Payment:\n" + "    Id:     \n" + "    Name:   \n"
+        assertEquals("Order:\n" + "    Id:     \n" + "    Name:   \n"
                 + "    Email:  \n" + "    Points: {}", user.toString());
     }
 
@@ -78,7 +78,7 @@ public class TestUser {
         user.setName("Name");
         user.setEmail("e-mail");
         user.setPoints(pointsMap());
-        assertEquals("Payment:\n" + "    Id:     ID\n" + "    Name:   Name\n"
+        assertEquals("Order:\n" + "    Id:     ID\n" + "    Name:   Name\n"
                 + "    Email:  e-mail\n" + "    Points: {\n"
                 + "        ABC = 123.0,\n" + "        EFG = 12.3,\n"
                 + "        HIJ = 1.23\n" + "    }", user.toString());
