@@ -1,7 +1,12 @@
 import { combineReducers } from 'redux'
+import { reducer as formReducer } from 'redux-form'
+
 import reports, * as fromReports from './Reports/reports'
 
-export default combineReducers({ reports })
+export default combineReducers({
+  reports,
+  form: formReducer
+})
 
 export const getAllReports = state => fromReports.getAllReports(state.reports)
 
