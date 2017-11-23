@@ -2,17 +2,33 @@
   "name": "operis",
   "version": "0.1.0",
   "private": true,
+  "main": "src/index.js",
   "dependencies": {
+    "babel-runtime": "^6.26.0",
     "react": "^16.1.0",
-    "react-dom": "^16.1.0"
+    "react-dom": "^16.1.0",
+    "source-map-support": "^0.5.0",
+    "uuid": "^3.1.0"
   },
   "devDependencies": {
-    "react-scripts": "1.0.17"
+    "aws-sdk": "^2.155.0",
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-plugin-source-map-support": "^1.0.0",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-stage-3": "^6.24.1",
+    "react-scripts": "1.0.17",
+    "serverless-webpack": "^4.1.0",
+    "webpack": "^3.8.1",
+    "webpack-node-externals": "^1.6.0"
   },
   "scripts": {
-    "start": "react-scripts start",
     "build": "react-scripts build",
+    "deploy": "serverless deploy",
+    "eject": "react-scripts eject",
+    "start": "react-scripts start",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "update": "yarn test && yarn build && yarn deploy"
   }
 }
