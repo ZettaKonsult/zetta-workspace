@@ -1,32 +1,47 @@
 package com.zetta.payment.pojo;
 
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 
 @DynamoDBTable(tableName = "MembrumPlan-Test")
 public class Plan {
 
-    private String id;
+    public static final String ID_INDEX = "planId";
+    public static final String AMOUNT_INDEX = "amount";
+
+    private String planId;
+    private int amount;
 
     public Plan() {
-        this("");
+        this("", 0);
     }
 
-    public Plan(String id) {
-        this.id = id;
+    public Plan(String planId, int amount) {
+        this.planId = planId;
+        this.amount = amount;
     }
 
-    @DynamoDBHashKey
-    public String getId() {
-        return id;
+    @DynamoDBHashKey(attributeName = ID_INDEX)
+    public String getPlanId() {
+        return planId;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setPlanId(String planId) {
+        this.planId = planId;
     }
 
-    public String getAmount() {
-        // TODO Auto-generated method stub
-        return null;
+    @DynamoDBAttribute(attributeName = AMOUNT_INDEX)
+    public int getAmount() {
+        return amount;
+    }
+
+    public void setAmount(int amount) {
+        this.amount = amount;
+    }
+
+    @Override
+    public String toString() {
+        return "Plan id: " + planId + "\nAmount: " + amount;
     }
 }

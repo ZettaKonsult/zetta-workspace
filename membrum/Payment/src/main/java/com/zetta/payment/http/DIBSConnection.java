@@ -10,7 +10,7 @@ public final class DIBSConnection extends HTTPConnection {
     private Form form;
 
     public DIBSConnection() {
-        form = new TRFForm("1");
+        form = new TRFForm(1);
     }
 
     public void connect(OutputStream outStream) throws IOException {

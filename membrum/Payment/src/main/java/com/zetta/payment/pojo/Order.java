@@ -18,14 +18,14 @@ public class Order implements Serializable {
 
     private String orderId;
     private String userId;
-    private double amount;
+    private int amount;
     private boolean isPaid;
 
     public Order() {
-        this("", "", 0.0, false);
+        this("", "", 0, false);
     }
 
-    public Order(String orderId, String userId, double amount, boolean isPaid) {
+    public Order(String orderId, String userId, int amount, boolean isPaid) {
         this.orderId = orderId;
         this.userId = userId;
         this.amount = amount;
@@ -51,11 +51,11 @@ public class Order implements Serializable {
     }
 
     @DynamoDBAttribute(attributeName = AMOUNT_INDEX)
-    public double getAmount() {
+    public int getAmount() {
         return amount;
     }
 
-    public void setAmount(double amount) {
+    public void setAmount(int amount) {
         this.amount = amount;
     }
 

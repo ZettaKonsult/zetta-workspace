@@ -14,15 +14,19 @@ public class TestTRFForm {
 
     @Before
     public void setUp() {
-        form = new TRFForm("123");
+        form = new TRFForm(123);
     }
 
     @Test
     public void values() throws UnsupportedEncodingException {
-        String[] names = { "accepturl", "amount", "callbackurl", "cancelurl", "currency", "decorator", "ip", "lang",
-                "merchant", "orderid", "test", "uniqueoid" };
-        String[] values = { "", "123", "https://qe3bzqhdu8.execute-api.eu-central-1.amazonaws.com/prod/confirm", "",
-                "SEK", "responsive", "", "sv", "90234620", "<skip>", "1", "yes" };
+        String[] names = { "accepturl", "amount", "callbackurl", "cancelurl",
+                "currency", "decorator", "ip", "lang", "merchant", "orderid",
+                "test", "uniqueoid" };
+        String[] values = { "", "123",
+                "https://qe3bzqhdu8.execute-api.eu-central-1.amazonaws.com"
+                        + "/prod/confirm",
+                "", "SEK", "responsive", "", "sv", "90234620", "<skip>", "1",
+                "yes" };
 
         int size = form.size();
         assertEquals(names.length, size);
@@ -33,7 +37,8 @@ public class TestTRFForm {
             if (name.equals("orderid")) {
                 continue;
             }
-            assertEquals("Invalid key-value mapping for " + name + ":", values[i], form.get(name));
+            assertEquals("Invalid key-value mapping for " + name + ":",
+                    values[i], form.get(name));
         }
     }
 

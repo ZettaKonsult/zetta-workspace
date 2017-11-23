@@ -78,7 +78,7 @@ public abstract class PaymentLambda extends Lambda {
     }
 
     private String createDIBSUrl(Order order, Plan plan, User user) {
-        String amount = plan.getAmount();
+        int amount = plan.getAmount();
         String orderid = order.getOrderId();
 
         Form form = new TRFForm(orderid, amount);

@@ -6,14 +6,14 @@ public final class TRFForm extends DIBSForm {
 
     private static final long serialVersionUID = 1452321975763992435L;
 
-    public TRFForm(String amount) {
-        this(amount, generateOrderID());
+    public TRFForm(int amount) {
+        this(generateOrderID(), amount);
     }
 
-    public TRFForm(String amount, String orderID) {
+    public TRFForm(String orderID, int amount) {
         super();
         set("orderid", orderID);
-        set("amount", amount);
+        set("amount", Integer.toString(amount));
     }
 
     public static String generateOrderID() {

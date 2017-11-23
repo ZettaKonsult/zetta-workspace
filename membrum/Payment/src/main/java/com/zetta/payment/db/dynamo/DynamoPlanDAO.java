@@ -3,14 +3,22 @@ package com.zetta.payment.db.dynamo;
 import java.util.List;
 import java.util.Optional;
 
+import org.apache.log4j.Logger;
+
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
+import com.zetta.payment.db.DynamoDBManager;
 import com.zetta.payment.db.dao.PlanDAO;
 import com.zetta.payment.exception.MethodNotImplemented;
 import com.zetta.payment.pojo.Plan;
 
 public class DynamoPlanDAO implements PlanDAO {
 
-    // private static final Logger log = Logger.getLogger(DynamoPlanDAO.class);
-    // private static final DynamoDBMapper mapper = DynamoDBManager.mapper();
+    @SuppressWarnings("unused")
+    private static final Logger log = Logger.getLogger(DynamoPlanDAO.class);
+
+    @SuppressWarnings("unused")
+    private static final DynamoDBMapper mapper = DynamoDBManager.mapper();
+
     private static volatile DynamoPlanDAO instance;
 
     private DynamoPlanDAO() {}
@@ -43,7 +51,7 @@ public class DynamoPlanDAO implements PlanDAO {
 
     @Override
     public Optional<Plan> get(String id) {
-        return Optional.<Plan>of(new Plan("trf-standard"));
+        return Optional.<Plan>of(new Plan("trf-standard", 123));
     }
 
     @Override
