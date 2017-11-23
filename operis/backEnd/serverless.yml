@@ -26,7 +26,7 @@ functions:
   # Project handlers. #
 
   createProject:
-    handler: src/database/projects.createProject
+    handler: database/projects.createProject
     events:
       - http:
           path: projects
@@ -34,7 +34,7 @@ functions:
           cors: true
           authorizer: aws_iam
   deleteProject:
-    handler: src/database/projects.deleteProject
+    handler: database/projects.deleteProject
     events:
       - http:
           path: projects/{id}
@@ -42,7 +42,7 @@ functions:
           cors: true
           authorizer: aws_iam
   getProject:
-    handler: src/database/projects.getProject
+    handler: database/projects.getProject
     events:
       - http:
           path: projects/{id}
@@ -50,7 +50,7 @@ functions:
           cors: true
           authorizer: aws_iam
   updateProject:
-    handler: src/database/projects.updateProject
+    handler: database/projects.updateProject
     events:
       - http:
           path: projects/{id}
@@ -61,7 +61,7 @@ functions:
   # Report handlers. #
 
   createReport:
-    handler: src/database/reports.createReport
+    handler: database/reports.createReport
     events:
       - http:
           path: reports
@@ -69,7 +69,7 @@ functions:
           cors: true
           authorizer: aws_iam
   deleteReport:
-    handler: src/database/reports.deleteReport
+    handler: database/reports.deleteReport
     events:
       - http:
           path: reports/{id}
@@ -77,7 +77,7 @@ functions:
           cors: true
           authorizer: aws_iam
   getReport:
-    handler: src/database/reports.getReport
+    handler: database/reports.getReport
     events:
       - http:
           path: reports/{id}
@@ -85,7 +85,7 @@ functions:
           cors: true
           authorizer: aws_iam
   updateReport:
-    handler: src/database/reports.updateReport
+    handler: database/reports.updateReport
     events:
       - http:
           path: reports/{id}
@@ -96,7 +96,7 @@ functions:
   # Worker handlers. #
 
   createWorker:
-    handler: src/database/workers.createWorker
+    handler: database/workers.createWorker
     events:
       - http:
           path: workers
@@ -104,7 +104,7 @@ functions:
           cors: true
           authorizer: aws_iam
   deleteWorker:
-    handler: src/database/workers.deleteWorker
+    handler: database/workers.deleteWorker
     events:
       - http:
           path: workers/{id}
@@ -112,7 +112,7 @@ functions:
           cors: true
           authorizer: aws_iam
   getWorker:
-    handler: src/database/workers.getWorker
+    handler: database/workers.getWorker
     events:
       - http:
           path: workers/{id}
@@ -120,7 +120,7 @@ functions:
           cors: true
           authorizer: aws_iam
   updateWorker:
-    handler: src/database/workers.updateWorker
+    handler: database/workers.updateWorker
     events:
       - http:
           path: workers/{id}
