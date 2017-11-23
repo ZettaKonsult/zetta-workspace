@@ -1,23 +1,15 @@
 import React, { Component } from 'react';
-import ReportForm from './ReportForm'
-import logo from './logo.svg';
+import ReportForm from './Container/Report/Report'
+import Mypage from './Container/Mypage/Mypage'
+import AdminDashboard from './Container/AdminDashboard/AdminDashboard'
 import './App.css';
 
 class App extends Component {
-
-  constructor() {
-    super()
-
-    this.state = {
-      isCool: 1
-    }
-  }
 
   render() {
     return (
       <div className="App">
         <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
           <h1 className="App-title">Operis</h1>
         </header>
         <ReportForm />
