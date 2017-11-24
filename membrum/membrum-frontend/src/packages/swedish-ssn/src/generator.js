@@ -1,1 +1,0 @@
-const generateSsn = (dateOfBirth, seed) => {}
