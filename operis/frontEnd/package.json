@@ -1,0 +1,26 @@
+{
+  "name": "operis",
+  "version": "0.1.0",
+  "private": true,
+  "main": "src/index.js",
+  "dependencies": {
+    "react": "^16.1.0",
+    "react-dom": "^16.1.0",
+    "react-redux": "^5.0.6",
+    "react-router-dom": "^4.2.2",
+    "redux": "^3.7.2",
+    "redux-form": "^7.1.2",
+    "uuid": "^3.1.0"
+  },
+  "devDependencies": {
+    "prettier": "^1.8.2",
+    "react-scripts": "1.0.17",
+    "redux-devtools": "^3.4.1"
+  },
+  "scripts": {
+    "build": "react-scripts build",
+    "eject": "react-scripts eject",
+    "start": "react-scripts start",
+    "test": "react-scripts test --env=jsdom"
+  }
+}
