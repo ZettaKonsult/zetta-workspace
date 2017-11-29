@@ -31,7 +31,7 @@
     "deploy":
       "yarn build && aws s3 sync build/ s3://membrum-client && yarn clean",
     "postdeploy":
-      "aws cloudfront create-invalidation --distribution-id E2O9SBWDRR4JZS --paths /*",
+      "aws cloudfront create-invalidation --distribution-id E2O9SBWDRR4JZS --paths /* && aws cloudfront create-invalidation --distribution-id E36Q7O5H2Q1R7U --paths /*",
     "pretty": "prettier --write --no-semi \"src/**/*.js\"",
     "precommit": "lint-staged"
   },
