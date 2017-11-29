@@ -1,6 +1,9 @@
 package com.zetta.payment.db.dynamo;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.apache.log4j.Logger;
@@ -8,6 +11,7 @@ import org.apache.log4j.Logger;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
+import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.zetta.payment.db.DynamoDBManager;
 import com.zetta.payment.db.dao.OrderDAO;
 import com.zetta.payment.pojo.Order;
@@ -73,10 +77,25 @@ public class DynamoOrderDAO implements OrderDAO {
         return get(order.getOrderId());
     }
 
-    public Optional<Order> getLatest(String userId) {
-        List<Order> orders = mapper.query(Order.class,
-                new DynamoDBQueryExpression<Order>());
-        return Optional.ofNullable(orders.get(0));
+    @Override
+    public List<Order> getUnpaid(String userId) {
+        Map<String, AttributeValue> eav = new HashMap<String, AttributeValue>();
+        eav.put(":v1", new AttributeValue().withS(userId));
+        eav.put(":v2", new AttributeValue().withBOOL(false));
+
+        DynamoDBQueryExpression<Order> query = new DynamoDBQueryExpression<Order>()
+                .withIndexName(Order.USER_INDEX).withConsistentRead(false)
+                .withKeyConditionExpression("userId = :v1")
+                .withIndexName(Order.IS_PAID_INDEX)
+                .withKeyConditionExpression("isPaid = :v2")
+                .withExpressionAttributeValues(eav);
+
+        return new ArrayList<Order>(mapper.query(Order.class, query));
+    }
+
+    @Override
+    public Optional<Order> getLatestUnpaid(String userId) {
+        return Optional.ofNullable(getUnpaid(userId).get(0));
     }
 
 }

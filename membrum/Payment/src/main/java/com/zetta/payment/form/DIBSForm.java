@@ -6,8 +6,8 @@ import java.util.Map;
 public class DIBSForm extends BasicForm {
 
     private static final long serialVersionUID = 8418801285386062689L;
-    private static final String CALLBACK_URL = "https://qe3bzqhdu8.execute-api"
-            + ".eu-central-1.amazonaws.com/prod/confirm";
+    private static final String CALLBACK_URL = "https://gjnhqznxmd.execute"
+            + "-api.eu-central-1.amazonaws.com/prod/confirm";
     private static final String ACCEPT_URL = "";
     private static final String CANCEL_URL = "";
 

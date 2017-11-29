@@ -23,8 +23,8 @@ public class TestTRFForm {
                 "currency", "decorator", "ip", "lang", "merchant", "orderid",
                 "test", "uniqueoid" };
         String[] values = { "", "123",
-                "https://qe3bzqhdu8.execute-api.eu-central-1.amazonaws.com"
-                        + "/prod/confirm",
+                "https://gjnhqznxmd.execute-api.eu-central-1.amazonaws"
+                        + ".com/prod/confirm",
                 "", "SEK", "responsive", "", "sv", "90234620", "<skip>", "1",
                 "yes" };
 

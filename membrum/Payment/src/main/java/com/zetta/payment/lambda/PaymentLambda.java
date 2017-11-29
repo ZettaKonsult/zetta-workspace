@@ -9,13 +9,11 @@ import org.apache.log4j.Logger;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.zetta.payment.db.dynamo.DynamoOrderDAO;
-import com.zetta.payment.db.dynamo.DynamoPlanDAO;
 import com.zetta.payment.db.dynamo.DynamoUserDAO;
 import com.zetta.payment.form.Form;
 import com.zetta.payment.form.TRFForm;
 import com.zetta.payment.pojo.FormData;
 import com.zetta.payment.pojo.Order;
-import com.zetta.payment.pojo.Plan;
 import com.zetta.payment.pojo.User;
 import com.zetta.payment.util.JSONUtil;
 
@@ -24,61 +22,55 @@ import com.zetta.payment.util.JSONUtil;
  * 
  * @date 2017-11-14
  */
-public abstract class PaymentLambda extends Lambda {
+public class PaymentLambda extends Lambda {
 
     private static final Logger log = Logger.getLogger(PaymentLambda.class);
 
-    private static final DynamoPlanDAO planDAO = DynamoPlanDAO.instance();
     private static final DynamoOrderDAO orderDAO = DynamoOrderDAO.instance();
     private static final DynamoUserDAO userDAO = DynamoUserDAO.instance();
 
     public String getDIBSUrl(FormData data, Context context) {
 
-        String planId = data.getPlanId();
+        String orderId = data.getOrderId();
         String userId = data.getUserId();
 
-        Optional<Plan> maybePlan = planDAO.get(planId);
-        Optional<Order> maybeOrder = orderDAO.getLatest(userId);
+        Optional<Order> maybeOrder = orderDAO.get(orderId);
         Optional<User> maybeUser = userDAO.get(userId);
 
         if (!maybeOrder.isPresent()) {
-            error("No payment for user " + userId + ".");
+            error(log, "No payment for user " + userId + ".");
         } else if (maybeOrder.get().getIsPaid()) {
-            return orderIsPaid();
+            return orderIsPaidResponse();
         }
 
         if (!maybeUser.isPresent()) {
-            error("No such user: " + userId);
-        }
-        if (!maybePlan.isPresent()) {
-            error("No such plan: " + planId);
+            error(log, "No such user: " + userId);
         }
 
         if (hasErrors()) {
             return errorJSON(log);
         }
 
-        return createDIBSUrl(maybeOrder.get(), maybePlan.get(),
-                maybeUser.get());
+        return createDIBSUrl(maybeOrder.get(), maybeUser.get());
     }
 
-    private String orderIsPaid() {
+    private String orderIsPaidResponse() {
         Map<String, Object> json = new LinkedHashMap<String, Object>();
         json.put("url", "");
         json.put("status", true);
 
-        String response = "";
+        String result = "";
         try {
-            response = JSONUtil.prettyPrint(json);
+            result = JSONUtil.prettyPrint(json);
         } catch (JsonProcessingException e) {
-            error("Error during JSON printing:\n" + e.getMessage());
-            response = errorJSON(log);
+            log.error("Error during JSON printing:\n" + e.getMessage());
+            result = errorJSON(log);
         }
-        return response;
+        return result;
     }
 
-    private String createDIBSUrl(Order order, Plan plan, User user) {
-        int amount = plan.getAmount();
+    private String createDIBSUrl(Order order, User user) {
+        int amount = order.getAmount();
         String orderid = order.getOrderId();
 
         Form form = new TRFForm(orderid, amount);

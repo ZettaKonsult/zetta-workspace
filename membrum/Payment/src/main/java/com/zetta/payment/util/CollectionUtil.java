@@ -10,10 +10,12 @@ public final class CollectionUtil {
 
         String prefix = "\n";
         for (Map.Entry<?, ?> entry : map.entrySet()) {
-            string.append(prefix + entry.getKey() + " = " + entry.getValue());
+            string.append(prefix + "    " + entry.getKey() + " = "
+                    + entry.getValue());
             prefix = ",\n";
         }
 
-        return string.append((prefix.contains(",") ? "\n" : "") + "}").toString();
+        return string.append((prefix.contains(",") ? "\n" : "") + "}")
+                .toString();
     }
 }

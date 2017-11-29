@@ -17,4 +17,3 @@ public interface DAOInterface<T> {
 
     void delete(T t);
 }
-

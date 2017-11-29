@@ -3,20 +3,15 @@ package com.zetta.payment.lambda;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Scanner;
 
 import org.apache.log4j.Logger;
 
 import com.amazonaws.services.lambda.runtime.Context;
 import com.zetta.payment.db.dynamo.DynamoOrderDAO;
-import com.zetta.payment.exception.InvalidInput;
-import com.zetta.payment.exception.ValidationFailed;
 import com.zetta.payment.pojo.Order;
 import com.zetta.payment.util.JSONUtil;
-import com.zetta.payment.util.URLUtil;
 
 /**
  * Handlers for Order management.
@@ -25,113 +20,54 @@ import com.zetta.payment.util.URLUtil;
  */
 public class OrderLambda extends Lambda {
 
-	private static Logger log = Logger.getLogger(OrderLambda.class);
+    private static Logger log = Logger.getLogger(OrderLambda.class);
 
-	private static final DynamoOrderDAO orderDAO = DynamoOrderDAO.instance();
+    private static final DynamoOrderDAO orderDAO = DynamoOrderDAO.instance();
 
-	public void dibsConfirmation(InputStream is, OutputStream os, Context context) {
+    public void getOrder(InputStream is, OutputStream os, Context context) {
+        Response response = null;
 
-		log.info("DIBS executed callback.");
+        try {
+            Map<?, ?> json = JSONUtil.parseMap(is);
+            log.info("Received " + json);
+            String id = json.get("orderId").toString();
+            log.info("Querying table for order " + id + ".");
 
-		Map<String, String> headers = new LinkedHashMap<String, String>();
-		headers.put("content-type", "*/*");
+            Optional<Order> order = orderDAO.get(id);
 
-		Response response = null;
-		try {
-			Order order = createNewOrder(is);
-			response = new Response(200, headers, "Transaction completed.");
-			order.setIsPaid(true);
-			saveOrder(order);
-		} catch (InvalidInput | ValidationFailed e) {
-			error(e.getMessage());
-			response = new Response(500, headers, errorJSON(log));
-		}
+            if (order.isPresent()) {
+                log.info("Order existed.");
+                response = new Response(200,
+                        JSONUtil.toString(order.get(), Order.class));
+            } else {
+                error(log, "Order could not be found.");
+            }
+        } catch (IOException e) {
+            log.error("Error retrieving order: " + e.getMessage());
+        }
 
-		log.info("Sending response:\n    " + response.toString());
-		try {
-			os.write(response.asJson().getBytes());
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
+        respond(os, response, log);
+    }
 
-	private Order createNewOrder(InputStream inStream) throws ValidationFailed, InvalidInput {
+    public void saveOrder(InputStream is, OutputStream os, Context context) {
+        Response response = null;
 
-		Map<String, String> parameters = URLUtil.decode(getBody(inStream));
-		String status = parameters.get("statuscode");
-		String orderId = parameters.get("orderid");
-		Optional<Order> maybeOrder = lambdaGetOrder(orderId);
+        try {
+            Order order = JSONUtil.parse(is, Order.class);
 
-		if (status == null) {
-			error("Erroneous callback format, no 'statuscode' parameter.");
-		} else if (!status.equals("2")) {
-			error("Transaction not completed, status code: " + status + ".");
-		}
+            if (order == null) {
+                error(log, "Can not save null order.");
+            } else {
+                orderDAO.save(order);
+                String message = "Saved order " + order.getOrderId() + ".";
+                log.info(message);
+                response = new Response(200, message);
+            }
+        } catch (IOException e) {
+            error(log, "Error saving order: " + e.getMessage());
+        }
 
-		if (!maybeOrder.isPresent()) {
-			error("No order with the specified ID (" + orderId + ") exists:");
-		}
-
-		if (!hasErrors()) {
-			return maybeOrder.get();
-		}
-
-		throw new ValidationFailed(errorString());
-	}
-
-	private String getBody(InputStream is) throws InvalidInput {
-		try {
-			Map<?, ?> json = JSONUtil.parse(is);
-			log.info("Received json with parameters:\n" + JSONUtil.prettyPrint(json));
-
-			if (!json.containsKey("body")) {
-				throw new InvalidInput("No \"body\" key in object.");
-			}
-			return json.get("body").toString();
-		} catch (IOException e) {
-			throw new InvalidInput("Error parsing JSON object:\n" + e.getMessage().split("\n at")[0] + ".");
-		}
-	}
-
-	private Optional<Order> lambdaGetOrder(String orderId) {
-		Map<String, String> input = new LinkedHashMap<String, String>();
-		input.put("orderId", orderId);
-
-		try {
-			Map<?, ?> result = callLambda("payment-prod-getOrder", JSONUtil.prettyPrint(input));
-
-			return Optional.of(JSONUtil.parse(result, Order.class));
-		} catch (IOException e) {
-			error(e.getMessage());
-		}
-		return Optional.empty();
-	}
-
-	public void getOrder(InputStream is, OutputStream os, Context context) {
-		log.info("Received " + new Scanner(is).useDelimiter("\\A").next());
-		String id = "test";
-
-		log.info("Querying table for order " + id + ".");
-		Optional<Order> order = orderDAO.get(id);
-		if (order.isPresent()) {
-			log.info("Order existed.");
-		} else {
-			log.info("Order could not be found.");
-		}
-
-		log.info(order);
-	}
-
-	public void saveOrder(Order order) {
-
-		if (order == null) {
-			log.error("Can not save null order.");
-			throw new IllegalArgumentException("Can not save null order.");
-		}
-
-		log.info("Saving or updating order " + order.getOrderId() + ".");
-		orderDAO.save(order);
-		log.info("Successfully saved order.");
-	}
+        respond(os, response, log);
+    }
 
 }

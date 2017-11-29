@@ -12,22 +12,22 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import com.zetta.payment.lambda.OrderLambda;
+import com.zetta.payment.lambda.URLLambda;
 import com.zetta.payment.test.util.TestUtil;
 import com.zetta.payment.util.FileUtil;
 
-public class TestOrderLambda {
+public class TestURLLambda {
     private static final File TEST_DIR = new File(
             "src/test/java/com/zetta/payment/mocks/");
     private static final File approvedFile = new File(TEST_DIR,
             "DIBSResponseApproved.txt");
     private static final File noStatusCodeFile = new File(TEST_DIR,
             "ResponseNoStatusCode.txt");
-    private OrderLambda lambda;
+    private URLLambda lambda;
 
     @Before
     public void setUp() {
-        lambda = new OrderLambda();
+        lambda = new URLLambda();
     }
 
     @Test
@@ -59,7 +59,7 @@ public class TestOrderLambda {
                 new String(out.toByteArray()).replaceAll("\\\\r|\\\\n", ""));
     }
 
-    @Ignore("Relies on database state.")
+    @Ignore("Depends on database state.")
     public void noStatusCode() throws IOException {
         String response = FileUtil.fileAsString(noStatusCodeFile);
         InputStream in = new ByteArrayInputStream(response.getBytes());
@@ -73,7 +73,7 @@ public class TestOrderLambda {
 
     }
 
-    @Ignore("Relies on database state.")
+    @Ignore("Depends on database state.")
     public void approvedNullContext() throws IOException {
         String response = FileUtil.fileAsString(approvedFile);
         InputStream in = new ByteArrayInputStream(response.getBytes());
