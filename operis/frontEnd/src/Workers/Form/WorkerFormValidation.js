@@ -1,13 +1,13 @@
-import isISO8601 from 'validator/lib/isISO8601'
+import { validateSwedishSsn } from 'swedish-ssn'
 
-const isDate = value => (!isISO8601(value) ? 'Must be valid date' : '')
 const isRequired = value => (!value ? 'Field required.' : '')
+const isSsn = value =>
+  !validateSwedishSsn(value) ? 'Must be a swedish personal number' : ''
 
 const checks = {
-  date: [isRequired, isDate],
-  worker: [isRequired],
-  place: [isRequired],
-  hours: [isRequired]
+  name: [isRequired],
+  ssn: [isRequired, isSsn],
+  email: [isRequired]
 }
 
 export default values => {

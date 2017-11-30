@@ -1,5 +1,9 @@
 import React from 'react'
-import styled from 'styled-components'
+
+import FormGroup from '../../Components/FormGroup/FormGroup'
+import Input from '../../Components/Input/Input'
+import Textarea from '../../Components/Textarea/Textarea'
+import Select from '../../Components/Select/Select'
 
 export const inputGroup = ({
   input,
@@ -9,13 +13,13 @@ export const inputGroup = ({
   value,
   meta: { touched, error, warning }
 }) => (
-  <div>
-    <label htmlFor={input.name}>{placeholder}</label>
-    <div>
-      <Input {...input} type={type} autoComplete="off" />
-      {error && touched && <span>{error}</span>}
-    </div>
-  </div>
+  <FormGroup
+    name={input.name}
+    placeholder={placeholder}
+    error={error}
+    touched={touched}>
+    <Input {...input} type={type} autoComplete="off" />
+  </FormGroup>
 )
 
 export const textGroup = ({
@@ -25,23 +29,28 @@ export const textGroup = ({
   placeholder,
   meta: { touched, error, warning }
 }) => (
-  <div>
-    <label htmlFor={input.name}>{placeholder}</label>
-    <div>
-      <Textarea {...input} />
-      {error && touched && <span>{error}</span>}
-    </div>
-  </div>
+  <FormGroup
+    name={input.name}
+    placeholder={placeholder}
+    error={error}
+    touched={touched}>
+    <Textarea {...input} />
+  </FormGroup>
 )
 
-const Input = styled.input`
-  padding: 0.5em;
-  font-size: 1.3em;
-  width: 90%;
-`
-
-const Textarea = styled.textarea`
-  width: 95%;
-  height: 10em;
-  font-size: 1.2em;
-`
+export const selectGroup = ({
+  input,
+  type,
+  name,
+  placeholder,
+  children,
+  meta: { touched, error, warning }
+}) => (
+  <FormGroup
+    name={input.name}
+    placeholder={placeholder}
+    error={error}
+    touched={touched}>
+    <Select {...input}>{children}</Select>
+  </FormGroup>
+)
