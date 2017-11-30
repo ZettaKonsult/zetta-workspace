@@ -1,12 +1,12 @@
 package com.zetta.payment.pojo;
 
 import java.io.Serializable;
+import java.util.Map;
 import java.util.UUID;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBIndexHashKey;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBRangeKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 import com.zetta.payment.util.DateUtil;
 
@@ -15,10 +15,10 @@ public class Order implements Serializable {
 
     private static final long serialVersionUID = 5685764812092864593L;
 
-    public static final String ID_INDEX = "orderId";
+    public static final String ORDER_ID_INDEX = "orderId";
     public static final String AMOUNT_INDEX = "amount";
     public static final String IS_PAID_INDEX = "isPaid";
-    public static final String USER_INDEX = "userId";
+    public static final String USER_ID_INDEX = "userId";
     public static final String CREATED_INDEX = "created";
 
     private String orderId;
@@ -50,7 +50,7 @@ public class Order implements Serializable {
         this.created = created;
     }
 
-    @DynamoDBHashKey(attributeName = ID_INDEX)
+    @DynamoDBHashKey(attributeName = ORDER_ID_INDEX)
     public String getOrderId() {
         return orderId;
     }
@@ -59,7 +59,7 @@ public class Order implements Serializable {
         this.orderId = orderId;
     }
 
-    @DynamoDBIndexHashKey(globalSecondaryIndexName = USER_INDEX)
+    @DynamoDBIndexHashKey(globalSecondaryIndexName = USER_ID_INDEX)
     public String getUserId() {
         return userId;
     }
@@ -86,7 +86,7 @@ public class Order implements Serializable {
         this.isPaid = isPaid;
     }
 
-    @DynamoDBRangeKey(attributeName = CREATED_INDEX)
+    @DynamoDBAttribute(attributeName = CREATED_INDEX)
     public String getCreated() {
         return created;
     }
@@ -100,9 +100,13 @@ public class Order implements Serializable {
         StringBuilder string = new StringBuilder();
         string.append("Order id: " + orderId);
         string.append("\nUser id: " + userId);
+        string.append("\nCreated: " + created);
         string.append("\nAmount: " + amount);
         string.append("\nIs paid: " + (isPaid ? "yes" : "no") + ".");
-        string.append("\nCreated: " + created);
         return string.toString();
+    }
+
+    public void complement(Map<?, ?> orderMap) {
+        
     }
 }

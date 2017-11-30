@@ -12,38 +12,42 @@ import org.apache.log4j.Logger;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.zetta.payment.exception.InvalidInput;
 import com.zetta.payment.exception.ValidationFailed;
+import com.zetta.payment.lambda.response.Response;
 import com.zetta.payment.pojo.Order;
 import com.zetta.payment.util.CollectionUtil;
 import com.zetta.payment.util.JSONUtil;
 import com.zetta.payment.util.URLUtil;
 
-public class URLLambda extends Lambda {
-    private static Logger log = Logger.getLogger(URLLambda.class);
+public class URLLambda extends LambdaHandler {
+
+    private final Logger log = Logger.getLogger(URLLambda.class);
 
     public void dibsConfirmation(InputStream is, OutputStream os,
             Context context) {
 
         log.info("DIBS executed callback.");
 
-        Response response = null;
+        Optional<Order> maybeOrder = Optional.empty();
         try {
-            Optional<Order> maybeOrder = getOrderFromURL(is);
+            maybeOrder = getOrderFromURL(is);
 
-            if (maybeOrder.isPresent()) {
-                Order order = maybeOrder.get();
-                log.info("Created order " + order);
-
-                response = new Response(200, "Transaction completed.");
-                order.setIsPaid(true);
-
-                log.info("Saving order.");
-                lambdaSaveOrder(order);
+            if (!maybeOrder.isPresent()) {
+                Response.error("No such order.");
+                return;
             }
+
         } catch (InvalidInput | ValidationFailed e) {
-            error(log, e.getMessage());
+            Response.error(e.getMessage()).emit(os);
+            return;
         }
 
-        respond(os, response, log);
+        Order order = maybeOrder.get();
+        String orderId = order.getOrderId();
+        order.setIsPaid(true);
+        lambdaSaveOrder(order);
+
+        log.info("Saved order " + orderId + ".");
+        Response.success("Transaction " + orderId + " completed.").emit(os);
     }
 
     private Optional<Order> getOrderFromURL(InputStream inStream)
@@ -57,14 +61,11 @@ public class URLLambda extends Lambda {
         String orderId = parameters.get("orderid");
 
         if (status == null) {
-            error(log, "Erroneous callback format, no 'statuscode' parameter.");
+            throw new ValidationFailed(
+                    "Erroneous callback format, no 'statuscode' parameter.");
         } else if (!status.equals("2")) {
-            error(log,
+            throw new ValidationFailed(
                     "Transaction not completed, status code: " + status + ".");
-        }
-
-        if (hasErrors()) {
-            return Optional.empty();
         }
 
         log.info("Retrieving order " + orderId + ".");
@@ -120,14 +121,14 @@ public class URLLambda extends Lambda {
                     JSONUtil.toString(order, Order.class));
 
             if (result.containsKey("errorMessage")) {
-                error(log, "Lambda call resulted in error: "
+                log.error("Lambda call resulted in error: "
                         + result.get("errorMessage"));
             } else {
                 log.info("Successfully saved order " + orderId
                         + " with lambda call.");
             }
         } catch (IOException e) {
-            error(log, "Error calling lambda: " + e.getMessage());
+            log.error("Error calling lambda: " + e.getMessage());
         }
 
     }

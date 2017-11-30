@@ -10,7 +10,9 @@ import org.apache.log4j.Logger;
 
 import com.amazonaws.services.lambda.runtime.Context;
 import com.zetta.payment.db.dynamo.DynamoOrderDAO;
+import com.zetta.payment.lambda.response.Response;
 import com.zetta.payment.pojo.Order;
+import com.zetta.payment.util.CollectionUtil;
 import com.zetta.payment.util.JSONUtil;
 
 /**
@@ -18,56 +20,67 @@ import com.zetta.payment.util.JSONUtil;
  * 
  * @date 2017-11-08
  */
-public class OrderLambda extends Lambda {
+public class OrderLambda extends LambdaHandler {
 
-    private static Logger log = Logger.getLogger(OrderLambda.class);
+    private static final Logger log = Logger.getLogger(OrderLambda.class);
 
     private static final DynamoOrderDAO orderDAO = DynamoOrderDAO.instance();
 
     public void getOrder(InputStream is, OutputStream os, Context context) {
-        Response response = null;
 
         try {
             Map<?, ?> json = JSONUtil.parseMap(is);
             log.info("Received " + json);
             String orderId = json.get("orderId").toString();
 
-            log.info("Querying table for order order: " + orderId + ".");
-            Optional<Order> order = orderDAO.get(orderId); 
+            log.info("Querying table for order: " + orderId + ".");
+            Optional<Order> maybeOrder = orderDAO.get(orderId);
 
-            if (order.isPresent()) {
+            if (maybeOrder.isPresent()) {
                 log.info("Order existed.");
-                response = new Response(200,
-                        JSONUtil.toString(order.get(), Order.class));
-            } else {
-                error(log, "Order could not be found.");
+                new Response(200,
+                        JSONUtil.toString(maybeOrder.get(), Order.class))
+                                .emit(os);
+                return;
             }
-        } catch (IOException e) {
-            log.error("Error retrieving order: " + e.getMessage());
-        }
 
-        respond(os, response, log);
+            Response.error("Order could not be found.").emit(os);
+
+        } catch (IOException exception) {
+            Response.error("Error retrieving order: " + exception.getMessage())
+                    .emit(os);
+        }
     }
 
-    public void saveOrder(InputStream is, OutputStream os, Context context) {
-        Response response = null;
+    public void updateOrder(InputStream is, OutputStream os, Context context) {
 
         try {
-            Order order = JSONUtil.parse(is, Order.class);
+            String key = Order.ORDER_ID_INDEX;
+            Map<String, Object> orderMap = JSONUtil.parseMap(is);
 
-            if (order == null) {
-                error(log, "Can not save null order.");
-            } else {
-                orderDAO.save(order);
-                String message = "Saved order " + order.getOrderId() + ".";
-                log.info(message);
-                response = new Response(200, message);
+            if (!orderMap.containsKey(key)) {
+                Response.error("Can not save order without key 'no " + key
+                        + "' key present.").emit(os);
+                return;
             }
+
+            String orderId = orderMap.get(key).toString();
+            Optional<Order> existing = orderDAO.get(orderId);
+
+            if (existing.isPresent()) {
+                Map<String, Object> setValues = JSONUtil
+                        .parseMap(existing.get(), Order.class);
+
+                CollectionUtil.complement(orderMap, setValues);
+            }
+
+            orderDAO.save(JSONUtil.parseMap(orderMap, Order.class));
+            Response.success("Saved order " + orderId).emit(os);
+
         } catch (IOException e) {
-            error(log, "Error saving order: " + e.getMessage());
+            Response.error("Error saving order: " + e.getMessage()).emit(os);
         }
 
-        respond(os, response, log);
     }
 
 }

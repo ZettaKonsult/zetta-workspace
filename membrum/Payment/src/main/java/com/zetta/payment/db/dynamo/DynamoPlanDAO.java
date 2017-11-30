@@ -50,8 +50,8 @@ public class DynamoPlanDAO implements PlanDAO {
     }
 
     @Override
-    public Optional<Plan> get(String id) {
-        return Optional.<Plan>of(new Plan("trf-standard", 123));
+    public Optional<Plan> get(String planId) {
+        return Optional.<Plan>of(new Plan(planId, 123));
     }
 
     @Override

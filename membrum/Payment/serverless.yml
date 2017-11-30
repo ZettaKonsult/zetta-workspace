@@ -42,7 +42,7 @@ functions:
          role: paymentDatabaseManager
          cors: true
   updateOrder:
-    handler: com.zetta.payment.lambda.OrderLambda::saveOrder
+    handler: com.zetta.payment.lambda.OrderLambda::updateOrder
     events:
       - http:
          method: put
@@ -132,6 +132,7 @@ resources:
                       - dynamodb:GetItem
                       - dynamodb:PutItem
                       - dynamodb:UpdateItem
+                      - dynamodb:Query
                     Resource: arn:aws:dynamodb:eu-central-1:460056602695:table/MembrumOrders/orderId
                   - Effect: Allow
                     Action:
@@ -139,11 +140,13 @@ resources:
                       - dynamodb:GetItem
                       - dynamodb:PutItem
                       - dynamodb:UpdateItem
-                    Resource: arn:aws:dynamodb:eu-central-1:460056602695:table/MembrumOrders/indexId
+                      - dynamodb:Query
+                    Resource: arn:aws:dynamodb:eu-central-1:460056602695:table/MembrumOrders/index/userId
                   - Effect: Allow
                     Action:
                       - dynamodb:DeleteItem
                       - dynamodb:GetItem
                       - dynamodb:PutItem
                       - dynamodb:UpdateItem
+                      - dynamodb:Query
                     Resource: arn:aws:dynamodb:eu-central-1:460056602695:table/MembrumUsers

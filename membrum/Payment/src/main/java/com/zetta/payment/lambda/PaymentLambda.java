@@ -14,8 +14,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.zetta.payment.db.dynamo.DynamoOrderDAO;
 import com.zetta.payment.db.dynamo.DynamoPlanDAO;
 import com.zetta.payment.db.dynamo.DynamoUserDAO;
+import com.zetta.payment.exception.InvalidInput;
 import com.zetta.payment.exception.ProcessFail;
 import com.zetta.payment.form.TRFForm;
+import com.zetta.payment.lambda.response.Response;
 import com.zetta.payment.pojo.FormData;
 import com.zetta.payment.pojo.Order;
 import com.zetta.payment.pojo.Plan;
@@ -27,7 +29,7 @@ import com.zetta.payment.util.ProcessUtil.Engine;
 /**
  * @date 2017-11-14
  */
-public class PaymentLambda extends Lambda {
+public class PaymentLambda extends LambdaHandler {
     private static final File PLAN_FILE = new File(
             "src/main/resources/testScript.js");
 
@@ -37,113 +39,132 @@ public class PaymentLambda extends Lambda {
     private static final DynamoPlanDAO planDAO = DynamoPlanDAO.instance();
     private static final DynamoUserDAO userDAO = DynamoUserDAO.instance();
 
-    public String getLatestUnpaidUrl(FormData data, Context context)
-            throws ProcessFail {
+    /**
+     * Handler.
+     */
+    public String getLatestUnpaidUrl(FormData data, Context context) {
+
+        Response response = new Response();
 
         String planId = data.getPlanId();
         String userId = data.getUserId();
+        log.info("Received planId: " + planId + ", userId: " + userId);
 
         Optional<Plan> maybePlan = planDAO.get(planId);
         Optional<User> maybeUser = userDAO.get(userId);
 
         if (!maybePlan.isPresent()) {
-            error(log, "No such plan: " + planId);
+            log.error(response.addError("No such plan: " + planId));
+            return response.toString();
         }
         if (!maybeUser.isPresent()) {
-            error(log, "No such user: " + userId);
-        }
-
-        if (hasErrors()) {
-            return errorJSON(log);
+            log.error(response.addError("No such user: " + userId));
+            return response.toString();
         }
 
         Plan plan = maybePlan.get();
         User user = maybeUser.get();
 
-        Order order = null;
-        if (shouldCreateNewOrder(plan)) {
-            order = new Order(user, plan);
-            orderDAO.save(order);
-            log.info("Created new order: " + order.getOrderId() + ".");
-        } else {
-            Optional<Order> maybeOrder = orderDAO.getLatestUnpaid(user);
-            if (maybeOrder.isPresent()) {
-                order = maybeOrder.get();
-                log.info("Found unpaid order: " + order.getOrderId() + ".");
-            } else {
-                log.info("No unpaid orders were found.");
-                return createResult("", false);
-            }
-        }
+        String url = "";
+        boolean status = false;
 
-        return createResult(new TRFForm(order).url(), true);
+        try {
+            Optional<Order> orderToPay = getOrderToPay(user, plan);
+            if (orderToPay.isPresent()) {
+                url = new TRFForm(orderToPay.get()).url();
+                status = true;
+            }
+            return createResult(url, status);
+        } catch (InvalidInput | ProcessFail exception) {
+            return new Response(exception).toString();
+        }
     }
 
-    public String getUnpaidUrls(FormData data, Context context)
+    private Optional<Order> getOrderToPay(User user, Plan plan)
             throws ProcessFail {
 
-        String planId = data.getPlanId();
-        String userId = data.getUserId();
-
-        log.info("Getting unpaid URLs for\n    " + data);
-
-        Optional<Plan> maybePlan = planDAO.get(planId);
-        Optional<User> maybeUser = userDAO.get(userId);
-
-        if (!maybePlan.isPresent()) {
-            error(log, "No such plan: " + planId);
-        }
-        if (!maybeUser.isPresent()) {
-            error(log, "No such user: " + userId);
-        }
-
-        if (hasErrors()) {
-            return errorJSON(log);
-        }
-
-        Plan plan = maybePlan.get();
-        User user = maybeUser.get();
-
-        List<Order> orders = orderDAO.getUnpaid(user.getUserId());
-        if (shouldCreateNewOrder(maybePlan.get())) {
+        Optional<Order> maybeOrder = Optional.empty();
+        if (shouldCreateNewOrder(plan)) {
             Order order = new Order(user, plan);
             orderDAO.save(order);
             log.info("Created new order: " + order.getOrderId() + ".");
-            orders.add(order);
+            maybeOrder = Optional.of(order);
+        } else {
+            maybeOrder = orderDAO.getLatestUnpaid(user);
+
+            if (maybeOrder.isPresent()) {
+                log.info("Found unpaid order.");
+            }
         }
 
-        return createResults(orders);
+        return maybeOrder;
     }
 
-    private String createResult(String url, boolean status) {
-        String result = "";
+    /**
+     * Handler.
+     */
+    public String getUnpaidUrls(FormData data, Context context) {
+
+        Response response = new Response();
+
+        String planId = data.getPlanId();
+        String userId = data.getUserId();
+        log.info("Received planId: " + planId + ", userId: " + userId);
+
+        Optional<Plan> maybePlan = planDAO.get(planId);
+        Optional<User> maybeUser = userDAO.get(userId);
+
+        if (!maybePlan.isPresent()) {
+            log.error(response.addError("No such plan: " + planId));
+            return response.errorJSON();
+        }
+        if (!maybeUser.isPresent()) {
+            log.error(response.addError("No such user: " + userId));
+            return response.errorJSON();
+        }
+
+        Plan plan = maybePlan.get();
+        User user = maybeUser.get();
+
+        List<Order> unpaid = orderDAO.getUnpaid(userId);
         try {
-            result = JSONUtil.prettyPrint(urlMap(url, status));
-        } catch (JsonProcessingException e) {
-            log.error("Error during JSON printing:\n" + e.getMessage());
-            result = errorJSON(log);
+            if (shouldCreateNewOrder(plan)) {
+                Order order = new Order(user, plan);
+                orderDAO.save(order);
+                log.info("Created new order: " + order.getOrderId() + ".");
+                unpaid.add(order);
+            }
+            return createResults(unpaid);
+        } catch (ProcessFail | InvalidInput exception) {
+            return new Response(exception).toString();
         }
-        return result;
     }
 
-    private String createResults(List<Order> orders) {
+    private String createResult(String url, boolean status)
+            throws InvalidInput {
+
+        try {
+            return JSONUtil.prettyPrint(urlMap(url, status));
+        } catch (JsonProcessingException exception) {
+            throw new InvalidInput(
+                    "Error during JSON printing:\n" + exception.getMessage());
+        }
+    }
+
+    private String createResults(List<Order> orders) throws InvalidInput {
         List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 
-        log.info("Found orders:\n");
         for (Order order : orders) {
             log.info("    " + order.getOrderId());
             list.add(urlMap(new TRFForm(order).url(), false));
         }
 
-        String result = "";
         try {
-            result = JSONUtil.toString(list, List.class);
-        } catch (JsonProcessingException e) {
-            log.error("Error during JSON printing:\n" + e.getMessage());
-            result = errorJSON(log);
+            return JSONUtil.toString(list, List.class);
+        } catch (JsonProcessingException exception) {
+            throw new InvalidInput(
+                    "Error during JSON printing:\n" + exception.getMessage());
         }
-        log.info("Returning JSON:\n\n" + result);
-        return result;
     }
 
     private Map<String, Object> urlMap(String url, boolean status) {
@@ -155,7 +176,7 @@ public class PaymentLambda extends Lambda {
 
     // TODO: Fix.
     private boolean shouldCreateNewOrder(Plan plan) throws ProcessFail {
-        if (plan.getPlanId().contains("stop")) {
+        if (plan.getPlanId().equals("notNew")) {
             return false;
         } else if (1 == 1) {
             return true;

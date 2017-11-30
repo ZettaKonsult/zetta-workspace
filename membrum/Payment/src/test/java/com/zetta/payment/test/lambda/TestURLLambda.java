@@ -36,12 +36,10 @@ public class TestURLLambda {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         lambda.dibsConfirmation(in, out, null);
 
-        assertEquals(
-                "{\"statusCode\":\"500\",\"headers\":{\"content-type\":\"*/*"
-                        + "\"},\"body\":\"{  \\\"error\\\" : \\\"Error parsing"
-                        + " JSON object:\\Unexpected character ('B' "
-                        + "(code 66)): was expecting a colon to separate field"
-                        + " name and value.\\\"}\"}",
+        assertEquals("{\"statusCode\":\"500\",\"headers\":{\"content-type\":\"*"
+                + "/*\"},\"body\":{\"errorMessage\":\"Error parsing JSON "
+                + "object:Unexpected character ('B' (code 66)): was expecting "
+                + "a colon to separate field name and value.\"}}",
                 new String(out.toByteArray()).replaceAll("\\\\r|\\\\n", ""));
     }
 
@@ -52,10 +50,9 @@ public class TestURLLambda {
                 "{\"key\": \"value\"}".getBytes());
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         lambda.dibsConfirmation(in, out, null);
-        assertEquals(
-                "{\"statusCode\":\"500\",\"headers\":{\"content-type\":\"*/*"
-                        + "\"},\"body\":\"{  \\\"error\\\" : \\\"No \\\\\\"
-                        + "\"body\\\\\\\" key in object.\\\"}\"}",
+        assertEquals("{\"statusCode\":\"500\",\"headers\":{\"content-type\":\"*"
+                + "/*\"},\"body\":{\"errorMessage\":\"No \\\"body\\\" key "
+                + "in object.\"}}",
                 new String(out.toByteArray()).replaceAll("\\\\r|\\\\n", ""));
     }
 
