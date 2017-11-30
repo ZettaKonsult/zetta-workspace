@@ -40,6 +40,9 @@ export const allIds = (state = [], action) => {
 const reports = combineReducers({ byId, allIds })
 export default reports
 
+export const isReportId = (state, id) =>
+  state.allIds.find(compareId => compareId === id)
+
 export const getAllReports = state => state.allIds.map(id => state.byId[id])
 
 export const getReportById = (state, id) => state.byId[id]

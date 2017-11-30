@@ -7,6 +7,10 @@ import './Mypage.css'
 const ReportList = ({ reports }) => (
   <div className="Mypage">
     <Link to="/report">Create new report</Link>
+    <br />
+    <Link to="/Worker">Create new worker</Link>
+    <br />
+    <Link to="/place">Create new workplace</Link>
     <ul className="ReportList">
       {reports.map(report => <ReportItem key={report.id} report={report} />)}
     </ul>
