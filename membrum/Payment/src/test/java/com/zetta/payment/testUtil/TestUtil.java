@@ -1,4 +1,4 @@
-package com.zetta.payment.test.util;
+package com.zetta.payment.testUtil;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

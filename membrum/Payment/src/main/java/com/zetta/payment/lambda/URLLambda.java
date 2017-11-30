@@ -27,15 +27,18 @@ public class URLLambda extends Lambda {
 
         Response response = null;
         try {
-            Order order = getOrderFromURL(is);
-            log.info("Created order " + order);
+            Optional<Order> maybeOrder = getOrderFromURL(is);
 
-            response = new Response(200, "Transaction completed.");
-            order.setIsPaid(true);
+            if (maybeOrder.isPresent()) {
+                Order order = maybeOrder.get();
+                log.info("Created order " + order);
 
-            log.info("Saving order.");
-            lambdaSaveOrder(order);
+                response = new Response(200, "Transaction completed.");
+                order.setIsPaid(true);
 
+                log.info("Saving order.");
+                lambdaSaveOrder(order);
+            }
         } catch (InvalidInput | ValidationFailed e) {
             error(log, e.getMessage());
         }
@@ -43,7 +46,7 @@ public class URLLambda extends Lambda {
         respond(os, response, log);
     }
 
-    private Order getOrderFromURL(InputStream inStream)
+    private Optional<Order> getOrderFromURL(InputStream inStream)
             throws ValidationFailed, InvalidInput {
 
         Map<String, String> parameters = URLUtil.decode(getBody(inStream));
@@ -53,9 +56,6 @@ public class URLLambda extends Lambda {
         String status = parameters.get("statuscode");
         String orderId = parameters.get("orderid");
 
-        log.info("Retrieving order.");
-        Optional<Order> maybeOrder = lambdaGetOrder(orderId);
-
         if (status == null) {
             error(log, "Erroneous callback format, no 'statuscode' parameter.");
         } else if (!status.equals("2")) {
@@ -63,16 +63,12 @@ public class URLLambda extends Lambda {
                     "Transaction not completed, status code: " + status + ".");
         }
 
-        if (!maybeOrder.isPresent()) {
-            error(log,
-                    "No order with the specified ID (" + orderId + ") exists:");
+        if (hasErrors()) {
+            return Optional.empty();
         }
 
-        if (!hasErrors()) {
-            return maybeOrder.get();
-        }
-
-        throw new ValidationFailed(errorString());
+        log.info("Retrieving order " + orderId + ".");
+        return lambdaGetOrder(orderId);
     }
 
     private String getBody(InputStream is) throws InvalidInput {
@@ -117,10 +113,7 @@ public class URLLambda extends Lambda {
 
     private void lambdaSaveOrder(Order order) {
         String orderId = order.getOrderId();
-
         log.info("Calling lambda to save order " + orderId + ".");
-        Map<String, String> input = new LinkedHashMap<String, String>();
-        input.put("orderId", orderId);
 
         try {
             Map<?, ?> result = callLambda("payment-prod-updateOrder",

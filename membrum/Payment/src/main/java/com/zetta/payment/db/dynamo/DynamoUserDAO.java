@@ -46,7 +46,7 @@ public class DynamoUserDAO implements UserDAO {
 
     @Override
     public void delete(User user) {
-        delete(user.getId());
+        delete(user.getUserId());
     }
 
     @Override
@@ -67,7 +67,7 @@ public class DynamoUserDAO implements UserDAO {
 
     @Override
     public Optional<User> get(User user) {
-        return get(user.getId());
+        return get(user.getUserId());
     }
 
 }

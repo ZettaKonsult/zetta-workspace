@@ -11,14 +11,22 @@ package:
 
 functions:
   confirmPayment:
-    handler: com.zetta.payment.lambda.OrderLambda::dibsConfirmation
+    handler: com.zetta.payment.lambda.URLLambda::dibsConfirmation
     events:
       - http:
           method: post
           path: confirm
           role: callPaymentLambdas
-  generateDibsUrl:
-    handler: com.zetta.payment.lambda.PaymentLambda::getDIBSUrl
+  getUnpaidUrls:
+    handler: com.zetta.payment.lambda.PaymentLambda::getUnpaidUrls
+    events:
+      - http:
+         method: get
+         path: url
+         role: paymentDatabaseManager
+         cors: true
+  getLatestUnpaidUrl:
+    handler: com.zetta.payment.lambda.PaymentLambda::getLatestUnpaidUrl
     events:
       - http:
          method: get
@@ -30,14 +38,14 @@ functions:
     events:
       - http:
          method: get
-         path: getOrder/{id}
+         path: getOrder
          role: paymentDatabaseManager
          cors: true
   updateOrder:
     handler: com.zetta.payment.lambda.OrderLambda::saveOrder
     events:
       - http:
-         method: get
+         method: put
          path: updateOrder
          role: paymentDatabaseManager
          cors: true
@@ -116,11 +124,22 @@ resources:
                           - 'log-group:/aws/lambda/*:*:*'
                   - Effect: Allow
                     Action:
+                      - dynamodb:*
+                    Resource: arn:aws:dynamodb:eu-central-1:460056602695:table/MembrumOrders
+                  - Effect: Allow
+                    Action:
                       - dynamodb:DeleteItem
                       - dynamodb:GetItem
                       - dynamodb:PutItem
                       - dynamodb:UpdateItem
-                    Resource: arn:aws:dynamodb:eu-central-1:460056602695:table/MembrumOrders
+                    Resource: arn:aws:dynamodb:eu-central-1:460056602695:table/MembrumOrders/orderId
+                  - Effect: Allow
+                    Action:
+                      - dynamodb:DeleteItem
+                      - dynamodb:GetItem
+                      - dynamodb:PutItem
+                      - dynamodb:UpdateItem
+                    Resource: arn:aws:dynamodb:eu-central-1:460056602695:table/MembrumOrders/indexId
                   - Effect: Allow
                     Action:
                       - dynamodb:DeleteItem

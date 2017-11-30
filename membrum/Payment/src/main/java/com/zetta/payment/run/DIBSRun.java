@@ -4,16 +4,17 @@ import java.io.IOException;
 
 import com.zetta.payment.form.TRFForm;
 import com.zetta.payment.http.DIBSConnection;
+import com.zetta.payment.pojo.Order;
 
 public class DIBSRun {
 
-    private static void generateURL(int amount) {
-        System.out.println(new TRFForm(amount).url());
+    private static void generateURL(String orderId, int amount) {
+        System.out.println(new TRFForm(new Order(orderId, amount)).url());
     }
 
     private static void doPost() {
         try {
-            new DIBSConnection().connect(System.out);
+            new DIBSConnection("testId", 123).connect(System.out);
         } catch (IOException e) {
             System.err.println(
                     "Could not perform DIBS payment:\n    " + e.getMessage());
@@ -28,7 +29,7 @@ public class DIBSRun {
 
         switch (opt) {
             case "url":
-                generateURL(1);
+                generateURL("testId", 1);
                 break;
             case "post":
                 doPost();

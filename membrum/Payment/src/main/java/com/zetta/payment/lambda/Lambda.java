@@ -34,6 +34,7 @@ public abstract class Lambda {
     }
 
     protected void error(Logger log, String errorMessage) {
+        log.error(errorMessage);
         errors.add(errorMessage);
     }
 

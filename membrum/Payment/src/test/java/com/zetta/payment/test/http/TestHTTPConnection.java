@@ -13,9 +13,10 @@ import org.junit.Test;
 import com.zetta.payment.form.TRFForm;
 import com.zetta.payment.http.DIBSConnection;
 import com.zetta.payment.http.HTTPConnection;
+import com.zetta.payment.pojo.Order;
 
 public class TestHTTPConnection {
-    private HTTPConnection connection = new DIBSConnection();
+    private HTTPConnection connection = new DIBSConnection("testId", 123);
 
     @Test
     public void constructRequest() throws IOException {
@@ -30,7 +31,8 @@ public class TestHTTPConnection {
     @Test
     public void doRequest() throws IOException {
         ByteArrayOutputStream outStream = new ByteArrayOutputStream();
-        connection.doRequest("POST", new TRFForm(1).bytes(), outStream);
+        connection.doRequest("POST", new TRFForm(new Order()).bytes(),
+                outStream);
         assertTrue(
                 "Test failure indicates connection issues; check output "
                         + "stream (print expected string).",

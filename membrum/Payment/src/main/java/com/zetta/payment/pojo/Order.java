@@ -1,11 +1,14 @@
 package com.zetta.payment.pojo;
 
 import java.io.Serializable;
+import java.util.UUID;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBIndexHashKey;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBRangeKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
+import com.zetta.payment.util.DateUtil;
 
 @DynamoDBTable(tableName = "MembrumOrders")
 public class Order implements Serializable {
@@ -26,6 +29,15 @@ public class Order implements Serializable {
 
     public Order() {
         this("", "", 0, false, "");
+    }
+
+    public Order(User user, Plan plan) {
+        this(user.getUserId(), plan.getAmount());
+    }
+
+    public Order(String userId, int amount) {
+        this(UUID.randomUUID().toString(), userId, amount, false,
+                DateUtil.now());
     }
 
     public Order(String orderId, String userId, int amount, boolean isPaid,
@@ -74,7 +86,7 @@ public class Order implements Serializable {
         this.isPaid = isPaid;
     }
 
-    @DynamoDBAttribute(attributeName = CREATED_INDEX)
+    @DynamoDBRangeKey(attributeName = CREATED_INDEX)
     public String getCreated() {
         return created;
     }

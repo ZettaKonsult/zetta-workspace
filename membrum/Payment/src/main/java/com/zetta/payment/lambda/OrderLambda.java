@@ -30,10 +30,10 @@ public class OrderLambda extends Lambda {
         try {
             Map<?, ?> json = JSONUtil.parseMap(is);
             log.info("Received " + json);
-            String id = json.get("orderId").toString();
-            log.info("Querying table for order " + id + ".");
+            String orderId = json.get("orderId").toString();
 
-            Optional<Order> order = orderDAO.get(id);
+            log.info("Querying table for order order: " + orderId + ".");
+            Optional<Order> order = orderDAO.get(orderId); 
 
             if (order.isPresent()) {
                 log.info("Order existed.");

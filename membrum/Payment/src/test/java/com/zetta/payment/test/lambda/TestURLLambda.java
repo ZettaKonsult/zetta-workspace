@@ -13,7 +13,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import com.zetta.payment.lambda.URLLambda;
-import com.zetta.payment.test.util.TestUtil;
+import com.zetta.payment.testUtil.TestUtil;
 import com.zetta.payment.util.FileUtil;
 
 public class TestURLLambda {

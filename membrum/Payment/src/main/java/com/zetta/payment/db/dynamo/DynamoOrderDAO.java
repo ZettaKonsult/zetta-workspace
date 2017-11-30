@@ -15,6 +15,7 @@ import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.zetta.payment.db.DynamoDBManager;
 import com.zetta.payment.db.dao.OrderDAO;
 import com.zetta.payment.pojo.Order;
+import com.zetta.payment.pojo.User;
 
 public class DynamoOrderDAO implements OrderDAO {
 
@@ -62,9 +63,35 @@ public class DynamoOrderDAO implements OrderDAO {
     }
 
     @Override
-    public Optional<Order> get(String id) {
-        Order order = mapper.load(Order.class, id);
-        return Optional.ofNullable(order);
+    public Optional<Order> get(String orderId) {
+        return getByOrderId(orderId);
+    }
+
+    @Override
+    public Optional<Order> getByOrderId(String orderId) {
+        Map<String, AttributeValue> eav = new HashMap<String, AttributeValue>();
+        eav.put(":v1", new AttributeValue().withS(orderId));
+
+        DynamoDBQueryExpression<Order> query = new DynamoDBQueryExpression<Order>()
+                .withIndexName(Order.ID_INDEX)
+                .withKeyConditionExpression("orderId = :v1")
+                .withExpressionAttributeValues(eav).withConsistentRead(false)
+                .withLimit(1);
+
+        return Optional.ofNullable(mapper.query(Order.class, query).get(0));
+    }
+
+    @Override
+    public List<Order> getByUserId(String userId) {
+        Map<String, AttributeValue> eav = new HashMap<String, AttributeValue>();
+        eav.put(":v1", new AttributeValue().withS(userId));
+
+        DynamoDBQueryExpression<Order> query = new DynamoDBQueryExpression<Order>()
+                .withIndexName(Order.USER_INDEX)
+                .withKeyConditionExpression("userId = :v1")
+                .withExpressionAttributeValues(eav).withConsistentRead(false);
+
+        return new ArrayList<Order>(mapper.query(Order.class, query));
     }
 
     @Override
@@ -80,22 +107,21 @@ public class DynamoOrderDAO implements OrderDAO {
     @Override
     public List<Order> getUnpaid(String userId) {
         Map<String, AttributeValue> eav = new HashMap<String, AttributeValue>();
-        eav.put(":v1", new AttributeValue().withS(userId));
-        eav.put(":v2", new AttributeValue().withBOOL(false));
+        eav.put(":v1", new AttributeValue(userId));
+        eav.put(":v2", new AttributeValue("false"));
 
         DynamoDBQueryExpression<Order> query = new DynamoDBQueryExpression<Order>()
-                .withIndexName(Order.USER_INDEX).withConsistentRead(false)
+                .withIndexName(Order.USER_INDEX)
                 .withKeyConditionExpression("userId = :v1")
-                .withIndexName(Order.IS_PAID_INDEX)
-                .withKeyConditionExpression("isPaid = :v2")
+                .withFilterExpression("isPaid = :v2").withConsistentRead(false)
                 .withExpressionAttributeValues(eav);
 
         return new ArrayList<Order>(mapper.query(Order.class, query));
     }
 
     @Override
-    public Optional<Order> getLatestUnpaid(String userId) {
-        return Optional.ofNullable(getUnpaid(userId).get(0));
+    public Optional<Order> getLatestUnpaid(User user) {
+        return Optional.ofNullable(getUnpaid(user.getUserId()).get(0));
     }
 
 }

@@ -8,13 +8,14 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.zetta.payment.form.TRFForm;
+import com.zetta.payment.pojo.Order;
 
 public class TestTRFForm {
     private TRFForm form;
 
     @Before
     public void setUp() {
-        form = new TRFForm(123);
+        form = new TRFForm(new Order("", 123));
     }
 
     @Test

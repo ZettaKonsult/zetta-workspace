@@ -1,13 +1,13 @@
 package com.zetta.payment.form;
 
-import java.util.UUID;
+import com.zetta.payment.pojo.Order;
 
 public final class TRFForm extends DIBSForm {
 
     private static final long serialVersionUID = 1452321975763992435L;
 
-    public TRFForm(int amount) {
-        this(generateOrderID(), amount);
+    public TRFForm(Order order) {
+        this(order.getOrderId(), order.getAmount());
     }
 
     public TRFForm(String orderID, int amount) {
@@ -16,7 +16,4 @@ public final class TRFForm extends DIBSForm {
         set("amount", Integer.toString(amount));
     }
 
-    public static String generateOrderID() {
-        return UUID.randomUUID().toString();
-    }
 }

@@ -11,14 +11,14 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.zetta.payment.http.DIBSConnection;
-import com.zetta.payment.test.util.TestUtil;
+import com.zetta.payment.testUtil.TestUtil;
 
 public class TestDIBSConnection {
     private DIBSConnection connection;
 
     @Before
     public void setUp() {
-        connection = new DIBSConnection();
+        connection = new DIBSConnection("testId", 1);
     }
 
     @Test

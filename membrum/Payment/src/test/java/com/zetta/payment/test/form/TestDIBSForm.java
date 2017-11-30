@@ -8,7 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.zetta.payment.form.DIBSForm;
-import com.zetta.payment.test.util.TestUtil;
+import com.zetta.payment.testUtil.TestUtil;
 
 /**
  * Tests for the DIBS connection class.

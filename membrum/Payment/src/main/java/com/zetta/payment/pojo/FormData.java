@@ -6,14 +6,14 @@ public class FormData implements Serializable {
     private static final long serialVersionUID = 3150193213130779657L;
 
     private String userId;
-    private String orderId;
+    private String planId;
 
     public FormData() {
         this("", "");
     }
 
-    private FormData(String userId, String orderId) {
-        this.orderId = orderId;
+    private FormData(String userId, String planId) {
+        this.planId = planId;
         this.userId = userId;
     }
 
@@ -30,12 +30,12 @@ public class FormData implements Serializable {
         return "User ID: " + (userId.equals("") ? "<undefined>" : userId);
     }
 
-    public String getOrderId() {
-        return orderId;
+    public String getPlanId() {
+        return planId;
     }
 
-    public void setOrderId(String orderId) {
-        this.orderId = orderId;
+    public void setplanId(String planId) {
+        this.planId = planId;
     }
 
 }
