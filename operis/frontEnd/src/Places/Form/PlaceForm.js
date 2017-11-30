@@ -10,6 +10,9 @@ let PlaceForm = props => (
   <form
     onSubmit={props.handleSubmit(values => {
       props.dispatch(addPlace(values))
+      if (typeof props.callback !== 'undefined') {
+        props.callback()
+      }
     })}>
     <Field
       name="name"

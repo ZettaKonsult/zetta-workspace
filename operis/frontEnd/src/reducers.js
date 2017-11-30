@@ -12,8 +12,8 @@ export default combineReducers({
   form: formReducer
 })
 
-//TODO reutrn true if id exists
-export const isReportId = () => ({})
+export const isReportId = (state, id) =>
+  fromReports.isReportId(state.reports, id)
 
 export const getAllReports = state => fromReports.getAllReports(state.reports)
 

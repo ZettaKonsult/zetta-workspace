@@ -3,9 +3,9 @@ import { connect } from 'react-redux'
 import { reduxForm, Field } from 'redux-form'
 import { withRouter } from 'react-router-dom'
 
-import { addReport } from '../ReportActions'
+import { addReport, updateReport } from '../ReportActions'
 
-import { getReportById } from '../reports'
+import { getReportById, isReportId } from '../reports'
 import { getWorkers, getPlaces } from '../../reducers'
 
 import validate from './ReportFormValidation'
@@ -14,7 +14,14 @@ import { inputGroup, textGroup, selectGroup } from './Components'
 let ReportForm = props => (
   <form
     onSubmit={props.handleSubmit(values => {
-      props.dispatch(addReport(values))
+      if (props.idExists) {
+        props.updateReport(values)
+      } else {
+        props.addNewReport(values)
+      }
+      if (typeof props.callback !== 'undefined') {
+        props.callback()
+      }
     })}>
     <Field name="date" component={inputGroup} type="date" placeholder="Date" />
     <Field
@@ -22,6 +29,7 @@ let ReportForm = props => (
       component={selectGroup}
       type="text"
       placeholder="Worker">
+      <option />
       {props.workers.map(worker => (
         <option key={worker.id} value={worker.id}>
           {worker.name}
@@ -33,6 +41,7 @@ let ReportForm = props => (
       component={selectGroup}
       type="text"
       placeholder="Workplace">
+      <option />
       {props.places.map(place => (
         <option key={place.id} value={place.id}>
           {place.name}
@@ -70,11 +79,16 @@ let ReportForm = props => (
 
 ReportForm = reduxForm({ form: 'reportForm', validate })(ReportForm)
 
-//TODO abstract away withrouter, let users of the form send in a onsubmit function
-export default withRouter(
-  connect((state, props) => ({
-    initialValues: getReportById(state.reports, props.id),
-    workers: getWorkers(state),
-    places: getPlaces(state)
-  }))(ReportForm)
-)
+const mapStateToProps = (state, props) => ({
+  idExists: isReportId(state.reports, props.id),
+  initialValues: getReportById(state.reports, props.id),
+  workers: getWorkers(state),
+  places: getPlaces(state)
+})
+
+const mapDispatchToProps = dispatch => ({
+  addNewReport: values => dispatch(addReport(values)),
+  updateReport: values => dispatch(updateReport(values))
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(ReportForm)

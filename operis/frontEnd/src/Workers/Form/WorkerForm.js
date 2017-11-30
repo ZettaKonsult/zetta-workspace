@@ -10,6 +10,9 @@ let WorkerForm = props => (
   <form
     onSubmit={props.handleSubmit(values => {
       props.dispatch(addWorker(values))
+      if (typeof props.callback !== 'undefined') {
+        props.callback()
+      }
     })}>
     <Field
       name="name"
