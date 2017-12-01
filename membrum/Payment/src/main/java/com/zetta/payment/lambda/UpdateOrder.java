@@ -25,7 +25,8 @@ public class UpdateOrder extends LambdaHandler {
 
     private static final DynamoOrderDAO orderDAO = DynamoOrderDAO.instance();
 
-    public void updateOrder(InputStream inStream, OutputStream outStream, Context context) {
+    public void updateOrder(InputStream inStream, OutputStream outStream,
+            Context context) {
 
         String key = Order.ORDER_ID_INDEX;
         Map<String, Object> orderMap = Collections.emptyMap();

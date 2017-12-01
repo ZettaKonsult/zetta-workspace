@@ -33,14 +33,6 @@ functions:
          path: getNextOrder
          role: paymentDatabaseManager
          cors: true
-  getOrder:
-    handler: com.zetta.payment.lambda.GetOrder::getOrder
-    events:
-      - http:
-         method: get
-         path: getOrder
-         role: paymentDatabaseManager
-         cors: true
   updateOrder:
     handler: com.zetta.payment.lambda.UpdateOrder::updateOrder
     events:

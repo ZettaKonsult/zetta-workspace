@@ -8,9 +8,8 @@ FILE=`cat $YML`
 
 NAMES=( \
  "confirmPayment" \
- "getUnpaidUrls" \
- "getLatestUnpaidUrl" \
- "getOrder" \
+ "getUnpaidOrders" \
+ "getNextOrder" \
  "updateOrder" \
 )
 

@@ -27,8 +27,10 @@ public class Order implements Serializable {
     private boolean isPaid;
     private String created;
 
-    public Order() {
-        this("", "", 0, false, "");
+    public Order() {}
+
+    public Order(String orderId) {
+        this.orderId = orderId;
     }
 
     public Order(User user, Plan plan) {
@@ -107,6 +109,7 @@ public class Order implements Serializable {
     }
 
     public void complement(Map<?, ?> orderMap) {
-        
+
     }
+
 }
