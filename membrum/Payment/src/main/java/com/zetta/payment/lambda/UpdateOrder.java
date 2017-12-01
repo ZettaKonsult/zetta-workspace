@@ -30,7 +30,7 @@ public class UpdateOrder extends LambdaHandler {
         String key = Order.ORDER_ID_INDEX;
         Map<String, Object> orderMap = Collections.emptyMap();
         try {
-            orderMap = JSONUtil.parseMap(inStream);
+            orderMap = JSONUtil.asMap(inStream);
         } catch (IOException error) {
             ResponseFactory.error("Error parsing JSON: " + error.getMessage())
                     .emit(outStream);
@@ -49,14 +49,14 @@ public class UpdateOrder extends LambdaHandler {
 
         if (existing.isPresent()) {
             log.info("Order existed.");
-            Map<String, Object> setValues = JSONUtil.parseMap(existing.get(),
+            Map<String, Object> setValues = JSONUtil.asMap(existing.get(),
                     Order.class);
 
             CollectionUtil.complement(orderMap, setValues);
         }
 
         try {
-            orderDAO.save(JSONUtil.parseMap(orderMap, Order.class));
+            orderDAO.save(JSONUtil.asObject(orderMap, Order.class));
         } catch (IOException error) {
             ResponseFactory.error("Error parsing JSON: " + error.getMessage())
                     .emit(outStream);

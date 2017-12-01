@@ -2,6 +2,7 @@ package com.zetta.payment.util;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public final class CollectionUtil {
     private CollectionUtil() {}
@@ -31,22 +32,27 @@ public final class CollectionUtil {
     }
 
     public static Map<String, String> toStringEntries(Map<?, ?> map) {
-        Map<String, String> newMap = new LinkedHashMap<String, String>();
-        for (Map.Entry<?, ?> entry : map.entrySet()) {
-            newMap.put(entry.getKey().toString(), entry.getValue().toString());
-        }
-        return newMap;
+        return map.keySet().stream().collect(Collectors
+                .toMap(key -> key.toString(), key -> map.get(key).toString()));
     }
 
     public static Map<String, Object> toStringKeys(Map<?, ?> map) {
-        Map<String, Object> newMap = new LinkedHashMap<String, Object>();
+        Map<String, Object> newMap = new LinkedHashMap<>();
         for (Map.Entry<?, ?> entry : map.entrySet()) {
             newMap.put(entry.getKey().toString(), entry.getValue());
         }
         return newMap;
     }
 
-    public static Map<String, Object> map(Object... objects) {
+    public static Map<Object, String> toStringValues(Map<?, ?> map) {
+        Map<Object, String> newMap = new LinkedHashMap<>();
+        for (Map.Entry<?, ?> entry : map.entrySet()) {
+            newMap.put(entry.getKey(), StringUtil.ofNullable(entry.getValue()));
+        }
+        return newMap;
+    }
+
+    public static Map<String, Object> newMap(Object... objects) {
         if (objects.length % 2 != 0) {
             throw new IllegalArgumentException(
                     "Can not build map without an equal number of "

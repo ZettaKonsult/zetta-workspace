@@ -100,7 +100,7 @@ public abstract class BasicForm implements Form, Serializable {
     @Override
     public final String asJSON() {
         try {
-            return JSONUtil.toString(fields, Map.class);
+            return JSONUtil.prettyPrint(fields, Map.class);
         } catch (IOException error) {
             throw new IllegalStateException(
                     "Could not convert to JSON:\n" + error.getMessage());

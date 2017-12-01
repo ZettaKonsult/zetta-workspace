@@ -15,22 +15,22 @@ functions:
     events:
       - http:
           method: post
-          path: confirm
+          path: confirmPayment
           role: callPaymentLambdas
-  getUnpaidUrls:
-    handler: com.zetta.payment.lambda.UnpaidUrls::getUnpaidUrls
+  getUnpaidOrders:
+    handler: com.zetta.payment.lambda.GetUnpaidOrders::getUnpaidOrders
     events:
       - http:
          method: get
-         path: url
+         path: getUnpaidOrders
          role: paymentDatabaseManager
          cors: true
-  getLatestUnpaidUrl:
-    handler: com.zetta.payment.lambda.LatestUnpaidUrl::getLatestUnpaidUrl
+  getNextOrder:
+    handler: com.zetta.payment.lambda.GetNextOrder::getNextOrder
     events:
       - http:
          method: get
-         path: url
+         path: getNextOrder
          role: paymentDatabaseManager
          cors: true
   getOrder:

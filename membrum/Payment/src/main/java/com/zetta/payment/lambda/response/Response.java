@@ -9,7 +9,7 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.zetta.payment.util.CollectionUtil;
 import com.zetta.payment.util.JSONUtil;
 
 public final class Response {
@@ -27,9 +27,10 @@ public final class Response {
     }
 
     public String asJSON() {
+
         String json = "";
         try {
-            json = new ObjectMapper().writeValueAsString(this.values);
+            json = JSONUtil.prettyPrint(this.values);
         } catch (IOException error) {
             error.printStackTrace();
         }
@@ -49,45 +50,14 @@ public final class Response {
         return asJSON();
     }
 
-    protected String errorString() {
-        StringBuilder string = new StringBuilder();
-        String prefix = "";
-
-        for (String errorMessage : errors) {
-            string.append(prefix + errorMessage);
-            prefix = "\n";
-        }
-
-        return string.toString();
-    }
-
     public String addError(String message) {
         errors.add(message);
+        setBody(CollectionUtil.newMap("errorMessages", errors));
         return message;
     }
 
-    public String errorJSON() {
-        String errorString = errorString();
-
-        Map<String, String> json = new LinkedHashMap<String, String>();
-        json.put("errorMessage", errorString);
-
-        String response = "";
-        try {
-            response = JSONUtil.prettyPrint(json);
-        } catch (IOException error) {
-            response = "{\"errorMessage\": \"" + errorString + "\n"
-                    + error.getMessage() + "\"}";
-        }
-        return response;
-    }
-
     public void emit(OutputStream outStream) {
-        if (!errors.isEmpty()) {
-            setBody(JSONUtil.atKey("errorMessage", errorString()));
-        }
-
-        String response = toString();
+        String response = asJSON();
         Logger.getLogger(Response.class)
                 .info("Sending response:\n    " + response);
 
@@ -98,4 +68,13 @@ public final class Response {
         }
     }
 
+    @Override
+    public boolean equals(Object other) {
+        if (!(other instanceof Response)) {
+            return false;
+        }
+        Response otherResponse = (Response) other;
+        return otherResponse.values.equals(this.values)
+                && otherResponse.errors.equals(this.errors);
+    }
 }

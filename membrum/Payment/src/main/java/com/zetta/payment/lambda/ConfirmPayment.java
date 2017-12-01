@@ -65,7 +65,8 @@ public class ConfirmPayment extends LambdaHandler {
     private Optional<Order> getOrderFromURL(InputStream inStream)
             throws PaymentError {
 
-        Map<String, String> parameters = URLUtil.decode(getBody(inStream));
+        Map<String, String> parameters = URLUtil
+                .decodeParameters(getBody(inStream));
         log.info("The URL had parameters:\n"
                 + CollectionUtil.mapString(parameters));
 
@@ -86,7 +87,7 @@ public class ConfirmPayment extends LambdaHandler {
 
     private String getBody(InputStream inStream) throws InvalidInput {
         try {
-            Map<?, ?> json = JSONUtil.parseMap(inStream);
+            Map<?, ?> json = JSONUtil.asMap(inStream);
             log.info("Received json with parameters:\n"
                     + JSONUtil.prettyPrint(json));
 
@@ -128,7 +129,7 @@ public class ConfirmPayment extends LambdaHandler {
 
         try {
             order = Optional.of(
-                    JSONUtil.parse(result.get("body").toString(), Order.class));
+                    JSONUtil.asObject(result.get("body").toString(), Order.class));
         } catch (IOException error) {
             throw new InvalidInput("Error parsing JSON: " + error.getMessage());
         }
@@ -144,7 +145,7 @@ public class ConfirmPayment extends LambdaHandler {
         Map<?, ?> result = Collections.emptyMap();
         try {
             result = callLambda("payment-prod-updateOrder",
-                    JSONUtil.toString(order, Order.class));
+                    JSONUtil.prettyPrint(order, Order.class));
 
         } catch (IOException error) {
             throw new LambdaError(

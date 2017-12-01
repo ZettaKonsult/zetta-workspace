@@ -4,16 +4,13 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import com.zetta.payment.util.JSONUtil;
-
 public final class ResponseFactory {
 
     private ResponseFactory() {}
 
     private static final Map<String, String> HEADERS = Collections
             .unmodifiableMap(buildHeaders());
-    private static final Response UNKNOWN_ERROR = new Response(500, HEADERS,
-            "Unknown error.");
+    private static final Response UNKNOWN_ERROR = error("Unknown error.");
 
     public static Response unknownError() {
         return UNKNOWN_ERROR;
@@ -24,8 +21,9 @@ public final class ResponseFactory {
     }
 
     public static Response error(String message) {
-        return new Response(500, HEADERS,
-                JSONUtil.atKey("errorMessage", message));
+        Response response = new Response(500, HEADERS, null);
+        response.addError(message);
+        return response;
     }
 
     public static Response success(String message) {

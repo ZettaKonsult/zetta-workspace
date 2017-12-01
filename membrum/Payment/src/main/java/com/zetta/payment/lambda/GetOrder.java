@@ -27,7 +27,7 @@ public class GetOrder extends LambdaHandler {
             Context context) {
 
         try {
-            Map<?, ?> json = JSONUtil.parseMap(inStream);
+            Map<?, ?> json = JSONUtil.asMap(inStream);
             log.info("Received " + json);
             String orderId = json.get("orderId").toString();
 
@@ -38,7 +38,7 @@ public class GetOrder extends LambdaHandler {
                 log.info("Order existed.");
 
                 ResponseFactory.success(
-                        JSONUtil.toString(maybeOrder.get(), Order.class))
+                        JSONUtil.prettyPrint(maybeOrder.get(), Order.class))
                         .emit(outStream);
                 return;
             }

@@ -31,6 +31,6 @@ public abstract class LambdaHandler {
 
         InvokeResult result = client.invoke(request);
 
-        return JSONUtil.parse(result);
+        return JSONUtil.asMap(result);
     }
 }
