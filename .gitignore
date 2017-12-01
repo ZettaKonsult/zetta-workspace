@@ -232,6 +232,7 @@ $RECYCLE.BIN/
 
 # Ignore build and lib folders
 build
+dist
 
 # open-source modules are handled by own git repo
 zk-open-modules
