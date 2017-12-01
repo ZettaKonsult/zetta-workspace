@@ -8,7 +8,7 @@ import com.zetta.payment.pojo.User;
 
 public interface OrderDAO extends DAOInterface<Order> {
 
-    List<Order> getUnpaid(String userId);
+    List<Order> getAllUnpaid(String userId);
 
     Optional<Order> getLatestUnpaid(User user);
 

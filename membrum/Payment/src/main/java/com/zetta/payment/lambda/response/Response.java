@@ -3,44 +3,19 @@ package com.zetta.payment.lambda.response;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zetta.payment.util.JSONUtil;
 
-public class Response {
-    private static final Map<String, String> HEADERS = Collections
-            .unmodifiableMap(buildHeaders());
+public final class Response {
 
     private List<String> errors;
     private Map<String, Object> values;
-
-    public static Response unknownError() {
-        return new Response(500, HEADERS, "Unknown error.");
-    }
-
-    public static Response error(String message) {
-        return new Response(500, HEADERS,
-                JSONUtil.atKey("errorMessage", message));
-    }
-
-    public static Response success(String message) {
-        return new Response(200, HEADERS, message);
-    }
-
-    public Response() {
-        this(500, HEADERS, "");
-    }
-
-    public Response(Exception exception) {
-        this(500, HEADERS, exception.getMessage());
-    }
 
     public Response(int code, Map<String, String> headers, Object body) {
         this.errors = new ArrayList<String>();
@@ -51,16 +26,12 @@ public class Response {
         setBody(body);
     }
 
-    public Response(int code, Object body) {
-        this(code, HEADERS, body);
-    }
-
     public String asJSON() {
         String json = "";
         try {
             json = new ObjectMapper().writeValueAsString(this.values);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
+        } catch (IOException error) {
+            error.printStackTrace();
         }
         return json;
     }
@@ -76,12 +47,6 @@ public class Response {
     @Override
     public String toString() {
         return asJSON();
-    }
-
-    private static Map<String, String> buildHeaders() {
-        Map<String, String> headers = new LinkedHashMap<String, String>();
-        headers.put("content-type", "*/*");
-        return headers;
     }
 
     protected String errorString() {
@@ -110,9 +75,9 @@ public class Response {
         String response = "";
         try {
             response = JSONUtil.prettyPrint(json);
-        } catch (JsonProcessingException e) {
+        } catch (IOException error) {
             response = "{\"errorMessage\": \"" + errorString + "\n"
-                    + e.getMessage() + "\"}";
+                    + error.getMessage() + "\"}";
         }
         return response;
     }
@@ -128,8 +93,8 @@ public class Response {
 
         try {
             outStream.write(response.getBytes());
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException error) {
+            error.printStackTrace();
         }
     }
 

@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.amazonaws.services.lambda.model.InvokeResult;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public final class JSONUtil {
@@ -26,8 +25,7 @@ public final class JSONUtil {
         return new ObjectMapper().readValue(input, classType);
     }
 
-    public static String prettyPrint(Map<?, ?> json)
-            throws JsonProcessingException {
+    public static String prettyPrint(Map<?, ?> json) throws IOException {
 
         return toString(json, Map.class);
     }
@@ -47,7 +45,7 @@ public final class JSONUtil {
     }
 
     public static <T> String toString(T object, Class<T> classType)
-            throws JsonProcessingException {
+            throws IOException {
 
         return new ObjectMapper().writerWithDefaultPrettyPrinter()
                 .writeValueAsString(object);

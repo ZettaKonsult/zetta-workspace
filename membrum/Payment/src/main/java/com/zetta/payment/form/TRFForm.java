@@ -2,6 +2,9 @@ package com.zetta.payment.form;
 
 import com.zetta.payment.pojo.Order;
 
+/**
+ * @date 2017-11-10
+ */
 public final class TRFForm extends DIBSForm {
 
     private static final long serialVersionUID = 1452321975763992435L;

@@ -2,17 +2,17 @@ package com.zetta.payment.pojo;
 
 import java.io.Serializable;
 
-public class FormData implements Serializable {
+public class PlanUserInput implements Serializable {
     private static final long serialVersionUID = 3150193213130779657L;
 
     private String userId;
     private String planId;
 
-    public FormData() {
+    public PlanUserInput() {
         this("", "");
     }
 
-    private FormData(String userId, String planId) {
+    private PlanUserInput(String userId, String planId) {
         this.planId = planId;
         this.userId = userId;
     }

@@ -1,4 +1,4 @@
-package com.zetta.payment.db.dynamo;
+package com.zetta.payment.db.dynamodb;
 
 import java.util.List;
 import java.util.Optional;

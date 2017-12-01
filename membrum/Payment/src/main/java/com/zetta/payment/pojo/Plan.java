@@ -1,11 +1,16 @@
 package com.zetta.payment.pojo;
 
+import java.io.File;
+
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
+import com.zetta.payment.exception.ProcessFail;
 
 @DynamoDBTable(tableName = "MembrumPlan-Test")
 public class Plan {
+    private static final File PLAN_FILE = new File(
+            "src/main/resources/checkPlan.sh");
 
     public static final String ID_INDEX = "planId";
     public static final String AMOUNT_INDEX = "amount";
@@ -44,4 +49,15 @@ public class Plan {
     public String toString() {
         return "Plan id: " + planId + "\nAmount: " + amount;
     }
+
+    // TODO: Fix.
+    public static boolean shouldCreateNewOrder(Plan plan) throws ProcessFail {
+        if (plan.getPlanId().equals("notNew")) {
+            return false;
+        } else if (("a" + "b").equals("ab")) {
+            return true;
+        }
+        return PLAN_FILE.exists();
+    }
+
 }

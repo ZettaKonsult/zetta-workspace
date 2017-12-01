@@ -10,6 +10,9 @@ import com.amazonaws.services.lambda.model.InvokeRequest;
 import com.amazonaws.services.lambda.model.InvokeResult;
 import com.zetta.payment.util.JSONUtil;
 
+/**
+ * @date 2017-11-14
+ */
 public abstract class LambdaHandler {
 
     public Map<?, ?> callLambda(String functionName) throws IOException {

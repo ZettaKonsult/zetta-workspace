@@ -1,4 +1,4 @@
-package com.zetta.payment.db.dynamo;
+package com.zetta.payment.db.dynamodb;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,6 +17,7 @@ import com.zetta.payment.db.DynamoDBManager;
 import com.zetta.payment.db.dao.OrderDAO;
 import com.zetta.payment.pojo.Order;
 import com.zetta.payment.pojo.User;
+import com.zetta.payment.util.DateUtil;
 
 public class DynamoOrderDAO implements OrderDAO {
 
@@ -50,12 +51,12 @@ public class DynamoOrderDAO implements OrderDAO {
                     "Unable to delete non-existent order.");
         }
 
-        mapper.delete(orderToDelete);
+        delete(orderToDelete.get());
     }
 
     @Override
     public void delete(Order order) {
-        delete(order.getOrderId());
+        mapper.delete(order);
     }
 
     @Override
@@ -69,8 +70,13 @@ public class DynamoOrderDAO implements OrderDAO {
     }
 
     @Override
-    public Optional<Order> getByOrderId(String orderId) {
-        return Optional.ofNullable(mapper.load(Order.class, orderId));
+    public Optional<Order> get(Order order) {
+        return get(order.getOrderId());
+    }
+
+    @Override
+    public void save(Order order) {
+        mapper.save(order);
     }
 
     @Override
@@ -87,17 +93,12 @@ public class DynamoOrderDAO implements OrderDAO {
     }
 
     @Override
-    public void save(Order order) {
-        mapper.save(order);
+    public Optional<Order> getByOrderId(String orderId) {
+        return Optional.ofNullable(mapper.load(Order.class, orderId));
     }
 
     @Override
-    public Optional<Order> get(Order order) {
-        return get(order.getOrderId());
-    }
-
-    @Override
-    public List<Order> getUnpaid(String userId) {
+    public List<Order> getAllUnpaid(String userId) {
 
         List<Order> unpaid = getByUserId(userId);
 
@@ -106,9 +107,8 @@ public class DynamoOrderDAO implements OrderDAO {
         }
 
         unpaid = unpaid.stream().filter((Order order) -> !order.getIsPaid())
-                .sorted((Order order1,
-                        Order order2) -> -(order1.getCreated()
-                                .compareTo(order2.getCreated())))
+                .sorted((Order order1, Order order2) -> DateUtil
+                        .compare(order1.getCreated(), order2.getCreated()))
                 .collect(Collectors.toList());
 
         return unpaid;
@@ -116,7 +116,7 @@ public class DynamoOrderDAO implements OrderDAO {
 
     @Override
     public Optional<Order> getLatestUnpaid(User user) {
-        List<Order> unpaid = getUnpaid(user.getUserId());
+        List<Order> unpaid = getAllUnpaid(user.getUserId());
         return unpaid.isEmpty() ? Optional.empty() : Optional.of(unpaid.get(0));
     }
 

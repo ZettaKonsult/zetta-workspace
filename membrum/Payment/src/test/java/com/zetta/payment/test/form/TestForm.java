@@ -76,13 +76,13 @@ public class TestForm {
     @Test
     public void asJSON() {
         form.fill(names, values);
-        assertEquals(
-                "{\"accepturl\":\"a\",\"amount\":\"b\",\"callbackurl\":\"c\","
-                        + "\"cancelurl\":\"d\",\"currency\":\"e\",\"decorator"
-                        + "\":\"f\",\"ip\":\"g\",\"lang\":\"h\",\"merchant\":"
-                        + "\"i\",\"orderid\":\"j\",\"test\":\"k\",\"uniqueoid"
-                        + "\":\"l\"}",
-                form.asJSon());
+        assertEquals("{\r\n" + "  \"accepturl\" : \"a\",\r\n"
+                + "  \"amount\" : \"b\",\r\n" + "  \"callbackurl\" : \"c\",\r\n"
+                + "  \"cancelurl\" : \"d\",\r\n" + "  \"currency\" : \"e\",\r\n"
+                + "  \"decorator\" : \"f\",\r\n" + "  \"ip\" : \"g\",\r\n"
+                + "  \"lang\" : \"h\",\r\n" + "  \"merchant\" : \"i\",\r\n"
+                + "  \"orderid\" : \"j\",\r\n" + "  \"test\" : \"k\",\r\n"
+                + "  \"uniqueoid\" : \"l\"\r\n" + "}", form.asJSON());
     }
 
     @Test
@@ -102,7 +102,7 @@ public class TestForm {
                 103, 61, 104, 38, 109, 101, 114, 99, 104, 97, 110, 116, 61, 105,
                 38, 111, 114, 100, 101, 114, 105, 100, 61, 106, 38, 116, 101,
                 115, 116, 61, 107, 38, 117, 110, 105, 113, 117, 101, 111, 105,
-                100, 61, 108 }, form.bytes());
+                100, 61, 108 }, form.url().getBytes());
     }
 
     @Test

@@ -1,4 +1,4 @@
-package com.zetta.payment.db.dynamo;
+package com.zetta.payment.db.dynamodb;
 
 import java.util.List;
 import java.util.Optional;
@@ -35,8 +35,7 @@ public class DynamoUserDAO implements UserDAO {
         Optional<User> userToDelete = get(id);
 
         if (!userToDelete.isPresent()) {
-            log.error("Unable to delete user " + id
-                    + ", no such user exists.");
+            log.error("Unable to delete user " + id + ", no such user exists.");
             throw new IllegalArgumentException(
                     "Unable to delete non-existent payment.");
         }
@@ -61,13 +60,12 @@ public class DynamoUserDAO implements UserDAO {
     }
 
     @Override
-    public void save(User user) {
-        mapper.save(user);
-    }
-
-    @Override
     public Optional<User> get(User user) {
         return get(user.getUserId());
     }
 
+    @Override
+    public void save(User user) {
+        mapper.save(user);
+    }
 }

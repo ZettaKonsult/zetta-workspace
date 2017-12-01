@@ -1,6 +1,9 @@
 package com.zetta.payment.exception;
 
-public class InvalidInput extends Exception {
+/**
+ * @date 2017-11-12
+ */
+public class InvalidInput extends PaymentError {
 
     private static final long serialVersionUID = 715845704921077959L;
 

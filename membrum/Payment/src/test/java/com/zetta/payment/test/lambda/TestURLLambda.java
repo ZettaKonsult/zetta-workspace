@@ -12,7 +12,7 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import com.zetta.payment.lambda.URLLambda;
+import com.zetta.payment.lambda.ConfirmPayment;
 import com.zetta.payment.testUtil.TestUtil;
 import com.zetta.payment.util.FileUtil;
 
@@ -23,18 +23,18 @@ public class TestURLLambda {
             "DIBSResponseApproved.txt");
     private static final File noStatusCodeFile = new File(TEST_DIR,
             "ResponseNoStatusCode.txt");
-    private URLLambda lambda;
+    private ConfirmPayment lambda;
 
     @Before
     public void setUp() {
-        lambda = new URLLambda();
+        lambda = new ConfirmPayment();
     }
 
     @Test
     public void parseError() {
         InputStream in = new ByteArrayInputStream("{\"A: \"B\"}".getBytes());
         ByteArrayOutputStream out = new ByteArrayOutputStream();
-        lambda.dibsConfirmation(in, out, null);
+        lambda.confirmPayment(in, out, null);
 
         assertEquals("{\"statusCode\":\"500\",\"headers\":{\"content-type\":\"*"
                 + "/*\"},\"body\":{\"errorMessage\":\"Error parsing JSON "
@@ -49,7 +49,7 @@ public class TestURLLambda {
         InputStream in = new ByteArrayInputStream(
                 "{\"key\": \"value\"}".getBytes());
         ByteArrayOutputStream out = new ByteArrayOutputStream();
-        lambda.dibsConfirmation(in, out, null);
+        lambda.confirmPayment(in, out, null);
         assertEquals("{\"statusCode\":\"500\",\"headers\":{\"content-type\":\"*"
                 + "/*\"},\"body\":{\"errorMessage\":\"No \\\"body\\\" key "
                 + "in object.\"}}",
@@ -61,7 +61,7 @@ public class TestURLLambda {
         String response = FileUtil.fileAsString(noStatusCodeFile);
         InputStream in = new ByteArrayInputStream(response.getBytes());
         ByteArrayOutputStream out = new ByteArrayOutputStream();
-        lambda.dibsConfirmation(in, out, null);
+        lambda.confirmPayment(in, out, null);
         assertEquals(TestUtil.withoutOrderId(
                 "{\"statusCode\":\"500\",\"headers\":{\"content-type\":\"*/*"
                         + "\"},\"body\":\"Erroneous callback format, no "
@@ -75,7 +75,7 @@ public class TestURLLambda {
         String response = FileUtil.fileAsString(approvedFile);
         InputStream in = new ByteArrayInputStream(response.getBytes());
         ByteArrayOutputStream out = new ByteArrayOutputStream();
-        lambda.dibsConfirmation(in, out, null);
+        lambda.confirmPayment(in, out, null);
         assertEquals(TestUtil.withoutOrderId(
                 "{\"statusCode\":\"200\",\"headers\":{\"content-type\":\"*/*"
                         + "\"},\"body\":\"Transaction completed.\"}"),

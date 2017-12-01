@@ -46,4 +46,19 @@ public final class CollectionUtil {
         return newMap;
     }
 
+    public static Map<String, Object> map(Object... objects) {
+        if (objects.length % 2 != 0) {
+            throw new IllegalArgumentException(
+                    "Can not build map without an equal number of "
+                            + "keys and values: " + objects.length
+                            + " elements.");
+        }
+
+        Map<String, Object> map = new LinkedHashMap<String, Object>();
+        for (int i = 0; i < objects.length; i += 2) {
+            map.put(objects[i].toString(), objects[i + 1]);
+        }
+        return map;
+    }
+
 }

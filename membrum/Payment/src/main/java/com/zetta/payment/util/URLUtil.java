@@ -5,8 +5,7 @@ import java.util.Map;
 
 public final class URLUtil {
 
-    private URLUtil() {
-    }
+    private URLUtil() {}
 
     public static Map<String, String> decode(String url) {
         Map<String, String> map = new LinkedHashMap<String, String>();
