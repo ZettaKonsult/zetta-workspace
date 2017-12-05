@@ -15,10 +15,8 @@ public final class FileUtil {
     private static final Charset DEFAULT_CHAR_SET = Charsets.UTF_8;
 
     public static String fileAsString(File file) throws IOException {
-        return new String(Files.readAllBytes(Paths.get(checkFile(file).getAbsolutePath())), DEFAULT_CHAR_SET);
+        return new String(Files.readAllBytes(Paths.get(file.getAbsolutePath())),
+                DEFAULT_CHAR_SET);
     }
 
-    private static File checkFile(File file) {
-        return file;
-    }
 }

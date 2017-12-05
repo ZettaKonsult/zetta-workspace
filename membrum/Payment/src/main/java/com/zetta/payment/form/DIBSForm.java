@@ -3,21 +3,24 @@ package com.zetta.payment.form;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+/**
+ * @date 2017-11-10
+ */
 public class DIBSForm extends BasicForm {
 
     private static final long serialVersionUID = 8418801285386062689L;
-    private static final String CALLBACK_URL = "https://qe3bzqhdu8.execute-api"
-            + ".eu-central-1.amazonaws.com/prod/confirm";
+    private static final String CALLBACK_URL = "https://gjnhqznxmd.execute"
+            + "-api.eu-central-1.amazonaws.com/prod/confirm";
     private static final String ACCEPT_URL = "";
     private static final String CANCEL_URL = "";
 
     @Override
-    public String baseUrl() {
+    public final String baseUrl() {
         return "https://payment.architrade.com/paymentweb/start.action";
     }
 
     @Override
-    public Map<String, String> presetValues() {
+    public final Map<String, String> presetValues() {
         Map<String, String> values = new LinkedHashMap<String, String>();
 
         set("accepturl", ACCEPT_URL);
@@ -34,9 +37,10 @@ public class DIBSForm extends BasicForm {
     }
 
     @Override
-    public String[] names() {
-        return new String[] { "accepturl", "amount", "callbackurl", "cancelurl", "currency", "decorator", "ip", "lang",
-                "merchant", "orderid", "test", "uniqueoid" };
+    public final String[] names() {
+        return new String[] { "accepturl", "amount", "callbackurl", "cancelurl",
+                "currency", "decorator", "ip", "lang", "merchant", "orderid",
+                "test", "uniqueoid" };
     }
 
 }

@@ -3,6 +3,9 @@ package com.zetta.payment.db.dao;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * @date 1 dec. 2017
+ */
 public interface DAOInterface<T> {
 
     List<T> getAll();
@@ -17,4 +20,3 @@ public interface DAOInterface<T> {
 
     void delete(T t);
 }
-

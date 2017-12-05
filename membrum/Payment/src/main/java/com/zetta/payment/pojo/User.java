@@ -9,7 +9,7 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 
-@DynamoDBTable(tableName = "MembrumUser-Test")
+@DynamoDBTable(tableName = "MembrumUsers")
 public class User implements Serializable {
 
     private static final long serialVersionUID = 4172745746658050408L;
@@ -19,7 +19,7 @@ public class User implements Serializable {
     private static final String NAME_INDEX = "name";
     private static final String POINTS_INDEX = "points";
 
-    private String id;
+    private String userId;
     private String name;
     private String email;
     private Map<String, Double> points;
@@ -28,22 +28,22 @@ public class User implements Serializable {
         this("", "", "", Collections.<String, Double>emptyMap());
     }
 
-    public User(String id, String name, String email,
+    public User(String userId, String name, String email,
             Map<String, Double> points) {
 
-        this.id = id;
+        this.userId = userId;
         this.name = name;
         this.email = email;
         setPoints(points);
     }
 
     @DynamoDBHashKey(attributeName = ID_INDEX)
-    public String getId() {
-        return id;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     @DynamoDBAttribute(attributeName = EMAIL_INDEX)
@@ -82,8 +82,8 @@ public class User implements Serializable {
 
     @Override
     public String toString() {
-        StringBuilder string = new StringBuilder("Payment:");
-        string.append("\n    Id:     " + id);
+        StringBuilder string = new StringBuilder("Order:");
+        string.append("\n    Id:     " + userId);
         string.append("\n    Name:   " + name);
         string.append("\n    Email:  " + email);
         string.append("\n    Points: {");

@@ -11,22 +11,78 @@ package:
 
 functions:
   confirmPayment:
-    handler: com.zetta.payment.lambda.PaymentLambda::dibsConfirmation
+    handler: com.zetta.payment.lambda.ConfirmPayment::confirmPayment
     events:
       - http:
           method: post
-          path: confirm
-  generateDibsUrl:
-    handler: com.zetta.payment.lambda.PaymentLambda::getDIBSUrl
+          path: confirmPayment
+          role: callPaymentLambdas
+  getUnpaidOrders:
+    handler: com.zetta.payment.lambda.GetUnpaidOrders::getUnpaidOrders
     events:
       - http:
          method: get
-         path: url
+         path: getUnpaidOrders
+         role: paymentDatabaseManager
+         cors: true
+  getNextOrder:
+    handler: com.zetta.payment.lambda.GetNextOrder::getNextOrder
+    events:
+      - http:
+         method: get
+         path: getNextOrder
+         role: paymentDatabaseManager
+         cors: true
+  updateOrder:
+    handler: com.zetta.payment.lambda.UpdateOrder::updateOrder
+    events:
+      - http:
+         method: put
+         path: updateOrder
          role: paymentDatabaseManager
          cors: true
 
 resources:
   Resources:
+    callPaymentLambdas:
+      Type: AWS::IAM::Role
+      Properties:
+        RoleName: callPaymentLambdas
+        Path: "/"
+        AssumeRolePolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Principal:
+                Service:
+                  - lambda.amazonaws.com
+              Action: sts:AssumeRole
+        Policies:
+            - PolicyName: CallPaymentDatabaseManagers
+              PolicyDocument:
+                Version: '2012-10-17'
+                Statement:
+                  - Effect: Allow
+                    Action:
+                      - logs:CreateLogGroup
+                      - logs:CreateLogStream
+                      - logs:PutLogEvents
+                    Resource:
+                      - 'Fn::Join':
+                        - ':'
+                        -
+                          - 'arn:aws:logs'
+                          - Ref: 'AWS::Region'
+                          - Ref: 'AWS::AccountId'
+                          - 'log-group:/aws/lambda/*:*:*'
+                  - Effect: Allow
+                    Action:
+                      - lambda:InvokeFunction
+                    Resource: arn:aws:lambda:eu-central-1:460056602695:function:payment-prod-getOrder
+                  - Effect: Allow
+                    Action:
+                      - lambda:InvokeFunction
+                    Resource: arn:aws:lambda:eu-central-1:460056602695:function:payment-prod-updateOrder
     paymentDatabaseManager:
       Type: AWS::IAM::Role
       Properties:
@@ -47,15 +103,42 @@ resources:
                 Statement:
                   - Effect: Allow
                     Action:
-                      - dynamodb:DeleteItem
-                      - dynamodb:GetItem
-                      - dynamodb:PutItem
-                      - dynamodb:UpdateItem
-                    Resource: arn:aws:dynamodb:eu-central-1:460056602695:table/MembrumPayment-Test
+                      - logs:CreateLogGroup
+                      - logs:CreateLogStream
+                      - logs:PutLogEvents
+                    Resource:
+                      - 'Fn::Join':
+                        - ':'
+                        -
+                          - 'arn:aws:logs'
+                          - Ref: 'AWS::Region'
+                          - Ref: 'AWS::AccountId'
+                          - 'log-group:/aws/lambda/*:*:*'
+                  - Effect: Allow
+                    Action:
+                      - dynamodb:*
+                    Resource: arn:aws:dynamodb:eu-central-1:460056602695:table/MembrumOrders
                   - Effect: Allow
                     Action:
                       - dynamodb:DeleteItem
                       - dynamodb:GetItem
                       - dynamodb:PutItem
                       - dynamodb:UpdateItem
-                    Resource: arn:aws:dynamodb:eu-central-1:460056602695:table/MembrumUser-Test
+                      - dynamodb:Query
+                    Resource: arn:aws:dynamodb:eu-central-1:460056602695:table/MembrumOrders/orderId
+                  - Effect: Allow
+                    Action:
+                      - dynamodb:DeleteItem
+                      - dynamodb:GetItem
+                      - dynamodb:PutItem
+                      - dynamodb:UpdateItem
+                      - dynamodb:Query
+                    Resource: arn:aws:dynamodb:eu-central-1:460056602695:table/MembrumOrders/index/userId
+                  - Effect: Allow
+                    Action:
+                      - dynamodb:DeleteItem
+                      - dynamodb:GetItem
+                      - dynamodb:PutItem
+                      - dynamodb:UpdateItem
+                      - dynamodb:Query
+                    Resource: arn:aws:dynamodb:eu-central-1:460056602695:table/MembrumUsers

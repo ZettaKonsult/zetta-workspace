@@ -1,22 +1,22 @@
 package com.zetta.payment.form;
 
-import java.util.UUID;
+import com.zetta.payment.pojo.Order;
 
+/**
+ * @date 2017-11-10
+ */
 public final class TRFForm extends DIBSForm {
 
     private static final long serialVersionUID = 1452321975763992435L;
 
-    public TRFForm(String amount) {
-        this(amount, generateOrderID());
+    public TRFForm(Order order) {
+        this(order.getOrderId(), order.getAmount());
     }
 
-    public TRFForm(String amount, String orderID) {
+    public TRFForm(String orderID, int amount) {
         super();
         set("orderid", orderID);
-        set("amount", amount);
+        set("amount", Integer.toString(amount));
     }
 
-    public static String generateOrderID() {
-        return UUID.randomUUID().toString();
-    }
 }
