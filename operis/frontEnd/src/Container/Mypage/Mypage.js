@@ -1,11 +1,16 @@
-import React, { Component } from 'react'
+import React from 'react'
+import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { getAllReports } from '../../reducers'
 import './Mypage.css'
 
 const ReportList = ({ reports }) => (
   <div className="Mypage">
-    <button>Create new report</button>
+    <Link to="/report">Create new report</Link>
+    <br />
+    <Link to="/Worker">Create new worker</Link>
+    <br />
+    <Link to="/place">Create new workplace</Link>
     <ul className="ReportList">
       {reports.map(report => <ReportItem key={report.id} report={report} />)}
     </ul>
@@ -14,9 +19,9 @@ const ReportList = ({ reports }) => (
 
 const ReportItem = ({ report }) => (
   <li className="ReportItem">
-    <a className="ReportLink" href="#">
+    <Link to={`/report/${report.id}`} className="ReportLink">
       Report date: {new Date(report.date).toDateString()}
-    </a>
+    </Link>
   </li>
 )
 

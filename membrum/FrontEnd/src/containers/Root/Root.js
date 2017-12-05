@@ -6,10 +6,6 @@ import { authUser, signOutUser } from "../../libs/awslib"
 
 import App from "../App"
 
-// import dbPlans from '../../mocks/Database'
-// import dbSubscription from '../../mocks/Database'
-// import { mockPlans } from '../../mocks/createMocks'
-
 class Root extends Component {
   constructor(props) {
     super(props)
@@ -54,7 +50,7 @@ class Root extends Component {
           isAuthenticated={this.state.isAuthenticated}
           logout={this.handleLogout}
         >
-          <h1>Dev</h1>
+          {process.env.NODE_ENV !== "production" ? <h1>Dev</h1> : ""}
           <Routes childProps={childProps} />
         </App>
       )

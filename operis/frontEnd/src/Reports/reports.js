@@ -1,36 +1,11 @@
 import { combineReducers } from 'redux'
-import { ADD_REPORT } from './ActionTypes'
 
-const initialState = {
-  '1': {
-    id: '1',
-    workerId: '1',
-    date: 1511352724387,
-    hours: 2,
-    projectId: '1',
-    driving: 4,
-    extrawork:
-      'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Id, suscipit.',
-    extrahours: 1,
-    submittedBy: '2'
-  },
-  '2': {
-    id: '2',
-    workerId: '2',
-    date: 1511352724387,
-    hours: 2,
-    projectId: '1',
-    driving: 4,
-    extrawork:
-      'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Id, suscipit.',
-    extrahours: 1,
-    submittedBy: '1'
-  }
-}
+import { ADD_REPORT, UPDATE_REPORT } from './ReportActions'
 
 const report = (state, action) => {
   switch (action.type) {
     case ADD_REPORT:
+    case UPDATE_REPORT:
       return {
         id: action.id,
         ...action.report
@@ -40,16 +15,20 @@ const report = (state, action) => {
   }
 }
 
-const byId = (state = initialState, action) => {
+export const byId = (state = {}, action) => {
   switch (action.type) {
     case ADD_REPORT:
-      return { ...state, [action.id]: report(state[action.id], action) }
+    case UPDATE_REPORT:
+      return {
+        ...state,
+        [action.id]: report(state[action.id], action)
+      }
     default:
       return state
   }
 }
 
-const allIds = (state = ['1', '2'], action) => {
+export const allIds = (state = [], action) => {
   switch (action.type) {
     case ADD_REPORT:
       return [...state, action.id]
@@ -59,10 +38,14 @@ const allIds = (state = ['1', '2'], action) => {
 }
 
 const reports = combineReducers({ byId, allIds })
-
 export default reports
 
+export const isReportId = (state, id) =>
+  state.allIds.find(compareId => compareId === id)
+
 export const getAllReports = state => state.allIds.map(id => state.byId[id])
+
+export const getReportById = (state, id) => state.byId[id]
 
 export const getAllReportsSubmittedBy = (state, id) => {
   const allReports = getAllReports(state)
