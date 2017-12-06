@@ -1,10 +1,8 @@
 package com.zetta.payment.pojo;
 
-import java.io.IOException;
-
 import com.zetta.payment.exception.InvalidInput;
 import com.zetta.payment.util.CollectionUtil;
-import com.zetta.payment.util.JSONUtil;
+import com.zetta.payment.util.JSON;
 
 /**
  * @date 2017-12-06
@@ -27,14 +25,10 @@ public final class URLResponse {
 
     public String toJSON() throws InvalidInput {
 
-        try {
-            return JSONUtil.prettyPrint(CollectionUtil.newMap("providerUrl",
-                    providerUrl, "invoiceUrl", invoiceUrl, "validUntil",
-                    validUntil, "isPaid", isPaid));
-        } catch (IOException error) {
-            throw new InvalidInput(
-                    "Error during JSON printing:\n" + error.getMessage());
-        }
+        return JSON.prettyPrint(CollectionUtil.newMap("providerUrl",
+                providerUrl, "invoiceUrl", invoiceUrl, "validUntil", validUntil,
+                "isPaid", isPaid));
+
     }
 
     public String getInvoiceUrl() {

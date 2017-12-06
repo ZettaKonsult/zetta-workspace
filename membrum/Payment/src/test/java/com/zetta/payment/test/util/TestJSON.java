@@ -12,39 +12,39 @@ import java.util.Map;
 import org.junit.Test;
 
 import com.amazonaws.services.lambda.model.InvokeResult;
-import com.zetta.payment.util.CollectionUtil;
 import com.zetta.payment.util.FileUtil;
-import com.zetta.payment.util.JSONUtil;
+import com.zetta.payment.util.JSON;
 
-public class TestJSONUtil {
-    private static final String JSON = "{\"key1\": \"value1\","
+public class TestJSON {
+    private static final String STRING = "{\"key1\": \"value1\","
             + "\"key2\": \"value2\"}";
 
-    private static final Map<String, ?> referenceMap = CollectionUtil
-            .newMap("key1", "value1", "key2", "value2");
+    private static final JSON reference = new JSON(
+            new String[] { "key1", "key2" },
+            new Object[] { "value1", "value2" });
 
     @Test
     public void asMapStream() throws IOException {
-        assertEquals(referenceMap,
-                JSONUtil.asMap(new ByteArrayInputStream(JSON.getBytes())));
+        assertEquals(reference,
+                new JSON(new ByteArrayInputStream(STRING.getBytes())));
     }
 
     @Test
     public void asMapObject() {
         final TestPojo pojo = new TestPojo();
-        assertEquals(referenceMap, JSONUtil.asMap(pojo, TestPojo.class));
+        assertEquals(reference, new JSON(pojo));
     }
 
     @Test
     public void asMapInvokeResult() throws IOException {
-        byte[] bytes = JSON.getBytes();
+        byte[] bytes = STRING.getBytes();
         ByteBuffer buffer = ByteBuffer.allocate(bytes.length);
         buffer.put(bytes);
 
         InvokeResult result = new InvokeResult();
         result.setPayload(buffer);
 
-        assertEquals(referenceMap, JSONUtil.asMap(result));
+        assertEquals(reference, new JSON(result));
     }
 
     private static final class TestPojo {
@@ -67,8 +67,8 @@ public class TestJSONUtil {
 
     @Test
     public void objectFromStream() throws IOException {
-        TestPojo pojo = JSONUtil.asObject(
-                new ByteArrayInputStream(JSON.getBytes()), TestPojo.class);
+        TestPojo pojo = new JSON(new ByteArrayInputStream(STRING.getBytes()))
+                .convertTo(TestPojo.class);
 
         assertEquals(pojo.getKey1(), "value1");
         assertEquals(pojo.getKey2(), "value2");
@@ -76,7 +76,7 @@ public class TestJSONUtil {
 
     @Test
     public void objectFromMap() throws IOException {
-        TestPojo pojo = JSONUtil.asObject(referenceMap, TestPojo.class);
+        TestPojo pojo = reference.convertTo(TestPojo.class);
 
         assertEquals(pojo.getKey1(), "value1");
         assertEquals(pojo.getKey2(), "value2");
@@ -84,7 +84,7 @@ public class TestJSONUtil {
 
     @Test
     public void objectFromString() throws IOException {
-        TestPojo pojo = JSONUtil.asObject(JSON, TestPojo.class);
+        TestPojo pojo = new JSON(STRING).convertTo(TestPojo.class);
 
         assertEquals(pojo.getKey1(), "value1");
         assertEquals(pojo.getKey2(), "value2");
@@ -95,7 +95,7 @@ public class TestJSONUtil {
         assertEquals(
                 "{\r\n" + "  \"key1\" : \"value1\",\r\n"
                         + "  \"key2\" : \"value2\"\r\n" + "}",
-                JSONUtil.prettyPrint(referenceMap));
+                reference.toString());
     }
 
     @Test
@@ -103,7 +103,7 @@ public class TestJSONUtil {
         assertEquals(
                 "{\r\n" + "  \"key1\" : \"value1\",\r\n"
                         + "  \"key2\" : \"value2\"\r\n" + "}",
-                JSONUtil.prettyPrint(new TestPojo(), TestPojo.class));
+                new JSON(new TestPojo()).toString());
     }
 
     /*
@@ -116,8 +116,7 @@ public class TestJSONUtil {
                         "src/test/resources/mocks/DIBSResponseApproved.txt"))
                 .getBytes());
 
-        assertEquals(JSONUtil.prettyPrint(createReferenceMap()),
-                JSONUtil.prettyPrint(JSONUtil.asMap(inStream)));
+        assertEquals(new JSON(createReferenceMap()), new JSON(inStream));
     }
 
     private Map<String, Object> createReferenceMap() {

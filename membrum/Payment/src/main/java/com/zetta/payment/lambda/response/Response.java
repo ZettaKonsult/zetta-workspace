@@ -10,7 +10,7 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 
 import com.zetta.payment.util.CollectionUtil;
-import com.zetta.payment.util.JSONUtil;
+import com.zetta.payment.util.JSON;
 
 public final class Response {
 
@@ -27,14 +27,7 @@ public final class Response {
     }
 
     public String asJSON() {
-
-        String json = "";
-        try {
-            json = JSONUtil.prettyPrint(this.values);
-        } catch (IOException error) {
-            error.printStackTrace();
-        }
-        return json;
+        return JSON.prettyPrint(this.values);
     }
 
     public void setBody(Object body) {

@@ -10,6 +10,7 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 
 @DynamoDBTable(tableName = "MembrumPlan-Test")
 public class Plan {
+    @SuppressWarnings("unused")
     private static final File PLAN_FILE = new File(
             "src/main/resources/checkPlan.sh");
 

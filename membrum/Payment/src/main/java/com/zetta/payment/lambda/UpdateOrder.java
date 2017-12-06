@@ -1,10 +1,7 @@
 package com.zetta.payment.lambda;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.Collections;
-import java.util.Map;
 import java.util.Optional;
 
 import org.apache.log4j.Logger;
@@ -14,7 +11,7 @@ import com.zetta.payment.db.dynamodb.DynamoOrderDAO;
 import com.zetta.payment.lambda.response.ResponseFactory;
 import com.zetta.payment.pojo.Order;
 import com.zetta.payment.util.CollectionUtil;
-import com.zetta.payment.util.JSONUtil;
+import com.zetta.payment.util.JSON;
 
 /**
  * @date 2017-11-08
@@ -29,40 +26,27 @@ public class UpdateOrder extends LambdaHandler {
             Context context) {
 
         String key = Order.ORDER_ID_INDEX;
-        Map<String, Object> orderMap = Collections.emptyMap();
-        try {
-            orderMap = JSONUtil.asMap(inStream);
-        } catch (IOException error) {
-            ResponseFactory.error("Error parsing JSON: " + error.getMessage())
-                    .emit(outStream);
-            return;
-        }
-        log.info("Received data:\n" + CollectionUtil.mapString(orderMap));
+        JSON json = new JSON(inStream);
 
-        if (!orderMap.containsKey(key)) {
+        log.info("Received data:\n" + json);
+
+        if (!json.has(key)) {
             ResponseFactory.error("Can not save order without key 'no " + key
                     + "' key present.").emit(outStream);
             return;
         }
 
-        String orderId = orderMap.get(key).toString();
+        String orderId = json.get(key).toString();
         Optional<Order> existing = orderDAO.get(orderId);
 
         if (existing.isPresent()) {
             log.info("Order existed.");
-            Map<String, Object> setValues = JSONUtil.asMap(existing.get(),
-                    Order.class);
+            JSON setValues = new JSON(existing.get());
 
-            CollectionUtil.complement(orderMap, setValues);
+            CollectionUtil.complement(json, setValues);
         }
 
-        try {
-            orderDAO.save(JSONUtil.asObject(orderMap, Order.class));
-        } catch (IOException error) {
-            ResponseFactory.error("Error parsing JSON: " + error.getMessage())
-                    .emit(outStream);
-            return;
-        }
+        orderDAO.save(json.convertTo(Order.class));
         ResponseFactory.success("Saved order " + orderId).emit(outStream);
 
     }

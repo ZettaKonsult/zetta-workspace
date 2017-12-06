@@ -1,6 +1,5 @@
 package com.zetta.payment.lambda;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -19,7 +18,7 @@ import com.zetta.payment.pojo.Plan;
 import com.zetta.payment.pojo.PlanUserInput;
 import com.zetta.payment.pojo.URLResponse;
 import com.zetta.payment.pojo.User;
-import com.zetta.payment.util.JSONUtil;
+import com.zetta.payment.util.JSON;
 
 /**
  * @date 2017-11-14
@@ -79,12 +78,7 @@ public class GetUnpaidOrders extends OrderLambda {
                     plan.getNextPaymentDate(), false));
         }
 
-        try {
-            return JSONUtil.prettyPrint(output, List.class);
-        } catch (IOException error) {
-            throw new InvalidInput(
-                    "Error during JSON printing:\n" + error.getMessage());
-        }
+        return JSON.prettyPrint(output);
     }
 
 }
