@@ -1,39 +1,31 @@
 package com.zetta.payment.lambda;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import org.apache.log4j.Logger;
 
 import com.amazonaws.services.lambda.runtime.Context;
-import com.zetta.payment.db.dynamodb.DynamoOrderDAO;
-import com.zetta.payment.db.dynamodb.DynamoPlanDAO;
-import com.zetta.payment.db.dynamodb.DynamoUserDAO;
 import com.zetta.payment.exception.InvalidInput;
 import com.zetta.payment.exception.PaymentError;
+import com.zetta.payment.form.Form;
 import com.zetta.payment.form.TRFForm;
 import com.zetta.payment.lambda.response.Response;
 import com.zetta.payment.lambda.response.ResponseFactory;
-import com.zetta.payment.pojo.PlanUserInput;
 import com.zetta.payment.pojo.Order;
 import com.zetta.payment.pojo.Plan;
+import com.zetta.payment.pojo.PlanUserInput;
+import com.zetta.payment.pojo.URLResponse;
 import com.zetta.payment.pojo.User;
-import com.zetta.payment.util.CollectionUtil;
-import com.zetta.payment.util.JSONUtil;
+import com.zetta.payment.util.JSON;
 
 /**
  * @date 2017-11-14
  */
-public class GetUnpaidOrders extends LambdaHandler {
+public class GetUnpaidOrders extends OrderLambda {
 
     private static final Logger log = Logger.getLogger(GetUnpaidOrders.class);
-
-    private static final DynamoOrderDAO orderDAO = DynamoOrderDAO.instance();
-    private static final DynamoPlanDAO planDAO = DynamoPlanDAO.instance();
-    private static final DynamoUserDAO userDAO = DynamoUserDAO.instance();
 
     public String getUnpaidOrders(PlanUserInput data, Context context) {
 
@@ -58,36 +50,35 @@ public class GetUnpaidOrders extends LambdaHandler {
         Plan plan = maybePlan.get();
         User user = maybeUser.get();
 
-        List<Order> unpaid = orderDAO.getAllUnpaid(userId);
-        try {
-            if (Plan.shouldCreateNewOrder(plan)) {
-                Order order = new Order(user, plan);
-                orderDAO.save(order);
-                log.info("Created new order: " + order.getOrderId() + ".");
+        List<Order> unpaid = orderDAO.getAllUnpaid(plan, user);
+
+        Optional<Order> orderToPay = getOrderToPay(plan, user);
+        if (orderToPay.isPresent()) {
+            Order order = orderToPay.get();
+
+            if (!unpaid.contains(order)) {
                 unpaid.add(order);
             }
-            return createResults(unpaid);
+        }
+
+        try {
+            return createResults(unpaid, plan);
         } catch (PaymentError error) {
             return ResponseFactory.error(error).toString();
         }
     }
 
-    private String createResults(List<Order> orders) throws InvalidInput {
-        List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+    private String createResults(List<Order> orders, Plan plan)
+            throws InvalidInput {
 
-        log.info("Found orders:");
+        List<URLResponse> output = new ArrayList<URLResponse>();
         for (Order order : orders) {
-            log.info("    " + order.getOrderId());
-            list.add(CollectionUtil.newMap("url", new TRFForm(order).url(),
-                    "status", true));
+            Form form = new TRFForm(order);
+            output.add(new URLResponse(form.url(), form.invoiceUrl(),
+                    plan.getNextPaymentDate(), false));
         }
 
-        try {
-            return JSONUtil.prettyPrint(list, List.class);
-        } catch (IOException error) {
-            throw new InvalidInput(
-                    "Error during JSON printing:\n" + error.getMessage());
-        }
+        return JSON.prettyPrint(output);
     }
 
 }

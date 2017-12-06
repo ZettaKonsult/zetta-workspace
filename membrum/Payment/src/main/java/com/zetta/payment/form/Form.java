@@ -32,4 +32,6 @@ public interface Form {
 
     boolean complete();
 
+    String invoiceUrl();
+
 }

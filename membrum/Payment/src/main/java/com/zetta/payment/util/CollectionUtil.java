@@ -21,6 +21,12 @@ public final class CollectionUtil {
                 .toString();
     }
 
+    public static void complement(JSON json, JSON... others) {
+        for (JSON other : others) {
+            json.complement(other);
+        }
+    }
+
     public static <K extends Comparable<K>, V> void complement(Map<K, V> map,
             Map<K, V> complement) {
 
@@ -65,6 +71,12 @@ public final class CollectionUtil {
             map.put(objects[i].toString(), objects[i + 1]);
         }
         return map;
+    }
+
+    public static Map<?, ?> removeNull(Map<?, ?> map) {
+        return map.entrySet().stream().filter(entry -> entry.getValue() != null)
+                .collect(Collectors.toMap(entry -> entry.getKey(),
+                        entry -> entry.getValue()));
     }
 
 }
