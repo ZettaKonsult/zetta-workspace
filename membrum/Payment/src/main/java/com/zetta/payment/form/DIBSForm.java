@@ -3,6 +3,8 @@ package com.zetta.payment.form;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
+
 /**
  * @date 2017-11-10
  */
@@ -41,6 +43,13 @@ public class DIBSForm extends BasicForm {
         return new String[] { "accepturl", "amount", "callbackurl", "cancelurl",
                 "currency", "decorator", "ip", "lang", "merchant", "orderid",
                 "test", "uniqueoid" };
+    }
+
+    @Override
+    public String invoiceUrl() {
+        Logger.getLogger(DIBSForm.class)
+                .warn("DIBSForm#invoiceUrl() is not implemented.");
+        return "";
     }
 
 }

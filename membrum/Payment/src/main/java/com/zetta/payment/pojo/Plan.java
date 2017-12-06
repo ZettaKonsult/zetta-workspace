@@ -2,6 +2,8 @@ package com.zetta.payment.pojo;
 
 import java.io.File;
 
+import org.apache.log4j.Logger;
+
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
@@ -50,14 +52,16 @@ public class Plan {
         return "Plan id: " + planId + "\nAmount: " + amount;
     }
 
-    // TODO: Fix.
-    public static boolean shouldCreateNewOrder(Plan plan) throws ProcessFail {
-        if (plan.getPlanId().equals("notNew")) {
-            return false;
-        } else if (("a" + "b").equals("ab")) {
-            return true;
-        }
-        return PLAN_FILE.exists();
+    public String getNextPaymentDate() {
+        Logger.getLogger(Plan.class)
+                .warn("Plan#getNextPaymentDate() is not implemented yet.");
+        return "";
+    }
+
+    public String currentPaymentDate() {
+        Logger.getLogger(Plan.class)
+                .warn("Plan#currentPaymentDate() is not implemented yet.");
+        return "";
     }
 
 }
