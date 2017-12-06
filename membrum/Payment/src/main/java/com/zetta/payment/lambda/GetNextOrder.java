@@ -20,7 +20,7 @@ import com.zetta.payment.pojo.User;
  * @date 2017-11-14
  */
 public class GetNextOrder extends OrderLambda {
-    private static final Logger log = Logger.getLogger(GetNextOrder.class); 
+    private static final Logger log = Logger.getLogger(GetNextOrder.class);
 
     public String getNextOrder(PlanUserInput data, Context context) {
 
@@ -57,6 +57,7 @@ public class GetNextOrder extends OrderLambda {
             output.setIsPaid(false);
         }
 
+        log.info("Returning:\n" + output);
         try {
             return output.toJSON();
         } catch (InvalidInput error) {

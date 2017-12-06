@@ -128,7 +128,7 @@ public class DynamoOrderDAO implements OrderDAO {
                 .collect(Collectors.toList());
 
         return orders.isEmpty() ? Optional.empty()
-                : Optional.of(orders.get(orders.size()));
+                : Optional.of(orders.get(orders.size() - 1));
     }
 
     @Override

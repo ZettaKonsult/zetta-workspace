@@ -68,4 +68,14 @@ public final class URLResponse {
     public void setValidUntil(String validUntil) {
         this.validUntil = validUntil;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder string = new StringBuilder();
+        string.append("Provider url: " + providerUrl);
+        string.append("Invoice url:  " + invoiceUrl);
+        string.append("Valid until:  " + validUntil);
+        string.append("Paid:         " + (isPaid ? "yes" : "no"));
+        return string.toString();
+    }
 }

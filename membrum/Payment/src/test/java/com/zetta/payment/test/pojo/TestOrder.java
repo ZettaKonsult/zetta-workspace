@@ -30,7 +30,7 @@ public class TestOrder {
     public void string() {
         assertEquals("Order id: orderId\n" + "Plan id: planId\n"
                 + "User id: userId\n" + "Created: 2017-12-06T10:49:18.236Z\n"
-                + "Amount: 123\n" + "Is paid: no.", order.toString());
+                + "Amount: 123\n" + "Is paid: no", order.toString());
     }
 
     @Test

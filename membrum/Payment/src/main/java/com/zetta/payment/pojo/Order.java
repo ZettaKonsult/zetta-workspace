@@ -95,7 +95,7 @@ public class Order implements Serializable {
     }
 
     @DynamoDBAttribute(attributeName = Plan.ID_INDEX)
-    public Object getPlanId() {
+    public String getPlanId() {
         return planId;
     }
 
@@ -111,7 +111,7 @@ public class Order implements Serializable {
         string.append("\nUser id: " + userId);
         string.append("\nCreated: " + created);
         string.append("\nAmount: " + amount);
-        string.append("\nIs paid: " + (isPaid ? "yes" : "no") + ".");
+        string.append("\nIs paid: " + (isPaid ? "yes" : "no"));
         return string.toString();
     }
 

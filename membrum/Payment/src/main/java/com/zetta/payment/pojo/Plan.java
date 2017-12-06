@@ -7,7 +7,6 @@ import org.apache.log4j.Logger;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
-import com.zetta.payment.exception.ProcessFail;
 
 @DynamoDBTable(tableName = "MembrumPlan-Test")
 public class Plan {
@@ -55,13 +54,13 @@ public class Plan {
     public String getNextPaymentDate() {
         Logger.getLogger(Plan.class)
                 .warn("Plan#getNextPaymentDate() is not implemented yet.");
-        return "";
+        return "2018-01-01T12:27:58.962Z";
     }
 
     public String currentPaymentDate() {
         Logger.getLogger(Plan.class)
                 .warn("Plan#currentPaymentDate() is not implemented yet.");
-        return "";
+        return "2015-01-01T12:27:58.962Z";
     }
 
 }
