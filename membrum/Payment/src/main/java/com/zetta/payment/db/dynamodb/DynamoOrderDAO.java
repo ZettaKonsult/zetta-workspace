@@ -16,6 +16,7 @@ import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.zetta.payment.db.DynamoDBManager;
 import com.zetta.payment.db.dao.OrderDAO;
 import com.zetta.payment.pojo.Order;
+import com.zetta.payment.pojo.Plan;
 import com.zetta.payment.pojo.User;
 import com.zetta.payment.util.DateUtil;
 
@@ -66,7 +67,7 @@ public class DynamoOrderDAO implements OrderDAO {
 
     @Override
     public Optional<Order> get(String orderId) {
-        return getByOrderId(orderId);
+        return Optional.ofNullable(mapper.load(Order.class, orderId));
     }
 
     @Override
@@ -80,9 +81,9 @@ public class DynamoOrderDAO implements OrderDAO {
     }
 
     @Override
-    public List<Order> getByUserId(String userId) {
+    public List<Order> getByUser(User user) {
         Map<String, AttributeValue> eav = new HashMap<>();
-        eav.put(":v1", new AttributeValue().withS(userId));
+        eav.put(":v1", new AttributeValue().withS(user.getUserId()));
 
         DynamoDBQueryExpression<Order> query = new DynamoDBQueryExpression<Order>()
                 .withIndexName(Order.USER_ID_INDEX).withConsistentRead(false)
@@ -93,14 +94,14 @@ public class DynamoOrderDAO implements OrderDAO {
     }
 
     @Override
-    public Optional<Order> getByOrderId(String orderId) {
-        return Optional.ofNullable(mapper.load(Order.class, orderId));
+    public Optional<Order> getByOrder(Order order) {
+        return get(order.getOrderId());
     }
 
     @Override
-    public List<Order> getAllUnpaid(String userId) {
+    public List<Order> getAllUnpaid(User user) {
 
-        List<Order> unpaid = getByUserId(userId);
+        List<Order> unpaid = getByUser(user);
 
         if (unpaid.isEmpty()) {
             return unpaid;
@@ -116,8 +117,25 @@ public class DynamoOrderDAO implements OrderDAO {
 
     @Override
     public Optional<Order> getLatestUnpaid(User user) {
-        List<Order> unpaid = getAllUnpaid(user.getUserId());
+        List<Order> unpaid = getAllUnpaid(user);
         return unpaid.isEmpty() ? Optional.empty() : Optional.of(unpaid.get(0));
+    }
+
+    @Override
+    public Optional<Order> getLatest(User user) {
+        List<Order> orders = getByUser(user).stream().sorted(
+                (Order order1, Order order2) -> order1.compareCreated(order2))
+                .collect(Collectors.toList());
+
+        return orders.isEmpty() ? Optional.empty()
+                : Optional.of(orders.get(orders.size() - 1));
+    }
+
+    @Override
+    public List<Order> getAllUnpaid(Plan plan, User user) {
+        return getAllUnpaid(user).stream().filter(
+                (Order order) -> order.getPlanId().equals(plan.getPlanId()))
+                .collect(Collectors.toList());
     }
 
 }

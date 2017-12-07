@@ -1,6 +1,5 @@
 package com.zetta.payment.form;
 
-import java.io.IOException;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -8,7 +7,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.StringJoiner;
 
-import com.zetta.payment.util.JSONUtil;
+import com.zetta.payment.util.JSON;
 
 /**
  * @date 2017-11-10
@@ -99,12 +98,8 @@ public abstract class BasicForm implements Form, Serializable {
 
     @Override
     public final String asJSON() {
-        try {
-            return JSONUtil.prettyPrint(fields, Map.class);
-        } catch (IOException error) {
-            throw new IllegalStateException(
-                    "Could not convert to JSON:\n" + error.getMessage());
-        }
+        return JSON.prettyPrint(fields);
+
     }
 
     @Override

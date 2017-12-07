@@ -6,7 +6,7 @@ public abstract class PaymentError extends Exception {
         super(message);
     }
 
-    public PaymentError(Exception error) {
+    public PaymentError(Throwable error) {
         super(error);
     }
 

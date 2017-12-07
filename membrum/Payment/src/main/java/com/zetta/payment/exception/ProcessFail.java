@@ -7,7 +7,7 @@ public class ProcessFail extends PaymentError {
 
     private static final long serialVersionUID = 1793204909265363699L;
 
-    public ProcessFail(Exception error) {
+    public ProcessFail(Throwable error) {
         super(error);
     }
 }

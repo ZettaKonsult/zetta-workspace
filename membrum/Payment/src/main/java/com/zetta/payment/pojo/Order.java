@@ -1,7 +1,6 @@
 package com.zetta.payment.pojo;
 
 import java.io.Serializable;
-import java.util.Map;
 import java.util.UUID;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
@@ -23,6 +22,7 @@ public class Order implements Serializable {
 
     private String orderId;
     private String userId;
+    private String planId;
     private int amount;
     private boolean isPaid;
     private String created;
@@ -34,19 +34,16 @@ public class Order implements Serializable {
     }
 
     public Order(User user, Plan plan) {
-        this(user.getUserId(), plan.getAmount());
+        this(UUID.randomUUID().toString(), user.getUserId(), plan.getPlanId(),
+                plan.getAmount(), false, DateUtil.now());
     }
 
-    public Order(String userId, int amount) {
-        this(UUID.randomUUID().toString(), userId, amount, false,
-                DateUtil.now());
-    }
-
-    public Order(String orderId, String userId, int amount, boolean isPaid,
-            String created) {
+    public Order(String orderId, String userId, String planId, int amount,
+            boolean isPaid, String created) {
 
         this.orderId = orderId;
         this.userId = userId;
+        this.planId = planId;
         this.amount = amount;
         this.isPaid = isPaid;
         this.created = created;
@@ -97,19 +94,38 @@ public class Order implements Serializable {
         this.created = created;
     }
 
+    @DynamoDBAttribute(attributeName = Plan.ID_INDEX)
+    public String getPlanId() {
+        return planId;
+    }
+
+    public void setPlanId(String planId) {
+        this.planId = planId;
+    }
+
     @Override
     public String toString() {
         StringBuilder string = new StringBuilder();
         string.append("Order id: " + orderId);
+        string.append("\nPlan id: " + planId);
         string.append("\nUser id: " + userId);
         string.append("\nCreated: " + created);
         string.append("\nAmount: " + amount);
-        string.append("\nIs paid: " + (isPaid ? "yes" : "no") + ".");
+        string.append("\nIs paid: " + (isPaid ? "yes" : "no"));
         return string.toString();
     }
 
-    public void complement(Map<?, ?> orderMap) {
+    @Override
+    public boolean equals(Object other) {
+        if (!(other instanceof Order)) {
+            return false;
+        }
 
+        return orderId.equals(((Order) other).getOrderId());
+    }
+
+    public int compareCreated(Order other) {
+        return DateUtil.compare(created, other.getCreated());
     }
 
 }

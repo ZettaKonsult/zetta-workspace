@@ -2,9 +2,10 @@
 
 HOME=`dirname $(readlink -f "$0")`
 YML="$HOME/../../../../serverless.yml"
+cd `dirname $YML`
+echo "Working from `pwd`"
 
 echo "Updating functions..."
-FILE=`cat $YML`
 
 NAMES=( \
  "confirmPayment" \

@@ -9,6 +9,10 @@ public class LambdaError extends PaymentError {
         super(message);
     }
 
+    public LambdaError(Throwable error) {
+        super(error);
+    }
+
     private static final long serialVersionUID = -939582048613929359L;
 
 }
