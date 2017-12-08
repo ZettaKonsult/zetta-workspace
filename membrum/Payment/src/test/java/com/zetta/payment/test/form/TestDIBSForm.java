@@ -31,7 +31,8 @@ public class TestDIBSForm {
 
     @Test
     public void emptyValues() {
-        String[] names = { "accepturl", "amount", "cancelurl", "ip" };
+        String[] names = { "accepturl", "amount", "callbackurl", "cancelurl",
+                "ip", "merchant" };
         for (String name : names) {
             assertEquals("Invalid value for parameter '" + name + "'.", "",
                     dibs.get(name));
@@ -40,12 +41,9 @@ public class TestDIBSForm {
 
     @Test
     public void presetValues() {
-        String[] names = { "callbackurl", "currency", "decorator", "lang",
-                "merchant", "test", "uniqueoid" };
-        String[] values = {
-                "https://gjnhqznxmd.execute-api.eu-central-1.amazonaws."
-                        + "com/prod/confirm",
-                "SEK", "responsive", "sv", "90234620", "1", "yes" };
+        String[] names = { "currency", "decorator", "lang", "test",
+                "uniqueoid" };
+        String[] values = { "SEK", "responsive", "sv", "1", "yes" };
         for (int i = 0; i < Math.max(names.length, values.length); ++i) {
             assertEquals(i + ": ", values[i], dibs.get(names[i]));
         }
@@ -54,10 +52,9 @@ public class TestDIBSForm {
     @Test
     public void fullUrl() {
         String url = "https://payment.architrade.com/paymentweb/start.action?"
-                + "accepturl=&amount=&callbackurl=https%3A%2F%2Fgjnhqznxmd."
-                + "execute-api.eu-central-1.amazonaws.com%2Fprod%2Fconfirm&"
+                + "accepturl=&amount=&callbackurl=&"
                 + "cancelurl=&currency=SEK&decorator=responsive&ip=&lang=sv&"
-                + "merchant=90234620&orderid=27b98cd8-3940-4742-a059-"
+                + "merchant=&orderid=27b98cd8-3940-4742-a059-"
                 + "7f132a7f72c4&test=1&uniqueoid=yes";
 
         assertEquals(TestUtil.withoutOrderId(url),
