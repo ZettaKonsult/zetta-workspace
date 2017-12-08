@@ -8,10 +8,9 @@ echo "Working from `pwd`"
 echo "Updating functions..."
 
 NAMES=( \
- "confirmPayment" \
- "getUnpaidOrders" \
- "getNextOrder" \
- "updateOrder" \
+ "membrumDIBSConfirm" \
+ "membrumNextOrder" \
+ "membrumSavePayment" \
 )
 
 LENGTH=${#NAMES[@]}

@@ -8,16 +8,14 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.zetta.payment.form.TRFForm;
-import com.zetta.payment.pojo.Order;
-import com.zetta.payment.pojo.Plan;
-import com.zetta.payment.pojo.User;
+import com.zetta.payment.pojo.membrum.Order;
 
 public class TestTRFForm {
     private TRFForm form;
 
     @Before
     public void setUp() {
-        form = new TRFForm(new Order(new User(), new Plan("plan", 123)));
+        form = new TRFForm(new Order("userId", 123));
     }
 
     @Test
