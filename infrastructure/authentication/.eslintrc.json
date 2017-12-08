@@ -9,5 +9,8 @@
   "plugins": ["flowtype"],
   "parserOptions": {
     "sourceType": "module"
+  },
+  "rules": {
+    "semi": 0
   }
 }
