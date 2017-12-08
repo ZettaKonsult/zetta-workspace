@@ -52,7 +52,7 @@ public final class Response {
     public void emit(OutputStream outStream) {
         String response = asJSON();
         Logger.getLogger(Response.class)
-                .info("Sending response:\n    " + response);
+                .info("Sending response:\n" + response);
 
         try {
             outStream.write(response.getBytes());

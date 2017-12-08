@@ -11,10 +11,6 @@ import org.apache.log4j.Logger;
 public class DIBSForm extends BasicForm {
 
     private static final long serialVersionUID = 8418801285386062689L;
-    private static final String CALLBACK_URL = "https://gjnhqznxmd.execute"
-            + "-api.eu-central-1.amazonaws.com/prod/confirm";
-    private static final String ACCEPT_URL = "";
-    private static final String CANCEL_URL = "";
 
     @Override
     public final String baseUrl() {
@@ -24,14 +20,9 @@ public class DIBSForm extends BasicForm {
     @Override
     public final Map<String, String> presetValues() {
         Map<String, String> values = new LinkedHashMap<String, String>();
-
-        set("accepturl", ACCEPT_URL);
-        set("callbackurl", CALLBACK_URL);
-        set("cancelurl", CANCEL_URL);
         set("currency", "SEK");
         set("decorator", "responsive");
         set("lang", "sv");
-        set("merchant", "90234620");
         set("test", "1");
         set("uniqueoid", "yes");
 

@@ -1,7 +1,10 @@
 package com.zetta.payment.util;
 
+import java.util.Collection;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public final class CollectionUtil {
@@ -77,6 +80,23 @@ public final class CollectionUtil {
         return map.entrySet().stream().filter(entry -> entry.getValue() != null)
                 .collect(Collectors.toMap(entry -> entry.getKey(),
                         entry -> entry.getValue()));
+    }
+
+    public static String verticalString(Collection<?> collection) {
+        StringBuilder string = new StringBuilder();
+        String prefix = "";
+
+        for (Object obj : collection) {
+            string.append(prefix + obj.toString());
+            prefix = "\n";
+        }
+        return string.toString();
+    }
+
+    public static <T, V> List<V> transform(List<T> list,
+            Function<T, V> transformation) {
+
+        return list.stream().map(transformation).collect(Collectors.toList());
     }
 
 }

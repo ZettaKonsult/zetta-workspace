@@ -1,9 +1,5 @@
 package com.zetta.payment.pojo;
 
-import com.zetta.payment.exception.InvalidInput;
-import com.zetta.payment.util.CollectionUtil;
-import com.zetta.payment.util.JSON;
-
 /**
  * @date 2017-12-06
  */
@@ -21,14 +17,6 @@ public final class URLResponse {
         this.invoiceUrl = invoiceUrl;
         this.validUntil = validUntil;
         this.isPaid = isPaid;
-    }
-
-    public String toJSON() throws InvalidInput {
-
-        return JSON.prettyPrint(CollectionUtil.newMap("providerUrl",
-                providerUrl, "invoiceUrl", invoiceUrl, "validUntil", validUntil,
-                "isPaid", isPaid));
-
     }
 
     public String getInvoiceUrl() {
@@ -67,9 +55,9 @@ public final class URLResponse {
     public String toString() {
         StringBuilder string = new StringBuilder();
         string.append("Provider url: " + providerUrl);
-        string.append("Invoice url:  " + invoiceUrl);
-        string.append("Valid until:  " + validUntil);
-        string.append("Paid:         " + (isPaid ? "yes" : "no"));
+        string.append("\nInvoice url:  " + invoiceUrl);
+        string.append("\nValid until:  " + validUntil);
+        string.append("\nPaid:         " + (isPaid ? "yes" : "no"));
         return string.toString();
     }
 }

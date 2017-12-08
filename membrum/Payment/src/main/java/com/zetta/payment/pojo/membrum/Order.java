@@ -1,4 +1,4 @@
-package com.zetta.payment.pojo;
+package com.zetta.payment.pojo.membrum;
 
 import java.io.Serializable;
 import java.util.UUID;
@@ -9,6 +9,9 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBIndexHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 import com.zetta.payment.util.DateUtil;
 
+/**
+ * @date 2017-11-15
+ */
 @DynamoDBTable(tableName = "MembrumOrders")
 public class Order implements Serializable {
 
@@ -16,37 +19,22 @@ public class Order implements Serializable {
 
     public static final String ORDER_ID_INDEX = "orderId";
     public static final String AMOUNT_INDEX = "amount";
-    public static final String IS_PAID_INDEX = "isPaid";
     public static final String USER_ID_INDEX = "userId";
     public static final String CREATED_INDEX = "created";
 
     private String orderId;
     private String userId;
-    private String planId;
-    private int amount;
-    private boolean isPaid;
     private String created;
+    private String validUntil;
+    private int amount;
 
     public Order() {}
 
-    public Order(String orderId) {
-        this.orderId = orderId;
-    }
-
-    public Order(User user, Plan plan) {
-        this(UUID.randomUUID().toString(), user.getUserId(), plan.getPlanId(),
-                plan.getAmount(), false, DateUtil.now());
-    }
-
-    public Order(String orderId, String userId, String planId, int amount,
-            boolean isPaid, String created) {
-
-        this.orderId = orderId;
+    public Order(String userId, int amount) {
+        this.orderId = UUID.randomUUID().toString();
         this.userId = userId;
-        this.planId = planId;
+        this.created = DateUtil.now();
         this.amount = amount;
-        this.isPaid = isPaid;
-        this.created = created;
     }
 
     @DynamoDBHashKey(attributeName = ORDER_ID_INDEX)
@@ -76,15 +64,6 @@ public class Order implements Serializable {
         this.amount = amount;
     }
 
-    @DynamoDBAttribute(attributeName = IS_PAID_INDEX)
-    public boolean getIsPaid() {
-        return isPaid;
-    }
-
-    public void setIsPaid(boolean isPaid) {
-        this.isPaid = isPaid;
-    }
-
     @DynamoDBAttribute(attributeName = CREATED_INDEX)
     public String getCreated() {
         return created;
@@ -94,24 +73,22 @@ public class Order implements Serializable {
         this.created = created;
     }
 
-    @DynamoDBAttribute(attributeName = Plan.ID_INDEX)
-    public String getPlanId() {
-        return planId;
+    public String getValidUntil() {
+        return validUntil;
     }
 
-    public void setPlanId(String planId) {
-        this.planId = planId;
+    public void setValidUntil(String validUntil) {
+        this.validUntil = validUntil;
     }
 
     @Override
     public String toString() {
         StringBuilder string = new StringBuilder();
-        string.append("Order id: " + orderId);
-        string.append("\nPlan id: " + planId);
-        string.append("\nUser id: " + userId);
-        string.append("\nCreated: " + created);
-        string.append("\nAmount: " + amount);
-        string.append("\nIs paid: " + (isPaid ? "yes" : "no"));
+        string.append("Order " + orderId + ":");
+        string.append("\nUser id:     " + userId);
+        string.append("\nCreated:     " + created);
+        string.append("\nAmount:      " + amount);
+        string.append("\nValid until: " + validUntil);
         return string.toString();
     }
 

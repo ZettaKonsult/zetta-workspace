@@ -10,31 +10,23 @@ package:
   artifact: target/PaymentLambda.jar
 
 functions:
-  confirmPayment:
-    handler: com.zetta.payment.lambda.ConfirmPayment::confirmPayment
+  membrumDIBSConfirm:
+    handler: com.zetta.payment.lambda.membrum.MembrumDIBSConfirm::membrumDIBSConfirm
     events:
       - http:
           method: post
           path: confirmPayment
           role: callPaymentLambdas
-  getUnpaidOrders:
-    handler: com.zetta.payment.lambda.GetUnpaidOrders::getUnpaidOrders
-    events:
-      - http:
-         method: get
-         path: getUnpaidOrders
-         role: paymentDatabaseManager
-         cors: true
-  getNextOrder:
-    handler: com.zetta.payment.lambda.GetNextOrder::getNextOrder
+  membrumNextOrder:
+    handler: com.zetta.payment.lambda.membrum.MembrumNextOrder::membrumNextOrder
     events:
       - http:
          method: get
          path: getNextOrder
          role: paymentDatabaseManager
          cors: true
-  updateOrder:
-    handler: com.zetta.payment.lambda.UpdateOrder::updateOrder
+  membrumSavePayment:
+    handler: com.zetta.payment.lambda.membrum.MembrumSavePayment::membrumSavePayment
     events:
       - http:
          method: put
@@ -78,11 +70,7 @@ resources:
                   - Effect: Allow
                     Action:
                       - lambda:InvokeFunction
-                    Resource: arn:aws:lambda:eu-central-1:460056602695:function:payment-prod-getOrder
-                  - Effect: Allow
-                    Action:
-                      - lambda:InvokeFunction
-                    Resource: arn:aws:lambda:eu-central-1:460056602695:function:payment-prod-updateOrder
+                    Resource: arn:aws:lambda:eu-central-1:460056602695:function:payment-prod-membrumSavePayment
     paymentDatabaseManager:
       Type: AWS::IAM::Role
       Properties:
@@ -134,6 +122,26 @@ resources:
                       - dynamodb:UpdateItem
                       - dynamodb:Query
                     Resource: arn:aws:dynamodb:eu-central-1:460056602695:table/MembrumOrders/index/userId
+                  - Effect: Allow
+                    Action:
+                      - dynamodb:*
+                    Resource: arn:aws:dynamodb:eu-central-1:460056602695:table/MembrumPayments
+                  - Effect: Allow
+                    Action:
+                      - dynamodb:DeleteItem
+                      - dynamodb:GetItem
+                      - dynamodb:PutItem
+                      - dynamodb:UpdateItem
+                      - dynamodb:Query
+                    Resource: arn:aws:dynamodb:eu-central-1:460056602695:table/MembrumPayments/orderId
+                  - Effect: Allow
+                    Action:
+                      - dynamodb:DeleteItem
+                      - dynamodb:GetItem
+                      - dynamodb:PutItem
+                      - dynamodb:UpdateItem
+                      - dynamodb:Query
+                    Resource: arn:aws:dynamodb:eu-central-1:460056602695:table/MembrumPayments/index/userId
                   - Effect: Allow
                     Action:
                       - dynamodb:DeleteItem
