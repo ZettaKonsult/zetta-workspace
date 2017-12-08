@@ -27,7 +27,7 @@ iamRoleStatements:
 
 functions:
   mailer:
-    handler: handler.mailer
+    handler: src/handler.mailer
     events:
       - http:
           path: mail
