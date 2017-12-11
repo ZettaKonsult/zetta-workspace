@@ -12,12 +12,12 @@ import com.zetta.payment.util.JSON;
  */
 public abstract class LambdaHandler {
 
-    public JSON callLambda(String functionName) {
+    public final JSON callLambda(String functionName) {
 
         return callLambda(functionName, null);
     }
 
-    public JSON callLambda(String functionName, String payload) {
+    public final JSON callLambda(String functionName, String payload) {
 
         AWSLambdaAsync client = AWSLambdaAsyncClientBuilder.standard()
                 .withRegion(Regions.EU_CENTRAL_1).build();

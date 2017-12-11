@@ -3,13 +3,13 @@ package com.zetta.payment.exception;
 /**
  * @date 2017-12-01
  */
-public class LambdaError extends PaymentError {
+public class LambdaCall extends PaymentError {
 
-    public LambdaError(String message) {
+    public LambdaCall(String message) {
         super(message);
     }
 
-    public LambdaError(Throwable error) {
+    public LambdaCall(Throwable error) {
         super(error);
     }
 

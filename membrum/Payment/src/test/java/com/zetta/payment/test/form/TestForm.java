@@ -118,12 +118,10 @@ public class TestForm {
     @Test
     public void toStringEmpty() {
         assertEquals("{\n" + "    accepturl: <empty>,\n"
-                + "    amount: <empty>,\n"
-                + "    callbackurl: https://gjnhqznxmd.execute-api.eu-central"
-                + "-1.amazonaws.com/prod/confirm,\n"
+                + "    amount: <empty>,\n" + "    callbackurl: <empty>,\n"
                 + "    cancelurl: <empty>,\n" + "    currency: SEK,\n"
                 + "    decorator: responsive,\n" + "    ip: <empty>,\n"
-                + "    lang: sv,\n" + "    merchant: 90234620,\n"
+                + "    lang: sv,\n" + "    merchant: <empty>,\n"
                 + "    orderid: <empty>,\n" + "    test: 1,\n"
                 + "    uniqueoid: yes\n" + "}", form.toString());
     }

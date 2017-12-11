@@ -196,8 +196,8 @@ sigV4Client.newClient = function(config) {
   awsSigV4Client.signRequest = function(request) {
     const verb = request.method.toUpperCase()
     const path = awsSigV4Client.pathComponent + request.path
-    const queryParams = { ...request.queryParams }
-    const headers = { ...request.headers }
+    const queryParams = [ ...request.queryParams ]
+    const headers = [ ...request.headers ]
 
     // If the user has not specified an override for Content type the use default
     if (headers["Content-Type"] === undefined) {
@@ -209,7 +209,7 @@ sigV4Client.newClient = function(config) {
       headers["Accept"] = awsSigV4Client.defaultAcceptType
     }
 
-    let body = { ...request.body }
+    let body = [...request.body]
     // override request body and set to empty when signing GET requests
     if (request.body === undefined || verb === "GET") {
       body = ""

@@ -12,9 +12,13 @@ import java.util.stream.IntStream;
 
 import com.amazonaws.services.lambda.model.InvokeResult;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.zetta.payment.exception.JSONError;
+import com.zetta.payment.exception.JSONFormat;
 
+/**
+ * @date 2017-12-06
+ */
 public class JSON {
+    private static final JSON empty = new JSON();
     private static final ObjectMapper MAPPER = new ObjectMapper();
     private Map<String, Object> map;
 
@@ -46,7 +50,7 @@ public class JSON {
         try {
             return MAPPER.readValue(inStream, Map.class);
         } catch (IOException error) {
-            throw new JSONError(error);
+            throw new JSONFormat(error);
         }
     }
 
@@ -78,7 +82,7 @@ public class JSON {
         try {
             return prettyPrint();
         } catch (IOException error) {
-            throw new JSONError(error);
+            throw new JSONFormat(error);
         }
     }
 
@@ -97,7 +101,7 @@ public class JSON {
                     new ByteArrayInputStream(prettyPrint().getBytes()),
                     classType);
         } catch (IOException error) {
-            throw new JSONError(error);
+            throw new JSONFormat(error);
         }
     }
 
@@ -107,7 +111,7 @@ public class JSON {
             return MAPPER.writerWithDefaultPrettyPrinter()
                     .writeValueAsString(output);
         } catch (IOException error) {
-            throw new JSONError(error);
+            throw new JSONFormat(error);
         }
     }
 
@@ -128,6 +132,10 @@ public class JSON {
 
     public int size() {
         return map.size();
+    }
+
+    public static JSON empty() {
+        return empty;
     }
 
 }

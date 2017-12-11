@@ -8,16 +8,14 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.zetta.payment.form.TRFForm;
-import com.zetta.payment.pojo.Order;
-import com.zetta.payment.pojo.Plan;
-import com.zetta.payment.pojo.User;
+import com.zetta.payment.pojo.membrum.Order;
 
 public class TestTRFForm {
     private TRFForm form;
 
     @Before
     public void setUp() {
-        form = new TRFForm(new Order(new User(), new Plan("plan", 123)));
+        form = new TRFForm(new Order("userId", 123));
     }
 
     @Test
@@ -26,8 +24,8 @@ public class TestTRFForm {
                 "currency", "decorator", "ip", "lang", "merchant", "orderid",
                 "test", "uniqueoid" };
         String[] values = { "", "123",
-                "https://gjnhqznxmd.execute-api.eu-central-1.amazonaws"
-                        + ".com/prod/confirm",
+                "https://4acs2nf77c.execute-api.eu-central-1.amazonaws.com"
+                        + "/prod/confirmPayment",
                 "", "SEK", "responsive", "", "sv", "90234620", "<skip>", "1",
                 "yes" };
 

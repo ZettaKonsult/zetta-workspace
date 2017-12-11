@@ -9,6 +9,9 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 
+/**
+ * @date 2017-11-15
+ */
 @DynamoDBTable(tableName = "MembrumUsers")
 public class User implements Serializable {
 

@@ -15,9 +15,8 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.zetta.payment.db.DynamoDBManager;
 import com.zetta.payment.db.dao.OrderDAO;
-import com.zetta.payment.pojo.Order;
-import com.zetta.payment.pojo.Plan;
 import com.zetta.payment.pojo.User;
+import com.zetta.payment.pojo.membrum.Order;
 import com.zetta.payment.util.DateUtil;
 
 public class DynamoOrderDAO implements OrderDAO {
@@ -71,11 +70,6 @@ public class DynamoOrderDAO implements OrderDAO {
     }
 
     @Override
-    public Optional<Order> get(Order order) {
-        return get(order.getOrderId());
-    }
-
-    @Override
     public void save(Order order) {
         mapper.save(order);
     }
@@ -94,47 +88,15 @@ public class DynamoOrderDAO implements OrderDAO {
     }
 
     @Override
-    public Optional<Order> getByOrder(Order order) {
+    public Optional<Order> get(Order order) {
         return get(order.getOrderId());
     }
 
     @Override
-    public List<Order> getAllUnpaid(User user) {
-
-        List<Order> unpaid = getByUser(user);
-
-        if (unpaid.isEmpty()) {
-            return unpaid;
-        }
-
-        unpaid = unpaid.stream().filter((Order order) -> !order.getIsPaid())
-                .sorted((Order order1, Order order2) -> DateUtil
-                        .compare(order1.getCreated(), order2.getCreated()))
-                .collect(Collectors.toList());
-
-        return unpaid;
-    }
-
-    @Override
-    public Optional<Order> getLatestUnpaid(User user) {
-        List<Order> unpaid = getAllUnpaid(user);
-        return unpaid.isEmpty() ? Optional.empty() : Optional.of(unpaid.get(0));
-    }
-
-    @Override
-    public Optional<Order> getLatest(User user) {
-        List<Order> orders = getByUser(user).stream().sorted(
-                (Order order1, Order order2) -> order1.compareCreated(order2))
-                .collect(Collectors.toList());
-
-        return orders.isEmpty() ? Optional.empty()
-                : Optional.of(orders.get(orders.size() - 1));
-    }
-
-    @Override
-    public List<Order> getAllUnpaid(Plan plan, User user) {
-        return getAllUnpaid(user).stream().filter(
-                (Order order) -> order.getPlanId().equals(plan.getPlanId()))
+    public List<Order> get(User user, String start, String end) {
+        return getByUser(user)
+                .stream().filter((Order order) -> DateUtil
+                        .isBetween(order.getCreated(), start, end))
                 .collect(Collectors.toList());
     }
 
