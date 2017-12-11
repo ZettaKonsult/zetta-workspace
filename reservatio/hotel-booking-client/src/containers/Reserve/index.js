@@ -57,16 +57,18 @@ class Reserve extends Component {
   roomToEdit = () => Number(this.props.match.params.startTime)
 
   getReservation() {
+    const encodedId = encodeURIComponent(this.props.match.params.id)
     return invokeApig(
-      { path: `/rooms/${this.props.match.params.id}` },
+      { path: `/rooms/${encodedId}` },
       this.props.userToken
     )
   }
 
   async saveReservation(reservation) {
+    const encodedId = encodeURIComponent(this.props.match.params.id)
     return invokeApig(
       {
-        path: `/rooms/${this.props.match.params.id}`,
+        path: `/rooms/${encodedId}`,
         method: 'PUT',
         body: reservation
       },
