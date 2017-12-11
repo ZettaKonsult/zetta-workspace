@@ -11,6 +11,8 @@ const ReportList = ({ reports }) => (
     <Link to="/Worker">Create new worker</Link>
     <br />
     <Link to="/place">Create new workplace</Link>
+    <br />
+    <Link to="/admin">Admin</Link>
     <ul className="ReportList">
       {reports.map(report => <ReportItem key={report.id} report={report} />)}
     </ul>

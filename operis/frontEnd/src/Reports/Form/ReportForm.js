@@ -1,11 +1,10 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { reduxForm, Field } from 'redux-form'
-import { withRouter } from 'react-router-dom'
 
 import { addReport, updateReport } from '../ReportActions'
 
-import { getReportById, isReportId } from '../reports'
+import { getReportById, isReportId } from '../../reducers'
 import { getWorkers, getPlaces } from '../../reducers'
 
 import validate from './ReportFormValidation'
@@ -80,8 +79,8 @@ let ReportForm = props => (
 ReportForm = reduxForm({ form: 'reportForm', validate })(ReportForm)
 
 const mapStateToProps = (state, props) => ({
-  idExists: isReportId(state.reports, props.id),
-  initialValues: getReportById(state.reports, props.id),
+  idExists: isReportId(state, props.id),
+  initialValues: getReportById(state, props.id),
   workers: getWorkers(state),
   places: getPlaces(state)
 })

@@ -6102,9 +6102,9 @@ sw-toolbox@^3.4.0:
     path-to-regexp "^1.0.1"
     serviceworker-cache-polyfill "^4.0.0"
 
-swedish-ssn@^1.0.2:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/swedish-ssn/-/swedish-ssn-1.0.2.tgz#86d0ad876040cb3d1e67c6dd87363a5e50df1d13"
+swedish-ssn@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/swedish-ssn/-/swedish-ssn-1.0.3.tgz#acf4fd5481dbfef99507282f4e673c97f982f1e1"
 
 symbol-observable@^1.0.3:
   version "1.0.4"

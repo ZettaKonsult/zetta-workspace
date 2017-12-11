@@ -39,3 +39,5 @@ const reports = combineReducers({ byId, allIds })
 export default reports
 
 export const getWorkers = state => state.allIds.map(id => state.byId[id])
+
+export const getWorkerName = (state, id) => state.byId[id].name

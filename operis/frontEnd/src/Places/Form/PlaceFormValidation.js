@@ -7,7 +7,7 @@ const checks = {
 
 export default values => {
   let errors = {}
-  Object.keys(checks).map(key => {
+  Object.keys(checks).forEach(key => {
     let result = checkValues(values[key], checks[key])
     if (typeof result === 'string') {
       errors[key] = result

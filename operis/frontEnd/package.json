@@ -11,7 +11,7 @@
     "redux": "^3.7.2",
     "redux-form": "^7.1.2",
     "styled-components": "^2.2.3",
-    "swedish-ssn": "^1.0.2",
+    "swedish-ssn": "^1.0.3",
     "uuid": "^3.1.0",
     "validator": "^9.1.2"
   },
@@ -21,9 +21,12 @@
     "redux-devtools-extension": "^2.13.2"
   },
   "scripts": {
-    "build": "react-scripts build",
-    "eject": "react-scripts eject",
     "start": "react-scripts start",
-    "test": "react-scripts test --env=jsdom"
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject",
+    "build": "react-scripts build",
+    "upload": "aws s3 sync build/ s3://operis-app-client",
+    "clean": "rm -rf ./build",
+    "deploy": "yarn build && yarn run upload && yarn clean"
   }
 }
