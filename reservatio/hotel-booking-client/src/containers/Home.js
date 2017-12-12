@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom'
 import { PageHeader, ListGroup, ListGroupItem } from 'react-bootstrap'
 import { invokeApig } from '../libs/awslib'
+import { getAll } from '../libs/apiDatabase'
 import { Link } from 'react-router-dom'
 import './Home.css'
 
@@ -23,8 +24,8 @@ class Home extends Component {
     this.setState({ isLoading: true })
 
     try {
-      const results = await this.getRooms()
-      const sortedResults = results.concat().sort(this.compareRoomId)
+      const results = await getAll(this.props.userToken)
+      const sortedResults = [...results].sort(this.compareRoomId)
 
       this.setState({ rooms: sortedResults })
     } catch (e) {
@@ -36,31 +37,27 @@ class Home extends Component {
 
   compareRoomId = (a, b) => Number(a.roomId) > Number(b.roomId)
 
-  getRooms() {
-    return invokeApig({ path: '/rooms' }, this.props.userToken)
-  }
-
   renderNotesList(notes) {
     return [{}].concat(notes).map(
       (note, i) =>
-        i !== 0
-          ? <ListGroupItem
-              key={note.roomId}
-              href={`/rooms/reserve/${note.roomId}`}
-              onClick={this.handleNoteClick}
-              header={note.roomId.trim().split('\n')[0]}
-            >
-              {'Created: ' + new Date(note.createdAt).toLocaleString()}
-            </ListGroupItem>
-          : <ListGroupItem
-              key="new"
-              href="/rooms/new"
-              onClick={this.handleNoteClick}
-            >
-              <h4>
-                <b>{'\uFF0B'}</b> Create a new room
-              </h4>
-            </ListGroupItem>
+        i !== 0 ? (
+          <ListGroupItem
+            key={note.roomId}
+            href={`/rooms/reserve/${note.roomId}`}
+            onClick={this.handleNoteClick}
+            header={note.roomId.trim().split('\n')[0]}>
+            {'Created: ' + new Date(note.createdAt).toLocaleString()}
+          </ListGroupItem>
+        ) : (
+          <ListGroupItem
+            key="new"
+            href="/rooms/new"
+            onClick={this.handleNoteClick}>
+            <h4>
+              <b>{'\uFF0B'}</b> Create a new room
+            </h4>
+          </ListGroupItem>
+        )
     )
   }
 
@@ -69,7 +66,7 @@ class Home extends Component {
     this.props.history.push(event.currentTarget.getAttribute('href'))
   }
 
-  renderLander = () =>
+  renderLander = () => (
     <div className="lander">
       <h1>Reservatio</h1>
       <p>A simple booking app</p>
@@ -79,14 +76,16 @@ class Home extends Component {
         </Link>
       </div>
     </div>
+  )
 
-  renderNotes = () =>
+  renderNotes = () => (
     <div className="notes">
       <PageHeader>Your Rooms</PageHeader>
       <ListGroup>
         {!this.state.isLoading && this.renderNotesList(this.state.rooms)}
       </ListGroup>
     </div>
+  )
 
   render() {
     return (

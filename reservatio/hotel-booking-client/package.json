@@ -14,15 +14,16 @@
     "styled-components": "^2.1.1"
   },
   "devDependencies": {
+    "prettier": "^1.9.2",
     "react-scripts": "1.0.17"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject",
+    "predeploy": "yarn run build",
     "deploy": "aws s3 sync build/ s3://hotel-booking-client",
     "postdeploy": "aws cloudfront create-invalidation --distribution-id E3MI3UASEWRUGU --paths /* && aws cloudfront create-invalidation --distribution-id E1B0QQP945O44E --paths /*",
-    "update": "yarn build && yarn deploy && yarn postdeploy"
+    "eject": "react-scripts eject"
   }
 }
