@@ -2,9 +2,8 @@ import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom'
 import { FormGroup, FormControl, ControlLabel } from 'react-bootstrap'
 import LoaderButton from '../components/LoaderButton'
-import config from '../config.js'
+
 import './NewNote.css'
-import { invokeApig, s3Upload } from '../libs/awslib'
 
 class NewNote extends Component {
   constructor(props) {
@@ -33,31 +32,21 @@ class NewNote extends Component {
     event.preventDefault()
 
     this.setState({ isLoading: true })
-
     try {
-      await this.createNote({
-        roomId: this.state.roomId,
-        beds: this.state.beds,
-        costPerNight: this.state.costPerNight,
-        maxOccupancy: this.state.maxOccupancy,
-        reserved: []
+      await this.props.database.createRoom({
+        Item: {
+          roomId: this.state.roomId,
+          beds: this.state.beds,
+          costPerNight: this.state.costPerNight,
+          maxOccupancy: this.state.maxOccupancy,
+          reserved: []
+        }
       })
       this.props.history.push('/')
     } catch (e) {
-      alert(e)
+      console.error(e)
       this.setState({ isLoading: false })
     }
-  }
-
-  createNote(note) {
-    return invokeApig(
-      {
-        path: '/rooms',
-        method: 'POST',
-        body: note
-      },
-      this.props.userToken
-    )
   }
 
   render() {

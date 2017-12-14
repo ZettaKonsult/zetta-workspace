@@ -1,8 +1,7 @@
 import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom'
 import { PageHeader, ListGroup, ListGroupItem } from 'react-bootstrap'
-import { invokeApig } from '../libs/awslib'
-import { getAll } from '../libs/apiDatabase'
+
 import { Link } from 'react-router-dom'
 import './Home.css'
 
@@ -24,12 +23,12 @@ class Home extends Component {
     this.setState({ isLoading: true })
 
     try {
-      const results = await getAll(this.props.userToken)
+      const results = await this.props.database.listAllRooms()
       const sortedResults = [...results].sort(this.compareRoomId)
 
       this.setState({ rooms: sortedResults })
     } catch (e) {
-      console.log(e)
+      console.error(e)
     }
 
     this.setState({ isLoading: false })

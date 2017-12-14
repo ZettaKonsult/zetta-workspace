@@ -1,4 +1,8 @@
-import { buildUpdateExpression, buildAttributeValues } from './queryBuilder'
+import {
+  buildUpdateExpression,
+  buildAttributeValues,
+  buildKeyConditionExpression
+} from './queryBuilder'
 
 describe('queryBuilder', () => {
   const values = { value1: 'hej', value2: 'nej' }
@@ -16,6 +20,15 @@ describe('queryBuilder', () => {
         ':value1': 'hej',
         ':value2': 'nej'
       })
+    })
+  })
+
+  describe('buildKeyConditionExpression()', () => {
+    it('Returns string representation from an array of keys', () => {
+      const keys = ['key1', 'key2']
+      expect(buildKeyConditionExpression(keys)).toBe(
+        'key1 = :key1, key2 = :key2'
+      )
     })
   })
 })

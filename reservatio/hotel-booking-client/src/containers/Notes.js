@@ -1,9 +1,7 @@
 import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom'
-import { invokeApig, s3Upload } from '../libs/awslib'
 import { FormGroup, FormControl, ControlLabel } from 'react-bootstrap'
 import LoaderButton from '../components/LoaderButton'
-import config from '../config.js'
 import './Notes.css'
 
 class Notes extends Component {
@@ -13,7 +11,6 @@ class Notes extends Component {
     this.state = {
       isLoading: null,
       isDeleting: null,
-      room: null,
       roomId: '',
       beds: '',
       costPerNight: '',
@@ -23,9 +20,10 @@ class Notes extends Component {
 
   async componentDidMount() {
     try {
-      const results = await this.getRoom()
+      const results = await this.props.database.getRoom(
+        this.props.match.params.id
+      )
       this.setState({
-        room: results,
         roomId: results.roomId,
         beds: results.beds,
         costPerNight: results.costPerNight,
@@ -34,13 +32,6 @@ class Notes extends Component {
     } catch (e) {
       alert(e)
     }
-  }
-
-  getRoom() {
-    return invokeApig(
-      { path: `/rooms/${this.props.match.params.id}` },
-      this.props.userToken
-    )
   }
 
   validateForm() {
@@ -53,25 +44,12 @@ class Notes extends Component {
     })
   }
 
-  saveRoom(room) {
-    return invokeApig(
-      {
-        path: `/rooms/${this.props.match.params.id}`,
-        method: 'PUT',
-        body: room
-      },
-      this.props.userToken
-    )
-  }
-
   handleSubmit = async event => {
     event.preventDefault()
 
     this.setState({ isLoading: true })
     try {
-      await this.saveRoom({
-        ...this.state.room,
-        roomId: this.state.roomId,
+      await this.props.database.updateRoom(this.props.match.params.id, {
         beds: this.state.beds,
         costPerNight: this.state.costPerNight,
         maxOccupancy: this.state.maxOccupancy
@@ -81,16 +59,6 @@ class Notes extends Component {
       alert(e)
       this.setState({ isLoading: false })
     }
-  }
-
-  deleteRoom() {
-    return invokeApig(
-      {
-        path: `/rooms/${this.props.match.params.id}`,
-        method: 'DELETE'
-      },
-      this.props.userToken
-    )
   }
 
   handleDelete = async event => {
@@ -107,7 +75,9 @@ class Notes extends Component {
     this.setState({ isDeleting: true })
 
     try {
-      await this.deleteRoom()
+      await this.props.database.removeRoom({
+        Key: { roomId: this.props.match.params.id }
+      })
       this.props.history.push('/')
     } catch (e) {
       alert(e)
@@ -118,45 +88,43 @@ class Notes extends Component {
   render() {
     return (
       <div className="Notes">
-        {this.state.room &&
+        {this.state.roomId && (
           <form onSubmit={this.handleSubmit}>
-            <FormGroup controlId="content">
+            <FormGroup controlId="roomId">
               <ControlLabel>Room Number</ControlLabel>
               <FormControl
                 onChange={this.handleChange}
                 value={this.state.roomId}
                 componentClass="input"
+                disabled
               />
             </FormGroup>
-            {this.state.beds &&
-              <FormGroup controlId="beds">
-                <ControlLabel>Number of beds</ControlLabel>
-                <FormControl
-                  onChange={this.handleChange}
-                  value={this.state.beds}
-                  componentClass="input"
-                />
-              </FormGroup>}
+            <FormGroup controlId="beds">
+              <ControlLabel>Number of beds</ControlLabel>
+              <FormControl
+                onChange={this.handleChange}
+                value={this.state.beds}
+                componentClass="input"
+              />
+            </FormGroup>
 
-            {this.state.costPerNight &&
-              <FormGroup controlId="beds">
-                <ControlLabel>Cost Per Night</ControlLabel>
-                <FormControl
-                  onChange={this.handleChange}
-                  value={this.state.costPerNight}
-                  componentClass="input"
-                />
-              </FormGroup>}
+            <FormGroup controlId="costPerNight">
+              <ControlLabel>Cost Per Night</ControlLabel>
+              <FormControl
+                onChange={this.handleChange}
+                value={this.state.costPerNight}
+                componentClass="input"
+              />
+            </FormGroup>
 
-            {this.state.maxOccupancy &&
-              <FormGroup controlId="beds">
-                <ControlLabel>Max Occupancy</ControlLabel>
-                <FormControl
-                  onChange={this.handleChange}
-                  value={this.state.maxOccupancy}
-                  componentClass="input"
-                />
-              </FormGroup>}
+            <FormGroup controlId="maxOccupancy">
+              <ControlLabel>Max Occupancy</ControlLabel>
+              <FormControl
+                onChange={this.handleChange}
+                value={this.state.maxOccupancy}
+                componentClass="input"
+              />
+            </FormGroup>
 
             <LoaderButton
               block
@@ -177,7 +145,8 @@ class Notes extends Component {
               text="Delete"
               loadingText="Deleting…"
             />
-          </form>}
+          </form>
+        )}
       </div>
     )
   }

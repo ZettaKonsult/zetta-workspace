@@ -5,6 +5,8 @@ import React, { Component } from 'react'
 import { withRouter, Link } from 'react-router-dom'
 import { Nav, NavItem, Navbar } from 'react-bootstrap'
 
+import database from './database'
+
 import Routes from './Routes'
 import RouteNavItem from './components/RouteNavItem'
 import config from './config.js'
@@ -88,56 +90,55 @@ class App extends Component {
   render() {
     const childProps = {
       userToken: this.state.userToken,
-      updateUserToken: this.updateUserToken
+      updateUserToken: this.updateUserToken,
+      database: database(this.state.userToken)
     }
 
     return (
-      !this.state.isLoadingUserToken &&
-      <div className="App container">
-        <Navbar fluid collapseOnSelect>
-          <Navbar.Header>
-            <Navbar.Brand>
-              <Link to="/">Reservatio</Link>
-            </Navbar.Brand>
-            <Navbar.Toggle />
-          </Navbar.Header>
-          <Navbar.Collapse>
-            <Nav pullRight>
-              {this.state.userToken
-                ? [
-                    <RouteNavItem
-                      key={1}
-                      onClick={this.handleNavLink}
-                      href="/bookings"
-                    >
-                      Bookings
-                    </RouteNavItem>,
-                    <RouteNavItem
-                      key={2}
-                      style={{ padding: '0 1em' }}
-                      onClick={this.handleNavLink}
-                      href="/overview"
-                    >
-                      Overview
-                    </RouteNavItem>,
-                    <NavItem key={3} onClick={this.handleLogout}>
-                      Logout
-                    </NavItem>
-                  ]
-                : [
-                    <RouteNavItem
-                      key={2}
-                      onClick={this.handleNavLink}
-                      href="/login"
-                    >
-                      Login
-                    </RouteNavItem>
-                  ]}
-            </Nav>
-          </Navbar.Collapse>
-        </Navbar>
-        <Routes childProps={childProps} />
-      </div>
+      !this.state.isLoadingUserToken && (
+        <div className="App container">
+          <Navbar fluid collapseOnSelect>
+            <Navbar.Header>
+              <Navbar.Brand>
+                <Link to="/">Reservatio</Link>
+              </Navbar.Brand>
+              <Navbar.Toggle />
+            </Navbar.Header>
+            <Navbar.Collapse>
+              <Nav pullRight>
+                {this.state.userToken
+                  ? [
+                      <RouteNavItem
+                        key={1}
+                        onClick={this.handleNavLink}
+                        href="/bookings">
+                        Bookings
+                      </RouteNavItem>,
+                      <RouteNavItem
+                        key={2}
+                        style={{ padding: '0 1em' }}
+                        onClick={this.handleNavLink}
+                        href="/overview">
+                        Overview
+                      </RouteNavItem>,
+                      <NavItem key={3} onClick={this.handleLogout}>
+                        Logout
+                      </NavItem>
+                    ]
+                  : [
+                      <RouteNavItem
+                        key={2}
+                        onClick={this.handleNavLink}
+                        href="/login">
+                        Login
+                      </RouteNavItem>
+                    ]}
+              </Nav>
+            </Navbar.Collapse>
+          </Navbar>
+          <Routes childProps={childProps} />
+        </div>
+      )
     )
   }
 }

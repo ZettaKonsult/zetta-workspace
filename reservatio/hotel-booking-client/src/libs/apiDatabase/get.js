@@ -1,21 +1,13 @@
-import * as dynamoDbLib from './libs/dynamodb-lib'
-import { success, failure } from './libs/response-lib'
+import { call } from './'
 
-export async function main(event, context, callback) {
-  const roomId = decodeURIComponent(event.pathParameters.id)
+export const get = async ({ TableName, Key }) => {
   const params = {
-    TableName: 'rooms',
-    // 'Key' defines the partition key and sort key of the item to be retrieved
-    // - 'userId': federated identity ID of the authenticated user
-    // - 'noteId': path parameter
-    Key: {
-      userId: event.requestContext.identity.cognitoIdentityId,
-      roomId
-    }
+    TableName,
+    Key
   }
 
   try {
-    const result = await dynamoDbLib.call('get', params)
+    const result = await call('get', params)
     if (result.Item) {
       return result.Item
     } else {

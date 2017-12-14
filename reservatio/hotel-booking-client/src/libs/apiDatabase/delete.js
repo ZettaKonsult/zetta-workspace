@@ -1,20 +1,13 @@
-import * as dynamoDbLib from './libs/dynamodb-lib'
-import { success, failure } from './libs/response-lib'
+import { call } from './'
 
-export async function main(event, context, callback) {
+export const remove = async ({ TableName, Key }) => {
   const params = {
-    TableName: 'rooms',
-    // 'Key' defines the partition key and sort key of the item to be removed
-    // - 'userId': User Pool sub of the authenticated user
-    // - 'noteId': path parameter
-    Key: {
-      userId: event.requestContext.identity.cognitoIdentityId,
-      roomId: event.pathParameters.id
-    }
+    TableName,
+    Key
   }
 
   try {
-    const result = await dynamoDbLib.call('delete', params)
+    await call('delete', params)
     return true
   } catch (e) {
     throw new Error(e)

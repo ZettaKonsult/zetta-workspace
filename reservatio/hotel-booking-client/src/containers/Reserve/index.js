@@ -1,19 +1,10 @@
 import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom'
 
-import { invokeApig } from '../../libs/awslib'
-
 import { Message } from '../../components/Message'
 import Form from './Form'
 import toggleDate, { isDatesConcurrent, removeDatesFromArray } from './actions'
-import {
-  getReservedDates,
-  getReservedArray,
-  getBookings,
-  getReservation
-} from './editMode'
-
-import { update } from '../../libs/apiDatabase'
+import { getReservedDates, getReservation } from './editMode'
 
 class Reserve extends Component {
   constructor(props) {
@@ -36,7 +27,7 @@ class Reserve extends Component {
     try {
       this.setState({ isLoading: true })
 
-      const room = await this.getReservation()
+      const room = await this.props.database.getRoom(this.props.match.params.id)
 
       let reservedDates = getReservedDates(room.reserved)
       let selectedDates = this.state.selectedDates
@@ -63,17 +54,11 @@ class Reserve extends Component {
 
   roomToEdit = () => Number(this.props.match.params.startTime)
 
-  getReservation() {
-    const encodedId = encodeURIComponent(this.props.match.params.id)
-    return invokeApig({ path: `/rooms/${encodedId}` }, this.props.userToken)
-  }
-
   handleSubmit = async event => {
     event.preventDefault()
 
     const { selectedDates, room, reservation } = this.state
     const { email, name, phone, paid } = reservation
-    this.setState({ isLoading: true })
 
     if (selectedDates.length === 0) {
       this.setState({ error: 'No dates are selected.', isLoading: false })
@@ -102,16 +87,10 @@ class Reserve extends Component {
         paid: paid
       }
     ]
+
+    this.setState({ isLoading: true })
     try {
-      // await this.saveReservation({
-      //   ...room
-      // })
-      await update(
-        'rooms',
-        this.props.match.params.id,
-        { reserved },
-        this.props.userToken
-      )
+      await this.props.database.updateRoom(this.props.match.params.id, reserved)
       this.props.history.push('/')
     } catch (e) {
       alert(e)
