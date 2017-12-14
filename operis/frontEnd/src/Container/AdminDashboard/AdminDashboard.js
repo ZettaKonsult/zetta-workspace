@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 
 import * as selectors from '../../reducers'
 
-import List from './TestList'
+import List from './Statistic'
 import './AdminDashboard.css'
 
 class AdminDashboard extends Component {

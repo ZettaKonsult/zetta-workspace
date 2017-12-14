@@ -1,7 +1,6 @@
 import React from 'react'
 
-import FormGroup from '../../Components/FormGroup/FormGroup'
-import Input from '../../Components/Input/Input'
+import { Form, Message } from 'semantic-ui-react'
 
 export const inputGroup = ({
   input,
@@ -11,11 +10,14 @@ export const inputGroup = ({
   value,
   meta: { touched, error, warning }
 }) => (
-  <FormGroup
-    name={input.name}
-    placeholder={placeholder}
-    error={error}
-    touched={touched}>
-    <Input {...input} type={type} autoComplete="off" />
-  </FormGroup>
+  <div>
+    <Form.Input
+      {...input}
+      label={placeholder}
+      type={type}
+      placeholder={placeholder}
+      error={!!touched && !!error}
+    />
+    {!!touched && !!error && <span style={{ color: '#ae5856' }}>{error}</span>}
+  </div>
 )

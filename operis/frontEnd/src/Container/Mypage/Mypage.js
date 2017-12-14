@@ -2,17 +2,18 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { getAllReports } from '../../reducers'
+
+import { Divider } from 'semantic-ui-react'
 import './Mypage.css'
 
 const ReportList = ({ reports }) => (
   <div className="Mypage">
     <Link to="/report">Create new report</Link>
-    <br />
+    <Divider />
     <Link to="/Worker">Create new worker</Link>
-    <br />
+    <Divider />
     <Link to="/place">Create new workplace</Link>
-    <br />
-    <Link to="/admin">Admin</Link>
+    <Divider />
     <ul className="ReportList">
       {reports.map(report => <ReportItem key={report.id} report={report} />)}
     </ul>

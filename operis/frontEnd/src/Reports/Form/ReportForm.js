@@ -1,6 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { reduxForm, Field } from 'redux-form'
+import { reduxForm, Field, FieldArray } from 'redux-form'
+import { Form, Button, Divider } from 'semantic-ui-react'
 
 import { addReport, updateReport } from '../ReportActions'
 
@@ -8,10 +9,12 @@ import { getReportById, isReportId } from '../../reducers'
 import { getWorkers, getPlaces } from '../../reducers'
 
 import validate from './ReportFormValidation'
-import { inputGroup, textGroup, selectGroup } from './Components'
+import { textGroup, selectGroup } from './Components'
+import { Input } from '../../Components/Form/Input'
+import { Dropdown } from '../../Components/Form/Dropdown'
 
 let ReportForm = props => (
-  <form
+  <Form
     onSubmit={props.handleSubmit(values => {
       if (props.idExists) {
         props.updateReport(values)
@@ -22,40 +25,31 @@ let ReportForm = props => (
         props.callback()
       }
     })}>
-    <Field name="date" component={inputGroup} type="date" placeholder="Date" />
+    <Field name="date" component={Input} type="date" placeholder="Date" />
     <Field
       name="worker"
-      component={selectGroup}
-      type="text"
-      placeholder="Worker">
-      <option />
-      {props.workers.map(worker => (
-        <option key={worker.id} value={worker.id}>
-          {worker.name}
-        </option>
-      ))}
-    </Field>
-    <Field
-      name="place"
-      component={selectGroup}
-      type="text"
-      placeholder="Workplace">
-      <option />
-      {props.places.map(place => (
-        <option key={place.id} value={place.id}>
-          {place.name}
-        </option>
-      ))}
-    </Field>
-    <Field
-      name="hours"
-      component={inputGroup}
-      type="number"
-      placeholder="Hours"
+      component={Dropdown}
+      placeholder="Worker"
+      options={props.workers.map(worker => ({
+        key: worker.id,
+        value: worker.id,
+        text: worker.name
+      }))}
     />
     <Field
+      name="place"
+      component={Dropdown}
+      placeholder="Workplace"
+      options={props.places.map(place => ({
+        key: place.id,
+        value: place.id,
+        text: place.name
+      }))}
+    />
+    <Field name="hours" component={Input} type="number" placeholder="Hours" />
+    <Field
       name="driving"
-      component={inputGroup}
+      component={Input}
       type="number"
       placeholder="Driving"
     />
@@ -67,13 +61,13 @@ let ReportForm = props => (
     />
     <Field
       name="extrahours"
-      component={inputGroup}
+      component={Input}
       type="number"
       placeholder="extrahours"
     />
-    <br />
-    <button type="submit">Save report</button>
-  </form>
+    <Divider />
+    <Button type="submit">Save report</Button>
+  </Form>
 )
 
 ReportForm = reduxForm({ form: 'reportForm', validate })(ReportForm)

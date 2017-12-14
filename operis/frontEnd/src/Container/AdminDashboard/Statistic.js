@@ -1,13 +1,24 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
+import { Segment, Statistic } from 'semantic-ui-react'
+
 import * as selectors from '../../reducers'
 
 const list = props => (
   <div>
-    Summary <br /> Hours: {props.sumReports.hours} <br />
-    Extra Hours: {props.sumReports.extrahours} <br />
-    Total: {props.sumReports.hours + props.sumReports.extrahours}
+    <Segment inverted>
+      <Statistic.Group inverted size="small">
+        <StatisticRow label="Hours" value={props.sumReports.hours} />
+
+        <StatisticRow label="Extra Hours" value={props.sumReports.extrahours} />
+
+        <StatisticRow
+          label="Total"
+          value={props.sumReports.hours + props.sumReports.extrahours}
+        />
+      </Statistic.Group>
+    </Segment>
     {props.reports.map(report => (
       <div
         style={{ padding: '0.5em', border: '1px solid black', margin: '0.2em' }}
@@ -20,6 +31,13 @@ const list = props => (
       </div>
     ))}
   </div>
+)
+
+const StatisticRow = ({ label, value }) => (
+  <Statistic>
+    <Statistic.Label>{label}</Statistic.Label>
+    <Statistic.Value>{value}</Statistic.Value>
+  </Statistic>
 )
 
 const mapStateToProps = (state, props) => {

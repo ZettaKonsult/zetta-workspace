@@ -27,9 +27,8 @@
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "build": "react-scripts build",
-    "upload": "aws s3 sync build/ s3://operis-app-client",
     "predeploy": "yarn run build",
-    "deploy": "yarn run upload",
+    "deploy": "aws s3 sync build/ s3://operis-app-client",
     "postdeploy": "rm -rf ./build"
   }
 }
