@@ -10,6 +10,8 @@
     "react-router-dom": "^4.2.2",
     "redux": "^3.7.2",
     "redux-form": "^7.1.2",
+    "semantic-ui-css": "^2.2.12",
+    "semantic-ui-react": "^0.77.1",
     "styled-components": "^2.2.3",
     "swedish-ssn": "^1.0.3",
     "uuid": "^3.1.0",
@@ -26,7 +28,8 @@
     "eject": "react-scripts eject",
     "build": "react-scripts build",
     "upload": "aws s3 sync build/ s3://operis-app-client",
-    "clean": "rm -rf ./build",
-    "deploy": "yarn build && yarn run upload && yarn clean"
+    "predeploy": "yarn run build",
+    "deploy": "yarn run upload",
+    "postdeploy": "rm -rf ./build"
   }
 }
