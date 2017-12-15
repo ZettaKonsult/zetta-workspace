@@ -37,12 +37,13 @@ const handleDateUpdate = (state, action) => {
   if (oldDate === newDate) {
     return state
   }
-  const oldIndex = state[oldDate].findIndex(idDate => idDate === id)
+  const oldDateKey = getFirstDayOfMonth(oldDate)
+  const oldIndex = state[oldDateKey].findIndex(idDate => idDate === id)
   return {
     ...state,
-    [oldDate]: [
-      ...state[oldDate].slice(0, oldIndex),
-      ...state[oldDate].slice(oldIndex + 1)
+    [oldDateKey]: [
+      ...state[oldDateKey].slice(0, oldIndex),
+      ...state[oldDateKey].slice(oldIndex + 1)
     ],
     [newDate]: addToArray(state[newDate], id)
   }

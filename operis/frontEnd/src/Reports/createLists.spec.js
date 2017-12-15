@@ -75,5 +75,33 @@ describe('reports', () => {
         }
       })
     })
+
+    it('should handle UPDATE_REPORT_DATE for dates other then first every month', () => {
+      const oldDateKey = Date.UTC(2017, 5, 1)
+      const oldDate = Date.UTC(2017, 5, 9)
+      const newDate = Date.UTC(2017, 2, 4)
+      expect(
+        createLists(
+          {
+            allIds: ['1'],
+            idsByYearMonthEpoch: {
+              [oldDateKey]: ['1']
+            }
+          },
+          {
+            type: UPDATE_REPORT_DATE,
+            id: '1',
+            oldDate,
+            newDate
+          }
+        )
+      ).toEqual({
+        allIds: ['1'],
+        idsByYearMonthEpoch: {
+          [oldDateKey]: [],
+          [newDate]: ['1']
+        }
+      })
+    })
   })
 })
