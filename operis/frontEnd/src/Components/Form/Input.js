@@ -7,7 +7,6 @@ export const Input = ({
   type,
   name,
   placeholder,
-  value,
   meta: { touched, error, warning }
 }) => (
   <div>

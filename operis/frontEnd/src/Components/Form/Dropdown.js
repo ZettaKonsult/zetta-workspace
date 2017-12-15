@@ -8,7 +8,6 @@ export const Dropdown = ({
   placeholder,
   children,
   options,
-  value,
   meta: { touched, error, warning }
 }) => (
   <div>
@@ -20,7 +19,6 @@ export const Dropdown = ({
         name={name}
         placeholder={placeholder}
         options={options}
-        value={value}
         fluid
         search
         selection
