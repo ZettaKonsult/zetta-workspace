@@ -9,6 +9,7 @@ import { Form, Button, Divider } from 'semantic-ui-react'
 
 let PlaceForm = props => (
   <Form
+    autoComplete="off"
     onSubmit={props.handleSubmit(values => {
       props.dispatch(addPlace(values))
       if (typeof props.callback !== 'undefined') {

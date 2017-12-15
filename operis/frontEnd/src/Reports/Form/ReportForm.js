@@ -15,6 +15,7 @@ import { Dropdown } from '../../Components/Form/Dropdown'
 
 let ReportForm = props => (
   <Form
+    autoComplete="off"
     onSubmit={props.handleSubmit(values => {
       if (props.idExists) {
         props.updateReport(values)

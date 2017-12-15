@@ -9,6 +9,7 @@ import { Input } from '../../Components/Form/Input'
 
 let WorkerForm = props => (
   <Form
+    autocomplete="off"
     onSubmit={props.handleSubmit(values => {
       props.dispatch(addWorker(values))
       if (typeof props.callback !== 'undefined') {
