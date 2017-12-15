@@ -1,19 +1,17 @@
 import React from 'react'
+import { Form, TextArea as Text } from 'semantic-ui-react'
 
-import { Form } from 'semantic-ui-react'
-
-export const Input = ({
+export const TextArea = ({
   input,
   type,
   name,
   placeholder,
-  value,
   meta: { touched, error, warning }
 }) => (
   <div>
     <Form.Field error={!!touched && !!error}>
       <label>{placeholder}</label>
-      <input {...input} type={type} placeholder={placeholder} />
+      <Text autoHeight {...input} placeholder={placeholder} />
       {!!touched &&
         !!error && <span style={{ color: '#ae5856' }}>{error}</span>}
     </Form.Field>

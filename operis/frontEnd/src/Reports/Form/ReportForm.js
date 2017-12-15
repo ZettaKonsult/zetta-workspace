@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { reduxForm, Field, FieldArray } from 'redux-form'
+import { reduxForm, Field } from 'redux-form'
 import { Form, Button, Divider } from 'semantic-ui-react'
 
 import { addReport, updateReport } from '../ReportActions'
@@ -9,7 +9,7 @@ import { getReportById, isReportId } from '../../reducers'
 import { getWorkers, getPlaces } from '../../reducers'
 
 import validate from './ReportFormValidation'
-import { textGroup, selectGroup } from './Components'
+import { TextArea } from '../../Components/Form/TextArea'
 import { Input } from '../../Components/Form/Input'
 import { Dropdown } from '../../Components/Form/Dropdown'
 
@@ -53,12 +53,7 @@ let ReportForm = props => (
       type="number"
       placeholder="Driving"
     />
-    <Field
-      name="extrawork"
-      component={textGroup}
-      type="text"
-      placeholder="Extra Work"
-    />
+    <Field name="extrawork" component={TextArea} placeholder="Extra Work" />
     <Field
       name="extrahours"
       component={Input}
