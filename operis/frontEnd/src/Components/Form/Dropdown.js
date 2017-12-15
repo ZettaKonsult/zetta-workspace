@@ -12,7 +12,6 @@ export const Dropdown = ({
   meta: { touched, error, warning }
 }) => (
   <div>
-    {console.log(input)}
     <Form.Field error={!!touched && !!error}>
       <label>{placeholder}</label>
       <Select
