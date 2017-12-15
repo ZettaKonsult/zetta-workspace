@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Link, withRouter } from 'react-router-dom'
 
 import PlaceForm from '../../Places/Form/PlaceForm'
-import './Place.css'
+import { Button } from 'semantic-ui-react'
 
 class Place extends Component {
   callback = () => {
@@ -13,7 +13,9 @@ class Place extends Component {
     return (
       <div>
         <PlaceForm callback={this.callback} id={this.props.match.params.id} />
-        <Link to="/">Cancel</Link>
+        <Button as={Link} to="/">
+          Cancel
+        </Button>
       </div>
     )
   }

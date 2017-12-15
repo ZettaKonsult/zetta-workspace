@@ -18,13 +18,13 @@ const changeReport = report => ({
   report
 })
 
-const changeReportDate = (id, oldDate, newDate) => ({
-  type: UPDATE_REPORT_DATE,
-  id,
-  oldDate,
-  newDate
-})
-
-const compareDate = (date1, date2) =>
-  Date.UTC(date1.getUTCFullYear(), date1.getUTCMonth(), 1) ===
-  Date.UTC(date2.getUTCFullYear(), date2.getUTCMonth(), 1)
+// const changeReportDate = (id, oldDate, newDate) => ({
+//   type: UPDATE_REPORT_DATE,
+//   id,
+//   oldDate,
+//   newDate
+// })
+//
+// const compareDate = (date1, date2) =>
+//   Date.UTC(date1.getUTCFullYear(), date1.getUTCMonth(), 1) ===
+//   Date.UTC(date2.getUTCFullYear(), date2.getUTCMonth(), 1)

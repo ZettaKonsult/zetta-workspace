@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { withRouter } from 'react-router-dom'
 
 import WorkerForm from '../../Workers/Form/WorkerForm'
-import './Worker.css'
+import { Button } from 'semantic-ui-react'
 
 class Worker extends Component {
   callback = () => {
@@ -14,7 +14,9 @@ class Worker extends Component {
     return (
       <div>
         <WorkerForm callback={this.callback} id={this.props.match.params.id} />
-        <Link to="/">Cancel</Link>
+        <Button as={Link} to="/">
+          Cancel
+        </Button>
       </div>
     )
   }
