@@ -1,6 +1,6 @@
 import AWS from 'aws-sdk'
 import { getAwsCredentials } from './libs/awslib'
-import db from './libs/apiDatabase'
+import db from 'zk-dynamodb-wrapper'
 
 export default userToken => {
   const database = db({
