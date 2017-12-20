@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom'
-import { invokeApig } from '../../libs/awslib'
 
 import Calendar from '../../components/Calendar/'
 import Layout from './Layout'
@@ -17,7 +16,10 @@ class Overview extends Component {
 
   async componentWillMount() {
     try {
-      const results = await this.getReservation()
+      // const results = await this.getReservation()
+      const results = await this.props.database.listAllRooms(
+        this.props.userToken
+      )
 
       const sortedResults = results.concat().sort(this.compareRoomId)
       this.setState({
@@ -28,10 +30,6 @@ class Overview extends Component {
     }
   }
   compareRoomId = (a, b) => Number(a.roomId) > Number(b.roomId)
-
-  getReservation(reservation) {
-    return invokeApig({ path: `/rooms/` }, this.props.userToken)
-  }
 
   render() {
     const rooms = this.state.rooms
@@ -45,7 +43,7 @@ class Overview extends Component {
     }
     return (
       <Layout>
-        {dates.map((dates, i) =>
+        {dates.map((dates, i) => (
           <Calendar
             key={i}
             header
@@ -53,7 +51,7 @@ class Overview extends Component {
             reservedDates={dates}
             headerTitle={'room' + this.state.rooms[i].roomId}
           />
-        )}
+        ))}
       </Layout>
     )
   }

@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom'
-import { invokeApig } from '../../libs/awslib'
 
 import Grid from './Grid'
 import Today from './Today'
@@ -22,7 +21,9 @@ class Bookings extends Component {
 
   async componentWillMount() {
     try {
-      const results = await this.getReservation()
+      const results = await this.props.database.listAllRooms(
+        this.props.userToken
+      )
       const reservations = this.createReservations(results)
 
       this.setState({
@@ -32,10 +33,6 @@ class Bookings extends Component {
     } catch (e) {
       alert(e)
     }
-  }
-
-  getReservation(reservation) {
-    return invokeApig({ path: `/rooms/` }, this.props.userToken)
   }
 
   createReservations(data) {
@@ -58,7 +55,7 @@ class Bookings extends Component {
   }
 
   renderBooking = array =>
-    array.map((booking, i) =>
+    array.map((booking, i) => (
       <Booking
         key={i}
         start={booking.start}
@@ -67,7 +64,7 @@ class Bookings extends Component {
         paid={booking.paid}
         roomId={booking.roomId}
       />
-    )
+    ))
 
   render() {
     const reservations = this.state.reservations
