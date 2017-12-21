@@ -1,9 +1,9 @@
-import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
-import { connect } from 'react-redux'
+import React, {Component} from 'react'
+import {Link} from 'react-router-dom'
+import {connect} from 'react-redux'
 
 import * as selectors from '../../reducers'
-
+import {Dropdown} from 'semantic-ui-react'
 import List from './Statistic'
 import './AdminDashboard.css'
 
@@ -22,28 +22,34 @@ class AdminDashboard extends Component {
   render() {
     return (
       <div className="AdminDashboard">
-        <select
-          style={{ fontSize: '1.5em', margin: '0.5em' }}
+        <Dropdown
+          style={{fontSize: '1.2em', margin: '0.5em 0'}}
           value={this.state.month}
-          onChange={e => this.onSelectChange('month', e.target.value)}>
-          <option value="" />
-          {this.props.months.map((monthEpoch, index) => (
-            <option key={index} value={monthEpoch}>
-              {new Date(Number(monthEpoch)).toISOString().split('T')[0]}
-            </option>
-          ))}
-        </select>
-        <select
-          style={{ fontSize: '1.5em', margin: '0.5em' }}
+          placeholder="Filter on month"
+          onChange={(e, {value}) => this.onSelectChange('month', value)}
+          options={this.props.months.map((monthEpoch, index) => ({
+            text: new Date(Number(monthEpoch)).toISOString().split('T')[0],
+            key: monthEpoch,
+            value: monthEpoch
+          }))}
+          fluid
+          search
+          selection
+        />
+        <Dropdown
+          style={{fontSize: '1.2em', margin: '0.5em 0'}}
           value={this.state.worker}
-          onChange={e => this.onSelectChange('worker', e.target.value)}>
-          <option value="" />
-          {this.props.workers.map(worker => (
-            <option key={worker.id} value={worker.id}>
-              {worker.name}
-            </option>
-          ))}
-        </select>
+          placeholder="Filter on worker"
+          onChange={(e, {value}) => this.onSelectChange('worker', value)}
+          options={this.props.workers.map(worker => ({
+            key: worker.id,
+            text: worker.name,
+            value: worker.id
+          }))}
+          fluid
+          search
+          selection
+        />
         <List filterWorker={this.state.worker} filterMonth={this.state.month} />
         <br />
         <br />
@@ -55,7 +61,7 @@ class AdminDashboard extends Component {
   }
 }
 
-const updateSelectedValue = (key, value) => (state, props) => ({ [key]: value })
+const updateSelectedValue = (key, value) => (state, props) => ({[key]: value})
 
 const mapStateToProps = (state, props) => ({
   workers: selectors.getWorkers(state),

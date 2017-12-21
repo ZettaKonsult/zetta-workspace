@@ -1,19 +1,25 @@
-import React, { Component } from 'react'
+import React, {Component} from 'react'
 
 import Routes from './Routes'
 
-import { Container, Menu } from 'semantic-ui-react'
+import {Container, Menu} from 'semantic-ui-react'
 
-import { Link, Route } from 'react-router-dom'
+import {Link, Route} from 'react-router-dom'
 
 class App extends Component {
   render() {
     return (
       <div>
         <Container>
-          <Menu inverted size="large">
-            <NavLink to="/" activeOnlyWhenExact>
-              Home
+          <Menu stackable inverted fluid size="large">
+            <NavLink to="/worker" activeOnlyWhenExact>
+              Worker
+            </NavLink>
+            <NavLink to="/report" activeOnlyWhenExact>
+              Report
+            </NavLink>
+            <NavLink to="/place" activeOnlyWhenExact>
+              Workplace
             </NavLink>
             <NavLink to="/admin" activeOnlyWhenExact>
               Admin
@@ -28,11 +34,11 @@ class App extends Component {
   }
 }
 
-const NavLink = ({ to, activeOnlyWhenExact, children }) => (
+const NavLink = ({to, activeOnlyWhenExact, children}) => (
   <Route
     path={to}
     exact={activeOnlyWhenExact}
-    children={({ match }) => (
+    children={({match}) => (
       <Menu.Item as={Link} to={to} active={!!match}>
         {children}
       </Menu.Item>

@@ -51,7 +51,13 @@ export default combineReducers({byId, allIds})
 const getWorker = (state, id) =>
   state.byId[id].visible
     ? state.byId[id]
-    : {name: 'Worker Removed', ssn: 'deleted', email: 'deleted', visible: false}
+    : {
+        id,
+        name: 'Worker Removed',
+        ssn: 'deleted',
+        email: 'deleted',
+        visible: false
+      }
 
 export const getWorkers = state => state.allIds.map(id => getWorker(state, id))
 
