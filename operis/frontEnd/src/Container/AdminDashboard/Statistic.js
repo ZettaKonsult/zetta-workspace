@@ -11,7 +11,7 @@ const list = props => (
       <Statistic.Group inverted size="small">
         <StatisticRow label="Hours" value={props.sumReports.hours} />
 
-        <StatisticRow label="Extra Hours" value={props.sumReports.extrahours} />
+        <StatisticRow label="Extra" value={props.sumReports.extrahours} />
 
         <StatisticRow
           label="Total"
@@ -20,16 +20,50 @@ const list = props => (
       </Statistic.Group>
     </Segment>
     {props.reports.map(report => (
-      <div
-        style={{ padding: '0.5em', border: '1px solid black', margin: '0.2em' }}
-        key={report.id}>
-        Date: {new Date(report.date).toISOString().split('T')[0]}
-        <br />
-        Hours: {report.hours} Extra Hours: {report.extrahours}
-        <br />
-        Worker: {props.getWorkerName(report.worker)}
-      </div>
+      <ReportCard
+        key={report.id}
+        worker={props.getWorkerName(report.worker)}
+        hours={report.hours}
+        extra={report.extrahours}
+        date={new Date(report.date).toISOString().split('T')[0]}
+        workplace={report.place}
+      />
     ))}
+  </div>
+)
+
+const ReportCard = ({ date, hours, extra, worker, workplace }) => (
+  <div
+    style={{
+      padding: '0.5em',
+      border: '1px solid grey',
+      margin: '0.2em',
+      display: 'flex',
+      flexDirection: 'column',
+      borderRadius: '5px'
+    }}>
+    <div style={{ display: 'flex', justifyContent: 'center' }}>
+      <h3>{date}</h3>
+    </div>
+    <div
+      style={{
+        display: 'flex',
+        justifyContent: 'space-between'
+      }}>
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column'
+        }}>
+        <h3 style={{ margin: 0 }}>{worker}</h3>
+        <em>workplace</em>
+      </div>
+
+      <div style={{ display: 'flex', flexDirection: 'column' }}>
+        <span style={{}}>Hours: {hours}</span>
+        <span>Extra: {extra}</span>
+      </div>
+    </div>
   </div>
 )
 
@@ -43,7 +77,7 @@ const StatisticRow = ({ label, value }) => (
 const mapStateToProps = (state, props) => {
   const reports = selectors.getWorkersMonthlyReport(
     state,
-    Date.UTC(2017, props.filterMonth, 2),
+    props.filterMonth,
     props.filterWorker
   )
   return {

@@ -7,7 +7,7 @@ import rootReducer from './reducers'
 
 const configureStore = () => {
   const persistedState =
-    process.env.NODE_ENV === 'production' ? loadState() : {}
+    process.env.NODE_ENV !== 'production' ? loadState() : {}
   const middleware = [thunk]
 
   const store = createStore(

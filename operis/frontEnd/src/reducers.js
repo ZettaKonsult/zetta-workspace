@@ -37,3 +37,6 @@ export const getWorkersMonthlyReport = (state, epoch, worker) =>
   fromReports.getWorkersMonthlyReport(state.reports, epoch, worker)
 
 export const sumWorkedHours = reports => fromReports.sumWorkedHours(reports)
+
+export const getAllMonthReported = state =>
+  fromReports.getAllMonthReported(state.reports)

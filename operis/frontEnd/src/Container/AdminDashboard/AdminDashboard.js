@@ -12,8 +12,8 @@ class AdminDashboard extends Component {
     super()
 
     this.state = {
-      month: 'jan',
-      worker: 'Worker1'
+      month: '',
+      worker: ''
     }
   }
   onSelectChange = (name, value) => {
@@ -27,18 +27,11 @@ class AdminDashboard extends Component {
           value={this.state.month}
           onChange={e => this.onSelectChange('month', e.target.value)}>
           <option value="" />
-          <option value="0">Januari</option>
-          <option value="1">Februari</option>
-          <option value="2">Mars</option>
-          <option value="3">April</option>
-          <option value="4">may</option>
-          <option value="5">jun</option>
-          <option value="6">jul</option>
-          <option value="7">aug</option>
-          <option value="8">sep</option>
-          <option value="9">oct</option>
-          <option value="10">nov</option>
-          <option value="11">dec</option>
+          {this.props.months.map((monthEpoch, index) => (
+            <option key={index} value={monthEpoch}>
+              {new Date(Number(monthEpoch)).toISOString().split('T')[0]}
+            </option>
+          ))}
         </select>
         <select
           style={{ fontSize: '1.5em', margin: '0.5em' }}
@@ -65,7 +58,8 @@ class AdminDashboard extends Component {
 const updateSelectedValue = (key, value) => (state, props) => ({ [key]: value })
 
 const mapStateToProps = (state, props) => ({
-  workers: selectors.getWorkers(state)
+  workers: selectors.getWorkers(state),
+  months: selectors.getAllMonthReported(state)
 })
 
 export default connect(mapStateToProps)(AdminDashboard)
