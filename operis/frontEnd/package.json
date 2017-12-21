@@ -20,7 +20,12 @@
     "zk-aws-users": "0.1.1"
   },
   "devDependencies": {
+    "eslint": "^4.13.1",
+    "eslint-config-prettier": "^2.9.0",
+    "eslint-plugin-prettier": "^2.4.0",
     "flow-bin": "^0.61.0",
+    "husky": "^0.14.3",
+    "lint-staged": "^6.0.0",
     "prettier": "^1.8.2",
     "react-scripts": "1.0.17",
     "redux-devtools-extension": "^2.13.2"
@@ -32,6 +37,15 @@
     "build": "react-scripts build",
     "predeploy": "yarn run build",
     "deploy": "aws s3 sync build/ s3://operis-app-client",
-    "postdeploy": "rm -rf ./build"
+    "postdeploy": "rm -rf ./build",
+    "precommit": "lint-staged"
+  },
+  "lint-staged": {
+    "*.js": [
+      "eslint --fix",
+      "prettier --single-quote --no-semi --write",
+      "git add",
+      "jest --color --bail --findRelatedTests"
+    ]
   }
 }
