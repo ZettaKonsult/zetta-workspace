@@ -13,5 +13,21 @@
   "workspaces": [
     "packages/*",
     "zk-open-modules"
-  ]
+  ],
+  "scripts": {
+    "precommit": "lint-staged"
+  },
+  "lint-staged": {
+    "*.js": [
+      "eslint --fix",
+      "prettier --single-quote --no-semi --write",
+      "git add"
+    ]
+  },
+  "prettier": {
+    "bracketSpacing": false,
+    "proseWrap": "always",
+    "singleQuote": true,
+    "trailingComma": "all"
+  }
 }
