@@ -1,9 +1,11 @@
 import React from 'react'
-import { connect } from 'react-redux'
+import {connect} from 'react-redux'
 
-import { Segment, Statistic } from 'semantic-ui-react'
+import {Segment, Statistic} from 'semantic-ui-react'
 
 import * as selectors from '../../reducers'
+
+import ReportCard from '../../Components/ReportCard/ReportCard'
 
 const list = props => (
   <div>
@@ -32,42 +34,7 @@ const list = props => (
   </div>
 )
 
-const ReportCard = ({ date, hours, extra, worker, workplace }) => (
-  <div
-    style={{
-      padding: '0.5em',
-      border: '1px solid grey',
-      margin: '0.2em',
-      display: 'flex',
-      flexDirection: 'column',
-      borderRadius: '5px'
-    }}>
-    <div style={{ display: 'flex', justifyContent: 'center' }}>
-      <h3>{date}</h3>
-    </div>
-    <div
-      style={{
-        display: 'flex',
-        justifyContent: 'space-between'
-      }}>
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column'
-        }}>
-        <h3 style={{ margin: 0 }}>{worker}</h3>
-        <em>workplace</em>
-      </div>
-
-      <div style={{ display: 'flex', flexDirection: 'column' }}>
-        <span style={{}}>Hours: {hours}</span>
-        <span>Extra: {extra}</span>
-      </div>
-    </div>
-  </div>
-)
-
-const StatisticRow = ({ label, value }) => (
+const StatisticRow = ({label, value}) => (
   <Statistic>
     <Statistic.Label>{label}</Statistic.Label>
     <Statistic.Value>{value}</Statistic.Value>
