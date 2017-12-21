@@ -1,7 +1,7 @@
 import React from 'react'
 import {Link} from 'react-router-dom'
 import {connect} from 'react-redux'
-import {getAllReports, getWorkerName} from '../../reducers'
+import {getAllReports, getWorkerName, getWorkplace} from '../../reducers'
 
 import {Divider} from 'semantic-ui-react'
 import './Mypage.css'
@@ -24,7 +24,7 @@ const ReportList = props => (
           hours={report.hours}
           extra={report.extrahours}
           date={new Date(report.date).toISOString().split('T')[0]}
-          workplace={report.place}
+          workplace={props.getWorkplace(report.place).name}
         />
       ))}
     </ul>
@@ -33,7 +33,8 @@ const ReportList = props => (
 
 const mapStateToProps = (state, props) => ({
   reports: getAllReports(state),
-  getWorkerName: getWorkerName(state)
+  getWorkerName: getWorkerName(state),
+  getWorkplace: id => getWorkplace(state, id)
 })
 
 const Mypage = connect(mapStateToProps)(ReportList)

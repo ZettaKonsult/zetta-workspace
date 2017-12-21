@@ -27,7 +27,7 @@ const ReportCard = ({date, hours, extra, worker, workplace}) => (
         }}
       >
         <h3 style={{margin: 0}}>{worker}</h3>
-        <em>workplace</em>
+        <em>{workplace}</em>
       </div>
 
       <div style={{display: 'flex', flexDirection: 'column'}}>

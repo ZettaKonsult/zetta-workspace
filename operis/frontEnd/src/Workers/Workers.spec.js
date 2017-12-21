@@ -5,8 +5,8 @@ describe('reducer', () => {
   describe('workers', () => {
     const initialState = {
       byId: {
-        '1': {id: '1', name: 'nej'},
-        '2': {id: '2', name: 'Fredrik'}
+        '1': {id: '1', name: 'nej', visible: true},
+        '2': {id: '2', name: 'Fredrik', visible: true}
       },
       allIds: ['1', '2']
     }
@@ -20,8 +20,8 @@ describe('reducer', () => {
         })
       ).toEqual({
         byId: {
-          '1': {id: '1', name: 'hej'},
-          '2': {id: '2', name: 'Fredrik'}
+          '1': {id: '1', name: 'hej', visible: true},
+          '2': {id: '2', name: 'Fredrik', visible: true}
         },
         allIds: ['1', '2']
       })
@@ -29,8 +29,15 @@ describe('reducer', () => {
 
     it('should handle DELETE_WORKER', () => {
       expect(Workers(initialState, {type: DELETE_WORKER, id: '1'})).toEqual({
-        byId: {'2': {id: '2', name: 'Fredrik'}},
-        allIds: ['2']
+        byId: {
+          '1': {
+            id: '1',
+            name: 'nej',
+            visible: false
+          },
+          '2': {id: '2', name: 'Fredrik', visible: true}
+        },
+        allIds: ['1', '2']
       })
     })
   })

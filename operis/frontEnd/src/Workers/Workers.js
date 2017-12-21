@@ -8,7 +8,13 @@ const worker = (state, action) => {
     case UPDATE_WORKER:
       return {
         id: action.id,
+        visible: true,
         ...action.worker
+      }
+    case DELETE_WORKER:
+      return {
+        ...state,
+        visible: false
       }
     default:
       return state
@@ -19,18 +25,12 @@ const byId = (state = {}, action) => {
   switch (action.type) {
     case ADD_WORKER:
     case UPDATE_WORKER:
+    case DELETE_WORKER:
       return {
         ...state,
         [action.id]: worker(state[action.id], action)
       }
-    case DELETE_WORKER:
-      let result = {}
-      Object.keys(state).forEach(id => {
-        if (id !== action.id) {
-          result = {...result, [id]: state[id]}
-        }
-      })
-      return result
+
     default:
       return state
   }
@@ -40,8 +40,7 @@ const allIds = (state = [], action) => {
   switch (action.type) {
     case ADD_WORKER:
       return [...state, action.id]
-    case DELETE_WORKER:
-      return state.filter(id => id !== action.id)
+
     default:
       return state
   }
@@ -49,6 +48,14 @@ const allIds = (state = [], action) => {
 
 export default combineReducers({byId, allIds})
 
-export const getWorkers = state => state.allIds.map(id => state.byId[id])
+const getWorker = (state, id) =>
+  state.byId[id].visible
+    ? state.byId[id]
+    : {name: 'Worker Removed', ssn: 'deleted', email: 'deleted', visible: false}
 
-export const getWorkerName = (state, id) => state.byId[id].name
+export const getWorkers = state => state.allIds.map(id => getWorker(state, id))
+
+export const getVisibleWorkers = state =>
+  getWorkers(state).filter(item => item.visible)
+
+export const getWorkerName = (state, id) => getWorker(state, id).name
