@@ -22,10 +22,9 @@ describe('byId', () => {
 
   it('should handle UPDATE_REPORT', () => {
     expect(
-      byId(
-        {'1': {id: '1', test: 'test'}},
-        {type: UPDATE_REPORT, id: '1', report: {test: 'hej'}}
-      )
+      byId(createState(), {type: UPDATE_REPORT, id: '1', report: {test: 'hej'}})
     ).toEqual({'1': {id: '1', test: 'hej'}})
   })
 })
+
+const createState = () => ({'1': {id: '1', test: 'test'}})
