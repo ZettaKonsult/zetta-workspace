@@ -1,6 +1,5 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
-import {Link} from 'react-router-dom'
 import {withRouter} from 'react-router-dom'
 
 import {Button, Icon} from 'semantic-ui-react'
@@ -23,7 +22,8 @@ class Worker extends Component {
       <WorkerCard
         key={worker.id}
         name={worker.name}
-        onClick={() => this.props.deleteWorker(worker.id)}
+        onClick={() => this.props.history.push(`/worker/${worker.id}`)}
+        delete={() => this.props.deleteWorker(worker.id)}
       />
     ))
 
@@ -63,9 +63,10 @@ const WorkerCard = props => (
       justifyContent: 'space-between',
       borderRadius: '5px'
     }}
+    onClick={props.onClick}
   >
-    <bold style={{fontSize: '1.2em'}}>{props.name}</bold>
-    <Icon onClick={props.onClick} link name="close" />
+    <strong style={{fontSize: '1.2em'}}>{props.name}</strong>
+    <Icon onClick={props.delete} link name="close" />
   </div>
 )
 const mapStateToProps = (state, props) => ({
