@@ -10,7 +10,7 @@ import ReportCard from '../../Components/ReportCard/ReportCard'
 const list = props => (
   <div>
     <Segment inverted>
-      <Statistic.Group inverted size="small">
+      <Statistic.Group widths="3" inverted size="small">
         <StatisticRow label="Hours" value={props.sumReports.hours} />
 
         <StatisticRow label="Extra" value={props.sumReports.extrahours} />

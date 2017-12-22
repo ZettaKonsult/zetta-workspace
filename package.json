@@ -17,24 +17,17 @@
     "prettier": "^1.8.2",
     "react-scripts": "1.0.17"
   },
-  "workspaces": [
-    "packages/*",
-    "zk-open-modules"
-  ],
+  "workspaces": ["packages/*", "zk-open-modules"],
   "scripts": {
     "precommit": "lint-staged",
     "lint": "eslint --fix"
   },
   "lint-staged": {
-    "*.js": [
-      "yarn run lint",
-      "prettier --write",
-      "git add"
-    ]
+    "*.js": ["yarn run lint", "prettier --write", "git add"]
   },
   "prettier": {
     "bracketSpacing": false,
-    "proseWrap": "always",
+    "proseWrap": true,
     "singleQuote": true,
     "semi": false
   }

@@ -1,7 +1,8 @@
 import React from 'react'
 
-const ReportCard = ({date, hours, extra, worker, workplace}) => (
+const ReportCard = ({date, hours, extra, worker, workplace, onClick}) => (
   <div
+    onClick={onClick}
     style={{
       padding: '0.5em',
       border: '1px solid grey',
