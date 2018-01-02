@@ -1,8 +1,8 @@
-import React, { Component } from 'react'
-import { Link, withRouter } from 'react-router-dom'
+import React, {Component} from 'react'
+import {Link, withRouter} from 'react-router-dom'
 
-import PlaceForm from '../../Places/Form/PlaceForm'
-import { Button } from 'semantic-ui-react'
+import PlaceForm from './Form/PlaceForm'
+import {Button} from 'semantic-ui-react'
 
 class Place extends Component {
   callback = () => {

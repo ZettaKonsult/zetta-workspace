@@ -3,11 +3,11 @@ import {withRouter} from 'react-router-dom'
 import {connect} from 'react-redux'
 import {Button} from 'semantic-ui-react'
 
-import ReportForm from '../../Reports/Form/ReportForm'
+import ReportForm from './Form/ReportForm'
 
-import {getAllReports, getWorkerName, getWorkplace} from '../../reducers'
+import {getAllReports, getWorkerName, getWorkplace} from '../reducers'
 
-import ReportCard from '../../Components/ReportCard/ReportCard'
+import ReportCard from '../Components/ReportCard/ReportCard'
 
 class Report extends Component {
   callback = () => {

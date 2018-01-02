@@ -4,9 +4,9 @@ import {withRouter} from 'react-router-dom'
 
 import {Button, Icon} from 'semantic-ui-react'
 
-import WorkerForm from '../../Workers/Form/WorkerForm'
-import {deleteWorker} from '../../Workers/WorkerActions'
-import {getVisibleWorkers} from '../../reducers'
+import WorkerForm from './Form/WorkerForm'
+import {deleteWorker} from './WorkerActions'
+import {getVisibleWorkers} from '../reducers'
 
 class Worker extends Component {
   callback = () => {

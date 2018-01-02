@@ -1,10 +1,10 @@
 import React from 'react'
 import {Route, Switch} from 'react-router-dom'
 
-import Report from './Container/Report/Report'
+import Report from './Reports/Report'
+import Place from './Places/Place'
+import Worker from './Workers/Worker'
 import Home from './Container/Home/Home'
-import Place from './Container/Place/Place'
-import Worker from './Container/Worker/Worker'
 import AdminDashboard from './Container/AdminDashboard/AdminDashboard'
 import PageNotFound from './Container/PageNotFound/PageNotFound'
 import Login from './Container/Login/Login'
