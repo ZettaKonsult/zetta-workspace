@@ -61,7 +61,8 @@ const getWorker = (state, id) =>
 
 export const getWorkers = state => state.allIds.map(id => getWorker(state, id))
 
-export const getWorkerById = (state, id) => getWorker(state, id)
+export const getWorkerById = (state, id) =>
+  isWorkerId(state, id) && getWorker(state, id)
 
 export const isWorkerId = (state, id) =>
   state.allIds.find(compareId => compareId === id)

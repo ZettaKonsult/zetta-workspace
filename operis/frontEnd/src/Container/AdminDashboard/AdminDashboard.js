@@ -1,5 +1,4 @@
 import React, {Component} from 'react'
-import {Link} from 'react-router-dom'
 import {connect} from 'react-redux'
 
 import * as selectors from '../../reducers'
@@ -19,6 +18,26 @@ class AdminDashboard extends Component {
   onSelectChange = (name, value) => {
     this.setState(updateSelectedValue(name, value))
   }
+  createMonthOptions = options => {
+    return [
+      {text: 'All', key: '-1', value: ''},
+      ...options.map((monthEpoch, index) => ({
+        text: new Date(Number(monthEpoch)).toISOString().split('T')[0],
+        key: monthEpoch,
+        value: monthEpoch
+      }))
+    ]
+  }
+  createWorkerOptions = options => {
+    return [
+      {text: 'All', key: '-1', value: ''},
+      ...options.map(worker => ({
+        key: worker.id,
+        text: worker.name,
+        value: worker.id
+      }))
+    ]
+  }
   render() {
     return (
       <div className="AdminDashboard">
@@ -27,11 +46,7 @@ class AdminDashboard extends Component {
           value={this.state.month}
           placeholder="Filter on month"
           onChange={(e, {value}) => this.onSelectChange('month', value)}
-          options={this.props.months.map((monthEpoch, index) => ({
-            text: new Date(Number(monthEpoch)).toISOString().split('T')[0],
-            key: monthEpoch,
-            value: monthEpoch
-          }))}
+          options={this.createMonthOptions(this.props.months)}
           fluid
           search
           selection
@@ -41,21 +56,12 @@ class AdminDashboard extends Component {
           value={this.state.worker}
           placeholder="Filter on worker"
           onChange={(e, {value}) => this.onSelectChange('worker', value)}
-          options={this.props.workers.map(worker => ({
-            key: worker.id,
-            text: worker.name,
-            value: worker.id
-          }))}
+          options={this.createWorkerOptions(this.props.workers)}
           fluid
           search
           selection
         />
         <List filterWorker={this.state.worker} filterMonth={this.state.month} />
-        <br />
-        <br />
-        <br />
-        <br />
-        <Link to="/">Back</Link>
       </div>
     )
   }
