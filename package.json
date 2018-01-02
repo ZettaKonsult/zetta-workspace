@@ -27,7 +27,7 @@
   },
   "prettier": {
     "bracketSpacing": false,
-    "proseWrap": true,
+    "proseWrap": "always",
     "singleQuote": true,
     "semi": false
   }

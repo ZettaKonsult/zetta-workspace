@@ -1,8 +1,8 @@
-import { combineReducers } from 'redux'
+import {combineReducers} from 'redux'
 import byId from './byId'
 import createLists, * as fromCreateLists from './createLists'
 
-export default combineReducers({ byId, createLists })
+export default combineReducers({byId, createLists})
 
 export const isReportId = (state, id) =>
   fromCreateLists.isReportId(state.createLists, id)
@@ -62,5 +62,5 @@ export const sumWorkedHours = reports =>
       hours: total.hours + Number(report.hours),
       extrahours: total.extrahours + Number(report.extrahours)
     }),
-    { hours: 0, extrahours: 0 }
+    {hours: 0, extrahours: 0}
   )

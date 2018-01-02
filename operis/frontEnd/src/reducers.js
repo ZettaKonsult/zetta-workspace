@@ -1,9 +1,9 @@
 import {combineReducers} from 'redux'
 import {reducer as formReducer} from 'redux-form'
 
-import reports, * as fromReports from './Reports/Reports'
-import workers, * as fromWorkers from './Workers/Workers'
-import places, * as fromPlaces from './Places/Places'
+import reports, * as fromReports from './Reports/ReportsReducer'
+import workers, * as fromWorkers from './Workers/WorkersReducer'
+import places, * as fromPlaces from './Places/PlacesReducer'
 
 export default combineReducers({
   reports,
