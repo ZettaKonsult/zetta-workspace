@@ -46,3 +46,9 @@ export const getPlaces = state => fromPlaces.getPlaces(state.places)
 
 export const getWorkplace = (state, id) =>
   fromPlaces.getWorkplace(state.places, id)
+
+export const getWorkerById = (state, id) =>
+  fromWorkers.getWorkerById(state.workers, id)
+
+export const isWorkerId = (state, id) =>
+  fromWorkers.isWorkerId(state.workers, id)
