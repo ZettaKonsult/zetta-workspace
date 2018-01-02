@@ -5,7 +5,7 @@ import {Button} from 'semantic-ui-react'
 
 import ReportForm from './Form/ReportForm'
 
-import {getAllReports, getWorkerName, getWorkplace} from '../reducers'
+import {getAllReports, getWorkerName, getWorkplaceById} from '../reducers'
 
 import ReportCard from '../Components/ReportCard/ReportCard'
 
@@ -59,7 +59,7 @@ class Report extends Component {
 const mapStateToProps = (state, props) => ({
   reports: getAllReports(state),
   getWorkerName: getWorkerName(state),
-  getWorkplace: id => getWorkplace(state, id)
+  getWorkplace: id => getWorkplaceById(state, id)
 })
 
 export default withRouter(connect(mapStateToProps)(Report))

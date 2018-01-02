@@ -44,8 +44,11 @@ export const getVisibleWorkers = state =>
 
 export const getPlaces = state => fromPlaces.getPlaces(state.places)
 
-export const getWorkplace = (state, id) =>
-  fromPlaces.getWorkplace(state.places, id)
+export const getWorkplaceById = (state, id) =>
+  fromPlaces.getWorkplaceById(state.places, id)
+
+export const isWorkplaceId = (state, id) =>
+  fromPlaces.isWorkplaceId(state.places, id)
 
 export const getWorkerById = (state, id) =>
   fromWorkers.getWorkerById(state.workers, id)
