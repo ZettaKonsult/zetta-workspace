@@ -28,7 +28,7 @@ const list = props => (
         hours={report.hours}
         extra={report.extrahours}
         date={new Date(report.date).toISOString().split('T')[0]}
-        workplace={report.place}
+        workplace={props.getWorkplaceById(report.place).name}
       />
     ))}
   </div>
@@ -50,7 +50,8 @@ const mapStateToProps = (state, props) => {
   return {
     reports,
     sumReports: selectors.sumWorkedHours(reports),
-    getWorkerName: selectors.getWorkerName(state)
+    getWorkerName: selectors.getWorkerName(state),
+    getWorkplaceById: id => selectors.getWorkplaceById(state, id)
   }
 }
 
