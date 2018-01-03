@@ -1,8 +1,10 @@
-import ladokParser from 'ladokParser'
-import unionAssigner from 'unionAssigner'
+/* @flow */
 
-module.exports = {
-  getAssignments: unionAssigner.getAssignments,
-  parseLadokFile: ladokParser.parse,
-  parseLadokDirectory: ladokParser.parseDirectory
-}
+export {
+  parseDirectory as parseLadokDirectory,
+  parseFile as parseLadokFile,
+  parseString as parseLadokString
+} from './ladokParser'
+
+export * from './person'
+export * from './unionAssigner'

@@ -1,18 +1,17 @@
+/* @flow */
+
 /**
- * Class representing a member listed in a LADOK file.
- *
  * @date    2017-08-24
- * @since   7.9.0
  */
 
-const NumberMap = require('common-js-utils').NumberMap
+import { NumberMap } from 'common-js-utils'
 
 /**
  * Error for when combining two non-equal people.
  */
 class NotSamePerson extends Error {}
 
-const fromJSON = (personObject) => {
+export const fromJSON = personObject => {
   let newPerson = new LadokPerson(
     personObject.ssn,
     personObject.name,
@@ -26,8 +25,8 @@ const fromJSON = (personObject) => {
   return newPerson
 }
 
-class LadokPerson {
-  constructor (ssn, name, email, points, union) {
+export class LadokPerson {
+  constructor(ssn, name, email, points, union) {
     this.ssn = ssn
     this.name = name
     this.email = email
@@ -38,14 +37,14 @@ class LadokPerson {
     }
   }
 
-  _addUnion (union, points) {
+  _addUnion(union, points) {
     if (union in this.points) {
       throw new Error(`Union ${union} already defined!`)
     }
     this.points.set(union, points)
   }
 
-  credits () {
+  credits() {
     let credits = {}
 
     for (let [key, value] of this.points) {
@@ -55,21 +54,28 @@ class LadokPerson {
     return credits
   }
 
-  join (ladokPerson) {
+  join(ladokPerson) {
     if (!this.samePerson(ladokPerson)) {
-      throw new NotSamePerson(`Can not combine non-equal ` +
-      `ladok people. SSNs:\n    ` +
-      `${this.ssn}\n    ${ladokPerson.ssn}`)
+      throw new NotSamePerson(
+        `Can not combine non-equal ` +
+          `ladok people. SSNs:\n    ` +
+          `${this.ssn}\n    ${ladokPerson.ssn}`
+      )
     }
 
     this.points.join(ladokPerson.points)
   }
 
-  samePerson (otherPerson) {
+  samePerson(otherPerson) {
     return this.ssn === otherPerson.ssn
   }
 
-  toJSON () {
+  toJSON(): {
+    ssn: string,
+    name: string,
+    email: string,
+    points: { [string]: number }
+  } {
     let { ssn, name, email, points } = this
 
     let credits = {}
@@ -79,9 +85,4 @@ class LadokPerson {
 
     return { ssn, name, email, credits }
   }
-}
-
-module.exports = {
-  LadokPersonFromJSON: fromJSON,
-  LadokPerson
 }
