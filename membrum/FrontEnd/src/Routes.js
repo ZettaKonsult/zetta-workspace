@@ -1,5 +1,5 @@
 import React from 'react'
-import {Route, Switch} from 'react-router-dom'
+import { Route, Switch } from 'react-router-dom'
 
 import AppliedRoute from './components/AppliedRoute'
 
@@ -7,7 +7,7 @@ import Statistics from './containers/Statistics/'
 import Home from './containers/Home/'
 import UploadMembers from './containers/UploadMembers/'
 import MyPage from './containers/MyPage/'
-import Login from './containers/Login/'
+import Login from './user/LoginForm'
 import SignUp from './containers/SignUp/'
 import VerifyEmail from './containers/VerifyEmail/'
 import AdminDashboard from './containers/AdminDashboard/'
@@ -17,7 +17,7 @@ import Plans from './containers/Plans/'
 
 import NotFound from './containers/NotFound/'
 
-export default ({childProps}) => (
+export default ({ childProps }) => (
   <Switch>
     {routes.map(item => (
       <AppliedRoute
@@ -34,15 +34,15 @@ export default ({childProps}) => (
 )
 
 const routes = [
-  {path: '/', component: Home},
-  {path: '/statistics', component: Statistics},
-  {path: '/uploadmembers', component: UploadMembers},
-  {path: '/mypage/:page', component: MyPage},
-  {path: '/login', component: Login},
-  {path: '/signup', component: SignUp},
-  {path: '/verifyemail', component: VerifyEmail},
-  {path: '/admindashboard', component: AdminDashboard},
-  {path: '/sh', component: SelfHelp},
-  {path: '/events', component: Events},
-  {path: '/plans', component: Plans}
+  { path: '/', component: Home },
+  { path: '/statistics', component: Statistics },
+  { path: '/uploadmembers', component: UploadMembers },
+  { path: '/mypage/:page', component: MyPage },
+  { path: '/login', component: Login },
+  { path: '/signup', component: SignUp },
+  { path: '/verifyemail', component: VerifyEmail },
+  { path: '/admindashboard', component: AdminDashboard },
+  { path: '/sh', component: SelfHelp },
+  { path: '/events', component: Events },
+  { path: '/plans', component: Plans }
 ]

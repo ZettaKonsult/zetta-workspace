@@ -1,7 +1,8 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { Field, reduxForm } from 'redux-form'
-import { loginUser } from '../../user/authenticationActions'
+
+import { loginUser } from './authenticationActions'
 
 //TODO move onChange, closeMessage, ssn and password to this and make class
 //TODO add &#x1f441; to password and have onclick for toggling visility
