@@ -29,7 +29,6 @@
     "eject": "react-scripts eject",
     "clean": "rm -rf ./build",
     "flow": "flow",
-    "mock-db": "json-server -p 4000 --watch ./src/mocks/db.json",
     "predeploy": "yarn test && yarn build",
     "deploy": "aws s3 sync build/ s3://membrum-client",
     "postdeploy":
