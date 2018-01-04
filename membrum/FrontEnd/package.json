@@ -3,15 +3,17 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "amazon-cognito-identity-js": "^1.21.0",
-    "aws-sdk": "^2.126.0",
     "chart.js": "^2.7.0",
-    "crypto-js": "^3.1.9-1",
     "normalize.css": "^7.0.0",
     "react": "^16.0.0",
     "react-chartjs-2": "^2.6.2",
     "react-dom": "^16.0.0",
-    "react-router-dom": "^4.2.2"
+    "react-redux": "^5.0.6",
+    "react-router-dom": "^4.2.2",
+    "redux": "^3.7.2",
+    "redux-devtools-extension": "^2.13.2",
+    "redux-form": "^7.2.0",
+    "redux-thunk": "^2.2.0"
   },
   "devDependencies": {
     "flow-bin": "^0.59.0",
@@ -28,14 +30,15 @@
     "clean": "rm -rf ./build",
     "flow": "flow",
     "mock-db": "json-server -p 4000 --watch ./src/mocks/db.json",
-    "deploy":
-      "yarn build && aws s3 sync build/ s3://membrum-client && yarn clean",
-    "postdeploy":
-      "aws cloudfront create-invalidation --distribution-id E2O9SBWDRR4JZS --paths /* && aws cloudfront create-invalidation --distribution-id E36Q7O5H2Q1R7U --paths /*",
+    "deploy": "yarn build && aws s3 sync build/ s3://membrum-client && yarn clean",
+    "postdeploy": "aws cloudfront create-invalidation --distribution-id E2O9SBWDRR4JZS --paths /* && aws cloudfront create-invalidation --distribution-id E36Q7O5H2Q1R7U --paths /*",
     "pretty": "prettier --write --no-semi \"src/**/*.js\"",
     "precommit": "lint-staged"
   },
   "lint-staged": {
-    "*.js": ["yarn run pretty", "git add"]
+    "*.js": [
+      "yarn run pretty",
+      "git add"
+    ]
   }
 }
