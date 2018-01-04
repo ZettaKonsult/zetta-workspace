@@ -1,51 +1,45 @@
-/**
- * Class representing a member listed in a LADOK file.
- *
- * @date    2017-08-24
- * @since   7.9.0
- */
-
-const NumberMap = require('common-js-utils').NumberMap
+/* @flow */
 
 /**
- * Error for when combining two non-equal people.
+ * @date 2017-08-24
  */
+
+import type { LadokPersonJSON } from '../types'
+import { NumberMap } from 'common-js-utils'
+
 class NotSamePerson extends Error {}
 
-const fromJSON = (personObject) => {
-  let newPerson = new LadokPerson(
-    personObject.ssn,
-    personObject.name,
-    personObject.email
-  )
+export class LadokPerson {
+  ssn: string
+  name: string
+  email: string
+  points: NumberMap
 
-  for (let [union, points] of Object.entries(personObject.credits)) {
-    newPerson._addUnion(union, points)
-  }
-
-  return newPerson
-}
-
-class LadokPerson {
-  constructor (ssn, name, email, points, union) {
+  constructor(
+    ssn: string,
+    name: string,
+    email: string,
+    unionPoints: string,
+    union: string
+  ) {
     this.ssn = ssn
     this.name = name
     this.email = email
 
     this.points = new NumberMap()
-    if (points !== undefined && union !== undefined) {
-      this._addUnion(union, Number(points.replace(',', '.')))
+    if (unionPoints !== undefined && union !== undefined) {
+      this._addUnion(union, Number(unionPoints.replace(',', '.')))
     }
   }
 
-  _addUnion (union, points) {
+  _addUnion(union: string, points: number) {
     if (union in this.points) {
       throw new Error(`Union ${union} already defined!`)
     }
     this.points.set(union, points)
   }
 
-  credits () {
+  credits() {
     let credits = {}
 
     for (let [key, value] of this.points) {
@@ -55,21 +49,23 @@ class LadokPerson {
     return credits
   }
 
-  join (ladokPerson) {
-    if (!this.samePerson(ladokPerson)) {
-      throw new NotSamePerson(`Can not combine non-equal ` +
-      `ladok people. SSNs:\n    ` +
-      `${this.ssn}\n    ${ladokPerson.ssn}`)
+  join(person: LadokPerson) {
+    if (!this.samePerson(person)) {
+      throw new NotSamePerson(
+        `Can not combine non-equal ` +
+          `ladok people. SSNs:\n    ` +
+          `${this.ssn}\n    ${person.ssn}`
+      )
     }
 
-    this.points.join(ladokPerson.points)
+    this.points.join(person.points)
   }
 
-  samePerson (otherPerson) {
-    return this.ssn === otherPerson.ssn
+  samePerson(person: LadokPerson) {
+    return this.ssn === person.ssn
   }
 
-  toJSON () {
+  toJSON(): LadokPersonJSON {
     let { ssn, name, email, points } = this
 
     let credits = {}
@@ -81,7 +77,24 @@ class LadokPerson {
   }
 }
 
-module.exports = {
-  LadokPersonFromJSON: fromJSON,
-  LadokPerson
+export const fromJSON = (personObject: LadokPersonJSON): LadokPerson => {
+  let objectCredits = Object.assign({}, personObject.credits)
+  const firstUnion = Object.keys(objectCredits)[0]
+  const firstPoints = objectCredits[firstUnion]
+
+  let newPerson = new LadokPerson(
+    personObject.ssn,
+    personObject.name,
+    personObject.email,
+    String(firstPoints),
+    firstUnion
+  )
+
+  for (let [union: string, points: number] of Object.entries(objectCredits)) {
+    // Recast required due to flow bug with Object.entries and Object.values.
+    const newPoints: number = (points: any)
+    newPerson._addUnion(union, newPoints)
+  }
+
+  return newPerson
 }

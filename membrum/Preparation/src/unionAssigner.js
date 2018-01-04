@@ -1,14 +1,17 @@
+/* @flow */
+
 /**
- * Assign LADOK people parsed using the ladok-parser module to unions.
- *
  * @date 2017-10-31
  */
 
-const getAssignment = credits => {
-  let maxKey
-  let maxValue = Number.MIN_VALUE
+import type { FileResult, LadokPersonJSON } from './types'
 
-  for (let [union, points] of Object.entries(credits)) {
+const getAssignment = (credits: { [string]: string }) => {
+  let maxKey
+  let maxValue: number = Number.MIN_VALUE
+
+  for (let [union, unionCredits] of Object.entries(credits)) {
+    const points = Number(unionCredits)
     if (points > maxValue || (points === maxValue && Math.random() >= 0.5)) {
       maxKey = union
       maxValue = points
@@ -18,20 +21,35 @@ const getAssignment = credits => {
   return maxKey
 }
 
-const getAssignments = peopleFiles => {
+export const getUnions = (
+  unionMap: { [string]: Array<string> },
+  facultyMap: { [string]: string }
+): { [string]: string } => {
+  let unions = {}
+  for (let [ssn: string, faculty: string] of Object.entries(facultyMap)) {
+    unions[ssn] = unionMap[String(faculty)]
+  }
+  return unions
+}
+
+export const getFaculties = (peopleFiles: {
+  [string]: FileResult
+}): { [string]: string } => {
   let assignments = {}
 
-  for (let fileResult of Object.values(peopleFiles)) {
-    for (let person of Object.values(fileResult.people)) {
+  for (const file of Object.values(peopleFiles)) {
+    // Recast required due to flow bug with Object.entries and Object.values.
+    const fileResult: FileResult = (file: any)
+
+    for (const person: LadokPersonJSON of fileResult.people) {
       const ssn = person.ssn
-      const credits = person.credits
-      assignments[ssn] = getAssignment(credits)
+      if (ssn in assignments) {
+        continue
+      }
+
+      assignments[ssn] = getAssignment(person.credits)
     }
   }
 
   return assignments
-}
-
-module.exports = {
-  getAssignments
 }

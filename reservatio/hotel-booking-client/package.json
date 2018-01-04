@@ -12,6 +12,7 @@
     "react-dom": "16.2.0",
     "react-router-dom": "4.2.2",
     "styled-components": "2.3.2",
+    "zk-aws-users": "^0.1.1",
     "zk-dynamodb-wrapper": "1.0.5"
   },
   "devDependencies": {

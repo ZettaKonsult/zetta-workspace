@@ -1,9 +1,11 @@
+/* @flow */
+
 /**
- * Lambda function handler for uploaded LADOK files.
- *
  * @date  2017-10-03
  */
 
+import type { AWSCallback, AWSContext, AWSEvent } from './types'
+import type { LadokPersonJSON } from '../types'
 import AWS from 'aws-sdk'
 import uuid from 'uuid'
 import { parseString } from '../ladokParser'
@@ -12,44 +14,64 @@ const s3 = new AWS.S3()
 AWS.config.update({ region: 'eu-central-1' })
 const dynamoDb = new AWS.DynamoDB.DocumentClient()
 
-export const parseUploadedFile = async (event, context, callback) => {
+export const parseUploadedFile = async (
+  event: AWSEvent,
+  context: AWSContext,
+  callback: AWSCallback
+) => {
   const fileRepo = event.Records[0].s3
   const bucketName = fileRepo.bucket.name
   const fileName = fileRepo.object.key
 
   console.log(`Fetching object; Bucket: ${bucketName}, File: ${fileName}`)
 
-  s3.getObject({
-    Bucket: bucketName,
-    Key: fileName
-  }, async function (error, data) {
-    if (error) {
-      console.log(`Error while getting bucket object: ${error}`, error.stack)
-      callback(error)
-    } else {
-      try {
-        let people = await parseData(data.Body.toString('utf-8'),
-          fileName, callback)
-        await updateDatabase(people, fileName, callback)
-      } catch (error) {
-        console.error(error)
+  s3.getObject(
+    {
+      Bucket: bucketName,
+      Key: fileName
+    },
+    async function(error, data) {
+      if (error) {
+        console.log(`Error while getting bucket object: ${error}`, error.stack)
+        callback(error)
+      } else {
+        try {
+          let people = await parseData(
+            data.Body.toString('utf-8'),
+            fileName,
+            callback
+          )
+          await updateDatabase(people, fileName, callback)
+        } catch (error) {
+          console.error(error)
+        }
       }
     }
-  })
+  )
 }
 
-const parseData = async (string, fileName, callback) => {
+export const parseData = async (
+  dataString: string,
+  fileName: string,
+  callback: AWSCallback
+): Promise<Array<LadokPersonJSON>> => {
   let people = []
   try {
-    people = await parseString(string, fileName, true)
+    people = (await parseString(dataString, fileName)).map(person =>
+      person.toJSON()
+    )
   } catch (error) {
     console.error(`Error while parsing in insertParseResult():\n    ${error}`)
-    return
+    throw error
   }
   return people
 }
 
-const updateDatabase = async (people, fileName, callback) => {
+const updateDatabase = async (
+  people: Array<LadokPersonJSON>,
+  fileName: string,
+  callback: AWSCallback
+) => {
   const params = {
     TableName: 'LadokParseResult',
 
