@@ -9,6 +9,8 @@ import {
 import './Login.css'
 import config from '../config.js'
 import { withRouter } from 'react-router-dom'
+import AWS from 'aws-sdk'
+import { Account, setIdentity } from '../libs/zk-aws-users'
 
 class Login extends Component {
   constructor(props) {
@@ -48,25 +50,19 @@ class Login extends Component {
     }
   }
 
-  login(username, password) {
-    const userPool = new CognitoUserPool({
-      UserPoolId: config.cognito.USER_POOL_ID,
-      ClientId: config.cognito.APP_CLIENT_ID
-    })
-    const authenticationData = {
-      Username: username,
-      Password: password
-    }
-
-    const user = new CognitoUser({ Username: username, Pool: userPool })
-    const authenticationDetails = new AuthenticationDetails(authenticationData)
-
-    return new Promise((resolve, reject) =>
-      user.authenticateUser(authenticationDetails, {
-        onSuccess: result => resolve(result.getIdToken().getJwtToken()),
-        onFailure: err => reject(err)
-      })
+  async login(username, password) {
+    await setIdentity(
+      '460056602695',
+      'eu-central-1:31bcf943-5ab2-414c-9b38-0de8939c4392',
+      'arn:aws:iam::460056602695:role/Cognito_hotelbookingidentitypoolUnauth_Role'
     )
+
+    try {
+      return await Account.loginUser({customer: 'ahusResort', project: 'reservatio'}, username, password)
+    } catch (exception) {
+      console.error(exception)
+      throw exception
+    }
   }
 
   render() {
