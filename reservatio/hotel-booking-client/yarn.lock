@@ -83,7 +83,7 @@ alphanum-sort@^1.0.1, alphanum-sort@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/alphanum-sort/-/alphanum-sort-1.0.2.tgz#97a1119649b211ad33691d9f9f486a8ec9fbe0a3"
 
-amazon-cognito-identity-js@1.28.0:
+amazon-cognito-identity-js@1.28.0, amazon-cognito-identity-js@^1.28.0:
   version "1.28.0"
   resolved "https://registry.yarnpkg.com/amazon-cognito-identity-js/-/amazon-cognito-identity-js-1.28.0.tgz#0dacba4db94ab97a1ad742c376b3e632fc5f772f"
   dependencies:
@@ -303,7 +303,7 @@ autoprefixer@^6.3.1:
     postcss "^5.2.16"
     postcss-value-parser "^3.2.3"
 
-aws-sdk@2.172.0, aws-sdk@^2.169.0, aws-sdk@^2.6.0:
+aws-sdk@2.172.0, aws-sdk@^2.166.0, aws-sdk@^2.169.0, aws-sdk@^2.6.0:
   version "2.172.0"
   resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.172.0.tgz#47dfb79907976ebbd538562ea5a25835b5b3f35d"
   dependencies:
@@ -6833,6 +6833,13 @@ yargs@~3.10.0:
     cliui "^2.1.0"
     decamelize "^1.0.0"
     window-size "0.1.0"
+
+zk-aws-users@^0.1.1:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/zk-aws-users/-/zk-aws-users-0.1.1.tgz#958cea20a37ef6330a9afbd215b10992ab77f453"
+  dependencies:
+    amazon-cognito-identity-js "^1.28.0"
+    aws-sdk "^2.166.0"
 
 zk-dynamodb-wrapper@1.0.5:
   version "1.0.5"
