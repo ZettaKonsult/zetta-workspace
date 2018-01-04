@@ -44,3 +44,12 @@ functions:
           method: post
           cors: true
           authorizer: aws_iam
+
+  registerOrganisations:
+    handler: src/lambda/organisation.registerOrganisations
+    events:
+      - http:
+          path: registerOrganisation
+          method: post
+          cors: true
+          authorizer: aws_iam
