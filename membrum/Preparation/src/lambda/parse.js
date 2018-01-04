@@ -1,6 +1,6 @@
+/* @flow */
+
 /**
- * Lambda function handler for uploaded LADOK files.
- *
  * @date  2017-10-03
  */
 
@@ -19,23 +19,29 @@ export const parseUploadedFile = async (event, context, callback) => {
 
   console.log(`Fetching object; Bucket: ${bucketName}, File: ${fileName}`)
 
-  s3.getObject({
-    Bucket: bucketName,
-    Key: fileName
-  }, async function (error, data) {
-    if (error) {
-      console.log(`Error while getting bucket object: ${error}`, error.stack)
-      callback(error)
-    } else {
-      try {
-        let people = await parseData(data.Body.toString('utf-8'),
-          fileName, callback)
-        await updateDatabase(people, fileName, callback)
-      } catch (error) {
-        console.error(error)
+  s3.getObject(
+    {
+      Bucket: bucketName,
+      Key: fileName
+    },
+    async function(error, data) {
+      if (error) {
+        console.log(`Error while getting bucket object: ${error}`, error.stack)
+        callback(error)
+      } else {
+        try {
+          let people = await parseData(
+            data.Body.toString('utf-8'),
+            fileName,
+            callback
+          )
+          await updateDatabase(people, fileName, callback)
+        } catch (error) {
+          console.error(error)
+        }
       }
     }
-  })
+  )
 }
 
 const parseData = async (string, fileName, callback) => {

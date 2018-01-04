@@ -1,7 +1,4 @@
-import { getAssignments } from './assign'
-import { parseUploadedFile } from './parse'
+/* @flow */
 
-module.exports = {
-  getAssignments,
-  parseUploadedFile
-}
+export * from './assign'
+export * from './parse'

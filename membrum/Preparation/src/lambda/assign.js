@@ -1,8 +1,9 @@
+/* @flow */
+
 /**
- * Lambda function handler assigning unions to LADOK people in a database.
- *
  * @date  2017-11-07
  */
+
 import * as unionAssigner from '../unionAssigner'
 import AWS from 'aws-sdk'
 

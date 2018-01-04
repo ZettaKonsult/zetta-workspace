@@ -1,10 +1,11 @@
-import { combineReducers } from 'redux'
+import {combineReducers} from 'redux'
 
-import { ADD_PLACE } from './PlaceActions'
+import {ADD_PLACE, UPDATE_WORKPLACE} from './PlaceActions'
 
 const place = (state, action) => {
   switch (action.type) {
     case ADD_PLACE:
+    case UPDATE_WORKPLACE:
       return {
         id: action.id,
         ...action.place
@@ -17,6 +18,7 @@ const place = (state, action) => {
 export const byId = (state = {}, action) => {
   switch (action.type) {
     case ADD_PLACE:
+    case UPDATE_WORKPLACE:
       return {
         ...state,
         [action.id]: place(state[action.id], action)
@@ -35,7 +37,12 @@ export const allIds = (state = [], action) => {
   }
 }
 
-const Places = combineReducers({ byId, allIds })
+const Places = combineReducers({byId, allIds})
 export default Places
 
 export const getPlaces = state => state.allIds.map(id => state.byId[id])
+
+export const getWorkplaceById = (state, id) => state.byId[id]
+
+export const isWorkplaceId = (state, id) =>
+  state.allIds.find(compareId => compareId === id)

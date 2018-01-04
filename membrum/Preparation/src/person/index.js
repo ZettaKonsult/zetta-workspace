@@ -1,5 +1,3 @@
-import { LadokPerson } from './ladokPerson'
+/* @flow */
 
-module.exports = {
-  LadokPerson
-}
+export { LadokPerson, fromJSON as LadokPersonFromJSON } from './ladokPerson'

@@ -1,8 +1,8 @@
-import { combineReducers } from 'redux'
+import {combineReducers} from 'redux'
 import byId from './byId'
 import createLists, * as fromCreateLists from './createLists'
 
-export default combineReducers({ byId, createLists })
+export default combineReducers({byId, createLists})
 
 export const isReportId = (state, id) =>
   fromCreateLists.isReportId(state.createLists, id)
@@ -17,22 +17,30 @@ export const getAllReportsSubmittedBy = (state, id) => {
   return allReports.filter(report => report.submittedBy === id)
 }
 
-export const getAllReportsAboutWorker = (state, id) => {
+export const getAllReportsAboutWorker = (state, workerId) => {
   const allReports = getAllReports(state)
-  return allReports.filter(report => report.workerId === id)
+  return allReports.filter(report => report.workerId === workerId)
 }
 
-export const getMonthlyReports = (state, epoch) => {
-  const month = new Date(epoch).getUTCMonth()
-  const allReports = getAllReports(state)
-  return allReports.filter(
-    report => new Date(report.date).getUTCMonth() === month
-  )
-}
+export const getMonthlyReports = (state, epoch) =>
+  fromCreateLists.getMonthReports(state.createLists, epoch)
 
-export const getWorkersMonthlyReport = (state, epoch, worker) => {
-  const monthReports = getMonthlyReports(state, epoch)
-  return monthReports.filter(report => report.worker === worker)
+export const getWorkersMonthlyReport = (
+  state,
+  epoch = false,
+  workerId = false
+) => {
+  let result = getAllReports(state)
+  if (epoch) {
+    const filter = getMonthlyReports(state, epoch)
+    result = result.filter(report => filter.indexOf(report.id) !== -1)
+  }
+
+  if (workerId) {
+    result = result.filter(report => report.worker === workerId)
+  }
+
+  return result
 }
 
 export const getWorkplacesForMonth = (state, epoch) => {
@@ -46,7 +54,7 @@ export const getWorkersWorkplacesForMonth = (state, epoch, worker) => {
 }
 
 export const getAllMonthReported = state =>
-  Object.keys(state.idsByYearMonthEpoch)
+  fromCreateLists.getAllMonthReported(state.createLists)
 
 export const sumWorkedHours = reports =>
   reports.reduce(
@@ -54,5 +62,5 @@ export const sumWorkedHours = reports =>
       hours: total.hours + Number(report.hours),
       extrahours: total.extrahours + Number(report.extrahours)
     }),
-    { hours: 0, extrahours: 0 }
+    {hours: 0, extrahours: 0}
   )

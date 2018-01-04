@@ -1,21 +1,29 @@
 import React from 'react'
-import { reduxForm, Field } from 'redux-form'
-import { Form, Button, Divider } from 'semantic-ui-react'
+import {connect} from 'react-redux'
+import {reduxForm, Field} from 'redux-form'
+import {Form, Button, Divider} from 'semantic-ui-react'
 
-import { addWorker } from '../WorkerActions'
+import {addWorker, updateWorker} from '../WorkerActions'
+
+import {isWorkerId, getWorkerById} from '../../reducers'
 
 import validate from './WorkerFormValidation'
-import { Input } from '../../Components/Form/Input'
+import {Input} from '../../Components/Form/Input'
 
 let WorkerForm = props => (
   <Form
     autoComplete="off"
     onSubmit={props.handleSubmit(values => {
-      props.dispatch(addWorker(values))
+      if (props.idExists) {
+        props.updateWorker(values)
+      } else {
+        props.addNewWorker(values)
+      }
       if (typeof props.callback !== 'undefined') {
         props.callback()
       }
-    })}>
+    })}
+  >
     <Field name="name" component={Input} placeholder="Full name" />
     <Field name="ssn" component={Input} placeholder="Social security number" />
     <Field name="email" component={Input} placeholder="Email" />
@@ -24,6 +32,16 @@ let WorkerForm = props => (
   </Form>
 )
 
-WorkerForm = reduxForm({ form: 'workerForm', validate })(WorkerForm)
+WorkerForm = reduxForm({form: 'workerForm', validate})(WorkerForm)
 
-export default WorkerForm
+const mapDispatchToProps = dispatch => ({
+  addNewWorker: values => dispatch(addWorker(values)),
+  updateWorker: values => dispatch(updateWorker(values))
+})
+
+const mapStateToProps = (state, props) => ({
+  idExists: isWorkerId(state, props.id),
+  initialValues: getWorkerById(state, props.id)
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(WorkerForm)
