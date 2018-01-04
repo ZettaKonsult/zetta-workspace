@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react'
 
 import Input from '../../components/Input'
 import Button from '../../components/Button'
@@ -27,9 +27,9 @@ export default class ResetPassword extends Component {
   //   }
   // }
 
-  closeError = () => this.setState({error: []})
+  closeError = () => this.setState({ error: [] })
 
-  onChange = e => this.setState({[e.target.id]: e.target.value, error: []})
+  onChange = e => this.setState({ [e.target.id]: e.target.value, error: [] })
 
   render() {
     return (
