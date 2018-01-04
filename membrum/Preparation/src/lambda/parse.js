@@ -4,6 +4,8 @@
  * @date  2017-10-03
  */
 
+import type { AWSCallback, AWSContext, AWSEvent } from './types'
+import type { LadokPersonJSON } from '../types'
 import AWS from 'aws-sdk'
 import uuid from 'uuid'
 import { parseString } from '../ladokParser'
@@ -12,7 +14,11 @@ const s3 = new AWS.S3()
 AWS.config.update({ region: 'eu-central-1' })
 const dynamoDb = new AWS.DynamoDB.DocumentClient()
 
-export const parseUploadedFile = async (event, context, callback) => {
+export const parseUploadedFile = async (
+  event: AWSEvent,
+  context: AWSContext,
+  callback: AWSCallback
+) => {
   const fileRepo = event.Records[0].s3
   const bucketName = fileRepo.bucket.name
   const fileName = fileRepo.object.key
@@ -44,18 +50,28 @@ export const parseUploadedFile = async (event, context, callback) => {
   )
 }
 
-const parseData = async (string, fileName, callback) => {
+export const parseData = async (
+  dataString: string,
+  fileName: string,
+  callback: AWSCallback
+): Promise<Array<LadokPersonJSON>> => {
   let people = []
   try {
-    people = await parseString(string, fileName, true)
+    people = (await parseString(dataString, fileName)).map(person =>
+      person.toJSON()
+    )
   } catch (error) {
     console.error(`Error while parsing in insertParseResult():\n    ${error}`)
-    return
+    throw error
   }
   return people
 }
 
-const updateDatabase = async (people, fileName, callback) => {
+const updateDatabase = async (
+  people: Array<LadokPersonJSON>,
+  fileName: string,
+  callback: AWSCallback
+) => {
   const params = {
     TableName: 'LadokParseResult',
 

@@ -7,19 +7,13 @@
 import * as path from 'path'
 import { listFiles } from 'common-js-utils'
 import { parseCSVFile, parseCSVLines } from 'zk-csv-parser'
+import { config } from './config'
 import { LadokPerson } from './person'
 
 // To do: find (or make) one that does not necessitate requires.
 const arrayEquals = require('array-equal')
 
-const EXPECTED_COLUMNS = [
-  'Pnr',
-  'Namn',
-  'Epostadress',
-  'Registrerade po�ng',
-  ''
-]
-const IGNORE = 8
+const IGNORE = config.Ladok.File.IgnoreLines
 
 export class InvalidFile extends Error {}
 
@@ -48,7 +42,10 @@ export const parseString = async (
   return aggregatePeople(result, path.basename(filePath))
 }
 
-const aggregatePeople = (lines, fileName: string): Array<LadokPerson> => {
+const aggregatePeople = (
+  lines: Array<Array<string>>,
+  fileName: string
+): Array<LadokPerson> => {
   checkHeader(lines)
   const unionName = getUnion(fileName, lines)
   lines = lines.slice(4, lines.length).filter(element => element.length > 3)
@@ -62,7 +59,9 @@ const aggregatePeople = (lines, fileName: string): Array<LadokPerson> => {
   return people
 }
 
-export const parseDirectory = async filePath => {
+export const parseDirectory = async (
+  filePath: string
+): { [string]: LadokPerson } => {
   let people = {}
 
   try {
@@ -77,7 +76,7 @@ export const parseDirectory = async filePath => {
 }
 
 const addPeople = (
-  people: Array<LadokPerson>,
+  people: { [string]: LadokPerson },
   newPeople: Array<LadokPerson>
 ) => {
   for (let person of newPeople) {
@@ -91,14 +90,17 @@ const addPeople = (
   }
 }
 
-const checkHeader = (lines: Array<string>) => {
+const checkHeader = (lines: Array<Array<string>>) => {
+  const expectedColumns = config.Ladok.File.ExpectedColumns
   const offset = 3
   const columns = lines[offset]
-  if (!arrayEquals(columns, EXPECTED_COLUMNS)) {
+  if (!arrayEquals(columns, expectedColumns)) {
     throw new InvalidFile(
       'Invalid LADOK file, column line not ' +
-        `found in expected position. Expected\n    ${EXPECTED_COLUMNS}\nas ` +
-        `row ${IGNORE + offset}, got\n    ${columns}.`
+        `found in expected position. Expected\n    ${String(
+          expectedColumns
+        )}\nas ` +
+        `row ${IGNORE + offset}, got\n    ${String(columns)}.`
     )
   }
 }
@@ -106,7 +108,10 @@ const checkHeader = (lines: Array<string>) => {
 /**
  * The union name is derived from the parsed file's name.
  */
-export const getUnion = (fileName: string, lines: Array<string>): string => {
+export const getUnion = (
+  fileName: string,
+  lines: Array<Array<string>> = []
+): string => {
   let parts = fileName.split('.')[0].split(/TRF_[H|V]\d\d_/)
   if (parts.length === 2) {
     return parts[1]

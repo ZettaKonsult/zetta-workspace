@@ -1,7 +1,7 @@
 /* @flow */
 
 /**
- * @date  2017-08-22
+ * @date 2017-08-22
  */
 
 import { LadokPersonFromJSON, LadokPerson } from './'

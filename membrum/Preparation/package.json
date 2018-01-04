@@ -5,6 +5,7 @@
   "author": "Zimon Kuhs <zmk.zk.dev@gmail.com>",
   "license": "MIT",
   "scripts": {
+    "deploy": "serverless deploy",
     "start": "node src/index",
     "test": "jest src --color",
     "test:watch": "yarn run test --watch",
@@ -14,7 +15,7 @@
     "prepublish": "yarn run build",
     "postpublish": "rm -rf /dist",
     "precommit": "lint-staged && yarn run test",
-    "update": "yarn test && yarn build"
+    "update": "yarn test && yarn build && yarn deploy"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
@@ -58,10 +59,11 @@
     }
   },
   "dependencies": {
-    "babel-runtime": "^6.26.0",
     "array-equal": "^1.0.0",
     "aws-sdk": "^2.166.0",
+    "babel-runtime": "^6.26.0",
     "common-js-utils": "^1.5.1",
+    "flow-typed": "^2.2.3",
     "zk-csv-parser": "^2.1.5"
   }
 }

@@ -151,7 +151,7 @@ describe('Ladok parser.', () => {
     })
     it('Incorrect case.', () => {
       try {
-        const union = getUnion('dummy.txt', [['Lokal klazz: EHL']])
+        getUnion('dummy.txt', [['Lokal klazz: EHL']])
         fail(
           `Wrong file name and erroneous lines should raise an error ` +
             `in getUnion.`
