@@ -30,14 +30,17 @@
     "clean": "rm -rf ./build",
     "flow": "flow",
     "mock-db": "json-server -p 4000 --watch ./src/mocks/db.json",
-    "deploy": "yarn build && aws s3 sync build/ s3://membrum-client && yarn clean",
-    "postdeploy": "aws cloudfront create-invalidation --distribution-id E2O9SBWDRR4JZS --paths /* && aws cloudfront create-invalidation --distribution-id E36Q7O5H2Q1R7U --paths /*",
-    "pretty": "prettier --write --no-semi \"src/**/*.js\"",
+    "predeploy": "yarn test && yarn build",
+    "deploy": "aws s3 sync build/ s3://membrum-client",
+    "postdeploy":
+      "aws cloudfront create-invalidation --distribution-id E2O9SBWDRR4JZS --paths /* && aws cloudfront create-invalidation --distribution-id E36Q7O5H2Q1R7U --paths /* && yarn clean",
     "precommit": "lint-staged"
   },
   "lint-staged": {
     "*.js": [
-      "yarn run pretty",
+      "eslint --fix",
+      "prettier --write",
+      "jest --color --bail --findRelatedTests",
       "git add"
     ]
   }
