@@ -1,11 +1,10 @@
-import React, { Component } from "react"
+import React, {Component} from 'react'
 
-import config from "../../config"
-import { s3Upload } from "../../libs/awsS3"
+import config from '../../config'
 
-import FadedLine from "../../components/FadedLine"
+import FadedLine from '../../components/FadedLine'
 
-import "./style.css"
+import './style.css'
 
 export default class UploadMembers extends Component {
   constructor(props) {
@@ -23,23 +22,22 @@ export default class UploadMembers extends Component {
 
   handleSubmit = async event => {
     event.preventDefault()
-
-    if (this.file && this.file.size > config.MAX_ATTACHMENT_SIZE) {
-      alert("Please pick a file smaller than 5MB")
+    let registrationFile = this.file
+    if (
+      registrationFile &&
+      registrationFile.size > config.MAX_ATTACHMENT_SIZE
+    ) {
+      alert('Please pick a file smaller than 5MB')
       return
     }
 
-    this.setState({ isLoading: true })
+    this.setState({isLoading: true})
 
     try {
-      const uploadedFilename = this.file
-        ? (await s3Upload(this.file)).Location
-        : null
-
-      console.log(uploadedFilename)
+      console.log(registrationFile)
     } catch (e) {
       alert(e)
-      this.setState({ isLoading: false })
+      this.setState({isLoading: false})
     }
   }
 

@@ -1,35 +1,35 @@
-import React, { Component } from "react"
+import React, {Component} from 'react'
 
-import Input from "../../components/Input"
-import Button from "../../components/Button"
-import FadedLine from "../../components/FadedLine"
-import Message from "../../components/Message"
+import Input from '../../components/Input'
+import Button from '../../components/Button'
+import FadedLine from '../../components/FadedLine'
+import Message from '../../components/Message'
 
-import { forgotPassword } from "../../libs/awsPassword"
-import { isRequired } from "../../libs/Validation"
+// import { forgotPassword } from "../../libs/awsPassword"
+// import { isRequired } from "../../libs/Validation"
 
 export default class ResetPassword extends Component {
   constructor(props) {
     super(props)
 
     this.state = {
-      email: "",
+      email: '',
       error: []
     }
   }
 
-  forgotPassword = e => {
-    e.preventDefault()
-    if (isRequired(this.state.email)) {
-      forgotPassword(this.state.email)
-    } else {
-      this.setState({ error: ["Fill in the field"] })
-    }
-  }
+  // forgotPassword = e => {
+  //   e.preventDefault()
+  //   if (isRequired(this.state.email)) {
+  //     forgotPassword(this.state.email)
+  //   } else {
+  //     this.setState({ error: ["Fill in the field"] })
+  //   }
+  // }
 
-  closeError = () => this.setState({ error: [] })
+  closeError = () => this.setState({error: []})
 
-  onChange = e => this.setState({ [e.target.id]: e.target.value, error: [] })
+  onChange = e => this.setState({[e.target.id]: e.target.value, error: []})
 
   render() {
     return (
