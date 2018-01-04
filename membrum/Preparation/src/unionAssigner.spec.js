@@ -5,7 +5,7 @@
  */
 
 import type { FileResult } from './types'
-import { getFaculties, getUnions } from './unionAssigner'
+import { getFaculties, getUpdatedUnions, getUnions } from './unionAssigner'
 import { LadokPerson } from './person'
 import { config } from './config'
 
@@ -44,7 +44,7 @@ const newTestFileResult = (
 }
 
 describe('Union assigner.', () => {
-  describe('Faculties.', () => {
+  describe('Faculty assignment.', () => {
     it('One.', () => {
       expect(
         getFaculties({ file1: newTestFileResult(SSN1, 'TestPerson1', 1) })
@@ -77,7 +77,90 @@ describe('Union assigner.', () => {
         [SSN2]: 'KO'
       })
     })
-    describe('Unions.', () => {
+    describe('New faculties.', () => {
+      it('No new.', () => {
+        expect(
+          getUpdatedUnions({
+            NewAssignments: {
+              1: ['A']
+            },
+            Users: [
+              { userId: 1, email: 'a', name: 'b', points: {}, union: 'A' }
+            ]
+          })
+        ).toEqual({ created: {}, decide: {}, modified: {}, same: { '1': 'A' } })
+      })
+      it('One modified.', () => {
+        expect(
+          getUpdatedUnions({
+            NewAssignments: {
+              1: ['A']
+            },
+            Users: [
+              { userId: 1, email: 'a', name: 'b', points: {}, union: 'B' }
+            ]
+          })
+        ).toEqual({
+          created: {},
+          decide: {},
+          modified: { '1': { next: 'A', old: 'B' } },
+          same: {}
+        })
+      })
+      it('One new.', () => {
+        expect(
+          getUpdatedUnions({
+            NewAssignments: {
+              1: ['Aa']
+            },
+            Users: [{ userId: 1, email: 'a', name: 'b', points: {} }]
+          })
+        ).toEqual({
+          created: { '1': 'Aa' },
+          decide: {},
+          modified: {},
+          same: {}
+        })
+      })
+      it('One decide.', () => {
+        expect(
+          getUpdatedUnions({
+            NewAssignments: {
+              1: ['Aa', 'Bb']
+            },
+            Users: [{ userId: 1, email: 'a', name: 'b', points: {} }]
+          })
+        ).toEqual({
+          created: {},
+          decide: { '1': ['Aa', 'Bb'] },
+          modified: {},
+          same: {}
+        })
+      })
+      it('One new, one modified.', () => {
+        expect(
+          getUpdatedUnions({
+            NewAssignments: {
+              1: ['Aa'],
+              2: ['Bb'],
+              3: ['Cc']
+            },
+            Users: [
+              { userId: 1, email: 'a', name: 'b', points: {} },
+              { userId: 2, email: 'a', name: 'b', points: {}, union: 'Bb' },
+              { userId: 3, email: 'a', name: 'b', points: {}, union: 'Aa' }
+            ]
+          })
+        ).toEqual({
+          created: { '1': 'Aa' },
+          decide: {},
+          modified: { '3': { next: 'Cc', old: 'Aa' } },
+          same: { '2': 'Bb' }
+        })
+      })
+      it('All new.', () => {})
+    })
+    describe('Union assignment.', () => {
       it('From faculty.', () => {
         expect(getUnions(UNION_MAP, { [SSN1]: 'MED' })).toEqual({
           [SSN1]: ['Corpus Medicus']

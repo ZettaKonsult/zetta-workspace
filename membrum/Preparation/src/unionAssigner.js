@@ -5,6 +5,7 @@
  */
 
 import type { FileResult, LadokPersonJSON } from './types'
+import util from 'util'
 
 const getAssignment = (credits: { [string]: string }) => {
   let maxKey
@@ -52,4 +53,47 @@ export const getFaculties = (peopleFiles: {
   }
 
   return assignments
+}
+
+export const getUpdatedUnions = (params: {
+  NewAssignments: { [string]: [string] },
+  Users: [{ userId: string, email: string, name: string, points: string }]
+}) => {
+  const { NewAssignments: assignments, Users: users } = params
+
+  let result = {
+    created: {},
+    decide: {},
+    modified: {},
+    same: {}
+  }
+
+  for (let user of users) {
+    const ssn = user.userId
+    const oldUnion = user.union
+
+    let newUnion = assignments[ssn]
+    if (newUnion === undefined) {
+      newUnion = [oldUnion]
+    }
+
+    if (newUnion.length > 1) {
+      result.decide[ssn] = newUnion
+      continue
+    }
+
+    const unionName = newUnion[0]
+    if (oldUnion === undefined) {
+      result.created[ssn] = unionName
+      continue
+    }
+
+    if (oldUnion !== unionName) {
+      result.modified[ssn] = { old: oldUnion, next: unionName }
+    } else {
+      result.same[ssn] = oldUnion
+    }
+  }
+
+  return result
 }
