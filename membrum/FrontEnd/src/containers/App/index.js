@@ -1,5 +1,5 @@
-import React, {Component} from 'react'
-import {withRouter} from 'react-router-dom'
+import React, { Component } from 'react'
+import { withRouter } from 'react-router-dom'
 
 import Navigation from './Navigation'
 import Footer from '../../components/Footer'
@@ -11,7 +11,7 @@ class App extends Component {
     return (
       <div className="App">
         <Navigation
-          logout={this.props.logout}
+          logout={() => {}}
           authenticated={this.props.isAuthenticated}
         />
         <div className="AppContent">{this.props.children}</div>
