@@ -1,9 +1,6 @@
-import React, { Component } from 'react'
-import { connect } from 'react-redux'
-import {
-  membershipFetchRequest,
-  fetchAllPlans
-} from '../../../membership/membershipActions'
+import React, {Component} from 'react'
+import {connect} from 'react-redux'
+import {membershipFetchRequest, fetchAllPlans} from './membershipActions'
 import './membership.css'
 
 class MembershipForm extends Component {
@@ -13,7 +10,7 @@ class MembershipForm extends Component {
   }
 
   render() {
-    const { isFetching, membership, plans } = this.props
+    const {isFetching, membership, plans} = this.props
     if (isFetching && !membership.length) {
       return <p>Loading...</p>
     }
