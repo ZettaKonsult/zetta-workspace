@@ -26,6 +26,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
+    "test:staged":
+      "cross-env CI=true react-scripts test --env=jsdom --findRelatedTests",
     "eject": "react-scripts eject",
     "clean": "rm -rf ./build",
     "flow": "flow",
@@ -39,7 +41,7 @@
     "*.js": [
       "eslint --fix",
       "prettier --write",
-      "jest --color --bail --findRelatedTests",
+      "yarn run test:staged",
       "git add"
     ]
   }
