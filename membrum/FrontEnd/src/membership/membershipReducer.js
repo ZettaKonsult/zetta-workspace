@@ -36,6 +36,17 @@ export const membership = (state = initialState, action) => {
         ...state,
         allPlans: [...action.payload.allPlans]
       }
+
+    case MEMBERSHIP_FETCH_REQUEST:
+      return {
+        ...state,
+        isFetching: true
+      }
+    case MEMBERSHIP_FETCH_REQUEST_FAILURE:
+      return {
+        ...state,
+        isFetching: false
+      }
     default:
       return state
   }

@@ -15,31 +15,45 @@ const PlanOptions = ({ plans }) =>
     </option>
   ))
 
-const renderPlans = ({ fields, ...props }) =>
-  fields.map((plan, index, field) => (
-    <Field key={index} name={`${plan}`} component="select">
-      <PlanOptions plans={props.allPlans} />
-    </Field>
-  ))
+const renderPlans = ({ fields, ...props }) => (
+  <div className="membershipGroup">
+    <div className="ButtonGroup">
+      <button type="button" onClick={() => fields.push(17)}>
+        Add Plan
+      </button>
+    </div>
+    {fields.map((plan, index, field) => (
+      <div>
+        <Field key={index} name={`${plan}`} component="select">
+          <PlanOptions plans={props.allPlans} />
+        </Field>
+        <button
+          type="button"
+          title="Remove"
+          onClick={() => fields.remove(index)}
+        >
+          Remove Plan
+        </button>
+      </div>
+    ))}
+  </div>
+)
 
 let Form = props => {
-  const { isFetching, membership, handleSubmit } = props
+  const { isFetching, membership, handleSubmit, submitting } = props
   if (isFetching && !membership.length) {
     return <p>Loading...</p>
   }
   return (
     <form onSubmit={handleSubmit} className="membership">
-      <div className="membershipGroup">
-        <FieldArray
-          name="plans"
-          component={renderPlans}
-          allPlans={props.allPlans}
-        />
-      </div>
-      <div className="ButtonGroup">
-        <button type="submit">Submit</button>
-        <button onClick={this.registerUndefined}>Register Undefined</button>
-      </div>
+      <FieldArray
+        name="plans"
+        component={renderPlans}
+        allPlans={props.allPlans}
+      />
+      <button type="submit" disabled={submitting}>
+        Submit
+      </button>
     </form>
   )
 }
@@ -49,6 +63,7 @@ Form = reduxForm({ form: 'MembershipForm' })(Form)
 class MembershipForm extends Component {
   componentDidMount() {
     this.props.fetchAllPlans()
+    this.props.membershipFetchRequest()
   }
 
   handleSubmit(values) {
@@ -56,6 +71,9 @@ class MembershipForm extends Component {
   }
 
   render() {
+    if (this.props.plans.length === 0) {
+      return <p>Loading</p>
+    }
     return (
       this.props.plans && (
         <Form

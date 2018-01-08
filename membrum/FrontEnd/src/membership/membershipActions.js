@@ -47,12 +47,18 @@ export const membershipFetchRequest = () => async dispatch => {
   }
 }
 
-export const fetchAllPlans = () => dispatch => {
+export const fetchAllPlans = () => (dispatch, getState) => {
+  if (getState().membershipReducer.allPlans.length > 0) {
+    return
+  }
   const { plans: allPlans } = db
   dispatch({ type: MEMBERSHIP_ALL_PLANS, payload: { allPlans } })
 }
 
 export const membershipSave = plans => dispatch => {
-  console.log(plans)
   dispatch(membershipUpdatePlans(plans))
+}
+
+export const membershipAddPlanSafe = () => dispatch => {
+  dispatch(membershipAddPlan('17'))
 }

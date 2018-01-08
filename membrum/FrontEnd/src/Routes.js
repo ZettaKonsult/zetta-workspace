@@ -42,7 +42,7 @@ const routes = [
   { path: '/statistics', component: Statistics },
   { path: '/uploadmembers', component: UploadMembers },
   { path: '/mypage/:page', component: MyPage },
-  { path: '/mypage/membership', component: MyPage },
+  { path: '/mypage/membership', component: Membership },
   { path: '/login', component: Login },
   { path: '/signup', component: SignUp },
   { path: '/verifyemail', component: VerifyEmail },
