@@ -31,15 +31,11 @@ export const membershipUpdatePlans = plans => ({
   }
 })
 
-export const membershipFetchRequest = async dispatch => {
+export const membershipFetchRequest = () => async dispatch => {
   dispatch({ type: MEMBERSHIP_FETCH_REQUEST })
 
   try {
-    const result = await [
-      { id: 18, name: 'TRF' },
-      { id: 1, name: 'TLTH' },
-      { id: 17, name: 'Undefined' }
-    ]
+    const result = await [18, 1, 17]
     dispatch({
       type: MEMBERSHIP_UPDATE_PLANS,
       payload: {
@@ -51,7 +47,12 @@ export const membershipFetchRequest = async dispatch => {
   }
 }
 
-export const fetchAllPlans = dispatch => {
+export const fetchAllPlans = () => dispatch => {
   const { plans: allPlans } = db
   dispatch({ type: MEMBERSHIP_ALL_PLANS, payload: { allPlans } })
+}
+
+export const membershipSave = plans => dispatch => {
+  console.log(plans)
+  dispatch(membershipUpdatePlans(plans))
 }
