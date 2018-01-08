@@ -31,7 +31,13 @@ export const membershipUpdatePlans = plans => ({
   }
 })
 
-export const membershipFetchRequest = () => async dispatch => {
+export const membershipFetchRequest = () => async (dispatch, getState) => {
+  const { membershipReducer } = getState()
+
+  //TODO extract to isUserPlansFetched
+  if (membershipReducer.isFetching || membershipReducer.plans.length > 0) {
+    return
+  }
   dispatch({ type: MEMBERSHIP_FETCH_REQUEST })
 
   try {
@@ -48,6 +54,7 @@ export const membershipFetchRequest = () => async dispatch => {
 }
 
 export const fetchAllPlans = () => (dispatch, getState) => {
+  //TODO extract to isAllPlansFetched
   if (getState().membershipReducer.allPlans.length > 0) {
     return
   }

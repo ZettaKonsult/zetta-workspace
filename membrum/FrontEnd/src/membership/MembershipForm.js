@@ -23,8 +23,8 @@ const renderPlans = ({ fields, ...props }) => (
       </button>
     </div>
     {fields.map((plan, index, field) => (
-      <div>
-        <Field key={index} name={`${plan}`} component="select">
+      <div key={index}>
+        <Field name={`${plan}`} component="select">
           <PlanOptions plans={props.allPlans} />
         </Field>
         <button
