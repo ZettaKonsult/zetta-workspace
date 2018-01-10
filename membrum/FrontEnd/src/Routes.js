@@ -5,7 +5,7 @@ import AppliedRoute from './components/AppliedRoute'
 
 //refactored to domain structure
 import Login from './user/LoginForm'
-import Membership from './membership/MembershipForm'
+import Membership from './membership/Membership'
 
 //TODO refactor folder structure
 import Statistics from './containers/Statistics/'
@@ -41,8 +41,8 @@ const routes = [
   { path: '/', component: Home },
   { path: '/statistics', component: Statistics },
   { path: '/uploadmembers', component: UploadMembers },
-  { path: '/mypage/:page', component: MyPage },
   { path: '/mypage/membership', component: Membership },
+  { path: '/mypage/:page', component: MyPage },
   { path: '/login', component: Login },
   { path: '/signup', component: SignUp },
   { path: '/verifyemail', component: VerifyEmail },

@@ -9,7 +9,6 @@ import IsPaid from './IsPaid'
 import IsNotPaid from './IsNotPaid'
 import ContactInfo from './ContactInfo'
 import ChangePassword from './ChangePassword'
-import Membership from '../../membership/MembershipForm'
 
 import './style.css'
 
@@ -19,7 +18,7 @@ import Message from '../../components/Message'
 export default class MyPage extends Component {
   constructor(props) {
     super(props)
-    this.pages = ['contact', 'changePassword', 'membership']
+    this.pages = ['contact', 'changePassword']
     this.fields = [
       'ssn',
       'first name',
@@ -95,14 +94,7 @@ export default class MyPage extends Component {
             submit={this.changePassword}
           />
         )}
-        {this.state.page === 'membership' && (
-          <Membership
-            membership={this.state.membership}
-            changeOrganisation={this.changeOrg}
-            isSuccess={this.state.isSuccess}
-            error={this.state.error}
-          />
-        )}
+
         {this.state.isSuccess && (
           <Message mode="success">Edit Successfull</Message>
         )}

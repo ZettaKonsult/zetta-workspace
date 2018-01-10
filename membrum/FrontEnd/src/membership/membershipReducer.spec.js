@@ -25,14 +25,15 @@ describe('membershipReducer', () => {
   it('handles MEMBERSHIP_UPDATE_PLANS', () => {
     expect(
       membership(createState({ plans: [1] }), membershipUpdatePlans([2, 3]))
-    ).toEqual(createState({ plans: [2, 3] }))
+    ).toEqual(createState({ plans: [2, 3], pristine: false }))
   })
 })
 
 const createState = state => ({
   allPlans: [],
   plans: [],
-  paid: false,
+  payments: [],
   isFetching: false,
+  pristine: true,
   ...state
 })

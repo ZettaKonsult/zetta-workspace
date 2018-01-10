@@ -161,6 +161,15 @@
       "intervalCount": "6",
       "labels": [],
       "group": ["obligatory"]
+    },
+    {
+      "id": "19",
+      "name": "Akademiska Föreningen",
+      "amount": "100",
+      "interval": "month",
+      "intervalCount": "6",
+      "labels": [],
+      "group": ["obligatory"]
     }
   ],
   "plantemplates": [

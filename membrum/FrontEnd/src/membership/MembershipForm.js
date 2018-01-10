@@ -1,12 +1,8 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { connect } from 'react-redux'
 import { Field, FieldArray, reduxForm } from 'redux-form'
-import {
-  membershipFetchRequest,
-  fetchAllPlans,
-  membershipSave
-} from './membershipActions'
-import './membership.css'
+
+import { membershipSave } from './membershipActions'
 
 const PlanOptions = ({ plans }) =>
   plans.map(item => (
@@ -18,7 +14,7 @@ const PlanOptions = ({ plans }) =>
 const renderPlans = ({ fields, ...props }) => (
   <div className="membershipGroup">
     <div className="ButtonGroup">
-      <button type="button" onClick={() => fields.push(17)}>
+      <button type="button" onClick={() => fields.push('17')}>
         Add Plan
       </button>
     </div>
@@ -39,11 +35,9 @@ const renderPlans = ({ fields, ...props }) => (
   </div>
 )
 
-let Form = props => {
-  const { isFetching, membership, handleSubmit, submitting } = props
-  if (isFetching && !membership.length) {
-    return <p>Loading...</p>
-  }
+let MembershipForm = props => {
+  const { handleSubmit, submitting, pristine } = props
+
   return (
     <form onSubmit={handleSubmit} className="membership">
       <FieldArray
@@ -51,51 +45,22 @@ let Form = props => {
         component={renderPlans}
         allPlans={props.allPlans}
       />
-      <button type="submit" disabled={submitting}>
+      <button type="submit" disabled={submitting || pristine}>
         Submit
       </button>
     </form>
   )
 }
 
-Form = reduxForm({ form: 'MembershipForm' })(Form)
-
-class MembershipForm extends Component {
-  componentDidMount() {
-    this.props.fetchAllPlans()
-    this.props.membershipFetchRequest()
-  }
-
-  handleSubmit(values) {
-    this.props.membershipSave(values.plans)
-  }
-
-  render() {
-    if (this.props.plans.length === 0) {
-      return <p>Loading</p>
-    }
-    return (
-      this.props.plans && (
-        <Form
-          initialValues={{ plans: this.props.plans }}
-          allPlans={this.props.allPlans}
-          onSubmit={values => this.handleSubmit(values)}
-        />
-      )
-    )
-  }
-}
+MembershipForm = reduxForm({ form: 'MembershipForm' })(MembershipForm)
 
 const mapStateToProps = (state, props) => ({
   allPlans: state.membershipReducer.allPlans,
-  plans: state.membershipReducer.plans,
-  isFetching: state.membershipReducer.isFetching
+  initialValues: { plans: state.membershipReducer.plans }
 })
 
 const mapDispatchToProps = {
-  membershipFetchRequest,
-  fetchAllPlans,
-  membershipSave: values => membershipSave(values)
+  onSubmit: values => membershipSave(values.plans)
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(MembershipForm)

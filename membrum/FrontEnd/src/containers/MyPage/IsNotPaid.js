@@ -1,9 +1,18 @@
-import React from "react"
+import React from 'react'
 
-import Button from "../../components/Button"
+import Button from '../../components/Button'
+
+const style = {
+  display: 'flex',
+  flexDirection: 'column',
+  border: '1px dotted grey',
+  margin: '1em',
+  padding: '1em',
+  background: 'var(--danger-light)'
+}
 
 export default ({ initiatePaymentProccess }) => (
-  <div className="paymentStatus unknownPayment">
+  <div style={style}>
     <h3>Payment status</h3>
 
     <p>We have no registered payment for this semester</p>
