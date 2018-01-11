@@ -67,6 +67,11 @@ export const membership = (state = initialState, action) => {
   }
 }
 
+const getUnpaidPlans = state => {
+  const { specification } = getLatestPayment(state)
+  return state.plans.filter(planId => !specification.find(id => id === planId))
+}
+
 export const getLatestPayment = state =>
   state.payments.length > 0 ? state.payments.slice(-1)[0] : undefined
 
@@ -81,7 +86,7 @@ export const isSubscriptionPaid = (state, date) => {
     return payment.validUntil > date
   }
 
-  return false
+  return getUnpaidPlans(state).length === 0
 }
 
 export const getNextPayment = state => {
@@ -96,18 +101,13 @@ export const getNextPayment = state => {
     }
   }
 
-  const { specification } = getLatestPayment(state)
-  const notPaidPlans = state.plans.filter(
-    planId => !specification.find(id => id === planId)
-  )
-
   return {
     date: getNextPaymentDate(state),
     amount: state.plans.reduce(
       (total, planId) => total + Number(getPlanDetails(state)(planId).amount),
       0
     ),
-    plans: notPaidPlans
+    plans: getUnpaidPlans(state)
   }
 }
 
