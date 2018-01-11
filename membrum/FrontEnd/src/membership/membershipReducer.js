@@ -67,29 +67,36 @@ export const membership = (state = initialState, action) => {
   }
 }
 
-const getUnpaidPlans = state => {
-  const { specification } = getLatestPayment(state)
-  return state.plans.filter(planId => !specification.find(id => id === planId))
+export const getUnpaidPlans = (state, date) => {
+  if (state.payments.length === 0) {
+    return state.plans
+  }
+  const validPayments = state.payments.filter(
+    payment => payment.validUntil > date
+  )
+  return state.plans.filter(
+    planId =>
+      !validPayments.find(payment =>
+        payment.specification.find(id => id === planId)
+      )
+  )
 }
-
-export const getLatestPayment = state =>
-  state.payments.length > 0 ? state.payments.slice(-1)[0] : undefined
 
 export const getPayments = state => state.payments
 
 export const isSubscriptionPaid = (state, date) => {
-  const payment = getLatestPayment(state)
-  if (payment === undefined) {
+  const payment = getLastPayment(state)
+  if (!payment) {
     return false
   }
   if (state.pristine) {
     return payment.validUntil > date
   }
 
-  return getUnpaidPlans(state).length === 0
+  return getUnpaidPlans(state, date).length === 0
 }
 
-export const getNextPayment = state => {
+export const getNextPayment = (state, date) => {
   if (state.pristine || state.payments.length === 0) {
     return {
       date: getNextPaymentDate(state),
@@ -103,11 +110,11 @@ export const getNextPayment = state => {
 
   return {
     date: getNextPaymentDate(state),
-    amount: getUnpaidPlans(state).reduce(
+    amount: getUnpaidPlans(state, date).reduce(
       (total, planId) => total + Number(getPlanDetails(state)(planId).amount),
       0
     ),
-    plans: getUnpaidPlans(state)
+    plans: getUnpaidPlans(state, date)
   }
 }
 
@@ -123,9 +130,12 @@ export const getNextPaymentDate = state => {
 
   if (interval === 'month') {
     const result = utilDate.incrementToNextLowerBound(
-      getLatestPayment(state).date,
+      getLastPayment(state).date,
       intervalCount
     )
     return result
   }
 }
+
+const getLastPayment = state =>
+  state.payments.length > 0 && state.payments.slice(-1)[0]

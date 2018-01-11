@@ -1,4 +1,9 @@
-import { membership, isSubscriptionPaid } from './membershipReducer'
+import {
+  membership,
+  isSubscriptionPaid,
+  getUnpaidPlans
+} from './membershipReducer'
+
 import {
   membershipAddPlan,
   membershipRemovePlan,
@@ -29,9 +34,10 @@ describe('membershipReducer', () => {
   })
 
   describe('isSubscriptionPaid()', () => {
+    const date = 1
     it('base case no payments', () => {
       const state = createState()
-      expect(isSubscriptionPaid(state)).toBeFalsy()
+      expect(isSubscriptionPaid(state, date)).toBeFalsy()
     })
 
     it('payment in valid interval', () => {
@@ -39,7 +45,7 @@ describe('membershipReducer', () => {
         pristine: true,
         payments: [{ validUntil: 2 }]
       })
-      expect(isSubscriptionPaid(state, 1)).toBeTruthy()
+      expect(isSubscriptionPaid(state, date)).toBeTruthy()
     })
 
     it('should be valid even if a plan has been deleted', () => {
@@ -49,7 +55,7 @@ describe('membershipReducer', () => {
         plans: [1, 2]
       })
 
-      expect(isSubscriptionPaid(state, 1)).toBeTruthy()
+      expect(isSubscriptionPaid(state, date)).toBeTruthy()
     })
 
     it('should not be valid if none paid plan is added', () => {
@@ -59,7 +65,7 @@ describe('membershipReducer', () => {
         plans: [1, 2]
       })
 
-      expect(isSubscriptionPaid(state, 1)).toBeFalsy()
+      expect(isSubscriptionPaid(state, date)).toBeFalsy()
     })
 
     it.skip('should not be valid if a not paid dublicate plan is added', () => {
@@ -69,7 +75,43 @@ describe('membershipReducer', () => {
         plans: [1, 2, 2]
       })
 
-      expect(isSubscriptionPaid(state, 1)).toBeFalsy()
+      expect(isSubscriptionPaid(state, date)).toBeFalsy()
+    })
+  })
+
+  describe('getUnpaidPlans()', () => {
+    const date = 1
+    it('returns all plans when nothing has been paid', () => {
+      const state = createState({ plans: [1, 2] })
+      expect(getUnpaidPlans(state)).toEqual([1, 2])
+    })
+
+    it('returns only the unpaid when there is a payment', () => {
+      const state = createState({
+        plans: [1, 2],
+        payments: [{ validUntil: 2, specification: [1] }]
+      })
+      expect(getUnpaidPlans(state, date)).toEqual([2])
+    })
+
+    it('handles multiple payments during same interval', () => {
+      const state = createState({
+        plans: [1, 2, 3],
+        payments: [
+          { validUntil: 2, specification: [1] },
+          { validUntil: 2, specification: [2] }
+        ]
+      })
+      expect(getUnpaidPlans(state, date)).toEqual([3])
+    })
+
+    it('handles multiple intervals', () => {
+      const date = 3
+      const state = createState({
+        plans: [1, 2],
+        payments: [{ validUntil: 2, specification: [1, 2] }]
+      })
+      expect(getUnpaidPlans(state, date)).toEqual([1, 2])
     })
   })
 })
