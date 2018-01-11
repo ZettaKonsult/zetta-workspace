@@ -85,7 +85,6 @@ export const getUnpaidPlans = (state, date) => {
 export const getPayments = state => state.payments
 
 export const isSubscriptionPaid = (state, date) => {
-  console.warn('https://github.com/ZettaKonsult/zetta-workspace/issues/71')
   const payment = getLastPayment(state)
   if (!payment) {
     return false
