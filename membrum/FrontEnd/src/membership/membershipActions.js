@@ -1,6 +1,6 @@
 import db from '../mocks/db.json'
 import * as utilDate from 'date-primitive-utils'
-import { getPlanDetails, getNextPaymentDate } from './membershipReducer'
+import { getPlanDetails } from './membershipReducer'
 
 export const MEMBERSHIP_ADD_PLAN = 'MEMBERSHIP_ADD_PLAN'
 export const MEMBERSHIP_REMOVE_PLAN = 'MEMBERSHIP_REMOVE_PLAN'
