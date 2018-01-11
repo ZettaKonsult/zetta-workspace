@@ -78,7 +78,7 @@ const Paid = ({ getRecipt, getMembershipVerification, nextPaymentDate }) => (
 
 const mapStateToProps = (state, props) => {
   return {
-    paid: isSubscriptionPaid(state.membershipReducer, Date.UTC(2018, 1, 1)),
+    paid: isSubscriptionPaid(state.membershipReducer, Date.now()),
     nextPayment: getNextPayment(state.membershipReducer),
     getPlanDetails: plan => getPlanDetails(state.membershipReducer)(plan)
   }

@@ -61,6 +61,16 @@ describe('membershipReducer', () => {
 
       expect(isSubscriptionPaid(state, 1)).toBeFalsy()
     })
+
+    it.skip('should not be valid if a not paid dublicate plan is added', () => {
+      const state = createState({
+        pristine: false,
+        payments: [{ validUntil: 2, specification: [1, 2] }],
+        plans: [1, 2, 2]
+      })
+
+      expect(isSubscriptionPaid(state, 1)).toBeFalsy()
+    })
   })
 })
 

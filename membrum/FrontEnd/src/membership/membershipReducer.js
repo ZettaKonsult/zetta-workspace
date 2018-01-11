@@ -103,7 +103,7 @@ export const getNextPayment = state => {
 
   return {
     date: getNextPaymentDate(state),
-    amount: state.plans.reduce(
+    amount: getUnpaidPlans(state).reduce(
       (total, planId) => total + Number(getPlanDetails(state)(planId).amount),
       0
     ),
