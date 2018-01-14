@@ -4,11 +4,16 @@
  * @date 2017-10-31
  */
 
-import type { FileResult, LadokPersonJSON } from './types'
-import util from 'util'
+import type {
+  FileResult,
+  LadokPersonJSON,
+  UnionPartition,
+  UserData
+} from './types'
 
-const getAssignment = (credits: { [string]: string }) => {
-  let maxKey
+const getAssignment = (person: LadokPersonJSON): string => {
+  const credits = person.credits
+  let maxKey: string = ''
   let maxValue: number = Number.MIN_VALUE
 
   for (let [union, unionCredits] of Object.entries(credits)) {
@@ -25,7 +30,7 @@ const getAssignment = (credits: { [string]: string }) => {
 export const getUnions = (
   unionMap: { [string]: Array<string> },
   facultyMap: { [string]: string }
-): { [string]: string } => {
+): { [string]: [string] } => {
   let unions = {}
   for (let [ssn: string, faculty: string] of Object.entries(facultyMap)) {
     unions[ssn] = unionMap[String(faculty)]
@@ -33,10 +38,10 @@ export const getUnions = (
   return unions
 }
 
-export const getFaculties = (peopleFiles: {
+export const aggregateResults = (peopleFiles: {
   [string]: FileResult
-}): { [string]: string } => {
-  let assignments = {}
+}): { [string]: LadokPersonJSON } => {
+  let people = {}
 
   for (const file of Object.values(peopleFiles)) {
     // Recast required due to flow bug with Object.entries and Object.values.
@@ -44,21 +49,32 @@ export const getFaculties = (peopleFiles: {
 
     for (const person: LadokPersonJSON of fileResult.people) {
       const ssn = person.ssn
-      if (ssn in assignments) {
-        continue
+      if (ssn in people) {
+        people[ssn].credits = Object.assign(people[ssn].credits, person.credits)
+      } else {
+        people[ssn] = person
       }
-
-      assignments[ssn] = getAssignment(person.credits)
     }
   }
 
-  return assignments
+  return people
 }
 
+export const getFaculties = (people: {
+  [string]: LadokPersonJSON
+}): { [string]: string } =>
+  Object.keys(people).reduce(
+    (object, ssn) => ({
+      ...object,
+      [ssn]: getAssignment(people[ssn])
+    }),
+    {}
+  )
+
 export const getUpdatedUnions = (params: {
-  NewAssignments: { [string]: [string] },
-  Users: [{ userId: string, email: string, name: string, points: string }]
-}) => {
+  NewAssignments: { [string]: any },
+  Users: { [string]: UserData }
+}): UnionPartition => {
   const { NewAssignments: assignments, Users: users } = params
 
   let result = {
@@ -68,30 +84,33 @@ export const getUpdatedUnions = (params: {
     same: {}
   }
 
-  for (let user of users) {
-    const ssn = user.userId
-    const oldUnion = user.union
+  for (let ssn of Object.keys(assignments)) {
+    const user = users[ssn]
+    const oldUnion = user.unionId
 
     let newUnion = assignments[ssn]
     if (newUnion === undefined) {
       newUnion = [oldUnion]
     }
 
-    if (newUnion.length > 1) {
-      result.decide[ssn] = newUnion
+    const unionName = newUnion[0]
+    if (oldUnion === undefined) {
+      result.created[ssn] = { ...user, union: unionName }
       continue
     }
 
-    const unionName = newUnion[0]
-    if (oldUnion === undefined) {
-      result.created[ssn] = unionName
+    if (newUnion.length > 1) {
+      result.decide[ssn] = { ...user, union: newUnion }
       continue
     }
 
     if (oldUnion !== unionName) {
-      result.modified[ssn] = { old: oldUnion, next: unionName }
+      result.modified[ssn] = {
+        ...user,
+        union: { old: oldUnion, next: unionName }
+      }
     } else {
-      result.same[ssn] = oldUnion
+      result.same[ssn] = { ...user, union: oldUnion }
     }
   }
 

@@ -22,5 +22,6 @@ export type AWSContext = {
 }
 
 export type AWSEvent = {
-  Records: any
+  Records: any,
+  names: any
 }

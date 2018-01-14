@@ -10,5 +10,5 @@ Lokal klass: EHL
 Registreringspo�ng-intervall: 1.0 - 99.0
 
 Pnr;Namn;Epostadress;Registrerade po�ng;
-9105040035;FREDRIK PALMQUIST;dat11fpa@student.lu.se; 35,5;
-9006211537;ZIMON KUHS;eng08zku@student.lu.se; 21,5;
+9105040035;FREDRIK PALMQUIST;zmk.zk.dev@gmail.com; 35,5;
+9006211537;ZIMON KUHS;zmk.zk.dev@gmail.com; 21,5;

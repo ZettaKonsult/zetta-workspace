@@ -28,7 +28,7 @@ provider:
 
 functions:
   assignLadokPeople:
-    handler: src/lambda/assign.getParseResults
+    handler: dist/lambda/assign.getParseResults
     events:
       - http:
           path: assignLadok
@@ -37,7 +37,7 @@ functions:
           authorizer: aws_iam
 
   parseUploadedFile:
-    handler: src/lambda/parse.parseUploadedFile
+    handler: dist/lambda/parse.parseUploadedFile
     events:
       - http:
           path: parseLadok
@@ -46,7 +46,7 @@ functions:
           authorizer: aws_iam
 
   registerOrganisations:
-    handler: src/lambda/organisation.registerOrganisations
+    handler: dist/lambda/organisation.registerOrganisations
     events:
       - http:
           path: registerOrganisation

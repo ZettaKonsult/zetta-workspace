@@ -18,7 +18,7 @@ import objectSize from 'object-size'
 const PERSON1 = new LadokPerson(
   '9105040035',
   'FREDRIK PALMQUIST',
-  'dat11fpa@student.lu.se',
+  'zmk.zk.dev@gmail.com',
   '35,5',
   'EHL'
 )
@@ -26,7 +26,7 @@ const PERSON1 = new LadokPerson(
 const PERSON2 = new LadokPerson(
   '9006211537',
   'ZIMON KUHS',
-  'eng08zku@student.lu.se',
+  'zmk.zk.dev@gmail.com',
   '21,5',
   'EHL'
 )
@@ -126,8 +126,8 @@ describe('Ladok parser.', () => {
         'Registreringspo�ng-intervall: 1.0 - 99.0\n' +
         '\n' +
         'Pnr;Namn;Epostadress;Registrerade po�ng;\n' +
-        '9105040035;FREDRIK PALMQUIST;dat11fpa@student.lu.se; 35,5;\n' +
-        '9006211537;ZIMON KUHS;eng08zku@student.lu.se; 21,5;',
+        '9105040035;FREDRIK PALMQUIST;zmk.zk.dev@gmail.com; 35,5;\n' +
+        '9006211537;ZIMON KUHS;zmk.zk.dev@gmail.com; 21,5;',
       'EHL'
     )
 
