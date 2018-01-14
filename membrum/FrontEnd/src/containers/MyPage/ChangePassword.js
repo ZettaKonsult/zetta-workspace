@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react'
 
 // import { changePassword } from "../../libs/awsPassword"
 // import { validateChangePassword } from "../../libs/Validation"
@@ -17,11 +17,11 @@ export default class ChangePassword extends Component {
     }
   }
 
-  onChange = e => this.setState({[e.target.id]: e.target.value})
+  onChange = e => this.setState({ [e.target.id]: e.target.value })
 
   changePassword = async e => {
     e.preventDefault()
-    const {oldPassword, newPassword, newPasswordConfirm} = this.state
+    // const {oldPassword, newPassword, newPasswordConfirm} = this.state
     // if (validateChangePassword(oldPassword, newPassword, newPasswordConfirm)) {
     //   await changePassword(oldPassword, newPassword)
     //   this.setState({ isSuccess: true })

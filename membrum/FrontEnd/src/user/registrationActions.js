@@ -28,3 +28,14 @@ export const userRegistration = user => async dispatch => {
     dispatch(newUserFailure(error))
   }
 }
+
+export const uploadUserList = async dispatch => {
+  dispatch({ type: 'UPLOAD_REGISTRATION_LIST' })
+
+  try {
+    //await upload(dest, file)
+    dispatch({ type: 'UPLOAD_REGISTRATION_LIST_SUCCESS' })
+  } catch (error) {
+    dispatch({ type: 'UPLOAD_REGISTRATION_LIST_FAILURE' })
+  }
+}

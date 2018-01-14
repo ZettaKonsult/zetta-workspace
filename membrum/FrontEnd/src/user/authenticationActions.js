@@ -54,13 +54,13 @@ export function loginUser(email, password, redirect = '/') {
     dispatch(loginUserRequest())
     console.log(email, password)
     try {
-      throw new Error()
-      const token = () => {}
+      console.warn('No login provider')
+      const token = {}
       dispatch(loginUserSuccess(token))
     } catch (error) {
       dispatch(
         loginUserFailure({
-          response: {status: 'fail', statusText: 'No login provider'}
+          response: { status: 'fail', statusText: 'No login provider' }
         })
       )
     }

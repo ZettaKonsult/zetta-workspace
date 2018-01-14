@@ -1,8 +1,8 @@
-import React, { Component } from "react"
-import PropTypes from "prop-types"
-import { NavLink } from "./NavLink"
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import { NavLink } from './NavLink'
 
-import "./Navigation.css"
+import './Navigation.css'
 
 export default class TopNavigation extends Component {
   constructor(props) {
@@ -17,8 +17,8 @@ export default class TopNavigation extends Component {
 
   render() {
     const className = this.state.toggled
-      ? "TopNavigation responsive"
-      : "TopNavigation"
+      ? 'TopNavigation responsive'
+      : 'TopNavigation'
 
     const authLink = this.props.authenticated ? (
       <Logout logout={this.props.logout} />
@@ -66,12 +66,13 @@ const Hamburger = ({ toggle }) => (
 )
 
 const guestLinks = [
-  { to: "/", label: "Home" },
-  { to: "/sh", label: "Help Me!!!" }
+  { to: '/', label: 'Home' },
+  { to: '/sh', label: 'Help Me!!!' },
+  { to: '/mypage/membership', label: 'Membership' }
 ]
 
 const userLinks = [
-  { to: "/mypage/contact", label: "My Page" },
-  { to: "/statistics", label: "Statistics" },
-  { to: "/admindashboard", label: "Dashboard" }
+  { to: '/mypage/contact', label: 'My Page' },
+  { to: '/statistics', label: 'Statistics' },
+  { to: '/admindashboard', label: 'Dashboard' }
 ]

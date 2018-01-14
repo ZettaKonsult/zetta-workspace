@@ -35,6 +35,26 @@ export function registration(state = initialState, action) {
           action.payload.statusText
         }`
       }
+    case 'UPLOAD_REGISTRATION_LIST':
+    case 'UPLOAD_REGISTRATION_LIST_SUCCESS':
+    case 'UPLOAD_REGISTRATION_LIST_FAILURE':
+      return upload(state.upload, action)
+    default:
+      return state
+  }
+}
+
+const initialStateUpload = {
+  progress: 0,
+  done: false,
+  error: undefined
+}
+
+function upload(state = initialStateUpload, action) {
+  switch (action.type) {
+    case 'UPLOAD_REGISTRATION_LIST':
+    case 'UPLOAD_REGISTRATION_LIST_SUCCESS':
+    case 'UPLOAD_REGISTRATION_LIST_FAILURE':
     default:
       return state
   }

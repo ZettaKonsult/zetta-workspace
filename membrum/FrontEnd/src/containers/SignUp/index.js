@@ -1,6 +1,5 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react'
 
-import config from '../../config'
 import SignupForm from './SignupForm'
 import ConfirmationForm from './ConfirmationForm'
 import * as is from './Validation'

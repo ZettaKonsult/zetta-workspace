@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react'
 
 // import {
 //   getUserAttributes,
@@ -9,7 +9,6 @@ import IsPaid from './IsPaid'
 import IsNotPaid from './IsNotPaid'
 import ContactInfo from './ContactInfo'
 import ChangePassword from './ChangePassword'
-import Membership from './Membership/Membership'
 
 import './style.css'
 
@@ -19,7 +18,7 @@ import Message from '../../components/Message'
 export default class MyPage extends Component {
   constructor(props) {
     super(props)
-    this.pages = ['contact', 'changePassword', 'membership']
+    this.pages = ['contact', 'changePassword']
     this.fields = [
       'ssn',
       'first name',
@@ -38,7 +37,7 @@ export default class MyPage extends Component {
   }
 
   async componentWillMount() {
-    this.fields.map(item => this.setState({[item]: ''}))
+    this.fields.map(item => this.setState({ [item]: '' }))
     this.setInitalPage()
     try {
       // const result = await getUserAttributes()
@@ -50,25 +49,25 @@ export default class MyPage extends Component {
 
   setInitalPage = () => {
     const page = this.props.match.params.page || this.pages[0]
-    this.setState({page})
+    this.setState({ page })
     this.props.history.push(`/mypage/${page}`)
   }
 
   changePage = page => {
     this.props.history.push(`/mypage/${page}`)
-    this.setState({page})
+    this.setState({ page })
   }
 
-  onChange = e => this.setState({[e.target.id]: e.target.value})
+  onChange = e => this.setState({ [e.target.id]: e.target.value })
 
-  paymentHandler = () => this.setState({isPaid: true})
+  paymentHandler = () => this.setState({ isPaid: true })
 
   updateContactInfo = async e => {
     e.preventDefault()
-    this.setState({loading: true})
-    const contactInfo = [{Name: 'email', Value: this.state.email}]
+    this.setState({ loading: true })
+    const contactInfo = [{ Name: 'email', Value: this.state.email }]
     // await updateUserAttributes(contactInfo)
-    this.setState({loading: false, isSuccess: true})
+    this.setState({ loading: false, isSuccess: true })
   }
 
   render() {
@@ -95,14 +94,7 @@ export default class MyPage extends Component {
             submit={this.changePassword}
           />
         )}
-        {this.state.page === 'membership' && (
-          <Membership
-            membership={this.state.membership}
-            changeOrganisation={this.changeOrg}
-            isSuccess={this.state.isSuccess}
-            error={this.state.error}
-          />
-        )}
+
         {this.state.isSuccess && (
           <Message mode="success">Edit Successfull</Message>
         )}

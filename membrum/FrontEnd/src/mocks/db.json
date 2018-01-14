@@ -161,40 +161,77 @@
       "intervalCount": "6",
       "labels": [],
       "group": ["obligatory"]
+    },
+    {
+      "id": "19",
+      "name": "Akademiska Föreningen",
+      "amount": "100",
+      "interval": "month",
+      "intervalCount": "6",
+      "labels": [],
+      "group": ["studentlund"]
+    },
+    {
+      "id": "20",
+      "name": "Smålands Nation",
+      "amount": "200",
+      "interval": "month",
+      "intervalCount": "6",
+      "labels": ["nation"],
+      "group": "Smalands"
+    }
+  ],
+  "trails": [
+    {
+      "id": "1",
+      "name": "Undefined Nation",
+      "amount": "80",
+      "for": {
+        "labels": ["nation"]
+      },
+      "length": "0"
     }
   ],
   "plantemplates": [
     {
+      "id": "1",
       "name": "unionRule",
       "group": "studentlund",
       "attribute": "labels",
       "key": "union",
       "func": "only",
-      "value": "1"
+      "value": "1",
+      "error": "There should be only 1 union"
     },
     {
+      "id": "2",
       "name": "nationRule",
       "group": "studentlund",
       "attribute": "labels",
       "key": "nation",
-      "func": "moreThan",
-      "value": "1"
+      "func": "atLeast",
+      "value": "1",
+      "error": "There should be atLeast 1 nation"
     },
     {
+      "id": "3",
       "name": "trfRule",
-      "group": "studentlund",
+      "group": "obligatory",
       "attribute": "id",
       "key": "18",
       "func": "only",
-      "value": "1"
+      "value": "1",
+      "error": "TRF must be part of the subscription"
     },
     {
-      "name": "undefinedRule",
+      "id": "4",
+      "name": "afRule",
       "group": "studentlund",
       "attribute": "id",
-      "key": "17",
+      "key": "19",
       "func": "only",
-      "value": "1"
+      "value": "1",
+      "error": "AF must be part of the subscription"
     }
   ],
   "members": [
