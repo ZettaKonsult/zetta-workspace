@@ -140,12 +140,11 @@ export const getNextPaymentDate = state => {
 const getLastPayment = state =>
   state.payments.length > 0 && state.payments.slice(-1)[0]
 
-export const getPlanOptions = state =>
-  state.plans.map(plan => {
-    const detailedPlan = getPlanDetails(state)(plan)
-    return state.allPlans.filter(
-      p =>
-        p.group.some(group => detailedPlan.group.some(g => g === group)) ||
-        p.labels.some(label => detailedPlan.labels.some(l => l === label))
-    )
-  })
+export const getPlanOptions = state => planId => {
+  const detailedPlan = getPlanDetails(state)(planId)
+  return state.allPlans.filter(
+    p =>
+      p.group.some(group => detailedPlan.group.some(g => g === group)) ||
+      p.labels.some(label => detailedPlan.labels.some(l => l === label))
+  )
+}

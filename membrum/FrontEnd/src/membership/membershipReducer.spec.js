@@ -119,9 +119,9 @@ describe('membershipReducer', () => {
   })
 
   describe('getPlanOptions()', () => {
-    it('returns the plans which have the same group or same label', () => {
-      let state = createState({
-        plans: ['1', '3'],
+    let state
+    beforeEach(() => {
+      state = createState({
         allPlans: [
           { id: '1', labels: [1], group: ['x'] },
           { id: '2', labels: [2], group: ['x'] },
@@ -129,9 +129,18 @@ describe('membershipReducer', () => {
           { id: '4', labels: [3], group: ['z'] }
         ]
       })
-      expect(getPlanOptions(state)).toEqual([
-        [state['allPlans'][0], state['allPlans'][1]],
-        [state['allPlans'][2], state['allPlans'][3]]
+    })
+
+    it('returns the plans which have the same group', () => {
+      expect(getPlanOptions(state)('1')).toEqual([
+        state['allPlans'][0],
+        state['allPlans'][1]
+      ])
+    })
+    it('returns the plans which have the same label', () => {
+      expect(getPlanOptions(state)('3')).toEqual([
+        state['allPlans'][2],
+        state['allPlans'][3]
       ])
     })
   })
