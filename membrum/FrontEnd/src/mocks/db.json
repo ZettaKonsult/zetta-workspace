@@ -151,7 +151,8 @@
       "interval": "month",
       "intervalCount": "6",
       "labels": ["nation"],
-      "group": ["studentlund"]
+      "group": ["studentlund"],
+      "type": "trail"
     },
     {
       "id": "18",
@@ -178,18 +179,7 @@
       "interval": "month",
       "intervalCount": "6",
       "labels": ["nation"],
-      "group": "Smalands"
-    }
-  ],
-  "trails": [
-    {
-      "id": "1",
-      "name": "Undefined Nation",
-      "amount": "80",
-      "for": {
-        "labels": ["nation"]
-      },
-      "length": "0"
+      "group": ["Smalands"]
     }
   ],
   "plantemplates": [

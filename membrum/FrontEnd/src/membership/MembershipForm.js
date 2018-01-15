@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { Field, FieldArray, reduxForm } from 'redux-form'
 
 import { membershipSave } from './membershipActions'
-import { getPlanDetails } from './membershipReducer'
+import { getPlanDetails, getPlanOptions } from './membershipReducer'
 
 import planTemplate from './PlanTemplate'
 import db from '../mocks/db.json'
@@ -29,9 +29,9 @@ const renderPlans = ({
       </button>
     </div>
     {fields.map((plan, index, field) => (
-      <div key={index}>
+      <div key={plan}>
         <Field name={`${plan}`} component="select">
-          <PlanOptions plans={props.allPlans} />
+          <PlanOptions plans={props.getPlanOptions[index]} />
         </Field>
         <button
           type="button"
@@ -52,6 +52,7 @@ let MembershipForm = props => {
         name="plans"
         component={renderPlans}
         allPlans={props.allPlans}
+        getPlanOptions={props.getPlanOptions}
       />
       <button type="submit" disabled={submitting || pristine}>
         Submit
@@ -83,8 +84,9 @@ MembershipForm = reduxForm({ form: 'MembershipForm', validate })(MembershipForm)
 
 const mapStateToProps = (state, props) => ({
   allPlans: state.membershipReducer.allPlans,
+  getPlanOptions: getPlanOptions(state.membershipReducer),
   initialValues: { plans: state.membershipReducer.plans },
-  getPlanDetails: id => getPlanDetails(state.membershipReducer)(id)
+  getPlanDetails: planId => getPlanDetails(state.membershipReducer)(planId)
 })
 
 const mapDispatchToProps = {

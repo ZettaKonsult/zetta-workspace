@@ -1,8 +1,11 @@
 import {
   membership,
   isSubscriptionPaid,
-  getUnpaidPlans
+  getUnpaidPlans,
+  getPlanOptions
 } from './membershipReducer'
+
+import db from '../mocks/db.json'
 
 import {
   membershipAddPlan,
@@ -112,6 +115,24 @@ describe('membershipReducer', () => {
         payments: [{ validUntil: 2, specification: [1, 2] }]
       })
       expect(getUnpaidPlans(state, date)).toEqual([1, 2])
+    })
+  })
+
+  describe('getPlanOptions()', () => {
+    it('returns the plans which have the same group or same label', () => {
+      let state = createState({
+        plans: ['1', '3'],
+        allPlans: [
+          { id: '1', labels: [1], group: ['x'] },
+          { id: '2', labels: [2], group: ['x'] },
+          { id: '3', labels: [3], group: ['y'] },
+          { id: '4', labels: [3], group: ['z'] }
+        ]
+      })
+      expect(getPlanOptions(state)).toEqual([
+        [state['allPlans'][0], state['allPlans'][1]],
+        [state['allPlans'][2], state['allPlans'][3]]
+      ])
     })
   })
 })
