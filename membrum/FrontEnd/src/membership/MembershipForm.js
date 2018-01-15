@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { Field, FieldArray, reduxForm } from 'redux-form'
 
-import { membershipSave, membershipAddPlan } from './membershipActions'
+import { membershipSave } from './membershipActions'
 import { getPlanDetails, getPlanOptions } from './membershipReducer'
 
 import planTemplate from './PlanTemplate'

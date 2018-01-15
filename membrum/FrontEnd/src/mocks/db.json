@@ -148,7 +148,7 @@
     {
       "id": "17",
       "name": "Undefined Nation",
-      "amount": "180",
+      "amount": "80",
       "interval": "month",
       "intervalCount": "6",
       "labels": ["nation"],
