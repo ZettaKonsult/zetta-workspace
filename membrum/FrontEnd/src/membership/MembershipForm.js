@@ -36,7 +36,7 @@ const renderPlans = ({
         </span>
       )}
     <div className="ButtonGroup">
-      <button type="button" onClick={() => fields.push('17')}>
+      <button type="button" onClick={() => fields.push('0')}>
         Add Plan
       </button>
     </div>

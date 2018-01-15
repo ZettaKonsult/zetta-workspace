@@ -4,7 +4,8 @@
       "id": "0",
       "name": "Please choose a plan",
       "labels": [],
-      "group": []
+      "group": [],
+      "type": "default"
     },
     {
       "id": "1",

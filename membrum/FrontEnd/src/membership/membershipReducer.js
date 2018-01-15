@@ -142,12 +142,16 @@ const getLastPayment = state =>
 
 export const getPlanOptions = state => planId => {
   const detailedPlan = getPlanDetails(state)(planId)
-  return state.allPlans.filter(
-    p =>
-      detailedPlan.type === 'trail'
-        ? trailLogic(p, detailedPlan)
-        : planLogic(p, detailedPlan)
-  )
+  if (detailedPlan.type === 'default') {
+    return state.allPlans
+  } else {
+    return state.allPlans.filter(
+      p =>
+        detailedPlan.type === 'trail'
+          ? trailLogic(p, detailedPlan)
+          : planLogic(p, detailedPlan)
+    )
+  }
 }
 
 const trailLogic = (trail, plan) =>
