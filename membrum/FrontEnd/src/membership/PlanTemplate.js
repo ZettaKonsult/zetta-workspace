@@ -33,8 +33,9 @@ export default function(rules: Object[]) {
     return plans.filter(plan => {
       if (Array.isArray(plan[attribute])) {
         return plan[attribute].find(item => item === key)
+      } else {
+        return plan[attribute] === key
       }
-      return plan[attribute] === key
     })
   }
 
