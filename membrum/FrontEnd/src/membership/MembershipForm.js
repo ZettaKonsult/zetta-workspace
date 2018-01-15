@@ -2,15 +2,20 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { Field, FieldArray, reduxForm } from 'redux-form'
 
-import { membershipSave } from './membershipActions'
+import { membershipSave, membershipAddPlan } from './membershipActions'
 import { getPlanDetails, getPlanOptions } from './membershipReducer'
 
 import planTemplate from './PlanTemplate'
 import db from '../mocks/db.json'
 
-const PlanSelect = ({ input, meta: { touched, error }, plans }) => (
-  <select {...input} name="" id="">
-    {plans.map(item => (
+const PlanSelect = ({
+  input,
+  meta: { touched, error },
+  plans,
+  getPlanOptions
+}) => (
+  <select {...input}>
+    {getPlanOptions(input.value).map(item => (
       <option key={item.id} value={item.id}>
         {item.name}
       </option>
@@ -25,7 +30,11 @@ const renderPlans = ({
 }) => (
   <div className="membershipGroup">
     {(touched || submitFailed) &&
-      error && <span>{error.map(e => <p>{e}</p>)}</span>}
+      error && (
+        <span style={{ color: 'red' }}>
+          {error.map((e, i) => <p key={i}>{e}</p>)}
+        </span>
+      )}
     <div className="ButtonGroup">
       <button type="button" onClick={() => fields.push('17')}>
         Add Plan
@@ -36,7 +45,7 @@ const renderPlans = ({
         <Field
           name={`${plan}`}
           component={PlanSelect}
-          plans={props.getPlanOptions[index]}
+          getPlanOptions={props.getPlanOptions}
         />
         <button
           type="button"
@@ -56,7 +65,6 @@ let MembershipForm = props => {
       <FieldArray
         name="plans"
         component={renderPlans}
-        allPlans={props.allPlans}
         getPlanOptions={props.getPlanOptions}
       />
       <button type="submit" disabled={submitting || pristine}>
@@ -88,9 +96,8 @@ const validate = (values, { getPlanDetails }) => {
 MembershipForm = reduxForm({ form: 'MembershipForm', validate })(MembershipForm)
 
 const mapStateToProps = (state, props) => ({
-  allPlans: state.membershipReducer.allPlans,
-  getPlanOptions: getPlanOptions(state.membershipReducer),
   initialValues: { plans: state.membershipReducer.plans },
+  getPlanOptions: planId => getPlanOptions(state.membershipReducer)(planId),
   getPlanDetails: planId => getPlanDetails(state.membershipReducer)(planId)
 })
 
