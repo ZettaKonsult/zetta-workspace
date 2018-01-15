@@ -53,7 +53,6 @@ describe('PlanTemplate', () => {
 
   describe('evaluatePlan()', () => {
     it('evaluate handles simple case', () => {
-      console.log(planTempaltes)
       expect(pt.evaluatePlan(simpleStudentlundPlans)).toBeTruthy()
     })
     it('evaluate handles a more complex case', () => {
