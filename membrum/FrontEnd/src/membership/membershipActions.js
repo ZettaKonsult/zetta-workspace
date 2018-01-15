@@ -1,4 +1,4 @@
-import db from '../mocks/db.json'
+import db from '../mocks/db.js'
 import * as utilDate from 'date-primitive-utils'
 import { getPlanDetails } from './membershipReducer'
 

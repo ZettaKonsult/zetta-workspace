@@ -5,7 +5,7 @@ import {
   getPlanOptions
 } from './membershipReducer'
 
-import db from '../mocks/db.json'
+import db from '../mocks/db.js'
 
 import {
   membershipAddPlan,

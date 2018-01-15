@@ -1,6 +1,6 @@
 /* @flow */
 
-import db from "../../mocks/db.json"
+import db from "../../mocks/db.js"
 
 type State = {
   readPlan: boolean,
