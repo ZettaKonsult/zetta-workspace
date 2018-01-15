@@ -1,10 +1,9 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import {
-  isSubscriptionPaid,
-  getNextPayment,
-  getPlanDetails
-} from './membershipReducer'
+import { isSubscriptionPaid, getNextPayment } from './membershipReducer'
+
+import { getPlanById } from './membershipReducer'
+
 import { membershipPay } from './membershipActions'
 
 import { toISODateString } from 'date-primitive-utils'
@@ -43,14 +42,14 @@ const Unpaid = ({ paymentProccess, nextPayment, getPlanDetails }) => (
 
     <p>There is a unpaid plan for this semester</p>
     <p>Current subscription is</p>
-    {nextPayment.plans.map((plan, i) => (
+    {nextPayment.subscription.map((plan, i) => (
       <span key={`${getPlanDetails(plan).id}${i}`}>
         {getPlanDetails(plan).name}
       </span>
     ))}
     <p>Total cost {nextPayment.amount}</p>
     <div className="ButtonGroup">
-      <Button large onClick={() => paymentProccess(nextPayment.plans)}>
+      <Button large onClick={() => paymentProccess(nextPayment.subscription)}>
         Pay semester fee
       </Button>
     </div>
@@ -83,7 +82,7 @@ const mapStateToProps = (state, props) => {
   return {
     paid: isSubscriptionPaid(state.membershipReducer, date),
     nextPayment: getNextPayment(state.membershipReducer, date),
-    getPlanDetails: plan => getPlanDetails(state.membershipReducer)(plan)
+    getPlanDetails: planId => getPlanById(state.membershipReducer)(planId)
   }
 }
 

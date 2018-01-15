@@ -20,20 +20,23 @@ describe('membershipReducer', () => {
 
   it('handles MEMBERSHIP_ADD_PLAN', () => {
     expect(membership(createState(), membershipAddPlan(1))).toEqual(
-      createState({ plans: [1] })
+      createState({ subscription: [1] })
     )
   })
 
   it('handles MEMBERSHIP_REMOVE_PLAN', () => {
     expect(
-      membership(createState({ plans: [1] }), membershipRemovePlan(1))
+      membership(createState({ subscription: [1] }), membershipRemovePlan(1))
     ).toEqual(createState())
   })
 
   it('handles MEMBERSHIP_UPDATE_PLANS', () => {
     expect(
-      membership(createState({ plans: [1] }), membershipUpdatePlans([2, 3]))
-    ).toEqual(createState({ plans: [2, 3], pristine: false }))
+      membership(
+        createState({ subscription: [1] }),
+        membershipUpdatePlans([2, 3])
+      )
+    ).toEqual(createState({ subscription: [2, 3], pristine: false }))
   })
 
   describe('isSubscriptionPaid()', () => {
@@ -55,7 +58,7 @@ describe('membershipReducer', () => {
       const state = createState({
         pristine: false,
         payments: [{ validUntil: 2, specification: [1, 2, 3] }],
-        plans: [1, 2]
+        subscription: [1, 2]
       })
 
       expect(isSubscriptionPaid(state, date)).toBeTruthy()
@@ -65,7 +68,7 @@ describe('membershipReducer', () => {
       const state = createState({
         pristine: false,
         payments: [{ validUntil: 2, specification: [1] }],
-        plans: [1, 2]
+        subscription: [1, 2]
       })
 
       expect(isSubscriptionPaid(state, date)).toBeFalsy()
@@ -75,7 +78,7 @@ describe('membershipReducer', () => {
       const state = createState({
         pristine: false,
         payments: [{ validUntil: 2, specification: [1, 2] }],
-        plans: [1, 2, 2]
+        subscription: [1, 2, 2]
       })
 
       expect(isSubscriptionPaid(state, date)).toBeFalsy()
@@ -85,13 +88,13 @@ describe('membershipReducer', () => {
   describe('getUnpaidPlans()', () => {
     const date = 1
     it('returns all plans when nothing has been paid', () => {
-      const state = createState({ plans: [1, 2] })
+      const state = createState({ subscription: [1, 2] })
       expect(getUnpaidPlans(state)).toEqual([1, 2])
     })
 
     it('returns only the unpaid when there is a payment', () => {
       const state = createState({
-        plans: [1, 2],
+        subscription: [1, 2],
         payments: [{ validUntil: 2, specification: [1] }]
       })
       expect(getUnpaidPlans(state, date)).toEqual([2])
@@ -99,7 +102,7 @@ describe('membershipReducer', () => {
 
     it('handles multiple payments during same interval', () => {
       const state = createState({
-        plans: [1, 2, 3],
+        subscription: [1, 2, 3],
         payments: [
           { validUntil: 2, specification: [1] },
           { validUntil: 2, specification: [2] }
@@ -111,52 +114,17 @@ describe('membershipReducer', () => {
     it('handles multiple intervals', () => {
       const date = 3
       const state = createState({
-        plans: [1, 2],
+        subscription: [1, 2],
         payments: [{ validUntil: 2, specification: [1, 2] }]
       })
       expect(getUnpaidPlans(state, date)).toEqual([1, 2])
     })
   })
-
-  describe('getPlanOptions()', () => {
-    let state
-    beforeEach(() => {
-      state = createState({
-        allPlans: [
-          { id: '1', labels: [1], group: ['x'] },
-          { id: '2', labels: [2], group: ['x'] },
-          { id: '3', labels: [3], group: ['y'] },
-          { id: '4', labels: [3], group: ['z'] },
-          { id: '5', labels: [3], group: ['z'], type: 'trail' }
-        ]
-      })
-    })
-
-    it('returns the plans which have the same group that are not trails', () => {
-      expect(getPlanOptions(state)('1')).toEqual([
-        state['allPlans'][0],
-        state['allPlans'][1]
-      ])
-    })
-    it('returns the plans which have the same label that are not trails', () => {
-      expect(getPlanOptions(state)('3')).toEqual([
-        state['allPlans'][2],
-        state['allPlans'][3]
-      ])
-    })
-
-    it('only returns when both label and group is all group and labels are matching', () => {
-      expect(getPlanOptions(state)('5')).toEqual([
-        state['allPlans'][3],
-        state['allPlans'][4]
-      ])
-    })
-  })
 })
 
 const createState = state => ({
-  allPlans: [],
-  plans: [],
+  subscription: [],
+  plan: undefined,
   payments: [],
   isFetching: false,
   pristine: true,

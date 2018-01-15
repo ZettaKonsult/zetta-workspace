@@ -3,7 +3,11 @@ import { connect } from 'react-redux'
 import { Field, FieldArray, reduxForm } from 'redux-form'
 
 import { membershipSave } from './membershipActions'
-import { getPlanDetails, getPlanOptions } from './membershipReducer'
+import {
+  getPlanById,
+  getPlanOptions,
+  getSubscription
+} from './membershipReducer'
 
 import planTemplate from './PlanTemplate'
 import db from '../mocks/db.js'
@@ -63,7 +67,7 @@ let MembershipForm = props => {
   return (
     <form onSubmit={handleSubmit} className="membership">
       <FieldArray
-        name="plans"
+        name="subscription"
         component={renderPlans}
         getPlanOptions={props.getPlanOptions}
       />
@@ -78,7 +82,7 @@ const validate = (values, { getPlanDetails }) => {
   const rules = db.plantemplates
   const validator = planTemplate(rules)
 
-  const mapPlans = values.plans.map(plan => getPlanDetails(plan))
+  const mapPlans = values.subscription.map(plan => getPlanDetails(plan))
   const valid = validator.evaluatePlan(mapPlans)
 
   if (!valid) {
@@ -87,7 +91,7 @@ const validate = (values, { getPlanDetails }) => {
       (result, key) => [...result, ...error[key]],
       []
     )
-    return { plans: { _error: errorArray } }
+    return { subscription: { _error: errorArray } }
   } else {
     return {}
   }
@@ -96,9 +100,9 @@ const validate = (values, { getPlanDetails }) => {
 MembershipForm = reduxForm({ form: 'MembershipForm', validate })(MembershipForm)
 
 const mapStateToProps = (state, props) => ({
-  initialValues: { plans: state.membershipReducer.plans },
+  initialValues: { subscription: getSubscription(state.membershipReducer) },
   getPlanOptions: planId => getPlanOptions(state.membershipReducer)(planId),
-  getPlanDetails: planId => getPlanDetails(state.membershipReducer)(planId)
+  getPlanDetails: planId => getPlanById(state.membershipReducer)(planId)
 })
 
 const mapDispatchToProps = {

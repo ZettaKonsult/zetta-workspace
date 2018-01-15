@@ -4,9 +4,15 @@ import {
   MEMBERSHIP_ADD_PLAN,
   MEMBERSHIP_REMOVE_PLAN,
   MEMBERSHIP_UPDATE_PLANS,
-  MEMBERSHIP_ALL_PLANS,
   MEMBERSHIP_PAY
 } from './membershipActions'
+
+import {
+  PLAN_LOAD_FAILURE,
+  PLAN_LOAD_REQUEST,
+  PLAN_LOAD_SUCCESS
+} from './planActions'
+import * as plan from './planReducer'
 
 import {
   LOAD_USER_REQUEST,
@@ -15,8 +21,8 @@ import {
 } from '../user/authenticationActions'
 
 const initialState = {
-  allPlans: [],
-  plans: [],
+  subscription: [],
+  plan: undefined,
   payments: [],
   pristine: true,
   isFetching: false
@@ -24,26 +30,30 @@ const initialState = {
 
 export const membership = (state = initialState, action) => {
   switch (action.type) {
+    case PLAN_LOAD_FAILURE:
+    case PLAN_LOAD_REQUEST:
+    case PLAN_LOAD_SUCCESS:
+      return {
+        ...state,
+        plan: plan.reducer(state.plan, action)
+      }
     case MEMBERSHIP_ADD_PLAN:
       return {
         ...state,
-        plans: [...state.plans, action.payload.plan]
+        subscription: [...state.subscription, action.payload.plan]
       }
     case MEMBERSHIP_REMOVE_PLAN:
       return {
         ...state,
-        plans: [...state.plans.filter(plan => plan !== action.payload.plan)]
+        subscription: [
+          ...state.subscription.filter(plan => plan !== action.payload.plan)
+        ]
       }
     case MEMBERSHIP_UPDATE_PLANS:
       return {
         ...state,
-        plans: [...action.payload.plans],
+        subscription: [...action.payload.plans],
         pristine: false
-      }
-    case MEMBERSHIP_ALL_PLANS:
-      return {
-        ...state,
-        allPlans: [...action.payload.allPlans]
       }
 
     case LOAD_USER_REQUEST:
@@ -55,7 +65,7 @@ export const membership = (state = initialState, action) => {
     case LOAD_USER_SUCCESS:
       return {
         ...state,
-        plans: action.payload.user.plans,
+        subscription: action.payload.user.plans,
         isFetching: false
       }
     case LOAD_USER_FAILURE:
@@ -76,12 +86,12 @@ export const membership = (state = initialState, action) => {
 
 export const getUnpaidPlans = (state, date) => {
   if (state.payments.length === 0) {
-    return state.plans
+    return state.subscription
   }
   const validPayments = state.payments.filter(
     payment => payment.validUntil > date
   )
-  return state.plans.filter(
+  return state.subscription.filter(
     planId =>
       !validPayments.find(payment =>
         payment.specification.find(id => id === planId)
@@ -107,33 +117,30 @@ export const getNextPayment = (state, date) => {
   if (state.pristine || state.payments.length === 0) {
     return {
       date: getNextPaymentDate(state),
-      amount: state.plans.reduce(
-        (total, planId) => total + Number(getPlanDetails(state)(planId).amount),
+      amount: state.subscription.reduce(
+        (total, planId) => total + Number(getPlanById(state)(planId).amount),
         0
       ),
-      plans: state.plans
+      subscription: state.subscription
     }
   }
 
   return {
     date: getNextPaymentDate(state),
     amount: getUnpaidPlans(state, date).reduce(
-      (total, planId) => total + Number(getPlanDetails(state)(planId).amount),
+      (total, planId) => total + Number(getPlanById(state)(planId).amount),
       0
     ),
-    plans: getUnpaidPlans(state, date)
+    subscription: getUnpaidPlans(state, date)
   }
 }
-
-export const getPlanDetails = state => id =>
-  state.allPlans.find(plan => plan.id === id)
 
 export const getNextPaymentDate = state => {
   if (state.payments.length === 0) {
     return Date.now()
   }
 
-  const { interval, intervalCount } = getPlanDetails(state)(state.plans[0])
+  const { interval, intervalCount } = getPlanById(state)(state.subscription[0])
 
   if (interval === 'month') {
     const result = utilDate.incrementToNextLowerBound(
@@ -147,28 +154,10 @@ export const getNextPaymentDate = state => {
 const getLastPayment = state =>
   state.payments.length > 0 && state.payments.slice(-1)[0]
 
-export const getPlanOptions = state => planId => {
-  const detailedPlan = getPlanDetails(state)(planId)
-  if (detailedPlan.type === 'default') {
-    return state.allPlans
-  } else {
-    return state.allPlans.filter(
-      p =>
-        detailedPlan.type === 'trail'
-          ? trailLogic(p, detailedPlan)
-          : planLogic(p, detailedPlan)
-    )
-  }
-}
+export const getPlanById = state => planId =>
+  plan.getPlanById(state.plan)(planId)
 
-const trailLogic = (trail, plan) =>
-  plan.group.every(group => trail.group.some(g => g === group)) &&
-  plan.labels.every(label => trail.labels.some(l => l === label))
+export const getPlanOptions = state => planId =>
+  plan.getPlanOptions(state.plan)(planId)
 
-const planLogic = (plan1, plan2) => {
-  return (
-    plan1.type !== 'trail' &&
-    (plan2.group.some(group => plan1.group.some(g => g === group)) ||
-      plan2.labels.some(label => plan1.labels.some(l => l === label)))
-  )
-}
+export const getSubscription = state => state.subscription

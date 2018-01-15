@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 
-import { fetchAllPlans } from '../../membership/membershipActions'
+import { fetchAllPlans } from '../../membership/planActions'
 import { loadUserProfile } from '../../user/authenticationActions'
 
 import Navigation from './Navigation'
