@@ -232,6 +232,16 @@
       "func": "only",
       "value": "1",
       "error": "AF must be part of the subscription"
+    },
+    {
+      "id": "4",
+      "name": "noNationRule",
+      "group": "dumbRule",
+      "attribute": "label",
+      "key": "nation",
+      "func": "lessThan",
+      "value": "1",
+      "error": "can't have any nations as part of this subscription"
     }
   ],
   "members": [
