@@ -4,7 +4,7 @@
  * @date 2018-01-05
  */
 
-import type { SignUpData } from '../types'
+import type { UserData } from '../types'
 import { Account } from 'zk-aws-users'
 import { config } from '../config'
 import { buildAttributes } from './util'
@@ -13,10 +13,10 @@ import passwordGenerator from 'password-generator'
 
 const db = dbLib(config.Region)
 
-export const registerUsers = (users: { [string]: SignUpData }) =>
+export const registerUsers = (users: { [string]: UserData }) =>
   Object.keys(users).forEach(async ssn => await registerUser(users[ssn]))
 
-export const registerUser = async (user: SignUpData) => {
+export const registerUser = async (user: UserData) => {
   const { ssn, credits, union } = user
   const attributes = buildAttributes(user)
 
