@@ -5,7 +5,12 @@
  */
 
 import type { LadokPersonJSON } from './types'
-import { getFaculties, getUpdatedUnions, getUnions } from './unionAssigner'
+import {
+  aggregateResults,
+  getFaculties,
+  getUpdatedUnions,
+  getUnions
+} from './unionAssigner'
 import { LadokPerson } from './person'
 import { config } from './config'
 
@@ -257,6 +262,103 @@ describe('Union assigner.', () => {
             'Lunds Naturvetarkår',
             'Samhällsvetarkåren'
           ]
+        })
+      })
+    })
+    describe('Aggregate users.', () => {
+      it('No people.', () => {
+        expect(
+          aggregateResults({
+            res1: {
+              people: [],
+              createdAt: 1,
+              file: 'aFile',
+              Index: 'AnIndex'
+            },
+            res2: {
+              people: [],
+              createdAt: 1,
+              file: 'aFile',
+              Index: 'AnIndex'
+            }
+          })
+        ).toEqual({})
+      })
+      it('One empty.', () => {
+        expect(
+          aggregateResults({
+            res1: {
+              people: [
+                newTestPerson(SSN + 'a', NAME, 1),
+                newTestPerson(SSN + 'b', NAME, 2)
+              ],
+              createdAt: 1,
+              file: 'aFile',
+              Index: 'AnIndex'
+            },
+            res2: {
+              people: [],
+              createdAt: 1,
+              file: 'aFile',
+              Index: 'AnIndex'
+            }
+          })
+        ).toEqual({
+          SSNa: {
+            credits: { EHL: 11.1 },
+            email: 'anEmail@domain.place.com',
+            name: 'NAME',
+            ssn: 'SSNa'
+          },
+          SSNb: {
+            credits: { EHL: 11.1, HT: 22.2 },
+            email: 'anEmail@domain.place.com',
+            name: 'NAME',
+            ssn: 'SSNb'
+          }
+        })
+      })
+      it('Two in both.', () => {
+        expect(
+          aggregateResults({
+            res1: {
+              people: [
+                newTestPerson(SSN + 'a', NAME, 1),
+                newTestPerson(SSN + 'b', NAME, 2)
+              ],
+              createdAt: 1,
+              file: 'aFile',
+              Index: 'AnIndex'
+            },
+            res2: {
+              people: [
+                newTestPerson(SSN + 'a', NAME, 1),
+                newTestPerson(SSN + 'c', NAME, 2)
+              ],
+              createdAt: 1,
+              file: 'aFile',
+              Index: 'AnIndex'
+            }
+          })
+        ).toEqual({
+          SSNa: {
+            credits: { EHL: 11.1 },
+            email: 'anEmail@domain.place.com',
+            name: 'NAME',
+            ssn: 'SSNa'
+          },
+          SSNb: {
+            credits: { EHL: 11.1, HT: 22.2 },
+            email: 'anEmail@domain.place.com',
+            name: 'NAME',
+            ssn: 'SSNb'
+          },
+          SSNc: {
+            credits: { EHL: 11.1, HT: 22.2 },
+            email: 'anEmail@domain.place.com',
+            name: 'NAME',
+            ssn: 'SSNc'
+          }
         })
       })
     })
