@@ -43,8 +43,10 @@ const Unpaid = ({ paymentProccess, nextPayment, getPlanDetails }) => (
 
     <p>There is a unpaid plan for this semester</p>
     <p>Current subscription is</p>
-    {nextPayment.plans.map(plan => (
-      <span key={getPlanDetails(plan).id}>{getPlanDetails(plan).name}</span>
+    {nextPayment.plans.map((plan, i) => (
+      <span key={`${getPlanDetails(plan).id}${i}`}>
+        {getPlanDetails(plan).name}
+      </span>
     ))}
     <p>Total cost {nextPayment.amount}</p>
     <div className="ButtonGroup">
