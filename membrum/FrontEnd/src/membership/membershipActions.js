@@ -90,7 +90,3 @@ export const membershipSave = plans => (dispatch, getState) => {
 
   dispatch(membershipUpdatePlans(result))
 }
-
-export const membershipAddPlanSafe = () => dispatch => {
-  dispatch(membershipAddPlan('17'))
-}
