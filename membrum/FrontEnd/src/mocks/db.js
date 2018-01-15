@@ -243,16 +243,27 @@ const plantemplates = [
     error: "can't have any nations as part of this subscription"
   }
 ]
+
+const filteredMembership = plans.reduce(
+  (result, plan) =>
+    plan.name === 'Teknologkåren' ||
+    plan.name === 'Akademiska Föreningen' ||
+    plan.name === 'Terminsräkningsföreningen' ||
+    plan.name === 'Undefined Nation'
+      ? [...result, plan.id]
+      : result,
+  []
+)
 const members = [
   {
     ssn: '910504-0035',
     name: 'Fredrik Palmquist',
-    membership: ['1', '16', '18']
+    plans: filteredMembership
   },
   {
     ssn: '901020-1234',
     name: 'Sture Student',
-    membership: ['1', '10', '18']
+    plans: filteredMembership
   }
 ]
 

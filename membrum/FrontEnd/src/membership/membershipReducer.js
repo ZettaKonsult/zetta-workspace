@@ -4,12 +4,15 @@ import {
   MEMBERSHIP_ADD_PLAN,
   MEMBERSHIP_REMOVE_PLAN,
   MEMBERSHIP_UPDATE_PLANS,
-  MEMBERSHIP_FETCH_REQUEST,
-  MEMBERSHIP_FETCH_REQUEST_FAILURE,
   MEMBERSHIP_ALL_PLANS,
-  MEMBERSHIP_PAY,
-  MEMBERSHIP_FETCH_SUCCESS
+  MEMBERSHIP_PAY
 } from './membershipActions'
+
+import {
+  LOAD_USER_REQUEST,
+  LOAD_USER_SUCCESS,
+  LOAD_USER_FAILURE
+} from '../user/authenticationActions'
 
 const initialState = {
   allPlans: [],
@@ -43,16 +46,20 @@ export const membership = (state = initialState, action) => {
         allPlans: [...action.payload.allPlans]
       }
 
-    case MEMBERSHIP_FETCH_REQUEST:
+    case LOAD_USER_REQUEST:
       return {
         ...state,
         isFetching: true
       }
 
-    case MEMBERSHIP_FETCH_SUCCESS:
-    case MEMBERSHIP_FETCH_REQUEST_FAILURE:
+    case LOAD_USER_SUCCESS:
       return {
         ...state,
+        plans: action.payload.user.plans,
+        isFetching: false
+      }
+    case LOAD_USER_FAILURE:
+      return {
         isFetching: false
       }
 
