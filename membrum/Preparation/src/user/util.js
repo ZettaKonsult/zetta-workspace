@@ -6,7 +6,7 @@
 
 import type { AttributeData, UserData, UnionPartition } from '../types'
 import { registerUsers } from './register'
-import { updateUsers } from './register'
+import { updateUsers } from './update'
 
 export const saveUnions = async (users: UnionPartition) => {
   try {

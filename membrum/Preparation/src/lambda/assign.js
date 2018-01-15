@@ -4,21 +4,16 @@
  * @date  2017-11-07
  */
 
-import type { AWSCallback, AWSContext, AWSEvent } from './types'
+import type { AWSCallback } from './types'
 import { getOrganisationIds } from './util'
 import * as unionAssigner from '../unionAssigner'
-import * as User from '../user'
 import AWS from 'aws-sdk'
 import { config } from '../config'
 
 AWS.config.update({ region: 'eu-central-1' })
 const dynamoDB = new AWS.DynamoDB.DocumentClient()
 
-export const getParseResults = async (
-  event: AWSEvent,
-  context: AWSContext,
-  callback: AWSCallback
-) => {
+export const getAssignments = async (callback: AWSCallback) => {
   console.log(`Parsing LADOK results.`)
 
   let parseResult = {}
@@ -35,7 +30,13 @@ export const getParseResults = async (
   console.log(`Fetched LADOK parse results from database.`)
 
   const faculties = unionAssigner.getFaculties(parseResult)
-  const trfMap = await getOrganisationIds(config.TRF.UnionMapping)
+  let trfMap = {}
+
+  try {
+    trfMap = await getOrganisationIds(config.TRF.UnionMapping)
+  } catch (error) {
+    callback(error)
+  }
   console.log(`Fetched organisation IDs.`)
 
   const newAssignments = unionAssigner.getUnions(trfMap, faculties)
@@ -70,14 +71,8 @@ export const getParseResults = async (
     }
   }
 
-  try {
-    await User.saveUnions(
-      unionAssigner.getUpdatedUnions({
-        NewAssignments: newAssignments,
-        Users: users
-      })
-    )
-  } catch (error) {
-    callback(error)
-  }
+  return unionAssigner.getUpdatedUnions({
+    NewAssignments: newAssignments,
+    Users: users
+  })
 }
