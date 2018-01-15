@@ -7,19 +7,17 @@ export default function(rules: Object[]) {
   }
 
   function getErrors(plans: Object[]) {
-    let errors = {}
-    rules.map(rule => {
+    return rules.reduce((errors, rule) => {
       if (!getEvaluation(rule, plans)) {
-        if (!(rule.key in errors)) {
-          errors = { ...errors, [rule.key]: [] }
-        }
-        errors = {
+        let error = errors[rule.key] || []
+        return {
           ...errors,
-          [rule.key]: [...errors[rule.key].slice(), rule.error]
+          [rule.key]: [...error, rule.error]
         }
+      } else {
+        return errors
       }
-    })
-    return errors
+    }, {})
   }
 
   function getEvaluation(rule: Object, plans: Object[]) {
@@ -35,8 +33,9 @@ export default function(rules: Object[]) {
     return plans.filter(plan => {
       if (Array.isArray(plan[attribute])) {
         return plan[attribute].find(item => item === key)
+      } else {
+        return plan[attribute] === key
       }
-      return plan[attribute] === key
     })
   }
 

@@ -1,22 +1,22 @@
 import PlanTemplate from './PlanTemplate'
 
 import mockData from '../mocks/db.json'
-const studentlundTemplate = mockData.plantemplates
+const planTempaltes = mockData.plantemplates
 
 const union = mockData.plans[1]
 const vg = mockData.plans[10]
 const krischan = mockData.plans[15]
-const trf = mockData.plans[17]
-const af = mockData.plans[18]
-const smalands = mockData.plans[19]
+const trf = mockData.plans[18]
+const af = mockData.plans[19]
+const smalands = mockData.plans[20]
 
 const simpleStudentlundPlans = [trf, af, union, krischan]
 const complexStudentlundPlans = [vg, af, union, krischan, trf, smalands]
 const simpleNotValidPlans = [union, trf, smalands]
-const complexNotValidPlans = []
+const complexNotValidPlans = [{}]
 
 describe('PlanTemplate', () => {
-  const pt = PlanTemplate(studentlundTemplate)
+  const pt = PlanTemplate(planTempaltes)
 
   describe('getOperator()', () => {
     it('only evaluates correctly', () => {

@@ -82,10 +82,11 @@ export const fetchAllPlans = () => (dispatch, getState) => {
   dispatch({ type: MEMBERSHIP_ALL_PLANS, payload: { allPlans } })
 }
 
-export const membershipSave = plans => dispatch => {
-  dispatch(membershipUpdatePlans(plans))
-}
+export const membershipSave = plans => (dispatch, getState) => {
+  const { membershipReducer } = getState()
+  const result = plans.filter(
+    plan => getPlanDetails(membershipReducer)(plan).type !== 'default'
+  )
 
-export const membershipAddPlanSafe = () => dispatch => {
-  dispatch(membershipAddPlan('17'))
+  dispatch(membershipUpdatePlans(result))
 }

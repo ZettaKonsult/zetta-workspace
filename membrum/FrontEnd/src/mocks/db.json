@@ -1,6 +1,13 @@
 {
   "plans": [
     {
+      "id": "0",
+      "name": "Please choose a plan",
+      "labels": [],
+      "group": [],
+      "type": "default"
+    },
+    {
       "id": "1",
       "name": "Teknologkåren",
       "amount": "0",
@@ -142,16 +149,18 @@
       "interval": "month",
       "intervalCount": "6",
       "labels": ["nation", "gudrun"],
-      "group": ["studentlund"]
+      "group": ["studentlund"],
+      "type": "plan"
     },
     {
       "id": "17",
       "name": "Undefined Nation",
-      "amount": "180",
+      "amount": "80",
       "interval": "month",
       "intervalCount": "6",
       "labels": ["nation"],
-      "group": ["studentlund"]
+      "group": ["studentlund"],
+      "type": "trail"
     },
     {
       "id": "18",
@@ -178,18 +187,7 @@
       "interval": "month",
       "intervalCount": "6",
       "labels": ["nation"],
-      "group": "Smalands"
-    }
-  ],
-  "trails": [
-    {
-      "id": "1",
-      "name": "Undefined Nation",
-      "amount": "80",
-      "for": {
-        "labels": ["nation"]
-      },
-      "length": "0"
+      "group": ["Smalands"]
     }
   ],
   "plantemplates": [
@@ -232,6 +230,16 @@
       "func": "only",
       "value": "1",
       "error": "AF must be part of the subscription"
+    },
+    {
+      "id": "4",
+      "name": "noNationRule",
+      "group": "dumbRule",
+      "attribute": "label",
+      "key": "nation",
+      "func": "lessThan",
+      "value": "1",
+      "error": "can't have any nations as part of this subscription"
     }
   ],
   "members": [

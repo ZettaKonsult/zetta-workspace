@@ -1,8 +1,11 @@
 import {
   membership,
   isSubscriptionPaid,
-  getUnpaidPlans
+  getUnpaidPlans,
+  getPlanOptions
 } from './membershipReducer'
+
+import db from '../mocks/db.json'
 
 import {
   membershipAddPlan,
@@ -112,6 +115,41 @@ describe('membershipReducer', () => {
         payments: [{ validUntil: 2, specification: [1, 2] }]
       })
       expect(getUnpaidPlans(state, date)).toEqual([1, 2])
+    })
+  })
+
+  describe('getPlanOptions()', () => {
+    let state
+    beforeEach(() => {
+      state = createState({
+        allPlans: [
+          { id: '1', labels: [1], group: ['x'] },
+          { id: '2', labels: [2], group: ['x'] },
+          { id: '3', labels: [3], group: ['y'] },
+          { id: '4', labels: [3], group: ['z'] },
+          { id: '5', labels: [3], group: ['z'], type: 'trail' }
+        ]
+      })
+    })
+
+    it('returns the plans which have the same group that are not trails', () => {
+      expect(getPlanOptions(state)('1')).toEqual([
+        state['allPlans'][0],
+        state['allPlans'][1]
+      ])
+    })
+    it('returns the plans which have the same label that are not trails', () => {
+      expect(getPlanOptions(state)('3')).toEqual([
+        state['allPlans'][2],
+        state['allPlans'][3]
+      ])
+    })
+
+    it('only returns when both label and group is all group and labels are matching', () => {
+      expect(getPlanOptions(state)('5')).toEqual([
+        state['allPlans'][3],
+        state['allPlans'][4]
+      ])
     })
   })
 })

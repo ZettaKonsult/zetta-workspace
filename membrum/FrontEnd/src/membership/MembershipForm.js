@@ -3,17 +3,25 @@ import { connect } from 'react-redux'
 import { Field, FieldArray, reduxForm } from 'redux-form'
 
 import { membershipSave } from './membershipActions'
-import { getPlanDetails } from './membershipReducer'
+import { getPlanDetails, getPlanOptions } from './membershipReducer'
 
 import planTemplate from './PlanTemplate'
 import db from '../mocks/db.json'
 
-const PlanOptions = ({ plans }) =>
-  plans.map(item => (
-    <option key={item.id} value={item.id}>
-      {item.name}
-    </option>
-  ))
+const PlanSelect = ({
+  input,
+  meta: { touched, error },
+  plans,
+  getPlanOptions
+}) => (
+  <select {...input}>
+    {getPlanOptions(input.value).map(item => (
+      <option key={item.id} value={item.id}>
+        {item.name}
+      </option>
+    ))}
+  </select>
+)
 
 const renderPlans = ({
   fields,
@@ -21,17 +29,24 @@ const renderPlans = ({
   ...props
 }) => (
   <div className="membershipGroup">
-    {(touched || submitFailed) && error && <span>{error}</span>}
+    {(touched || submitFailed) &&
+      error && (
+        <span style={{ color: 'red' }}>
+          {error.map((e, i) => <p key={i}>{e}</p>)}
+        </span>
+      )}
     <div className="ButtonGroup">
-      <button type="button" onClick={() => fields.push('17')}>
+      <button type="button" onClick={() => fields.push('0')}>
         Add Plan
       </button>
     </div>
     {fields.map((plan, index, field) => (
-      <div key={index}>
-        <Field name={`${plan}`} component="select">
-          <PlanOptions plans={props.allPlans} />
-        </Field>
+      <div key={plan}>
+        <Field
+          name={`${plan}`}
+          component={PlanSelect}
+          getPlanOptions={props.getPlanOptions}
+        />
         <button
           type="button"
           title="Remove"
@@ -50,7 +65,7 @@ let MembershipForm = props => {
       <FieldArray
         name="plans"
         component={renderPlans}
-        allPlans={props.allPlans}
+        getPlanOptions={props.getPlanOptions}
       />
       <button type="submit" disabled={submitting || pristine}>
         Submit
@@ -63,37 +78,27 @@ const validate = (values, { getPlanDetails }) => {
   const rules = db.plantemplates
   const validator = planTemplate(rules)
 
-  const errors = {}
   const mapPlans = values.plans.map(plan => getPlanDetails(plan))
   const valid = validator.evaluatePlan(mapPlans)
 
   if (!valid) {
-    errors.plans = { _error: 'AF is not a part of this' }
     const error = validator.getErrors(mapPlans)
-    console.log(error)
+    const errorArray = Object.keys(error).reduce(
+      (result, key) => [...result, ...error[key]],
+      []
+    )
+    return { plans: { _error: errorArray } }
   } else {
-    const membersArrayErrors = []
-    values.plans.forEach((plan, planIndex) => {
-      const planErrors = {}
-      console.log(plan)
-      if (!plan || !plan.firstName) {
-        planErrors.firstName = 'Required'
-        membersArrayErrors[planIndex] = planErrors
-      }
-    })
-    if (membersArrayErrors.length) {
-      errors.members = membersArrayErrors
-    }
+    return {}
   }
-  return errors
 }
 
 MembershipForm = reduxForm({ form: 'MembershipForm', validate })(MembershipForm)
 
 const mapStateToProps = (state, props) => ({
-  allPlans: state.membershipReducer.allPlans,
   initialValues: { plans: state.membershipReducer.plans },
-  getPlanDetails: id => getPlanDetails(state.membershipReducer)(id)
+  getPlanOptions: planId => getPlanOptions(state.membershipReducer)(planId),
+  getPlanDetails: planId => getPlanDetails(state.membershipReducer)(planId)
 })
 
 const mapDispatchToProps = {

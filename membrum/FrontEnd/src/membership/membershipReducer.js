@@ -139,3 +139,29 @@ export const getNextPaymentDate = state => {
 
 const getLastPayment = state =>
   state.payments.length > 0 && state.payments.slice(-1)[0]
+
+export const getPlanOptions = state => planId => {
+  const detailedPlan = getPlanDetails(state)(planId)
+  if (detailedPlan.type === 'default') {
+    return state.allPlans
+  } else {
+    return state.allPlans.filter(
+      p =>
+        detailedPlan.type === 'trail'
+          ? trailLogic(p, detailedPlan)
+          : planLogic(p, detailedPlan)
+    )
+  }
+}
+
+const trailLogic = (trail, plan) =>
+  plan.group.every(group => trail.group.some(g => g === group)) &&
+  plan.labels.every(label => trail.labels.some(l => l === label))
+
+const planLogic = (plan1, plan2) => {
+  return (
+    plan1.type !== 'trail' &&
+    (plan2.group.some(group => plan1.group.some(g => g === group)) ||
+      plan2.labels.some(label => plan1.labels.some(l => l === label)))
+  )
+}
