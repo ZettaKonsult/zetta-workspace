@@ -1,6 +1,6 @@
 import PlanTemplate from './PlanTemplate'
 
-import mockData from '../mocks/db.json'
+import mockData from '../mocks/db.js'
 const planTempaltes = mockData.plantemplates
 
 const union = mockData.plans[1]

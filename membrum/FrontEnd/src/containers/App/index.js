@@ -2,10 +2,8 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 
-import {
-  membershipFetchRequest,
-  fetchAllPlans
-} from '../../membership/membershipActions'
+import { fetchAllPlans } from '../../membership/membershipActions'
+import { loadUserProfile } from '../../user/authenticationActions'
 
 import Navigation from './Navigation'
 import Footer from '../../components/Footer'
@@ -15,7 +13,7 @@ import './App.css'
 class App extends Component {
   componentDidMount() {
     this.props.fetchAllPlans()
-    this.props.membershipFetchRequest()
+    this.props.loadUserProfile()
   }
 
   render() {
@@ -33,7 +31,7 @@ class App extends Component {
 }
 
 const mapDispatchToProps = {
-  membershipFetchRequest,
+  loadUserProfile,
   fetchAllPlans
 }
 

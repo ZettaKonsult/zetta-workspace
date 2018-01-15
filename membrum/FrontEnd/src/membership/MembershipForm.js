@@ -6,7 +6,7 @@ import { membershipSave } from './membershipActions'
 import { getPlanDetails, getPlanOptions } from './membershipReducer'
 
 import planTemplate from './PlanTemplate'
-import db from '../mocks/db.json'
+import db from '../mocks/db.js'
 
 const PlanSelect = ({
   input,

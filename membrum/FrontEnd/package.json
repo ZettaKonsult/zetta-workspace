@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "chart.js": "^2.7.0",
+    "cuid": "2.0.2",
     "date-primitive-utils": "^1.1.1",
     "normalize.css": "^7.0.0",
     "react": "^16.0.0",
