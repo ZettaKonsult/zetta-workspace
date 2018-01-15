@@ -1,6 +1,12 @@
 {
   "plans": [
     {
+      "id": "0",
+      "name": "Please choose a plan",
+      "labels": [],
+      "group": []
+    },
+    {
       "id": "1",
       "name": "Teknologkåren",
       "amount": "0",
