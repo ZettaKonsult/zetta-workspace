@@ -21,7 +21,8 @@ const renderPlans = ({
   ...props
 }) => (
   <div className="membershipGroup">
-    {(touched || submitFailed) && error && <span>{error}</span>}
+    {(touched || submitFailed) &&
+      error && <span>{error.map(e => <p>{e}</p>)}</span>}
     <div className="ButtonGroup">
       <button type="button" onClick={() => fields.push('17')}>
         Add Plan
@@ -63,29 +64,19 @@ const validate = (values, { getPlanDetails }) => {
   const rules = db.plantemplates
   const validator = planTemplate(rules)
 
-  const errors = {}
   const mapPlans = values.plans.map(plan => getPlanDetails(plan))
   const valid = validator.evaluatePlan(mapPlans)
 
   if (!valid) {
-    errors.plans = { _error: 'AF is not a part of this' }
     const error = validator.getErrors(mapPlans)
-    console.log(error)
+    const errorArray = Object.keys(error).reduce(
+      (result, key) => [...result, ...error[key]],
+      []
+    )
+    return { plans: { _error: errorArray } }
   } else {
-    const membersArrayErrors = []
-    values.plans.forEach((plan, planIndex) => {
-      const planErrors = {}
-      console.log(plan)
-      if (!plan || !plan.firstName) {
-        planErrors.firstName = 'Required'
-        membersArrayErrors[planIndex] = planErrors
-      }
-    })
-    if (membersArrayErrors.length) {
-      errors.members = membersArrayErrors
-    }
+    return {}
   }
-  return errors
 }
 
 MembershipForm = reduxForm({ form: 'MembershipForm', validate })(MembershipForm)
