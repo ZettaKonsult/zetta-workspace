@@ -8,12 +8,15 @@ import { getPlanDetails, getPlanOptions } from './membershipReducer'
 import planTemplate from './PlanTemplate'
 import db from '../mocks/db.json'
 
-const PlanOptions = ({ plans }) =>
-  plans.map(item => (
-    <option key={item.id} value={item.id}>
-      {item.name}
-    </option>
-  ))
+const PlanSelect = ({ input, meta: { touched, error }, plans }) => (
+  <select {...input} name="" id="">
+    {plans.map(item => (
+      <option key={item.id} value={item.id}>
+        {item.name}
+      </option>
+    ))}
+  </select>
+)
 
 const renderPlans = ({
   fields,
@@ -30,9 +33,11 @@ const renderPlans = ({
     </div>
     {fields.map((plan, index, field) => (
       <div key={plan}>
-        <Field name={`${plan}`} component="select">
-          <PlanOptions plans={props.getPlanOptions[index]} />
-        </Field>
+        <Field
+          name={`${plan}`}
+          component={PlanSelect}
+          plans={props.getPlanOptions[index]}
+        />
         <button
           type="button"
           title="Remove"
