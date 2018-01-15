@@ -144,7 +144,20 @@ export const getPlanOptions = state => planId => {
   const detailedPlan = getPlanDetails(state)(planId)
   return state.allPlans.filter(
     p =>
-      p.group.some(group => detailedPlan.group.some(g => g === group)) ||
-      p.labels.some(label => detailedPlan.labels.some(l => l === label))
+      detailedPlan.type === 'trail'
+        ? trailLogic(p, detailedPlan)
+        : planLogic(p, detailedPlan)
+  )
+}
+
+const trailLogic = (trail, plan) =>
+  plan.group.every(group => trail.group.some(g => g === group)) &&
+  plan.labels.every(label => trail.labels.some(l => l === label))
+
+const planLogic = (plan1, plan2) => {
+  return (
+    plan1.type !== 'trail' &&
+    (plan2.group.some(group => plan1.group.some(g => g === group)) ||
+      plan2.labels.some(label => plan1.labels.some(l => l === label)))
   )
 }
