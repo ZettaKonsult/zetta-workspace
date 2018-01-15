@@ -93,14 +93,14 @@ export const getUpdatedUnions = (params: {
       newUnion = [oldUnion]
     }
 
-    const unionName = newUnion[0]
-    if (oldUnion === undefined) {
-      result.created[ssn] = { ...user, union: unionName }
+    if (newUnion.length > 1) {
+      result.decide[ssn] = { ...user, union: newUnion }
       continue
     }
 
-    if (newUnion.length > 1) {
-      result.decide[ssn] = { ...user, union: newUnion }
+    const unionName = newUnion[0]
+    if (oldUnion === undefined) {
+      result.created[ssn] = { ...user, union: unionName }
       continue
     }
 

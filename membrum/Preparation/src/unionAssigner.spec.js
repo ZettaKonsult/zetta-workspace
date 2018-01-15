@@ -4,7 +4,7 @@
  * @date  2017-08-22
  */
 
-import type { FileResult, LadokPersonJSON } from './types'
+import type { LadokPersonJSON } from './types'
 import { getFaculties, getUpdatedUnions, getUnions } from './unionAssigner'
 import { LadokPerson } from './person'
 import { config } from './config'
@@ -15,23 +15,6 @@ const NAME = 'NAME'
 const SSN = 'SSN'
 
 const UNION_MAP = config.TRF.UnionMapping
-
-const newTestFileResult = (amount: number): FileResult => {
-  return {
-    people: [newTestPeople(amount).toJSON()],
-    createdAt: 123456789,
-    file: 'dummy.txt',
-    Index: '12a34b56-c789-10d1-1e1f-g2h131i4j15k'
-  }
-}
-
-const newTestPeople = (amount: number) => {
-  let people = []
-  for (let i = 0; i < amount; ++i) {
-    people.push(newTestPerson(SSN + i, NAME + i, (i + 1) % FACULTY.length))
-  }
-  return people
-}
 
 const newTestPerson = (
   ssn: string,
@@ -98,7 +81,21 @@ describe('Union assigner.', () => {
               }
             }
           })
-        ).toEqual({ created: {}, decide: {}, modified: {}, same: { '1': 'A' } })
+        ).toEqual({
+          created: {},
+          decide: {},
+          modified: {},
+          same: {
+            '1': {
+              credits: {},
+              email: 'a',
+              name: 'b',
+              ssn: '1',
+              union: 'A',
+              unionId: 'A'
+            }
+          }
+        })
       })
       it('One modified.', () => {
         expect(
@@ -119,7 +116,16 @@ describe('Union assigner.', () => {
         ).toEqual({
           created: {},
           decide: {},
-          modified: { '1': { next: 'A', old: 'B' } },
+          modified: {
+            '1': {
+              credits: {},
+              email: 'a',
+              name: 'b',
+              ssn: '1',
+              union: { next: 'A', old: 'B' },
+              unionId: 'B'
+            }
+          },
           same: {}
         })
       })
@@ -132,7 +138,9 @@ describe('Union assigner.', () => {
             Users: { '1': { ssn: '1', email: 'a', name: 'b', credits: {} } }
           })
         ).toEqual({
-          created: { '1': 'Aa' },
+          created: {
+            '1': { credits: {}, email: 'a', name: 'b', ssn: '1', union: 'Aa' }
+          },
           decide: {},
           modified: {},
           same: {}
@@ -148,7 +156,15 @@ describe('Union assigner.', () => {
           })
         ).toEqual({
           created: {},
-          decide: { '1': ['Aa', 'Bb'] },
+          decide: {
+            '1': {
+              credits: {},
+              email: 'a',
+              name: 'b',
+              ssn: '1',
+              union: ['Aa', 'Bb']
+            }
+          },
           modified: {},
           same: {}
         })
@@ -180,10 +196,30 @@ describe('Union assigner.', () => {
             }
           })
         ).toEqual({
-          created: { '1': 'Aa' },
+          created: {
+            '1': { credits: {}, email: 'a', name: 'b', ssn: '1', union: 'Aa' }
+          },
           decide: {},
-          modified: { '3': { next: 'Cc', old: 'Aa' } },
-          same: { '2': 'Bb' }
+          modified: {
+            '3': {
+              credits: {},
+              email: 'a',
+              name: 'b',
+              ssn: '3',
+              union: { next: 'Cc', old: 'Aa' },
+              unionId: 'Aa'
+            }
+          },
+          same: {
+            '2': {
+              credits: {},
+              email: 'a',
+              name: 'b',
+              ssn: '2',
+              union: 'Bb',
+              unionId: 'Bb'
+            }
+          }
         })
       })
       it('All new.', () => {})

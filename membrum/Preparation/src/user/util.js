@@ -4,12 +4,13 @@
  * 2018-01-12
  */
 
-import type { AttributeData, SignUpData, UnionPartition } from '../types'
-import * as User from './'
+import type { AttributeData, UserData, UnionPartition } from '../types'
+import { registerUsers } from './register'
+import { updateUsers } from './register'
 
 export const saveUnions = async (users: UnionPartition) => {
   try {
-    await User.registerUsers(users.created)
+    await registerUsers(users.created)
     console.log(`Done registering new users.`)
   } catch (error) {
     console.error(error)
@@ -17,7 +18,7 @@ export const saveUnions = async (users: UnionPartition) => {
   }
 
   try {
-    await User.updateUsers(users.modified)
+    await updateUsers(users.modified)
     console.log(`Done updating users with modified unions.`)
   } catch (error) {
     console.error(error)
@@ -25,7 +26,7 @@ export const saveUnions = async (users: UnionPartition) => {
   }
 
   try {
-    await User.updateUsers(users.decide)
+    await updateUsers(users.decide)
     console.log(`Done updating users with decisions to make.`)
   } catch (error) {
     console.error(error)
@@ -33,7 +34,7 @@ export const saveUnions = async (users: UnionPartition) => {
   }
 }
 
-export const buildAttributes = (user: SignUpData): AttributeData => {
+export const buildAttributes = (user: UserData): AttributeData => {
   const { ssn, name, email } = user
   let { given_name, family_name } = user
 
