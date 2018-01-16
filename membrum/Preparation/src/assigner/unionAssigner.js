@@ -9,7 +9,10 @@ import type {
   LadokPersonJSON,
   UnionPartition,
   UserData
-} from './types'
+} from '../types'
+
+import { config } from '../config'
+const DEFAULT_NATION = config.TRF.Nations.Undefined
 
 const getAssignment = (person: LadokPersonJSON): string => {
   const credits = person.credits
@@ -85,7 +88,7 @@ export const getUpdatedUnions = (params: {
 
   for (let ssn of Object.keys(assignments)) {
     const user = users[ssn]
-    const oldUnion = user.unionId
+    const oldUnion = user.union
 
     let newUnion = assignments[ssn]
     if (newUnion === undefined) {
@@ -97,11 +100,12 @@ export const getUpdatedUnions = (params: {
     }
 
     if (oldUnion === undefined) {
-      result.created[ssn] = { ...user, union: newUnion }
-      continue
-    }
-
-    if (oldUnion !== newUnion) {
+      result.created[ssn] = {
+        ...user,
+        nation: DEFAULT_NATION,
+        union: newUnion
+      }
+    } else if (oldUnion !== newUnion) {
       result.modified[ssn] = {
         ...user,
         union: { old: oldUnion, next: newUnion }

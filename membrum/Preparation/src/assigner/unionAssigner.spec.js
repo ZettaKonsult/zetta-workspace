@@ -4,15 +4,15 @@
  * @date  2017-08-22
  */
 
-import type { LadokPersonJSON } from './types'
+import type { LadokPersonJSON } from '../types'
 import {
   aggregateResults,
   getFaculties,
   getUpdatedUnions,
   getUnions
 } from './unionAssigner'
-import { LadokPerson } from './person'
-import { config } from './config'
+import { LadokPerson } from '../person/ladokPerson'
+import { config } from '../config'
 
 const FACULTY = ['EHL', 'HT', 'JUR', 'KO', 'LTH', 'MED', 'NAT', 'SAM', 'USV']
 const EMAIL = 'anEmail@domain.place.com'
@@ -82,7 +82,8 @@ describe('Union assigner.', () => {
                 email: 'a',
                 name: 'b',
                 credits: {},
-                unionId: 'A'
+                nation: 'Undefined Nation',
+                union: 'A'
               }
             }
           })
@@ -95,8 +96,8 @@ describe('Union assigner.', () => {
               email: 'a',
               name: 'b',
               ssn: '1',
-              union: 'A',
-              unionId: 'A'
+              nation: 'Undefined Nation',
+              union: 'A'
             }
           }
         })
@@ -113,7 +114,8 @@ describe('Union assigner.', () => {
                 email: 'a',
                 name: 'b',
                 credits: {},
-                unionId: 'B'
+                nation: 'Undefined Nation',
+                union: 'B'
               }
             }
           })
@@ -125,8 +127,8 @@ describe('Union assigner.', () => {
               email: 'a',
               name: 'b',
               ssn: '1',
-              union: { next: 'A', old: 'B' },
-              unionId: 'B'
+              nation: 'Undefined Nation',
+              union: { next: 'A', old: 'B' }
             }
           },
           same: {}
@@ -142,7 +144,14 @@ describe('Union assigner.', () => {
           })
         ).toEqual({
           created: {
-            '1': { credits: {}, email: 'a', name: 'b', ssn: '1', union: 'Aa' }
+            '1': {
+              credits: {},
+              email: 'a',
+              name: 'b',
+              ssn: '1',
+              nation: 'Undefined Nation',
+              union: 'Aa'
+            }
           },
           modified: {},
           same: {}
@@ -154,7 +163,15 @@ describe('Union assigner.', () => {
             NewAssignments: {
               '1': ['Aa', 'Bb']
             },
-            Users: { '1': { ssn: '1', email: 'a', name: 'b', credits: {} } }
+            Users: {
+              '1': {
+                ssn: '1',
+                email: 'a',
+                name: 'b',
+                nation: 'Undefined Nation',
+                credits: {}
+              }
+            }
           })
         ).toEqual({
           created: {
@@ -163,6 +180,7 @@ describe('Union assigner.', () => {
               email: 'a',
               name: 'b',
               ssn: '1',
+              nation: 'Undefined Nation',
               union: ['Aa', 'Bb']
             }
           },
@@ -185,20 +203,29 @@ describe('Union assigner.', () => {
                 email: 'a',
                 name: 'b',
                 credits: {},
-                unionId: 'Bb'
+                nation: 'Undefined Nation',
+                union: 'Bb'
               },
               '3': {
                 ssn: '3',
                 email: 'a',
                 name: 'b',
                 credits: {},
-                unionId: 'Aa'
+                nation: 'Undefined Nation',
+                union: 'Aa'
               }
             }
           })
         ).toEqual({
           created: {
-            '1': { credits: {}, email: 'a', name: 'b', ssn: '1', union: 'Aa' }
+            '1': {
+              credits: {},
+              email: 'a',
+              name: 'b',
+              ssn: '1',
+              nation: 'Undefined Nation',
+              union: 'Aa'
+            }
           },
           modified: {
             '3': {
@@ -206,8 +233,8 @@ describe('Union assigner.', () => {
               email: 'a',
               name: 'b',
               ssn: '3',
-              union: { next: 'Cc', old: 'Aa' },
-              unionId: 'Aa'
+              nation: 'Undefined Nation',
+              union: { next: 'Cc', old: 'Aa' }
             }
           },
           same: {
@@ -216,8 +243,8 @@ describe('Union assigner.', () => {
               email: 'a',
               name: 'b',
               ssn: '2',
-              union: 'Bb',
-              unionId: 'Bb'
+              nation: 'Undefined Nation',
+              union: 'Bb'
             }
           }
         })

@@ -32,6 +32,7 @@ export type UserData = {
   name?: string,
   family_name?: string,
   given_name?: string,
+  nation?: string,
   union?: string | [string],
   attributes?: { [string]: string }
 }
@@ -40,4 +41,26 @@ export type UnionPartition = {
   created: { [string]: UserData },
   modified: { [string]: UserData },
   same: { [string]: UserData }
+}
+
+export type AWSCallback = (error: any, data?: any) => mixed
+
+export type AWSContext = {
+  awsRequestId: string,
+  invokeid: string,
+  logGroupName: string,
+  logStreamName: string,
+  functionVersion: string,
+  isDefaultFunctionVersion: boolean,
+  functionName: string,
+  memoryLimitInMB: string,
+  succeed: () => mixed,
+  fail: () => mixed,
+  done: () => mixed,
+  getRemainingTimeInMillis: () => mixed
+}
+
+export type AWSEvent = {
+  Records: any,
+  names: any
 }

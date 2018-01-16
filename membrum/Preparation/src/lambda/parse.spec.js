@@ -7,7 +7,7 @@
 import { parseData } from './parse'
 
 describe('Parse tests.', () => {
-  it('parseData()', async () => {
+  it('parseString()', async () => {
     expect(
       await parseData(
         'UB01;2016-08-12;132659;HANS;Registreringsvillkor;\n' +

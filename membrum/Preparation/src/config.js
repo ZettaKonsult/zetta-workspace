@@ -35,6 +35,9 @@ export const config = {
   },
   Region: 'eu-central-1',
   TRF: {
+    Nations: {
+      Undefined: 'Undefined Nation'
+    },
     UnionMapping: {
       EHL: ['LundaEkonomerna'],
       HT: ['Humanistiska och Teologiska Studentkåren'],

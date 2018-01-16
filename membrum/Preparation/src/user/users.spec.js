@@ -4,7 +4,7 @@
  * @date 2018-01-15
  */
 
-import { buildAttributes } from './util'
+import { buildAttributes } from './users'
 
 const SSN = 'SSN'
 const EMAIL = 'email@domain.com'

@@ -4,11 +4,11 @@
  * @date  2017-10-03
  */
 
-import type { AWSCallback, AWSContext, AWSEvent } from './types'
+import type { AWSCallback, AWSContext, AWSEvent } from '../types'
 import type { LadokPersonJSON } from '../types'
 import AWS from 'aws-sdk'
 import uuid from 'uuid'
-import { parseString } from '../ladokParser'
+import { parseString } from '../parser/ladokParser'
 
 const s3 = new AWS.S3()
 AWS.config.update({ region: 'eu-central-1' })

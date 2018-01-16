@@ -7,8 +7,8 @@
 import * as path from 'path'
 import { listFiles } from 'common-js-utils'
 import { parseCSVFile, parseCSVLines } from 'zk-csv-parser'
-import { config } from './config'
-import { LadokPerson } from './person'
+import { config } from '../config'
+import { LadokPerson } from '../person/ladokPerson'
 
 // To do: find (or make) one that does not necessitate requires.
 const arrayEquals = require('array-equal')
