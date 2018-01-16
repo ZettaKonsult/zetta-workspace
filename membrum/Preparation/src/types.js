@@ -32,13 +32,12 @@ export type UserData = {
   name?: string,
   family_name?: string,
   given_name?: string,
-  unionId?: string,
+  union?: string | [string],
   attributes?: { [string]: string }
 }
 
 export type UnionPartition = {
   created: { [string]: UserData },
-  decide: { [string]: UserData },
   modified: { [string]: UserData },
   same: { [string]: UserData }
 }

@@ -13,8 +13,14 @@ import passwordGenerator from 'password-generator'
 
 const db = dbLib(config.Region)
 
-export const registerUsers = (users: { [string]: UserData }) =>
-  Object.keys(users).forEach(async ssn => await registerUser(users[ssn]))
+export const registerUsers = (users: { [string]: UserData }): Array<string> => {
+  let result = []
+  Object.keys(users).forEach(async ssn => {
+    await registerUser(users[ssn])
+    result.push(ssn)
+  })
+  return result
+}
 
 export const registerUser = async (user: UserData) => {
   const { ssn, credits, union } = user
@@ -47,7 +53,7 @@ export const registerUser = async (user: UserData) => {
         given_name: attributes.given_name,
         family_name: attributes.family_name,
         credits: credits,
-        unionId: union
+        union: union
       }
     })
   } catch (error) {

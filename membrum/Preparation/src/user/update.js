@@ -4,19 +4,23 @@
  * @date 2018-01-12
  */
 
-import type { SignUpData } from '../types'
+import type { UserData } from '../types'
 import { buildAttributes } from './util'
 import { config } from '../config'
 import dbLib from 'zk-dynamodb-wrapper'
 
-import util from 'util'
-
 const db = dbLib(config.Region)
 
-export const updateUsers = (users: { [string]: SignUpData }) =>
-  Object.keys(users).forEach(async ssn => await updateUser(users[ssn]))
+export const updateUsers = (users: { [string]: SignUpData }) => {
+  let result = []
+  Object.keys(users).forEach(async ssn => {
+    await updateUser(users[ssn])
+    result.push(ssn)
+  })
+  return result
+}
 
-export const updateUser = async (user: SignUpData) => {
+export const updateUser = async (user: UserData) => {
   const { ssn, credits, union } = user
   const attributes = buildAttributes(user)
 

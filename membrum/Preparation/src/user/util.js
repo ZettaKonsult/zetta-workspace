@@ -9,8 +9,13 @@ import { registerUsers } from './register'
 import { updateUsers } from './update'
 
 export const saveUnions = async (users: UnionPartition) => {
+  let result = {
+    registered: [],
+    updated: []
+  }
+
   try {
-    await registerUsers(users.created)
+    result.registered = await registerUsers(users.created)
     console.log(`Done registering new users.`)
   } catch (error) {
     console.error(error)
@@ -18,20 +23,14 @@ export const saveUnions = async (users: UnionPartition) => {
   }
 
   try {
-    await updateUsers(users.modified)
+    result.updated = await updateUsers(users.modified)
     console.log(`Done updating users with modified unions.`)
   } catch (error) {
     console.error(error)
     throw error
   }
 
-  try {
-    await updateUsers(users.decide)
-    console.log(`Done updating users with decisions to make.`)
-  } catch (error) {
-    console.error(error)
-    throw error
-  }
+  return result
 }
 
 export const buildAttributes = (user: UserData): AttributeData => {

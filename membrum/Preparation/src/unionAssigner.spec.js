@@ -88,7 +88,6 @@ describe('Union assigner.', () => {
           })
         ).toEqual({
           created: {},
-          decide: {},
           modified: {},
           same: {
             '1': {
@@ -120,7 +119,6 @@ describe('Union assigner.', () => {
           })
         ).toEqual({
           created: {},
-          decide: {},
           modified: {
             '1': {
               credits: {},
@@ -146,7 +144,6 @@ describe('Union assigner.', () => {
           created: {
             '1': { credits: {}, email: 'a', name: 'b', ssn: '1', union: 'Aa' }
           },
-          decide: {},
           modified: {},
           same: {}
         })
@@ -160,8 +157,7 @@ describe('Union assigner.', () => {
             Users: { '1': { ssn: '1', email: 'a', name: 'b', credits: {} } }
           })
         ).toEqual({
-          created: {},
-          decide: {
+          created: {
             '1': {
               credits: {},
               email: 'a',
@@ -204,7 +200,6 @@ describe('Union assigner.', () => {
           created: {
             '1': { credits: {}, email: 'a', name: 'b', ssn: '1', union: 'Aa' }
           },
-          decide: {},
           modified: {
             '3': {
               credits: {},
