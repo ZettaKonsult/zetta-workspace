@@ -33,6 +33,15 @@ const plans = [
     group: ['studentlund']
   },
   {
+    id: 'cm',
+    name: 'Corpus Medicus',
+    amount: 'X',
+    interval: 'month',
+    intervalCount: '6',
+    labels: ['union'],
+    group: ['studentlund']
+  },
+  {
     id: 'sv',
     name: 'Samhällsvetarkåren',
     amount: '110',
@@ -45,6 +54,33 @@ const plans = [
     id: 'luna',
     name: 'Lunds Naturvetarkår',
     amount: '120',
+    interval: 'month',
+    intervalCount: '6',
+    labels: ['union'],
+    group: ['studentlund']
+  },
+  {
+    id: 'huots',
+    name: 'Humanistiska och Teologiska Studentkåren',
+    amount: 'X',
+    interval: 'month',
+    intervalCount: '6',
+    labels: ['union'],
+    group: ['studentlund']
+  },
+  {
+    id: 'jf',
+    name: 'Juridiska Föreningen',
+    amount: 'X',
+    interval: 'month',
+    intervalCount: '6',
+    labels: ['union'],
+    group: ['studentlund']
+  },
+  {
+    id: 'svkfim',
+    name: 'Studentkåren vid Konstnärliga fakulteten i Malmö',
+    amount: 'X',
     interval: 'month',
     intervalCount: '6',
     labels: ['union'],
@@ -273,6 +309,8 @@ const members = [
   }
 ]
 
+const defaultPlan = (): Plan => plans[0]
+
 const specification = (): Array<Plan> => plans
 
-export default { plans, planTemplates, specification, members }
+export default { defaultPlan, plans, planTemplates, specification, members }

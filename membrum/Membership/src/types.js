@@ -12,7 +12,7 @@ export type UserData = {
   family_name?: string,
   given_name?: string,
   nation?: string,
-  union: string | [string],
+  unionName: string | [string],
   attributes?: { [string]: string }
 }
 

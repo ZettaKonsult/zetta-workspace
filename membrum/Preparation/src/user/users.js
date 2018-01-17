@@ -4,7 +4,7 @@
  * @date 2018-01-05
  */
 
-import type { UnionPartition, UserData } from '../types'
+import type { AttributeData, UnionPartition, UserDataWithNames } from '../types'
 import { Account } from 'zk-aws-users'
 import { config } from '../config'
 import dbLib from 'zk-dynamodb-wrapper'
@@ -31,7 +31,7 @@ const updateUsers = async (users: { [string]: UserData }) => {
 }
 
 const registerUser = async (user: UserData): Promise<string> => {
-  const { ssn, credits, nation, union } = user
+  const { ssn, credits, nation, unionName } = user
   const attributes = buildAttributes(user)
 
   try {
@@ -62,7 +62,7 @@ const registerUser = async (user: UserData): Promise<string> => {
         family_name: attributes.family_name,
         credits: credits,
         nation: nation,
-        union: union
+        unionName: unionName
       }
     })
   } catch (error) {
@@ -74,7 +74,7 @@ const registerUser = async (user: UserData): Promise<string> => {
 }
 
 const updateUser = async (user: UserData): Promise<string> => {
-  const { ssn, credits, nation, union } = user
+  const { ssn, credits, nation, unionName } = user
   const attributes = buildAttributes(user)
 
   try {
@@ -87,7 +87,7 @@ const updateUser = async (user: UserData): Promise<string> => {
         family_name: attributes.family_name,
         credits: credits,
         nation: nation,
-        union: union
+        unionName: unionName
       }
     })
   } catch (error) {
@@ -123,25 +123,8 @@ export const saveUnions = async (users: UnionPartition) => {
   return result
 }
 
-export const buildAttributes = (user: UserData): AttributeData => {
-  const { ssn, name, email } = user
-  let { given_name, family_name } = user
-
-  if (given_name == null) {
-    if (family_name == null) {
-      if (name == null) {
-        throw new Error(`No name for the user ${ssn}.`)
-      }
-
-      const split = name.split(' ')
-      given_name = split[0]
-      family_name = split[1]
-    } else {
-      given_name = ''
-    }
-  } else if (family_name == null) {
-    family_name = ''
-  }
+export const buildAttributes = (user: UserDataWithNames): AttributeData => {
+  const { ssn, given_name, family_name, email } = user
 
   return {
     birthdate: ssn,

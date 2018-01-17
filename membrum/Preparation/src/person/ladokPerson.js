@@ -4,7 +4,7 @@
  * @date 2017-08-24
  */
 
-import type { LadokPersonJSON } from '../types'
+import type { UserData } from '../types'
 import { NumberMap } from 'common-js-utils'
 
 class NotSamePerson extends Error {}
@@ -65,7 +65,7 @@ export class LadokPerson {
     return this.ssn === person.ssn
   }
 
-  toJSON(): LadokPersonJSON {
+  toJSON(): UserData {
     let { ssn, name, email, credits } = this
 
     let jsonCredits = {}
@@ -77,7 +77,7 @@ export class LadokPerson {
   }
 }
 
-export const fromJSON = (personObject: LadokPersonJSON): LadokPerson => {
+export const fromJSON = (personObject: UserData): LadokPerson => {
   let objectCredits = Object.assign({}, personObject.credits)
   const firstUnion = Object.keys(objectCredits)[0]
   const firstPoints = objectCredits[firstUnion]

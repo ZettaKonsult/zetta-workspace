@@ -11,30 +11,34 @@ export type AttributeData = {
   email: string
 }
 
-export type LadokPersonJSON = {
-  credits: { [string]: string },
+export type NameTuple = { family_name: string, given_name: string }
+
+type UserDataBase = {
+  ssn: string,
   email: string,
+  credits: { [string]: string }
+}
+
+export type UserData = UserDataBase & {
   name: string,
-  ssn: string
+  nation?: string,
+  unionName?: string | [string]
+}
+
+export type UserDataWithAttributes = UserDataBase & {
+  attributes: { [string]: string }
+}
+
+export type UserDataWithNames = UserDataBase & {
+  family_name: string,
+  given_name: string
 }
 
 export type FileResult = {
-  people: Array<LadokPersonJSON>,
+  people: Array<UserData>,
   createdAt: number,
   file: string,
   Index: string
-}
-
-export type UserData = {
-  ssn: string,
-  email: string,
-  credits: { [string]: string },
-  name?: string,
-  family_name?: string,
-  given_name?: string,
-  nation?: string,
-  union?: string | [string],
-  attributes?: { [string]: string }
 }
 
 export type UnionPartition = {

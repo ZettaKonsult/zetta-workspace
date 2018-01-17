@@ -9,8 +9,6 @@ import * as unionAssigner from '../assigner'
 import AWS from 'aws-sdk'
 import { config } from '../config'
 
-import util from 'util'
-
 AWS.config.update({ region: 'eu-central-1' })
 const dynamoDB = new AWS.DynamoDB.DocumentClient()
 

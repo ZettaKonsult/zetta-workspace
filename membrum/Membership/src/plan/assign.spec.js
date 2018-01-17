@@ -18,7 +18,7 @@ describe('Assign tests.', () => {
               LTH: '3.0',
               USV: '2.0'
             },
-            union: 'Teknologkåren'
+            unionName: 'Teknologkåren'
           },
           ssn2: {
             ssn: 'ssn2',
@@ -27,7 +27,7 @@ describe('Assign tests.', () => {
               HT: '3.0',
               EHL: '4.0'
             },
-            union: 'Lunda Ekonomerna'
+            unionName: 'Lunda Ekonomerna'
           }
         }
       })

@@ -8,6 +8,8 @@ import { buildAttributes } from './users'
 
 const SSN = 'SSN'
 const EMAIL = 'email@domain.com'
+const GIVEN_NAME = 'Given'
+const FAMILY_NAME = 'Family'
 const CREDITS = {
   aKey: 'aValue',
   bKey: 'bValue'
@@ -15,40 +17,13 @@ const CREDITS = {
 
 describe('User functions.', () => {
   describe('Build attributes.', () => {
-    it('No name.', () => {
-      try {
-        buildAttributes({
-          ssn: SSN,
-          email: EMAIL,
-          credits: CREDITS
-        })
-        fail('Building attributes without name should raise an error.')
-      } catch (error) {
-        expect(error.message).toMatch(/[nN]ame/)
-      }
-    })
-    it('One name string.', () => {
-      expect(
-        buildAttributes({
-          ssn: SSN,
-          email: EMAIL,
-          name: 'My Name',
-          credits: CREDITS
-        })
-      ).toEqual({
-        birthdate: 'SSN',
-        email: 'email@domain.com',
-        family_name: 'Name',
-        given_name: 'My'
-      })
-    })
     it('Split name.', () => {
       expect(
         buildAttributes({
           ssn: SSN,
           email: EMAIL,
-          family_name: 'Family',
-          given_name: 'Given',
+          family_name: FAMILY_NAME,
+          given_name: GIVEN_NAME,
           credits: CREDITS
         })
       ).toEqual({
@@ -63,7 +38,8 @@ describe('User functions.', () => {
         buildAttributes({
           ssn: SSN,
           email: EMAIL,
-          family_name: 'Family',
+          family_name: FAMILY_NAME,
+          given_name: '',
           credits: CREDITS
         })
       ).toEqual({
@@ -78,7 +54,8 @@ describe('User functions.', () => {
         buildAttributes({
           ssn: SSN,
           email: EMAIL,
-          given_name: 'Given',
+          family_name: '',
+          given_name: GIVEN_NAME,
           credits: CREDITS
         })
       ).toEqual({

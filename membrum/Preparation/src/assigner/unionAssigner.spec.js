@@ -4,7 +4,7 @@
  * @date  2017-08-22
  */
 
-import type { LadokPersonJSON } from '../types'
+import type { UserData } from '../types'
 import {
   aggregateResults,
   getFaculties,
@@ -25,7 +25,7 @@ const newTestPerson = (
   ssn: string,
   name: string,
   credits: number
-): LadokPersonJSON => {
+): UserData => {
   let person = new LadokPerson(ssn, name, EMAIL, '11.1', 'EHL')
   for (let i = 1; i < credits; ++i) {
     person.join(
@@ -83,7 +83,7 @@ describe('Union assigner.', () => {
                 name: 'b',
                 credits: {},
                 nation: 'Undefined Nation',
-                union: 'A'
+                unionName: 'A'
               }
             }
           })
@@ -97,7 +97,7 @@ describe('Union assigner.', () => {
               name: 'b',
               ssn: '1',
               nation: 'Undefined Nation',
-              union: 'A'
+              unionName: 'A'
             }
           }
         })
@@ -115,7 +115,7 @@ describe('Union assigner.', () => {
                 name: 'b',
                 credits: {},
                 nation: 'Undefined Nation',
-                union: 'B'
+                unionName: 'B'
               }
             }
           })
@@ -128,7 +128,7 @@ describe('Union assigner.', () => {
               name: 'b',
               ssn: '1',
               nation: 'Undefined Nation',
-              union: { next: 'A', old: 'B' }
+              unionName: { next: 'A', old: 'B' }
             }
           },
           same: {}
@@ -150,7 +150,7 @@ describe('Union assigner.', () => {
               name: 'b',
               ssn: '1',
               nation: 'Undefined Nation',
-              union: 'Aa'
+              unionName: 'Aa'
             }
           },
           modified: {},
@@ -181,7 +181,7 @@ describe('Union assigner.', () => {
               name: 'b',
               ssn: '1',
               nation: 'Undefined Nation',
-              union: ['Aa', 'Bb']
+              unionName: ['Aa', 'Bb']
             }
           },
           modified: {},
@@ -204,7 +204,7 @@ describe('Union assigner.', () => {
                 name: 'b',
                 credits: {},
                 nation: 'Undefined Nation',
-                union: 'Bb'
+                unionName: 'Bb'
               },
               '3': {
                 ssn: '3',
@@ -212,7 +212,7 @@ describe('Union assigner.', () => {
                 name: 'b',
                 credits: {},
                 nation: 'Undefined Nation',
-                union: 'Aa'
+                unionName: 'Aa'
               }
             }
           })
@@ -224,7 +224,7 @@ describe('Union assigner.', () => {
               name: 'b',
               ssn: '1',
               nation: 'Undefined Nation',
-              union: 'Aa'
+              unionName: 'Aa'
             }
           },
           modified: {
@@ -234,7 +234,7 @@ describe('Union assigner.', () => {
               name: 'b',
               ssn: '3',
               nation: 'Undefined Nation',
-              union: { next: 'Cc', old: 'Aa' }
+              unionName: { next: 'Cc', old: 'Aa' }
             }
           },
           same: {
@@ -244,7 +244,7 @@ describe('Union assigner.', () => {
               name: 'b',
               ssn: '2',
               nation: 'Undefined Nation',
-              union: 'Bb'
+              unionName: 'Bb'
             }
           }
         })
@@ -329,13 +329,15 @@ describe('Union assigner.', () => {
           SSNa: {
             credits: { EHL: 11.1 },
             email: 'anEmail@domain.place.com',
-            name: 'NAME',
+            given_name: 'Name',
+            family_name: '',
             ssn: 'SSNa'
           },
           SSNb: {
             credits: { EHL: 11.1, HT: 22.2 },
             email: 'anEmail@domain.place.com',
-            name: 'NAME',
+            given_name: 'Name',
+            family_name: '',
             ssn: 'SSNb'
           }
         })
@@ -366,19 +368,22 @@ describe('Union assigner.', () => {
           SSNa: {
             credits: { EHL: 11.1 },
             email: 'anEmail@domain.place.com',
-            name: 'NAME',
+            given_name: 'Name',
+            family_name: '',
             ssn: 'SSNa'
           },
           SSNb: {
             credits: { EHL: 11.1, HT: 22.2 },
             email: 'anEmail@domain.place.com',
-            name: 'NAME',
+            given_name: 'Name',
+            family_name: '',
             ssn: 'SSNb'
           },
           SSNc: {
             credits: { EHL: 11.1, HT: 22.2 },
             email: 'anEmail@domain.place.com',
-            name: 'NAME',
+            given_name: 'Name',
+            family_name: '',
             ssn: 'SSNc'
           }
         })
