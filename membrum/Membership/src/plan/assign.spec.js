@@ -32,84 +32,8 @@ describe('Assign tests.', () => {
         }
       })
     ).toEqual({
-      ssn1: [
-        {
-          amount: '100',
-          group: ['studentlund'],
-          id: 'af',
-          interval: 'month',
-          intervalCount: '6',
-          labels: [],
-          name: 'Akademiska Föreningen'
-        },
-        {
-          amount: '20',
-          group: ['obligatory'],
-          id: 'trf',
-          interval: 'month',
-          intervalCount: '6',
-          labels: [],
-          name: 'Terminsräkningsföreningen'
-        },
-        {
-          amount: '80',
-          group: ['studentlund'],
-          id: 'un',
-          interval: 'month',
-          intervalCount: '6',
-          labels: ['nation'],
-          name: 'Undefined Nation',
-          type: 'trail'
-        },
-        {
-          amount: '0',
-          group: ['studentlund'],
-          id: 'tek',
-          interval: 'month',
-          intervalCount: '6',
-          labels: ['union'],
-          name: 'Teknologkåren'
-        }
-      ],
-      ssn2: [
-        {
-          amount: '100',
-          group: ['studentlund'],
-          id: 'af',
-          interval: 'month',
-          intervalCount: '6',
-          labels: [],
-          name: 'Akademiska Föreningen'
-        },
-        {
-          amount: '20',
-          group: ['obligatory'],
-          id: 'trf',
-          interval: 'month',
-          intervalCount: '6',
-          labels: [],
-          name: 'Terminsräkningsföreningen'
-        },
-        {
-          amount: '80',
-          group: ['studentlund'],
-          id: 'un',
-          interval: 'month',
-          intervalCount: '6',
-          labels: ['nation'],
-          name: 'Undefined Nation',
-          type: 'trail'
-        },
-        {
-          amount: '100',
-          group: ['studentlund'],
-          id: 'le',
-          interval: 'month',
-          intervalCount: '6',
-          labels: ['union'],
-          name: 'Lunda Ekonomerna'
-        }
-      ]
+      ssn1: ['af', 'trf', 'un', 'tek'],
+      ssn2: ['af', 'trf', 'un', 'le']
     })
   })
 })
