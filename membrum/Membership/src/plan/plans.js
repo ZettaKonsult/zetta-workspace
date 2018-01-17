@@ -4,6 +4,8 @@
  * @date 2018-01-16
  */
 
+import type { Plan } from '../types'
+
 const plans = [
   {
     id: 'default',
@@ -271,4 +273,6 @@ const members = [
   }
 ]
 
-export default { plans, planTemplates, members }
+const specification = (): Array<Plan> => plans
+
+export default { plans, planTemplates, specification, members }

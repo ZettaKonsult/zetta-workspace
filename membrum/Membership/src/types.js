@@ -12,20 +12,19 @@ export type UserData = {
   family_name?: string,
   given_name?: string,
   nation?: string,
-  union?: string | [string],
+  union: string | [string],
   attributes?: { [string]: string }
 }
 
-export type Subscription = {
-  planId: string
-}
-
-export type UnionPlan = {
+export type Plan = {
   id: string,
   name: string,
-  amount: string,
-  interval: string,
-  intervalCount: string,
+  amount?: string,
+  interval?: string,
+  intervalCount?: string,
   labels: Array<string>,
-  group: Array<string>
+  group: Array<string>,
+  type?: string
 }
+
+export type Subscription = Array<Plan>
