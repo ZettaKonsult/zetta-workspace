@@ -39,7 +39,7 @@ export const config = {
       Undefined: 'Undefined Nation'
     },
     UnionMapping: {
-      EHL: ['LundaEkonomerna'],
+      EHL: ['Lunda Ekonomerna'],
       HT: ['Humanistiska och Teologiska Studentkåren'],
       JUR: ['Juridiska Föreningen'],
       KO: ['Studentkåren vid Konstnärliga fakulteten i Malmö'],
