@@ -1,14 +1,29 @@
-[![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
+Parse LADOK files.
+Convert data to database entries.
+Union assignments.
+Preparation for a batch of registrations.
 
-# What is this
+# ladok-parser
+Module responsible for parsing LADOK files, as well as assigning unions to people from such files.
 
-This is a simple starter kit for building sharable modules in javascript and
-node
+## Lambda functions
 
-# What needs to be done?
+    assignLadokPeople
+    parseUploadedFile
 
-There is already a lot in place for this starter kit. There are however a few
-things that would be good to get in place
+### assignLadokPeople
 
-* Minify the built bundle after babel has return
-* Get a publish command in place
+Fetches the data stored in LadokParseResult (see `serverless.yml` for exact AWS URL), and determines to which union this person belongs. The result is a map `{ssn: union}`.
+
+### parseUploadedFile
+
+Triggered on an upload to the s3-bucket ladok-files, this function parses the file (expecting .csv format), and saves all the people therein in the DynamoDB table `LadokParseResult`.
+
+## Other files
+
+* `unionAssigner.js` 
+    Used by `assignLadokPeople`
+* `ladokParser.js` 
+    Used by `parseUploadedFile`
+* `person/ladokPerson.js`
+    Data structure for representing a person from a LADOK file.

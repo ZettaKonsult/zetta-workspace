@@ -6,9 +6,7 @@
       "amount": "0",
       "interval": "month",
       "intervalCount": "6",
-      "labels": [
-        "union"
-      ],
+      "labels": ["union"],
       "group": "studentlund"
     },
     {
@@ -17,9 +15,7 @@
       "amount": "100",
       "interval": "month",
       "intervalCount": "6",
-      "labels": [
-        "union"
-      ],
+      "labels": ["union"],
       "group": "studentlund"
     },
     {
@@ -28,9 +24,7 @@
       "amount": "110",
       "interval": "month",
       "intervalCount": "6",
-      "labels": [
-        "union"
-      ],
+      "labels": ["union"],
       "group": "studentlund"
     },
     {
@@ -39,9 +33,7 @@
       "amount": "120",
       "interval": "month",
       "intervalCount": "6",
-      "labels": [
-        "union"
-      ],
+      "labels": ["union"],
       "group": "studentlund"
     },
     {
@@ -50,10 +42,7 @@
       "amount": "210",
       "interval": "month",
       "intervalCount": "6",
-      "labels": [
-        "nation",
-        "gudrun"
-      ],
+      "labels": ["nation", "gudrun"],
       "group": "studentlund"
     },
     {
@@ -62,10 +51,7 @@
       "amount": "200",
       "interval": "month",
       "intervalCount": "6",
-      "labels": [
-        "nation",
-        "city"
-      ],
+      "labels": ["nation", "city"],
       "group": "studentlund"
     },
     {
@@ -74,10 +60,7 @@
       "amount": "200",
       "interval": "month",
       "intervalCount": "6",
-      "labels": [
-        "nation",
-        "city"
-      ],
+      "labels": ["nation", "city"],
       "group": "studentlund"
     },
     {
@@ -86,10 +69,7 @@
       "amount": "200",
       "interval": "month",
       "intervalCount": "6",
-      "labels": [
-        "nation",
-        "torna"
-      ],
+      "labels": ["nation", "torna"],
       "group": "studentlund"
     },
     {
@@ -98,10 +78,7 @@
       "amount": "200",
       "interval": "month",
       "intervalCount": "6",
-      "labels": [
-        "nation",
-        "gudrun"
-      ],
+      "labels": ["nation", "gudrun"],
       "group": "studentlund"
     },
     {
@@ -110,10 +87,7 @@
       "amount": "200",
       "interval": "month",
       "intervalCount": "6",
-      "labels": [
-        "nation",
-        "torna"
-      ],
+      "labels": ["nation", "torna"],
       "group": "studentlund"
     },
     {
@@ -122,10 +96,7 @@
       "amount": "200",
       "interval": "month",
       "intervalCount": "6",
-      "labels": [
-        "nation",
-        "city"
-      ],
+      "labels": ["nation", "city"],
       "group": "studentlund"
     },
     {
@@ -134,10 +105,7 @@
       "amount": "200",
       "interval": "month",
       "intervalCount": "6",
-      "labels": [
-        "nation",
-        "city"
-      ],
+      "labels": ["nation", "city"],
       "group": "studentlund"
     },
     {
@@ -146,10 +114,7 @@
       "amount": "200",
       "interval": "month",
       "intervalCount": "6",
-      "labels": [
-        "nation",
-        "city"
-      ],
+      "labels": ["nation", "city"],
       "group": "studentlund"
     },
     {
@@ -158,10 +123,7 @@
       "amount": "200",
       "interval": "month",
       "intervalCount": "6",
-      "labels": [
-        "nation",
-        "torna"
-      ],
+      "labels": ["nation", "torna"],
       "group": "studentlund"
     },
     {
@@ -170,10 +132,7 @@
       "amount": "200",
       "interval": "month",
       "intervalCount": "6",
-      "labels": [
-        "nation",
-        "torna"
-      ],
+      "labels": ["nation", "torna"],
       "group": "studentlund"
     },
     {
@@ -182,10 +141,7 @@
       "amount": "210",
       "interval": "month",
       "intervalCount": "6",
-      "labels": [
-        "nation",
-        "gudrun"
-      ],
+      "labels": ["nation", "gudrun"],
       "group": "studentlund"
     },
     {
@@ -194,9 +150,7 @@
       "amount": "180",
       "interval": "month",
       "intervalCount": "6",
-      "labels": [
-        "nation"
-      ],
+      "labels": ["nation"],
       "group": "studentlund"
     },
     {
@@ -213,9 +167,7 @@
       "amount": "200",
       "interval": "month",
       "intervalCount": "6",
-      "labels": [
-        "nation"
-      ],
+      "labels": ["nation"],
       "group": "Smalands"
     }
   ],
