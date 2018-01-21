@@ -33,16 +33,18 @@ const PlanLink = ({ to, exact, label }) => (
   </NavLink>
 )
 
-let PlanList = ({ plans, match, history }) =>
-  plans.map(plan => (
-    <PlanLink
-      key={plan.id}
-      label={plan.name}
-      to={`${match.path}/${plan.id}`}
-      exact
-    />
-  ))
-
+let PlanList = ({ plans, match, history }) => (
+  <Row>
+    {plans.map(plan => (
+      <PlanLink
+        key={plan.id}
+        label={plan.name}
+        to={`${match.path}/${plan.id}`}
+        exact
+      />
+    ))}
+  </Row>
+)
 const mapStateToProps = (state, { match, ...props }) => {
   return {
     plans: getAllPlans(state.membershipReducer).map(id =>
@@ -55,9 +57,7 @@ PlanList = connect(mapStateToProps)(PlanList)
 
 export default ({ match }) => (
   <Column>
-    <Row>
-      <Route path={match.path} component={PlanList} />
-    </Row>
+    <Route path={match.path} component={PlanList} />
     <Route path={`${match.path}/:id?`} component={PlanForm} />
   </Column>
 )
