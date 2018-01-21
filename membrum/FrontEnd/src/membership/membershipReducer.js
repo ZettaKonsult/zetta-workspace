@@ -128,7 +128,7 @@ export const getNextPaymentDate = (state, date) => {
   if (interval === 'month') {
     const result = utilDate.incrementToNextLowerBound(
       payment.date,
-      Number(intervalCount)
+      intervalCount
     )
     return result
   }
@@ -141,13 +141,13 @@ export const getAllPaymentsForInterval = (state, date) =>
   state.payments.filter(payment => {
     const validUntil = utilDate.incrementToNextLowerBound(
       payment.date,
-      Number(payment.specification[0].intervalCount)
+      payment.specification[0].intervalCount
     )
     return validUntil > date
   })
 
 export const getPlanById = state => planId =>
-  plan.getPlanById(state.plan)(planId)
+  plan.getPlanById(state.plan, planId)
 
 export const getPlanOptions = state => planId =>
   plan.getPlanOptions(state.plan)(planId)

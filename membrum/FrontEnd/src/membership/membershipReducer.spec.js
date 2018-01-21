@@ -174,17 +174,17 @@ const createStateWithPlans = state => ({
       '1': {
         id: '1',
         interval: 'month',
-        intervalCount: '6'
+        intervalCount: 6
       },
       '3': {
         id: '3',
         interval: 'month',
-        intervalCount: '6'
+        intervalCount: 6
       },
       '2': {
         id: '2',
         interval: 'month',
-        intervalCount: '6'
+        intervalCount: 6
       }
     }
   },

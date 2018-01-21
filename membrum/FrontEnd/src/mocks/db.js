@@ -11,144 +11,144 @@ const plans = [
   {
     id: cuid(),
     name: 'Teknologkåren',
-    amount: '0',
+    amount: 0,
     interval: 'month',
-    intervalCount: '6',
+    intervalCount: 6,
     labels: ['union'],
     group: ['studentlund']
   },
   {
     id: cuid(),
     name: 'Lunda Ekonomerna',
-    amount: '100',
+    amount: 100,
     interval: 'month',
-    intervalCount: '6',
+    intervalCount: 6,
     labels: ['union'],
     group: ['studentlund']
   },
   {
     id: cuid(),
     name: 'Samhällsvetarkåren',
-    amount: '110',
+    amount: 110,
     interval: 'month',
-    intervalCount: '6',
+    intervalCount: 6,
     labels: ['union'],
     group: ['studentlund']
   },
   {
     id: cuid(),
     name: 'Lunds Naturvetarkår',
-    amount: '120',
+    amount: 120,
     interval: 'month',
-    intervalCount: '6',
+    intervalCount: 6,
     labels: ['union'],
     group: ['studentlund']
   },
   {
     id: cuid(),
     name: 'Blekingska Nationen',
-    amount: '210',
+    amount: 210,
     interval: 'month',
-    intervalCount: '6',
+    intervalCount: 6,
     labels: ['nation', 'gudrun'],
     group: ['studentlund']
   },
   {
     id: cuid(),
     name: 'Göteborgs Nation',
-    amount: '200',
+    amount: 200,
     interval: 'month',
-    intervalCount: '6',
+    intervalCount: 6,
     labels: ['nation', 'city'],
     group: ['studentlund']
   },
   {
     id: cuid(),
     name: 'Hallands Nation',
-    amount: '200',
+    amount: 200,
     interval: 'month',
-    intervalCount: '6',
+    intervalCount: 6,
     labels: ['nation', 'city'],
     group: ['studentlund']
   },
   {
     id: cuid(),
     name: 'Helsingkrona Nation',
-    amount: '200',
+    amount: 200,
     interval: 'month',
-    intervalCount: '6',
+    intervalCount: 6,
     labels: ['nation', 'torna'],
     group: ['studentlund']
   },
   {
     id: cuid(),
     name: 'Kalmar Nation',
-    amount: '200',
+    amount: 200,
     interval: 'month',
-    intervalCount: '6',
+    intervalCount: 6,
     labels: ['nation', 'gudrun'],
     group: ['studentlund']
   },
   {
     id: cuid(),
     name: 'Kristianstads Nation',
-    amount: '200',
+    amount: 200,
     interval: 'month',
-    intervalCount: '6',
+    intervalCount: 6,
     labels: ['nation', 'torna'],
     group: ['studentlund']
   },
   {
     id: cuid(),
     name: 'Lunds Nation',
-    amount: '200',
+    amount: 200,
     interval: 'month',
-    intervalCount: '6',
+    intervalCount: 6,
     labels: ['nation', 'city'],
     group: ['studentlund']
   },
   {
     id: cuid(),
     name: 'Malmö Nation',
-    amount: '200',
+    amount: 200,
     interval: 'month',
-    intervalCount: '6',
+    intervalCount: 6,
     labels: ['nation', 'city'],
     group: ['studentlund']
   },
   {
     id: cuid(),
     name: 'Östgöta Nation',
-    amount: '200',
+    amount: 200,
     interval: 'month',
-    intervalCount: '6',
+    intervalCount: 6,
     labels: ['nation', 'city'],
     group: ['studentlund']
   },
   {
     id: cuid(),
     name: 'Sydskånska Nation',
-    amount: '200',
+    amount: 200,
     interval: 'month',
-    intervalCount: '6',
+    intervalCount: 6,
     labels: ['nation', 'torna'],
     group: ['studentlund']
   },
   {
     id: cuid(),
     name: 'Västgöta Nation',
-    amount: '200',
+    amount: 200,
     interval: 'month',
-    intervalCount: '6',
+    intervalCount: 6,
     labels: ['nation', 'torna'],
     group: ['studentlund']
   },
   {
     id: cuid(),
     name: 'Wermlands Nation',
-    amount: '210',
+    amount: 210,
     interval: 'month',
-    intervalCount: '6',
+    intervalCount: 6,
     labels: ['nation', 'gudrun'],
     group: ['studentlund'],
     type: 'plan'
@@ -156,9 +156,9 @@ const plans = [
   {
     id: cuid(),
     name: 'Undefined Nation',
-    amount: '80',
+    amount: 80,
     interval: 'month',
-    intervalCount: '6',
+    intervalCount: 6,
     labels: ['nation'],
     group: ['studentlund'],
     type: 'trail'
@@ -166,27 +166,27 @@ const plans = [
   {
     id: cuid(),
     name: 'Terminsräkningsföreningen',
-    amount: '20',
+    amount: 20,
     interval: 'month',
-    intervalCount: '6',
+    intervalCount: 6,
     labels: [],
     group: ['obligatory']
   },
   {
     id: cuid(),
     name: 'Akademiska Föreningen',
-    amount: '100',
+    amount: 100,
     interval: 'month',
-    intervalCount: '6',
+    intervalCount: 6,
     labels: [],
     group: ['studentlund']
   },
   {
     id: cuid(),
     name: 'Smålands Nation',
-    amount: '200',
+    amount: 200,
     interval: 'month',
-    intervalCount: '6',
+    intervalCount: 6,
     labels: ['nation'],
     group: ['Smalands']
   }

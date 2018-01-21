@@ -1,11 +1,27 @@
+/* @flow */
 import { PLAN_LOAD_SUCCESS } from './planActions'
+import type { Action } from './planActions'
+export type Plan = {
+  +id: string,
+  +name: string,
+  +amount: number,
+  +interval: 'month' | 'year',
+  +intervalCount: number,
+  +labels: Array<string>,
+  +group: Array<string>,
+  +type: ?string
+}
+type State = {
+  +byId: { [string]: Plan },
+  +allIds: Array<string>
+}
 
 const initialState = {
   byId: {},
   allIds: []
 }
 
-export const reducer = (state = initialState, action) => {
+export const reducer = (state: State = initialState, action: Action): State => {
   switch (action.type) {
     case PLAN_LOAD_SUCCESS:
       return {
@@ -21,28 +37,28 @@ export const reducer = (state = initialState, action) => {
   }
 }
 
-export const getAllPlans = state => state.allIds
+export const getAllPlans = (state: State) => state.allIds
 
-export const getPlanById = state => id => state.byId[id]
+export const getPlanById = (state: State, id: string) => state.byId[id]
 
-export const getPlanOptions = state => planId => {
-  const detailedPlan = getPlanById(state)(planId)
+export const getPlanOptions = (state: State) => (planId: string) => {
+  const detailedPlan = getPlanById(state, planId)
   if (detailedPlan.type === 'default') {
-    return state.allIds.map(id => getPlanById(state)(id))
+    return state.allIds.map(id => getPlanById(state, id))
   } else {
     return state.allIds
       .filter(
         p =>
           detailedPlan.type === 'trail'
-            ? trailLogic(getPlanById(state)(p), detailedPlan)
-            : planLogic(getPlanById(state)(p), detailedPlan)
+            ? trailLogic(getPlanById(state, p), detailedPlan)
+            : planLogic(getPlanById(state, p), detailedPlan)
       )
-      .map(id => getPlanById(state)(id))
+      .map(id => getPlanById(state, id))
   }
 }
 
-export const getDefaultPlan = state =>
-  state.allIds.find(id => getPlanById(state)(id).type === 'default')
+export const getDefaultPlan = (state: State) =>
+  state.allIds.find(id => getPlanById(state, id).type === 'default')
 
 const trailLogic = (trail, plan) =>
   plan.group.every(group => trail.group.some(g => g === group)) &&
