@@ -24,7 +24,8 @@
     "husky": "^0.14.3",
     "lint-staged": "^5.0.0",
     "prettier": "^1.8.2",
-    "react-scripts": "1.1.0"
+    "react-scripts": "1.1.0",
+    "react-test-renderer": "16.2.0"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -36,11 +37,15 @@
     "flow": "flow",
     "predeploy": "yarn test && yarn build",
     "deploy": "aws s3 sync build/ s3://membrum-client",
-    "postdeploy":
-      "aws cloudfront create-invalidation --distribution-id E2O9SBWDRR4JZS --paths /* && aws cloudfront create-invalidation --distribution-id E36Q7O5H2Q1R7U --paths /* && yarn clean",
+    "postdeploy": "aws cloudfront create-invalidation --distribution-id E2O9SBWDRR4JZS --paths /* && aws cloudfront create-invalidation --distribution-id E36Q7O5H2Q1R7U --paths /* && yarn clean",
     "precommit": "lint-staged"
   },
   "lint-staged": {
-    "*.js": ["eslint --fix", "prettier --write", "yarn test:staged", "git add"]
+    "*.js": [
+      "eslint --fix",
+      "prettier --write",
+      "yarn test:staged",
+      "git add"
+    ]
   }
 }
