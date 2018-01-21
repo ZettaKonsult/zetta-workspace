@@ -25,7 +25,7 @@ export const membershipPay = plans => {
 export const membershipSave = plans => (dispatch, getState) => {
   const { membershipReducer } = getState()
   const result = plans.filter(
-    plan => getPlanById(membershipReducer)(plan).type !== 'default'
+    plan => getPlanById(membershipReducer, plan).type !== 'default'
   )
 
   dispatch(membershipUpdatePlans(result))

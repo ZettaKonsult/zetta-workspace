@@ -13,7 +13,7 @@ import User from '../user/User'
 import LoginForm from '../user/LoginForm'
 import NotFound from './NotFound'
 import Home from '../containers/Home/'
-import Plan from '../membership/PlanList'
+import Plan from '../membership/Plan'
 
 import Navigation from './Navigation'
 import Footer from './Footer'

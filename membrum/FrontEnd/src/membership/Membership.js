@@ -25,7 +25,7 @@ let Payments = ({ payments, getPlanById }) => (
 
 const mapStateToProps = (state, props) => ({
   payments: getPayments(state.membershipReducer),
-  getPlanById: getPlanById(state.membershipReducer)
+  getPlanById: planId => getPlanById(state.membershipReducer, planId)
 })
 
 Payments = connect(mapStateToProps)(Payments)

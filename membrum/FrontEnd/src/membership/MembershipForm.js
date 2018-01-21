@@ -109,7 +109,7 @@ MembershipForm = reduxForm({ form: 'MembershipForm', validate })(MembershipForm)
 const mapStateToProps = (state, props) => ({
   initialValues: { subscription: getSubscription(state.membershipReducer) },
   getPlanOptions: planId => getPlanOptions(state.membershipReducer)(planId),
-  getPlanDetails: planId => getPlanById(state.membershipReducer)(planId),
+  getPlanDetails: planId => getPlanById(state.membershipReducer, planId),
   defaultPlan: getDefaultPlan(state.membershipReducer),
   isFetching: getIsFetching(state.membershipReducer)
 })

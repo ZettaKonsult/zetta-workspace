@@ -14,9 +14,9 @@ const Row = styled.div`
   display: flex;
   flex-direction: column;
 `
-const Plan = styled.span`
+const Plan = styled.div`
   color: black;
-  padding: 5px;
+  margin: 5px;
   text-decoration: none;
   font-size: 17px;
   user-select: none;
@@ -48,7 +48,7 @@ let PlanList = ({ plans, match, history }) => (
 const mapStateToProps = (state, { match, ...props }) => {
   return {
     plans: getAllPlans(state.membershipReducer).map(id =>
-      getPlanById(state.membershipReducer)(id)
+      getPlanById(state.membershipReducer, id)
     )
   }
 }

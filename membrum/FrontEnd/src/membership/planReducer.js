@@ -11,7 +11,7 @@ export type Plan = {
   +group: Array<string>,
   +type: ?string
 }
-type PlanState = {
+export type PlanState = {
   +byId: { [string]: Plan },
   +allIds: Array<string>
 }

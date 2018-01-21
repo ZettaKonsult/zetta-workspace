@@ -53,7 +53,7 @@ PlanForm = reduxForm({
 
 const mapStateToProps = (state, { match }) => {
   return {
-    initialValues: getPlanById(state.membershipReducer)(match.params.id),
+    initialValues: getPlanById(state.membershipReducer, match.params.id),
     enableReinitialize: true
   }
 }

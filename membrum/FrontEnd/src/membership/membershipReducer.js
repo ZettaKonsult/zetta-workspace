@@ -8,16 +8,32 @@ import {
   PLAN_UPDATE
 } from './planActions'
 import * as plan from './planReducer'
+import type { PlanState } from './planReducer'
 import { LOAD_USER_REQUEST, LOAD_USER_SUCCESS } from '../user/profileActions'
+
+type MembershipState = {
+  +subscription: string[],
+  +plan: PlanState,
+  +payments: Object[],
+  +isFetching: boolean
+}
+
+type Action = {
+  type: string,
+  payload: Object
+}
 
 const initialState = {
   subscription: [],
-  plan: plan.reducer(undefined, {}),
+  plan: plan.reducer(undefined, { type: '' }),
   payments: [],
   isFetching: false
 }
 
-export const membership = (state = initialState, action) => {
+export const membership = (
+  state: MembershipState = initialState,
+  action: Action
+): MembershipState => {
   switch (action.type) {
     case PLAN_LOAD_SUCCESS:
     case PLAN_UPDATE:
@@ -61,7 +77,7 @@ export const membership = (state = initialState, action) => {
           {
             ...action.payload,
             specification: action.payload.specification.map(planId =>
-              getPlanById(state)(planId)
+              getPlanById(state, planId)
             )
           }
         ]
@@ -71,14 +87,17 @@ export const membership = (state = initialState, action) => {
   }
 }
 
-export const getUnpaidPlans = (state, date) => {
+export const getUnpaidPlans = (
+  state: MembershipState,
+  date: number
+): string[] => {
   const payments = getAllPaymentsForInterval(state, date)
   const totalSpecification = payments.reduce(
     (result, payment) => [...result, ...payment.specification],
     []
   )
   const subscription = getSubscription(state)
-  if (Object.keys(payments).length === 0) {
+  if (payments.length === 0) {
     return subscription
   } else {
     const result = subscription.filter(
@@ -88,36 +107,23 @@ export const getUnpaidPlans = (state, date) => {
   }
 }
 
-export const getPayments = state => state.payments
+export const getPayments = (state: MembershipState) => state.payments
 
-export const isSubscriptionPaid = (state, date) =>
+export const isSubscriptionPaid = (state: MembershipState, date: number) =>
   getSubscription(state).length > 0 && getUnpaidPlans(state, date).length === 0
 
-export const getNextPayment = (state, date) => {
-  if (isSubscriptionPaid(state, date)) {
-    return {
-      date: getNextPaymentDate(state, date),
-      amount: state.subscription.reduce(
-        (total, planId) => total + Number(getPlanById(state)(planId).amount),
-        0
-      ),
-      subscription: state.subscription.map(planId => getPlanById(state)(planId))
-    }
-  }
+export const getNextPayment = (state: MembershipState, date: number) => ({
+  date: getNextPaymentDate(state, date),
+  amount: getUnpaidPlans(state, date).reduce(
+    (total, planId) => total + getPlanById(state, planId).amount,
+    0
+  ),
+  subscription: getUnpaidPlans(state, date).map(planId =>
+    getPlanById(state, planId)
+  )
+})
 
-  return {
-    date: getNextPaymentDate(state, date),
-    amount: getUnpaidPlans(state, date).reduce(
-      (total, planId) => total + Number(getPlanById(state)(planId).amount),
-      0
-    ),
-    subscription: getUnpaidPlans(state, date).map(planId =>
-      getPlanById(state)(planId)
-    )
-  }
-}
-
-export const getNextPaymentDate = (state, date) => {
+export const getNextPaymentDate = (state: MembershipState, date: number) => {
   if (!isSubscriptionPaid(state, date)) {
     return date
   }
@@ -133,10 +139,18 @@ export const getNextPaymentDate = (state, date) => {
   }
 }
 
-const getLastPayment = state =>
-  state.payments.length > 0 && state.payments.slice(-1)[0]
+const getLastPayment = (state: MembershipState): Object => {
+  if (state.payments.length > 0) {
+    return state.payments.slice(-1)[0]
+  } else {
+    return {}
+  }
+}
 
-export const getAllPaymentsForInterval = (state, date) =>
+export const getAllPaymentsForInterval = (
+  state: MembershipState,
+  date: number
+): Object[] =>
   state.payments.filter(payment => {
     const validUntil = utilDate.incrementToNextLowerBound(
       payment.date,
@@ -145,16 +159,19 @@ export const getAllPaymentsForInterval = (state, date) =>
     return validUntil > date
   })
 
-export const getPlanById = state => planId =>
+export const getPlanById = (state: MembershipState, planId: string) =>
   plan.getPlanById(state.plan, planId)
 
-export const getAllPlans = state => plan.getAllPlans(state.plan)
+export const getAllPlans = (state: MembershipState) =>
+  plan.getAllPlans(state.plan)
 
-export const getPlanOptions = state => planId =>
+export const getPlanOptions = (state: MembershipState) => (planId: string) =>
   plan.getPlanOptions(state.plan)(planId)
 
-export const getSubscription = state => state.subscription
+export const getSubscription = (state: MembershipState): string[] =>
+  state.subscription
 
-export const getDefaultPlan = state => plan.getDefaultPlan(state.plan)
+export const getDefaultPlan = (state: MembershipState) =>
+  plan.getDefaultPlan(state.plan)
 
-export const getIsFetching = state => state.isFetching
+export const getIsFetching = (state: MembershipState) => state.isFetching
