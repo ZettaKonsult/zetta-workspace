@@ -4,7 +4,7 @@
  * @date 2017-08-24
  */
 
-import type { LadokPersonJSON } from '../types'
+import type { UserData } from '../types'
 import { NumberMap } from 'common-js-utils'
 
 class NotSamePerson extends Error {}
@@ -13,7 +13,7 @@ export class LadokPerson {
   ssn: string
   name: string
   email: string
-  points: NumberMap
+  credits: NumberMap
 
   constructor(
     ssn: string,
@@ -26,23 +26,23 @@ export class LadokPerson {
     this.name = name
     this.email = email
 
-    this.points = new NumberMap()
+    this.credits = new NumberMap()
     if (unionPoints !== undefined && union !== undefined) {
       this._addUnion(union, Number(unionPoints.replace(',', '.')))
     }
   }
 
   _addUnion(union: string, points: number) {
-    if (union in this.points) {
+    if (union in this.credits) {
       throw new Error(`Union ${union} already defined!`)
     }
-    this.points.set(union, points)
+    this.credits.set(union, points)
   }
 
-  credits() {
+  getCredits(): { [string]: number } {
     let credits = {}
 
-    for (let [key, value] of this.points) {
+    for (let [key, value] of this.credits) {
       credits[key] = value
     }
 
@@ -58,26 +58,26 @@ export class LadokPerson {
       )
     }
 
-    this.points.join(person.points)
+    this.credits.join(person.credits)
   }
 
   samePerson(person: LadokPerson) {
     return this.ssn === person.ssn
   }
 
-  toJSON(): LadokPersonJSON {
-    let { ssn, name, email, points } = this
+  toJSON(): UserData {
+    let { ssn, name, email, credits } = this
 
-    let credits = {}
-    for (let [key, value] of points.entries()) {
-      credits[key] = value
+    let jsonCredits = {}
+    for (let [key, value] of credits.entries()) {
+      jsonCredits[key] = value
     }
 
-    return { ssn, name, email, credits }
+    return { ssn, name, email, credits: jsonCredits }
   }
 }
 
-export const fromJSON = (personObject: LadokPersonJSON): LadokPerson => {
+export const fromJSON = (personObject: UserData): LadokPerson => {
   let objectCredits = Object.assign({}, personObject.credits)
   const firstUnion = Object.keys(objectCredits)[0]
   const firstPoints = objectCredits[firstUnion]

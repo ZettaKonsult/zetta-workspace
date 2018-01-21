@@ -4,15 +4,15 @@
  * @date  2017-08-22
  */
 
-import type { LadokPersonJSON } from './types'
+import type { UserData } from '../types'
 import {
   aggregateResults,
   getFaculties,
   getUpdatedUnions,
   getUnions
 } from './unionAssigner'
-import { LadokPerson } from './person'
-import { config } from './config'
+import { LadokPerson } from '../person/ladokPerson'
+import { config } from '../config'
 
 const FACULTY = ['EHL', 'HT', 'JUR', 'KO', 'LTH', 'MED', 'NAT', 'SAM', 'USV']
 const EMAIL = 'anEmail@domain.place.com'
@@ -25,7 +25,7 @@ const newTestPerson = (
   ssn: string,
   name: string,
   credits: number
-): LadokPersonJSON => {
+): UserData => {
   let person = new LadokPerson(ssn, name, EMAIL, '11.1', 'EHL')
   for (let i = 1; i < credits; ++i) {
     person.join(
@@ -82,13 +82,13 @@ describe('Union assigner.', () => {
                 email: 'a',
                 name: 'b',
                 credits: {},
-                unionId: 'A'
+                nation: 'Undefined Nation',
+                unionName: 'A'
               }
             }
           })
         ).toEqual({
           created: {},
-          decide: {},
           modified: {},
           same: {
             '1': {
@@ -96,8 +96,8 @@ describe('Union assigner.', () => {
               email: 'a',
               name: 'b',
               ssn: '1',
-              union: 'A',
-              unionId: 'A'
+              nation: 'Undefined Nation',
+              unionName: 'A'
             }
           }
         })
@@ -114,21 +114,21 @@ describe('Union assigner.', () => {
                 email: 'a',
                 name: 'b',
                 credits: {},
-                unionId: 'B'
+                nation: 'Undefined Nation',
+                unionName: 'B'
               }
             }
           })
         ).toEqual({
           created: {},
-          decide: {},
           modified: {
             '1': {
               credits: {},
               email: 'a',
               name: 'b',
               ssn: '1',
-              union: { next: 'A', old: 'B' },
-              unionId: 'B'
+              nation: 'Undefined Nation',
+              unionName: { next: 'A', old: 'B' }
             }
           },
           same: {}
@@ -144,9 +144,15 @@ describe('Union assigner.', () => {
           })
         ).toEqual({
           created: {
-            '1': { credits: {}, email: 'a', name: 'b', ssn: '1', union: 'Aa' }
+            '1': {
+              credits: {},
+              email: 'a',
+              name: 'b',
+              ssn: '1',
+              nation: 'Undefined Nation',
+              unionName: 'Aa'
+            }
           },
-          decide: {},
           modified: {},
           same: {}
         })
@@ -157,17 +163,25 @@ describe('Union assigner.', () => {
             NewAssignments: {
               '1': ['Aa', 'Bb']
             },
-            Users: { '1': { ssn: '1', email: 'a', name: 'b', credits: {} } }
+            Users: {
+              '1': {
+                ssn: '1',
+                email: 'a',
+                name: 'b',
+                nation: 'Undefined Nation',
+                credits: {}
+              }
+            }
           })
         ).toEqual({
-          created: {},
-          decide: {
+          created: {
             '1': {
               credits: {},
               email: 'a',
               name: 'b',
               ssn: '1',
-              union: ['Aa', 'Bb']
+              nation: 'Undefined Nation',
+              unionName: ['Aa', 'Bb']
             }
           },
           modified: {},
@@ -189,30 +203,38 @@ describe('Union assigner.', () => {
                 email: 'a',
                 name: 'b',
                 credits: {},
-                unionId: 'Bb'
+                nation: 'Undefined Nation',
+                unionName: 'Bb'
               },
               '3': {
                 ssn: '3',
                 email: 'a',
                 name: 'b',
                 credits: {},
-                unionId: 'Aa'
+                nation: 'Undefined Nation',
+                unionName: 'Aa'
               }
             }
           })
         ).toEqual({
           created: {
-            '1': { credits: {}, email: 'a', name: 'b', ssn: '1', union: 'Aa' }
+            '1': {
+              credits: {},
+              email: 'a',
+              name: 'b',
+              ssn: '1',
+              nation: 'Undefined Nation',
+              unionName: 'Aa'
+            }
           },
-          decide: {},
           modified: {
             '3': {
               credits: {},
               email: 'a',
               name: 'b',
               ssn: '3',
-              union: { next: 'Cc', old: 'Aa' },
-              unionId: 'Aa'
+              nation: 'Undefined Nation',
+              unionName: { next: 'Cc', old: 'Aa' }
             }
           },
           same: {
@@ -221,8 +243,8 @@ describe('Union assigner.', () => {
               email: 'a',
               name: 'b',
               ssn: '2',
-              union: 'Bb',
-              unionId: 'Bb'
+              nation: 'Undefined Nation',
+              unionName: 'Bb'
             }
           }
         })
@@ -307,13 +329,15 @@ describe('Union assigner.', () => {
           SSNa: {
             credits: { EHL: 11.1 },
             email: 'anEmail@domain.place.com',
-            name: 'NAME',
+            given_name: 'Name',
+            family_name: '',
             ssn: 'SSNa'
           },
           SSNb: {
             credits: { EHL: 11.1, HT: 22.2 },
             email: 'anEmail@domain.place.com',
-            name: 'NAME',
+            given_name: 'Name',
+            family_name: '',
             ssn: 'SSNb'
           }
         })
@@ -344,19 +368,22 @@ describe('Union assigner.', () => {
           SSNa: {
             credits: { EHL: 11.1 },
             email: 'anEmail@domain.place.com',
-            name: 'NAME',
+            given_name: 'Name',
+            family_name: '',
             ssn: 'SSNa'
           },
           SSNb: {
             credits: { EHL: 11.1, HT: 22.2 },
             email: 'anEmail@domain.place.com',
-            name: 'NAME',
+            given_name: 'Name',
+            family_name: '',
             ssn: 'SSNb'
           },
           SSNc: {
             credits: { EHL: 11.1, HT: 22.2 },
             email: 'anEmail@domain.place.com',
-            name: 'NAME',
+            given_name: 'Name',
+            family_name: '',
             ssn: 'SSNc'
           }
         })

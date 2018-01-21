@@ -4,7 +4,7 @@
  * @date 2017-08-22
  */
 
-import { LadokPersonFromJSON, LadokPerson } from './'
+import { fromJSON, LadokPerson } from './ladokPerson'
 
 const PERSON1 = new LadokPerson(
   '9105040035',
@@ -33,17 +33,17 @@ const newTestPerson = () => {
 }
 
 describe('Ladok person.', () => {
-  describe('credits().', () => {
-    expect(PERSON1.credits()).toEqual({ EHL: 35.5 })
-    expect(PERSON2.credits()).toEqual({ EHL: 21.5 })
+  describe('getCredits().', () => {
+    expect(PERSON1.getCredits()).toEqual({ EHL: 35.5 })
+    expect(PERSON2.getCredits()).toEqual({ EHL: 21.5 })
   })
   describe('join().', () => {
     it('Same nation.', () => {
       const person = newTestPerson()
 
       person.join(PERSON1)
-      expect(PERSON1.credits()).toEqual({ EHL: 35.5 })
-      expect(person.credits()).toEqual({ EHL: 71 })
+      expect(PERSON1.getCredits()).toEqual({ EHL: 35.5 })
+      expect(person.getCredits()).toEqual({ EHL: 71 })
     })
     it('New nation.', () => {
       const person = newTestPerson()
@@ -57,8 +57,8 @@ describe('Ladok person.', () => {
           'HT'
         )
       )
-      expect(PERSON1.credits()).toEqual({ EHL: 35.5 })
-      expect(person.credits()).toEqual({ EHL: 35.5, HT: 35.5 })
+      expect(PERSON1.getCredits()).toEqual({ EHL: 35.5 })
+      expect(person.getCredits()).toEqual({ EHL: 35.5, HT: 35.5 })
     })
     it('Invalid.', () => {
       const person = newTestPerson()
@@ -139,10 +139,8 @@ describe('Ladok person.', () => {
     })
   })
   it('From JSON.', () => {
-    expect(LadokPersonFromJSON(PERSON1.toJSON())).toEqual(PERSON1)
-    expect(LadokPersonFromJSON(PERSON2.toJSON())).toEqual(PERSON2)
-    expect(LadokPersonFromJSON(newTestPerson().toJSON())).toEqual(
-      newTestPerson()
-    )
+    expect(fromJSON(PERSON1.toJSON())).toEqual(PERSON1)
+    expect(fromJSON(PERSON2.toJSON())).toEqual(PERSON2)
+    expect(fromJSON(newTestPerson().toJSON())).toEqual(newTestPerson())
   })
 })

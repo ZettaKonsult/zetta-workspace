@@ -1,4 +1,7 @@
-import Plan from "./Plan"
-import Subscription from "./Subscription"
+/* @flow */
 
-export { Plan, Subscription }
+/**
+ * @date 2018-01-17
+ */
+
+export { getSubscriptions, saveSubscriptions } from './plan'

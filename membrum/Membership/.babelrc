@@ -1,3 +1,11 @@
 {
-  "presets": ["env", "flow"]
+  "plugins": [
+    "transform-runtime",
+    "transform-es2015-modules-commonjs",
+    "transform-object-rest-spread"
+  ],
+  "presets": [
+    "env",
+    "flow"
+  ]
 }

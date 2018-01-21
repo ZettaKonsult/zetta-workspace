@@ -4,14 +4,13 @@
  * @date 2017-10-31
  */
 
-import type {
-  FileResult,
-  LadokPersonJSON,
-  UnionPartition,
-  UserData
-} from './types'
+import type { FileResult, UserData, UnionPartition } from '../types'
 
-const getAssignment = (person: LadokPersonJSON): string => {
+import { config } from '../config'
+import { changeName } from '../user/attributes'
+const DEFAULT_NATION = config.TRF.Nations.Undefined
+
+const getAssignment = (person: UserData): string => {
   const credits = person.credits
   let maxKey: string = ''
   let maxValue: number = Number.MIN_VALUE
@@ -40,19 +39,19 @@ export const getUnions = (
 
 export const aggregateResults = (peopleFiles: {
   [string]: FileResult
-}): { [string]: LadokPersonJSON } => {
+}): { [string]: UserData } => {
   let people = {}
 
   for (const file of Object.values(peopleFiles)) {
     // Recast required due to flow bug with Object.entries and Object.values.
     const fileResult: FileResult = (file: any)
 
-    for (const person: LadokPersonJSON of fileResult.people) {
+    for (const person: UserData of fileResult.people) {
       const ssn = person.ssn
       if (ssn in people) {
         people[ssn].credits = Object.assign(people[ssn].credits, person.credits)
       } else {
-        people[ssn] = person
+        people[ssn] = changeName({ user: person, formats: ['all'] })
       }
     }
   }
@@ -61,7 +60,7 @@ export const aggregateResults = (peopleFiles: {
 }
 
 export const getFaculties = (people: {
-  [string]: LadokPersonJSON
+  [string]: UserData
 }): { [string]: string } =>
   Object.keys(people).reduce(
     (object, ssn) => ({
@@ -79,38 +78,36 @@ export const getUpdatedUnions = (params: {
 
   let result = {
     created: {},
-    decide: {},
     modified: {},
     same: {}
   }
 
   for (let ssn of Object.keys(assignments)) {
     const user = users[ssn]
-    const oldUnion = user.unionId
+    const oldUnion = user.unionName
 
     let newUnion = assignments[ssn]
     if (newUnion === undefined) {
       newUnion = [oldUnion]
     }
 
-    if (newUnion.length > 1) {
-      result.decide[ssn] = { ...user, union: newUnion }
-      continue
+    if (newUnion.length === 1) {
+      newUnion = newUnion[0]
     }
 
-    const unionName = newUnion[0]
     if (oldUnion === undefined) {
-      result.created[ssn] = { ...user, union: unionName }
-      continue
-    }
-
-    if (oldUnion !== unionName) {
+      result.created[ssn] = {
+        ...user,
+        nation: DEFAULT_NATION,
+        unionName: newUnion
+      }
+    } else if (oldUnion !== newUnion) {
       result.modified[ssn] = {
         ...user,
-        union: { old: oldUnion, next: unionName }
+        unionName: { old: oldUnion, next: newUnion }
       }
     } else {
-      result.same[ssn] = { ...user, union: oldUnion }
+      result.same[ssn] = { ...user, unionName: oldUnion }
     }
   }
 

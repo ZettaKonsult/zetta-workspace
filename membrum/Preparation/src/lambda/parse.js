@@ -4,11 +4,11 @@
  * @date  2017-10-03
  */
 
-import type { AWSCallback, AWSContext, AWSEvent } from './types'
-import type { LadokPersonJSON } from '../types'
+import type { AWSCallback, AWSContext, AWSEvent } from '../types'
+import type { UserData } from '../types'
 import AWS from 'aws-sdk'
 import uuid from 'uuid'
-import { parseString } from '../ladokParser'
+import { parseString } from '../parser/ladokParser'
 
 const s3 = new AWS.S3()
 AWS.config.update({ region: 'eu-central-1' })
@@ -54,7 +54,7 @@ export const parseData = async (
   dataString: string,
   fileName: string,
   callback: AWSCallback
-): Promise<Array<LadokPersonJSON>> => {
+): Promise<Array<UserData>> => {
   let people = []
   try {
     people = (await parseString(dataString, fileName)).map(person =>
@@ -68,7 +68,7 @@ export const parseData = async (
 }
 
 const updateDatabase = async (
-  people: Array<LadokPersonJSON>,
+  people: Array<UserData>,
   fileName: string,
   callback: AWSCallback
 ) => {

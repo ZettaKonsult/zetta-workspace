@@ -4,7 +4,7 @@
  * @date  2017-08-22
  */
 
-import { LadokPerson } from './person'
+import { LadokPerson } from '../person/ladokPerson'
 import {
   getUnion,
   parseFile,
@@ -57,11 +57,11 @@ describe('Ladok parser.', () => {
       }
     })
     describe('All files.', () => {
-      it('Points.', async () => {
+      it('Credits.', async () => {
         const people = await parseDirectory('mocks/ladok')
 
         expect(objectSize(people)).toBe(2)
-        expect(people['9105040035'].points).toEqual(
+        expect(people['9105040035'].credits).toEqual(
           new NumberMap({
             EHL: 35.5,
             HT: 30.5,
@@ -73,7 +73,7 @@ describe('Ladok parser.', () => {
             USV: 317.5
           })
         )
-        expect(people['9006211537'].points).toEqual(
+        expect(people['9006211537'].credits).toEqual(
           new NumberMap({
             EHL: 21.5,
             HT: 2.5,
@@ -86,10 +86,10 @@ describe('Ladok parser.', () => {
           })
         )
       })
-      it('credits().', async () => {
+      it('getCredits().', async () => {
         const people = await parseDirectory('mocks/ladok')
 
-        expect(people['9105040035'].credits()).toEqual({
+        expect(people['9105040035'].getCredits()).toEqual({
           EHL: 35.5,
           HT: 30.5,
           JUR: 27.5,
@@ -99,7 +99,7 @@ describe('Ladok parser.', () => {
           SAM: 3,
           USV: 317.5
         })
-        expect(people['9006211537'].credits()).toEqual({
+        expect(people['9006211537'].getCredits()).toEqual({
           EHL: 21.5,
           HT: 2.5,
           JUR: 12.5,

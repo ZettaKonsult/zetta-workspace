@@ -22,17 +22,48 @@ provider:
       Resource: "arn:aws:dynamodb:eu-central-1:460056602695:table/LadokParseResult"
     - Effect: Allow
       Action:
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+      Resource: "arn:aws:dynamodb:eu-central-1:460056602695:table/MembrumUsers"
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+      Resource: "arn:aws:dynamodb:eu-central-1:460056602695:table/MembrumOrganisations/index/organisationName"
+    - Effect: Allow
+      Action:
+        - dynamodb:Scan
+      Resource: "arn:aws:dynamodb:eu-central-1:460056602695:table/MembrumUsers"
+    - Effect: Allow
+      Action:
+        - cognito-idp:ListUsers
+        - cognito-idp:ListUserPoolClients
+      Resource: "arn:aws:cognito-idp:eu-central-1:460056602695:userpool/eu-central-1_ZKcdfXJ1W"
+    - Effect: Allow
+      Action:
+        - cognito-idp:ListUserPools
+      Resource: "*"
+    - Effect: Allow
+      Action:
         - s3:getObject
       Resource:
         - arn:aws:s3:::ladok-files/*
 
 functions:
-  assignLadokPeople:
-    handler: dist/lambda/assign.getParseResults
+  getNewAssignments:
+    handler: dist/lambda/getAssignments.getNewAssignments
     events:
       - http:
           path: assignLadok
           method: get
+          cors: true
+          authorizer: aws_iam
+
+  saveNewAssignments:
+    handler: dist/lambda/saveAssignments.saveNewAssignments
+    events:
+      - http:
+          path: assignLadok
+          method: put
           cors: true
           authorizer: aws_iam
 

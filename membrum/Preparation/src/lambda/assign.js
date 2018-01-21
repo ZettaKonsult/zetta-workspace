@@ -4,61 +4,35 @@
  * @date  2017-11-07
  */
 
-import type { AWSCallback, AWSContext, AWSEvent } from './types'
-import { getOrganisationIds } from './util'
-import * as unionAssigner from '../unionAssigner'
-import * as User from '../user'
+import type { AWSCallback } from '../types'
+import * as unionAssigner from '../assigner'
 import AWS from 'aws-sdk'
 import { config } from '../config'
 
 AWS.config.update({ region: 'eu-central-1' })
 const dynamoDB = new AWS.DynamoDB.DocumentClient()
 
-export const getParseResults = async (
-  event: AWSEvent,
-  context: AWSContext,
-  callback: AWSCallback
-) => {
-  console.log(`Parsing LADOK results.`)
+export const getAssignments = async (callback: AWSCallback) => {
+  console.log(`Fetching LADOK parse results.`)
 
   let parseResult = {}
   try {
-    parseResult = await dynamoDB
-      .scan({
-        TableName: 'LadokParseResult'
-      })
-      .promise()
-    parseResult = unionAssigner.aggregateResults(parseResult.Items)
+    parseResult = await unionAssigner.aggregateResults(await getParseResults())
   } catch (error) {
     callback(error)
   }
   console.log(`Fetched LADOK parse results from database.`)
 
   const faculties = unionAssigner.getFaculties(parseResult)
-  const trfMap = await getOrganisationIds(config.TRF.UnionMapping)
-  console.log(`Fetched organisation IDs.`)
 
-  const newAssignments = unionAssigner.getUnions(trfMap, faculties)
+  const newAssignments = unionAssigner.getUnions(
+    config.TRF.UnionMapping,
+    faculties
+  )
 
   let users = {}
   try {
-    users = await dynamoDB
-      .scan({
-        TableName: 'MembrumUsers'
-      })
-      .promise()
-    users = users.Items.reduce((object, user) => {
-      object[user.ssn] = {
-        ...user,
-        attributes: {
-          family_name: user.family_name,
-          given_name: user.given_name,
-          birthdate: user.ssn,
-          email: user.email
-        }
-      }
-      return object
-    }, {})
+    users = await getUsers()
   } catch (error) {
     callback(error)
   }
@@ -70,14 +44,36 @@ export const getParseResults = async (
     }
   }
 
-  try {
-    await User.saveUnions(
-      unionAssigner.getUpdatedUnions({
-        NewAssignments: newAssignments,
-        Users: users
-      })
-    )
-  } catch (error) {
-    callback(error)
-  }
+  return unionAssigner.getUpdatedUnions({
+    NewAssignments: newAssignments,
+    Users: users
+  })
+}
+
+const getParseResults = async () =>
+  (await dynamoDB
+    .scan({
+      TableName: 'LadokParseResult'
+    })
+    .promise()).Items
+
+const getUsers = async () => {
+  let users = await dynamoDB
+    .scan({
+      TableName: 'MembrumUsers'
+    })
+    .promise()
+
+  return users.Items.reduce((object, user) => {
+    object[user.ssn] = {
+      ...user,
+      attributes: {
+        family_name: user.family_name,
+        given_name: user.given_name,
+        birthdate: user.ssn,
+        email: user.email
+      }
+    }
+    return object
+  }, {})
 }
