@@ -16,11 +16,11 @@ import { membershipPay, membershipUpdatePlans } from './membershipActions'
 describe('membershipReducer', () => {
   let storeState
   beforeEach(() => {
-    storeState = createState()
+    storeState = membership(undefined, {})
   })
 
   it('returns inititalState', () => {
-    expect(membership(undefined, {})).toEqual(storeState)
+    expect(storeState).toEqual(createState())
   })
 
   it('handles MEMBERSHIP_UPDATE_PLANS', () => {

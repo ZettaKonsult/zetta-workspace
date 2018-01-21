@@ -29,13 +29,14 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "test:staged": "cross-env CI=true react-scripts test --env=jsdom --findRelatedTests",
+    "test:staged": "cross-env CI=true react-scripts test --findRelatedTests",
     "eject": "react-scripts eject",
     "clean": "rm -rf ./build",
     "flow": "flow",
     "predeploy": "yarn test && yarn build",
     "deploy": "aws s3 sync build/ s3://membrum-client",
-    "postdeploy": "aws cloudfront create-invalidation --distribution-id E2O9SBWDRR4JZS --paths /* && aws cloudfront create-invalidation --distribution-id E36Q7O5H2Q1R7U --paths /* && yarn clean",
+    "postdeploy":
+      "aws cloudfront create-invalidation --distribution-id E2O9SBWDRR4JZS --paths /* && aws cloudfront create-invalidation --distribution-id E36Q7O5H2Q1R7U --paths /* && yarn clean",
     "precommit": "lint-staged"
   },
   "lint-staged": {

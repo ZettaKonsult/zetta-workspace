@@ -1,6 +1,11 @@
 import { PLAN_LOAD_SUCCESS } from './planActions'
 
-export const reducer = (state, action) => {
+const initialState = {
+  byId: {},
+  allIds: []
+}
+
+export const reducer = (state = initialState, action) => {
   switch (action.type) {
     case PLAN_LOAD_SUCCESS:
       return {
