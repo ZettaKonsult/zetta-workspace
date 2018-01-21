@@ -14,7 +14,7 @@ import { LOAD_USER_REQUEST, LOAD_USER_SUCCESS } from '../user/profileActions'
 
 const initialState = {
   subscription: [],
-  plan: { allIds: [], byId: {} },
+  plan: plan.reducer(undefined, {}),
   payments: [],
   isFetching: false
 }

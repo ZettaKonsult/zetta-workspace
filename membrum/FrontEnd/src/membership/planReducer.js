@@ -11,7 +11,7 @@ export type Plan = {
   +group: Array<string>,
   +type: ?string
 }
-type State = {
+type PlanState = {
   +byId: { [string]: Plan },
   +allIds: Array<string>
 }
@@ -21,7 +21,10 @@ const initialState = {
   allIds: []
 }
 
-export const reducer = (state: State = initialState, action: Action): State => {
+export const reducer = (
+  state: PlanState = initialState,
+  action: Action
+): PlanState => {
   switch (action.type) {
     case PLAN_LOAD_SUCCESS:
       return {
@@ -37,11 +40,11 @@ export const reducer = (state: State = initialState, action: Action): State => {
   }
 }
 
-export const getAllPlans = (state: State) => state.allIds
+export const getAllPlans = (state: PlanState) => state.allIds
 
-export const getPlanById = (state: State, id: string) => state.byId[id]
+export const getPlanById = (state: PlanState, id: string) => state.byId[id]
 
-export const getPlanOptions = (state: State) => (planId: string) => {
+export const getPlanOptions = (state: PlanState) => (planId: string) => {
   const detailedPlan = getPlanById(state, planId)
   if (detailedPlan.type === 'default') {
     return state.allIds.map(id => getPlanById(state, id))
@@ -57,7 +60,7 @@ export const getPlanOptions = (state: State) => (planId: string) => {
   }
 }
 
-export const getDefaultPlan = (state: State) =>
+export const getDefaultPlan = (state: PlanState) =>
   state.allIds.find(id => getPlanById(state, id).type === 'default')
 
 const trailLogic = (trail, plan) =>
