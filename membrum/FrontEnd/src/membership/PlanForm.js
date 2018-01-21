@@ -1,6 +1,8 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { Field, reduxForm } from 'redux-form'
+import { getPlanById } from './membershipReducer'
+import { planSave } from './planActions'
 
 const renderField = ({
   input,
@@ -24,7 +26,6 @@ let PlanForm = props => {
     <form onSubmit={handleSubmit}>
       <Field name="name" type="text" component={renderField} label="name" />
       <Field name="amount" type="text" component={renderField} label="amount" />
-      <Field name="amount" type="text" component={renderField} label="amount" />
       <Field
         name="interval"
         type="text"
@@ -39,6 +40,9 @@ let PlanForm = props => {
       />
       <Field name="labels" type="text" component={renderField} label="labels" />
       <Field name="group" type="text" component={renderField} label="group" />
+      <button type="submit" disabled={submitting || pristine}>
+        Submit
+      </button>
     </form>
   )
 }
@@ -47,17 +51,15 @@ PlanForm = reduxForm({
   form: 'PlanForm'
 })(PlanForm)
 
-const mapStateToProps = state => {
+const mapStateToProps = (state, { match }) => {
   return {
-    initialValues: getUserData(state.userReducer),
+    initialValues: getPlanById(state.membershipReducer)(match.params.id),
     enableReinitialize: true
   }
 }
 
-const mapDispatchToProps = dispatch => {
-  return {
-    onSubmit: values => saveProfile(values)(dispatch)
-  }
+const mapDispatchToProps = {
+  onSubmit: values => planSave(values)
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(PlanForm)

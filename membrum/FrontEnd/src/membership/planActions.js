@@ -26,10 +26,17 @@ export const planLoadFailure = (error: Action) => ({
   payload: { error }
 })
 
-export const planUpdate = (plan: Plan) => ({
-  type: PLAN_UPDATE,
-  payload: { plan }
-})
+export const planUpdate = (plan: Plan) => {
+  console.log(plan)
+  return {
+    type: PLAN_UPDATE,
+    payload: plan
+  }
+}
+
+export const planSave = (plan: Plan) => dispatch => {
+  dispatch(planUpdate(plan))
+}
 
 export const fetchAllPlans = () => async dispatch => {
   dispatch(planLoadRequest())

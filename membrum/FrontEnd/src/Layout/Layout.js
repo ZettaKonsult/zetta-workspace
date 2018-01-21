@@ -13,6 +13,7 @@ import User from '../user/User'
 import LoginForm from '../user/LoginForm'
 import NotFound from './NotFound'
 import Home from '../containers/Home/'
+import Plan from '../membership/PlanList'
 
 import Navigation from './Navigation'
 import Footer from './Footer'
@@ -29,7 +30,8 @@ const Layout = props => {
       <div className="AppContent">
         <Switch>
           <Route path="/" exact component={Home} />
-          <Route path="/login" exact component={LoginForm} />
+          <Route path="/login" component={LoginForm} />
+          <AuthorizedRoute path="/plan" component={Plan} />
           <AuthorizedRoute path="/user" component={User} />
           <Route component={NotFound} />
         </Switch>

@@ -1,5 +1,5 @@
 /* @flow */
-import { PLAN_LOAD_SUCCESS } from './planActions'
+import { PLAN_LOAD_SUCCESS, PLAN_UPDATE } from './planActions'
 import type { Action } from './planActions'
 export type Plan = {
   +id: string,
@@ -34,6 +34,14 @@ export const reducer = (
           {}
         ),
         allIds: action.payload.plans.map(plan => plan.id)
+      }
+    case PLAN_UPDATE:
+      return {
+        ...state,
+        byId: {
+          ...state.byId,
+          [action.payload.id]: action.payload
+        }
       }
     default:
       return state

@@ -1,15 +1,13 @@
 /* @flow */
 import * as utilDate from 'date-primitive-utils'
-
 import { MEMBERSHIP_UPDATE_PLANS, MEMBERSHIP_PAY } from './membershipActions'
-
 import {
   PLAN_LOAD_FAILURE,
   PLAN_LOAD_REQUEST,
-  PLAN_LOAD_SUCCESS
+  PLAN_LOAD_SUCCESS,
+  PLAN_UPDATE
 } from './planActions'
 import * as plan from './planReducer'
-
 import { LOAD_USER_REQUEST, LOAD_USER_SUCCESS } from '../user/profileActions'
 
 const initialState = {
@@ -22,6 +20,7 @@ const initialState = {
 export const membership = (state = initialState, action) => {
   switch (action.type) {
     case PLAN_LOAD_SUCCESS:
+    case PLAN_UPDATE:
       return {
         ...state,
         plan: plan.reducer(state.plan, action)
@@ -148,6 +147,8 @@ export const getAllPaymentsForInterval = (state, date) =>
 
 export const getPlanById = state => planId =>
   plan.getPlanById(state.plan, planId)
+
+export const getAllPlans = state => plan.getAllPlans(state.plan)
 
 export const getPlanOptions = state => planId =>
   plan.getPlanOptions(state.plan)(planId)

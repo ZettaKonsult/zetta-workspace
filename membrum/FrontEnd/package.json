@@ -15,7 +15,8 @@
     "redux": "^3.7.2",
     "redux-devtools-extension": "^2.13.2",
     "redux-form": "^7.2.0",
-    "redux-thunk": "^2.2.0"
+    "redux-thunk": "^2.2.0",
+    "styled-components": "2.4.0"
   },
   "devDependencies": {
     "cross-env": "^5.1.3",
@@ -35,8 +36,7 @@
     "flow": "flow",
     "predeploy": "yarn test && yarn build",
     "deploy": "aws s3 sync build/ s3://membrum-client",
-    "postdeploy":
-      "aws cloudfront create-invalidation --distribution-id E2O9SBWDRR4JZS --paths /* && aws cloudfront create-invalidation --distribution-id E36Q7O5H2Q1R7U --paths /* && yarn clean",
+    "postdeploy": "aws cloudfront create-invalidation --distribution-id E2O9SBWDRR4JZS --paths /* && aws cloudfront create-invalidation --distribution-id E36Q7O5H2Q1R7U --paths /* && yarn clean",
     "precommit": "lint-staged"
   },
   "lint-staged": {

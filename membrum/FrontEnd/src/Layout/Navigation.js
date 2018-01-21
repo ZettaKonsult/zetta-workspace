@@ -34,6 +34,9 @@ export default class TopNavigation extends Component {
         <NavLink to="/user/profile" activeClassName="active">
           Profile
         </NavLink>
+        <NavLink to="/plan" activeClassName="active">
+          plan
+        </NavLink>
 
         <a className="Authentication" onClick={this.props.logout}>
           Logout
