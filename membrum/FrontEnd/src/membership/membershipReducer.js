@@ -92,14 +92,14 @@ export const getUnpaidPlans = (
   date: number
 ): string[] => {
   const payments = getAllPaymentsForInterval(state, date)
-  const totalSpecification = payments.reduce(
-    (result, payment) => [...result, ...payment.specification],
-    []
-  )
   const subscription = getSubscription(state)
   if (payments.length === 0) {
     return subscription
   } else {
+    const totalSpecification = payments.reduce(
+      (result, payment) => [...result, ...payment.specification],
+      []
+    )
     const result = subscription.filter(
       planId => totalSpecification.findIndex(plan => plan.id === planId) === -1
     )
