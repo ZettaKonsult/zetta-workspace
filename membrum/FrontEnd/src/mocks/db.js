@@ -257,13 +257,20 @@ const filteredMembership = plans.reduce(
 const members = [
   {
     ssn: '910504-0035',
-    name: 'Fredrik Palmquist',
-    plans: filteredMembership
+    firstName: 'Fredrik',
+    lastName: 'Palmquist',
+    city: 'Lund',
+    street: 'Kämnärsvägen 23F',
+    zipcode: '22646',
+    mobile: '0709394595',
+    email: 'fiddep@telia.com',
+    subscription: filteredMembership
   },
   {
     ssn: '901020-1234',
-    name: 'Sture Student',
-    plans: filteredMembership
+    firstName: 'Sture',
+    lastName: 'Student',
+    subscription: filteredMembership
   }
 ]
 

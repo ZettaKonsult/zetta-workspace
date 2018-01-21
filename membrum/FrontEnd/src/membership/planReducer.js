@@ -1,24 +1,7 @@
-import {
-  PLAN_LOAD_FAILURE,
-  PLAN_LOAD_REQUEST,
-  PLAN_LOAD_SUCCESS
-} from './planActions'
+import { PLAN_LOAD_SUCCESS } from './planActions'
 
-const inititalState = {
-  allIds: [],
-  byId: {},
-  isFetching: false,
-  error: undefined
-}
-
-export const reducer = (state = inititalState, action) => {
+export const reducer = (state, action) => {
   switch (action.type) {
-    case PLAN_LOAD_REQUEST:
-      return {
-        ...state,
-        isFetching: true
-      }
-
     case PLAN_LOAD_SUCCESS:
       return {
         ...state,
@@ -26,14 +9,7 @@ export const reducer = (state = inititalState, action) => {
           (result, plan) => ({ ...result, [plan.id]: plan }),
           {}
         ),
-        allIds: action.payload.plans.map(plan => plan.id),
-        isFetching: false
-      }
-    case PLAN_LOAD_FAILURE:
-      return {
-        ...state,
-        error: action.payload.error,
-        isFetching: false
+        allIds: action.payload.plans.map(plan => plan.id)
       }
     default:
       return state
@@ -59,6 +35,9 @@ export const getPlanOptions = state => planId => {
       .map(id => getPlanById(state)(id))
   }
 }
+
+export const getDefaultPlan = state =>
+  state.allIds.find(id => getPlanById(state)(id).type === 'default')
 
 const trailLogic = (trail, plan) =>
   plan.group.every(group => trail.group.some(g => g === group)) &&

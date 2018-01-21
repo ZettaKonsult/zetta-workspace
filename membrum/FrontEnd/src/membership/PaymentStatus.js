@@ -1,12 +1,9 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { isSubscriptionPaid, getNextPayment } from './membershipReducer'
-
-import { getPlanById } from './membershipReducer'
-
-import { membershipPay } from './membershipActions'
-
 import { toISODateString } from 'date-primitive-utils'
+
+import { isSubscriptionPaid, getNextPayment } from './membershipReducer'
+import { membershipPay } from './membershipActions'
 
 import Button from '../components/Button'
 
@@ -19,37 +16,30 @@ const style = {
   background: 'var(--danger-light)'
 }
 
-const PaymentStatus = ({
-  membershipPay,
-  paid,
-  nextPayment,
-  getPlanDetails
-}) => {
+const PaymentStatus = ({ membershipPay, paid, nextPayment }) => {
   return paid ? (
     <Paid nextPaymentDate={nextPayment.date} />
   ) : (
-    <Unpaid
-      paymentProccess={membershipPay}
-      nextPayment={nextPayment}
-      getPlanDetails={getPlanDetails}
-    />
+    <Unpaid paymentProccess={membershipPay} nextPayment={nextPayment} />
   )
 }
 
-const Unpaid = ({ paymentProccess, nextPayment, getPlanDetails }) => (
+const Unpaid = ({ paymentProccess, nextPayment }) => (
   <div style={style}>
     <h3>Payment status</h3>
 
     <p>There is a unpaid plan for this semester</p>
     <p>Current subscription is</p>
     {nextPayment.subscription.map((plan, i) => (
-      <span key={`${getPlanDetails(plan).id}${i}`}>
-        {getPlanDetails(plan).name}
-      </span>
+      <span key={`${plan.id}${i}`}>{plan.name}</span>
     ))}
     <p>Total cost {nextPayment.amount}</p>
     <div className="ButtonGroup">
-      <Button large onClick={() => paymentProccess(nextPayment.subscription)}>
+      <Button
+        large
+        onClick={() =>
+          paymentProccess(nextPayment.subscription.map(plan => plan.id))
+        }>
         Pay semester fee
       </Button>
     </div>
@@ -57,7 +47,7 @@ const Unpaid = ({ paymentProccess, nextPayment, getPlanDetails }) => (
 )
 
 const Paid = ({ getRecipt, getMembershipVerification, nextPaymentDate }) => (
-  <div className="paymentStatus approvedPayment">
+  <div style={style}>
     <h3>Payment status</h3>
 
     <p>Your fee has been payed for the current semester</p>
@@ -81,8 +71,7 @@ const mapStateToProps = (state, props) => {
   const date = Date.now()
   return {
     paid: isSubscriptionPaid(state.membershipReducer, date),
-    nextPayment: getNextPayment(state.membershipReducer, date),
-    getPlanDetails: planId => getPlanById(state.membershipReducer)(planId)
+    nextPayment: getNextPayment(state.membershipReducer, date)
   }
 }
 

@@ -1,41 +1,15 @@
 import { reducer, getPlanOptions, getAllPlans } from './planReducer'
-import {
-  planLoadRequest,
-  planLoadSuccess,
-  planLoadFailure
-} from './planActions'
+import { planLoadSuccess } from './planActions'
 
 describe('planReducer', () => {
-  it('returns default state', () => {
-    expect(reducer(undefined, {})).toEqual(createState())
-  })
-
-  describe('isFetching updats when actions are dispatched', () => {
-    let state
-    beforeEach(() => {
-      state = createState()
-    })
-
-    it('should be true when a request is dispatched', () => {
-      expect(reducer(state, planLoadRequest()).isFetching).toBeTruthy()
-    })
-
-    it('planLoadSuccess()', () => {
-      let plans = [{ id: '1' }, { id: '2' }]
-      expect(reducer(state, planLoadSuccess(plans))).toEqual(
-        createState({
-          byId: { '1': { id: '1' }, '2': { id: '2' } },
-          allIds: ['1', '2']
-        })
-      )
-    })
-
-    it('should be false if a error is dispatched', () => {
-      let error = 'hej'
-      expect(reducer(state, planLoadFailure(error))).toEqual(
-        createState({ error: 'hej' })
-      )
-    })
+  it('planLoadSuccess()', () => {
+    let plans = [{ id: '1' }, { id: '2' }]
+    expect(reducer(createState(), planLoadSuccess(plans))).toEqual(
+      createState({
+        byId: { '1': { id: '1' }, '2': { id: '2' } },
+        allIds: ['1', '2']
+      })
+    )
   })
 
   describe('selector tests', () => {
@@ -85,7 +59,5 @@ describe('planReducer', () => {
 const createState = state => ({
   byId: {},
   allIds: [],
-  isFetching: false,
-  error: undefined,
   ...state
 })
