@@ -142,6 +142,7 @@ describe('membershipReducer', () => {
   })
 
   describe('getAllPaymentsForInterval()', () => {
+    const date = Date.UTC(2018, 0, 1)
     let storeState
 
     beforeEach(() => {
@@ -153,7 +154,7 @@ describe('membershipReducer', () => {
       storeState = membership(storeState, membershipPay(['1']))
       storeState = membership(storeState, membershipUpdatePlans(['1', '2']))
       storeState = membership(storeState, membershipPay(['2']))
-      expect(getAllPaymentsForInterval(storeState, Date.now())).toHaveLength(2)
+      expect(getAllPaymentsForInterval(storeState, date)).toHaveLength(2)
     })
   })
 })
