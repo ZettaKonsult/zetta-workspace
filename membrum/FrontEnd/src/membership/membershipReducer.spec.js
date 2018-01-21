@@ -121,7 +121,7 @@ describe('membershipReducer', () => {
   })
 
   describe('getNextPaymentDate()', () => {
-    const date = Date.UTC(2018, 3, 5)
+    const date = Date.UTC(2018, 0, 1)
     const expected = Date.UTC(2018, 6, 1)
     let storeState
 

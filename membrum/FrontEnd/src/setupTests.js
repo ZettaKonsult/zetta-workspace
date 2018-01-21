@@ -6,3 +6,4 @@ const localStorageMock = {
 }
 
 global.localStorage = localStorageMock
+global.Date.now = jest.fn(() => 1514764800000)
