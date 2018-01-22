@@ -3,17 +3,11 @@ import { connect } from 'react-redux'
 import { Route, NavLink } from 'react-router-dom'
 import styled from 'styled-components'
 import { getAllPlans, getPlanById } from './membershipReducer'
-
 import PlanForm from './PlanForm'
 
-const Column = styled.div`
-  display: flex;
-  flex-direction: row;
-`
-const Row = styled.div`
-  display: flex;
-  flex-direction: column;
-`
+import Column from '../components/Column'
+import Row from '../components/Row'
+
 const Plan = styled.div`
   color: black;
   margin: 5px;
@@ -34,7 +28,7 @@ const PlanLink = ({ to, exact, label }) => (
 )
 
 let PlanList = ({ plans, match, history }) => (
-  <Row>
+  <Column>
     {plans.map(plan => (
       <PlanLink
         key={plan.id}
@@ -43,7 +37,7 @@ let PlanList = ({ plans, match, history }) => (
         exact
       />
     ))}
-  </Row>
+  </Column>
 )
 const mapStateToProps = (state, { match, ...props }) => {
   return {
@@ -56,8 +50,8 @@ const mapStateToProps = (state, { match, ...props }) => {
 PlanList = connect(mapStateToProps)(PlanList)
 
 export default ({ match }) => (
-  <Column>
+  <Row>
     <Route path={match.path} component={PlanList} />
     <Route path={`${match.path}/:id?`} component={PlanForm} />
-  </Column>
+  </Row>
 )

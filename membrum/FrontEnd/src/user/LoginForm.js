@@ -3,6 +3,8 @@ import { connect } from 'react-redux'
 import { Redirect } from 'react-router-dom'
 import { Field, reduxForm } from 'redux-form'
 
+import FormInput from '../components/FormInput'
+
 import { loginUser } from './authenticationActions'
 import { isUserAuthenticated } from './'
 
@@ -15,14 +17,18 @@ let LoginForm = props => {
   } else {
     return (
       <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="username">Username</label>
-          <Field name="username" component="input" type="text" />
-        </div>
-        <div>
-          <label htmlFor="password">Password</label>
-          <Field name="password" component="input" type="password" />
-        </div>
+        <Field
+          name="username"
+          type="text"
+          component={FormInput}
+          label="Username"
+        />
+        <Field
+          name="password"
+          type="password"
+          component={FormInput}
+          label="Password"
+        />
         <button type="submit">Submit</button>
       </form>
     )

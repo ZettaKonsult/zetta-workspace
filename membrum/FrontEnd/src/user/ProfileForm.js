@@ -2,24 +2,10 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { Field, reduxForm } from 'redux-form'
 
+import FormInput from '../components/FormInput'
+
 import { saveProfile } from './profileActions'
 import { getUserData } from './'
-
-const renderField = ({
-  input,
-  label,
-  type,
-  meta: { touched, error },
-  disabled
-}) => (
-  <div>
-    <label>{label}</label>
-    <div>
-      <input {...input} type={type} placeholder={label} disabled={disabled} />
-      {touched && error && <span>{error}</span>}
-    </div>
-  </div>
-)
 
 let ProfileForm = props => {
   const { handleSubmit, pristine, reset, submitting } = props
@@ -28,32 +14,27 @@ let ProfileForm = props => {
       <Field
         name="ssn"
         type="text"
-        component={renderField}
+        component={FormInput}
         label="ssn"
         disabled
       />
       <Field
         name="firstName"
         type="text"
-        component={renderField}
+        component={FormInput}
         label="firstName"
       />
       <Field
         name="lastName"
         type="text"
-        component={renderField}
+        component={FormInput}
         label="lastName"
       />
-      <Field name="street" type="text" component={renderField} label="street" />
-      <Field name="city" type="text" component={renderField} label="city" />
-      <Field
-        name="zipcode"
-        type="text"
-        component={renderField}
-        label="zipcode"
-      />
-      <Field name="mobile" type="text" component={renderField} label="mobile" />
-      <Field name="email" type="text" component={renderField} label="email" />
+      <Field name="street" type="text" component={FormInput} label="street" />
+      <Field name="city" type="text" component={FormInput} label="city" />
+      <Field name="zipcode" type="text" component={FormInput} label="zipcode" />
+      <Field name="mobile" type="text" component={FormInput} label="mobile" />
+      <Field name="email" type="text" component={FormInput} label="email" />
 
       <div>
         <button type="submit" disabled={pristine || submitting}>

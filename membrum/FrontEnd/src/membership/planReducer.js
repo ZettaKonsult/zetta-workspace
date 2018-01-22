@@ -1,6 +1,6 @@
 /* @flow */
-import { PLAN_LOAD_SUCCESS, PLAN_UPDATE } from './planActions'
-import type { Action } from './planActions'
+import { PLAN_LOAD_SUCCESS, PLAN_UPDATE, PLAN_ADD } from './planActions'
+import type { Action } from '../reducers'
 export type Plan = {
   +id: string,
   +name: string,
@@ -42,6 +42,15 @@ export const reducer = (
           ...state.byId,
           [action.payload.id]: action.payload
         }
+      }
+    case PLAN_ADD:
+      return {
+        ...state,
+        byId: {
+          ...state.byId,
+          [action.payload.id]: action.payload
+        },
+        allIds: [...state.allIds, action.payload.id]
       }
     default:
       return state

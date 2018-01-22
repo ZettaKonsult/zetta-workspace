@@ -5,7 +5,8 @@ import {
   PLAN_LOAD_FAILURE,
   PLAN_LOAD_REQUEST,
   PLAN_LOAD_SUCCESS,
-  PLAN_UPDATE
+  PLAN_UPDATE,
+  PLAN_ADD
 } from './planActions'
 import * as plan from './planReducer'
 import type { PlanState } from './planReducer'
@@ -37,6 +38,7 @@ export const membership = (
   switch (action.type) {
     case PLAN_LOAD_SUCCESS:
     case PLAN_UPDATE:
+    case PLAN_ADD:
       return {
         ...state,
         plan: plan.reducer(state.plan, action)
