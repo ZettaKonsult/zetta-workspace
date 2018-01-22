@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<Card /> should render a Card 1`] = `
+exports[`should render a Card 1`] = `
 <div
   className="Card"
 >
