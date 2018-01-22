@@ -7,7 +7,7 @@
 import type { AWSCallback, AWSContext, AWSEvent } from '../types'
 import type { UserData } from '../types'
 import AWS from 'aws-sdk'
-import uuid from 'uuid'
+import cuid from 'cuid'
 import { parseString } from '../parser/ladokParser'
 
 const s3 = new AWS.S3()
@@ -76,7 +76,7 @@ const updateDatabase = async (
     TableName: 'LadokParseResult',
 
     Item: {
-      Index: uuid.v1(),
+      Index: cuid(),
       file: fileName,
       people: people,
       createdAt: new Date().getTime()

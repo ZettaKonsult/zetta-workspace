@@ -31,5 +31,8 @@
     "ignore": [
       "*.spec*"
     ]
+  },
+  "dependencies": {
+    "serverless": "^1.25.0"
   }
 }
