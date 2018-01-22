@@ -21,5 +21,5 @@ i=0
 for NAME in ${NAMES[@]}; do
   i=$((i + 1))
   echo "==== Deploying $NAME [ $i / $LENGTH ] ==== "
-  sls deploy function -f $NAME
+  yarn sls deploy function -f $NAME
 done

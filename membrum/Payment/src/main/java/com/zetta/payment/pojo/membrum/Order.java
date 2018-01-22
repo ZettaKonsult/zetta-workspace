@@ -1,7 +1,7 @@
 package com.zetta.payment.pojo.membrum;
 
 import java.io.Serializable;
-import java.util.UUID;
+import cool.graph.cuid.*;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
@@ -31,7 +31,7 @@ public class Order implements Serializable {
     public Order() {}
 
     public Order(String userId, int amount) {
-        this.orderId = UUID.randomUUID().toString();
+        this.orderId = Cuid.createCuid();
         this.userId = userId;
         this.created = DateUtil.now();
         this.amount = amount;

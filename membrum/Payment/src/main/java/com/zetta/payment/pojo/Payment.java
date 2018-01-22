@@ -1,13 +1,14 @@
 package com.zetta.payment.pojo;
 
 import java.io.Serializable;
-import java.util.UUID;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBIndexHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 import com.zetta.payment.util.DateUtil;
+
+import cool.graph.cuid.Cuid;
 
 /**
  * @date 2017-12-07
@@ -32,7 +33,7 @@ public class Payment implements Serializable {
     public Payment() {}
 
     public Payment(String orderId, int amount) {
-        this(UUID.randomUUID().toString(), orderId, "", DateUtil.now(), false,
+        this(Cuid.createCuid(), orderId, "", DateUtil.now(), false,
                 amount);
     }
 
