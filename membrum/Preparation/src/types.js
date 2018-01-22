@@ -15,27 +15,22 @@ export type NameTuple = { family_name: string, given_name: string }
 
 type UserDataBase = {
   ssn: string,
-  email: string,
   credits: { [string]: string }
 }
 
+export type ParsedUser = UserDataBase & {
+  email: string,
+  name: string
+}
+
 export type UserData = UserDataBase & {
-  name: string,
   nation?: string,
-  unionName?: string | [string]
-}
-
-export type UserDataWithAttributes = UserDataBase & {
-  attributes: { [string]: string }
-}
-
-export type UserDataWithNames = UserDataBase & {
-  family_name: string,
-  given_name: string
+  unionName?: string | [string],
+  attributes: AttributeData
 }
 
 export type FileResult = {
-  people: Array<UserData>,
+  people: Array<ParsedUser>,
   createdAt: number,
   file: string,
   Index: string

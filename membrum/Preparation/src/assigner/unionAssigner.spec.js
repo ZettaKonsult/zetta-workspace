@@ -7,6 +7,7 @@
 import type { UserData } from '../types'
 import {
   aggregateResults,
+  compileUserData,
   getFaculties,
   getUpdatedUnions,
   getUnions
@@ -21,11 +22,10 @@ const SSN = 'SSN'
 
 const UNION_MAP = config.TRF.UnionMapping
 
-const newTestPerson = (
-  ssn: string,
-  name: string,
-  credits: number
-): UserData => {
+const newUserData = (ssn: string, name: string, credits: number): UserData =>
+  compileUserData({ person: newParsedUser(ssn, name, credits) })
+
+const newParsedUser = (ssn: string, name: string, credits: number) => {
   let person = new LadokPerson(ssn, name, EMAIL, '11.1', 'EHL')
   for (let i = 1; i < credits; ++i) {
     person.join(
@@ -40,29 +40,28 @@ const newTestPerson = (
   }
   return person.toJSON()
 }
-
 describe('Union assigner.', () => {
   describe('Faculty assignment.', () => {
     it('One.', () => {
-      expect(getFaculties({ ssn1: newTestPerson(SSN, NAME, 1) })).toEqual({
+      expect(getFaculties({ ssn1: newUserData(SSN, NAME, 1) })).toEqual({
         ssn1: 'EHL'
       })
     })
     it('Two.', () => {
-      expect(getFaculties({ ssn1: newTestPerson(SSN, NAME, 2) })).toEqual({
+      expect(getFaculties({ ssn1: newUserData(SSN, NAME, 2) })).toEqual({
         ssn1: 'HT'
       })
     })
     it('Lots.', () => {
-      expect(getFaculties({ ssn1: newTestPerson(SSN, NAME, 8) })).toEqual({
+      expect(getFaculties({ ssn1: newUserData(SSN, NAME, 8) })).toEqual({
         ssn1: 'SAM'
       })
     })
     it('Two people.', () => {
       expect(
         getFaculties({
-          ssn1: newTestPerson(SSN, NAME, 3),
-          ssn2: newTestPerson(SSN, NAME, 4)
+          ssn1: newUserData(SSN + 1, NAME, 3),
+          ssn2: newUserData(SSN + 2, NAME, 4)
         })
       ).toEqual({
         ssn1: 'JUR',
@@ -79,8 +78,12 @@ describe('Union assigner.', () => {
             Users: {
               '1': {
                 ssn: '1',
-                email: 'a',
-                name: 'b',
+                attributes: {
+                  birthdate: '1',
+                  email: 'a',
+                  given_name: 'b',
+                  family_name: ''
+                },
                 credits: {},
                 nation: 'Undefined Nation',
                 unionName: 'A'
@@ -93,9 +96,13 @@ describe('Union assigner.', () => {
           same: {
             '1': {
               credits: {},
-              email: 'a',
-              name: 'b',
               ssn: '1',
+              attributes: {
+                birthdate: '1',
+                email: 'a',
+                given_name: 'b',
+                family_name: ''
+              },
               nation: 'Undefined Nation',
               unionName: 'A'
             }
@@ -111,8 +118,12 @@ describe('Union assigner.', () => {
             Users: {
               '1': {
                 ssn: '1',
-                email: 'a',
-                name: 'b',
+                attributes: {
+                  birthdate: '1',
+                  email: 'a',
+                  given_name: 'b',
+                  family_name: ''
+                },
                 credits: {},
                 nation: 'Undefined Nation',
                 unionName: 'B'
@@ -124,8 +135,12 @@ describe('Union assigner.', () => {
           modified: {
             '1': {
               credits: {},
-              email: 'a',
-              name: 'b',
+              attributes: {
+                birthdate: '1',
+                email: 'a',
+                given_name: 'b',
+                family_name: ''
+              },
               ssn: '1',
               nation: 'Undefined Nation',
               unionName: { next: 'A', old: 'B' }
@@ -140,14 +155,29 @@ describe('Union assigner.', () => {
             NewAssignments: {
               '1': ['Aa']
             },
-            Users: { '1': { ssn: '1', email: 'a', name: 'b', credits: {} } }
+            Users: {
+              '1': {
+                ssn: '1',
+                attributes: {
+                  birthdate: '1',
+                  email: 'a',
+                  given_name: 'b',
+                  family_name: ''
+                },
+                credits: {}
+              }
+            }
           })
         ).toEqual({
           created: {
             '1': {
               credits: {},
-              email: 'a',
-              name: 'b',
+              attributes: {
+                birthdate: '1',
+                email: 'a',
+                given_name: 'b',
+                family_name: ''
+              },
               ssn: '1',
               nation: 'Undefined Nation',
               unionName: 'Aa'
@@ -166,8 +196,12 @@ describe('Union assigner.', () => {
             Users: {
               '1': {
                 ssn: '1',
-                email: 'a',
-                name: 'b',
+                attributes: {
+                  birthdate: '1',
+                  email: 'a',
+                  given_name: 'b',
+                  family_name: ''
+                },
                 nation: 'Undefined Nation',
                 credits: {}
               }
@@ -177,8 +211,12 @@ describe('Union assigner.', () => {
           created: {
             '1': {
               credits: {},
-              email: 'a',
-              name: 'b',
+              attributes: {
+                birthdate: '1',
+                email: 'a',
+                given_name: 'b',
+                family_name: ''
+              },
               ssn: '1',
               nation: 'Undefined Nation',
               unionName: ['Aa', 'Bb']
@@ -197,19 +235,36 @@ describe('Union assigner.', () => {
               '3': ['Cc']
             },
             Users: {
-              '1': { ssn: '1', email: 'a', name: 'b', credits: {} },
+              '1': {
+                ssn: '1',
+                attributes: {
+                  birthdate: '1',
+                  email: 'a',
+                  given_name: 'b',
+                  family_name: ''
+                },
+                credits: {}
+              },
               '2': {
                 ssn: '2',
-                email: 'a',
-                name: 'b',
+                attributes: {
+                  birthdate: '1',
+                  email: 'a',
+                  given_name: 'b',
+                  family_name: ''
+                },
                 credits: {},
                 nation: 'Undefined Nation',
                 unionName: 'Bb'
               },
               '3': {
                 ssn: '3',
-                email: 'a',
-                name: 'b',
+                attributes: {
+                  birthdate: '1',
+                  email: 'a',
+                  given_name: 'b',
+                  family_name: ''
+                },
                 credits: {},
                 nation: 'Undefined Nation',
                 unionName: 'Aa'
@@ -220,8 +275,12 @@ describe('Union assigner.', () => {
           created: {
             '1': {
               credits: {},
-              email: 'a',
-              name: 'b',
+              attributes: {
+                birthdate: '1',
+                email: 'a',
+                given_name: 'b',
+                family_name: ''
+              },
               ssn: '1',
               nation: 'Undefined Nation',
               unionName: 'Aa'
@@ -230,8 +289,12 @@ describe('Union assigner.', () => {
           modified: {
             '3': {
               credits: {},
-              email: 'a',
-              name: 'b',
+              attributes: {
+                birthdate: '1',
+                email: 'a',
+                given_name: 'b',
+                family_name: ''
+              },
               ssn: '3',
               nation: 'Undefined Nation',
               unionName: { next: 'Cc', old: 'Aa' }
@@ -240,8 +303,12 @@ describe('Union assigner.', () => {
           same: {
             '2': {
               credits: {},
-              email: 'a',
-              name: 'b',
+              attributes: {
+                birthdate: '1',
+                email: 'a',
+                given_name: 'b',
+                family_name: ''
+              },
               ssn: '2',
               nation: 'Undefined Nation',
               unionName: 'Bb'
@@ -311,8 +378,8 @@ describe('Union assigner.', () => {
           aggregateResults({
             res1: {
               people: [
-                newTestPerson(SSN + 'a', NAME, 1),
-                newTestPerson(SSN + 'b', NAME, 2)
+                newParsedUser(SSN + 'a', NAME, 1),
+                newParsedUser(SSN + 'b', NAME, 2)
               ],
               createdAt: 1,
               file: 'aFile',
@@ -328,17 +395,23 @@ describe('Union assigner.', () => {
         ).toEqual({
           SSNa: {
             credits: { EHL: 11.1 },
-            email: 'anEmail@domain.place.com',
-            given_name: 'Name',
-            family_name: '',
-            ssn: 'SSNa'
+            ssn: 'SSNa',
+            attributes: {
+              birthdate: 'SSNa',
+              email: 'anEmail@domain.place.com',
+              given_name: 'Name',
+              family_name: ''
+            }
           },
           SSNb: {
             credits: { EHL: 11.1, HT: 22.2 },
-            email: 'anEmail@domain.place.com',
-            given_name: 'Name',
-            family_name: '',
-            ssn: 'SSNb'
+            ssn: 'SSNb',
+            attributes: {
+              birthdate: 'SSNb',
+              email: 'anEmail@domain.place.com',
+              given_name: 'Name',
+              family_name: ''
+            }
           }
         })
       })
@@ -347,8 +420,8 @@ describe('Union assigner.', () => {
           aggregateResults({
             res1: {
               people: [
-                newTestPerson(SSN + 'a', NAME, 1),
-                newTestPerson(SSN + 'b', NAME, 2)
+                newParsedUser(SSN + 'a', NAME, 1),
+                newParsedUser(SSN + 'b', NAME, 2)
               ],
               createdAt: 1,
               file: 'aFile',
@@ -356,8 +429,8 @@ describe('Union assigner.', () => {
             },
             res2: {
               people: [
-                newTestPerson(SSN + 'a', NAME, 1),
-                newTestPerson(SSN + 'c', NAME, 2)
+                newParsedUser(SSN + 'a', NAME, 1),
+                newParsedUser(SSN + 'c', NAME, 2)
               ],
               createdAt: 1,
               file: 'aFile',
@@ -367,24 +440,33 @@ describe('Union assigner.', () => {
         ).toEqual({
           SSNa: {
             credits: { EHL: 11.1 },
-            email: 'anEmail@domain.place.com',
-            given_name: 'Name',
-            family_name: '',
-            ssn: 'SSNa'
+            ssn: 'SSNa',
+            attributes: {
+              birthdate: 'SSNa',
+              email: 'anEmail@domain.place.com',
+              given_name: 'Name',
+              family_name: ''
+            }
           },
           SSNb: {
             credits: { EHL: 11.1, HT: 22.2 },
-            email: 'anEmail@domain.place.com',
-            given_name: 'Name',
-            family_name: '',
-            ssn: 'SSNb'
+            ssn: 'SSNb',
+            attributes: {
+              birthdate: 'SSNb',
+              email: 'anEmail@domain.place.com',
+              given_name: 'Name',
+              family_name: ''
+            }
           },
           SSNc: {
             credits: { EHL: 11.1, HT: 22.2 },
-            email: 'anEmail@domain.place.com',
-            given_name: 'Name',
-            family_name: '',
-            ssn: 'SSNc'
+            ssn: 'SSNc',
+            attributes: {
+              birthdate: 'SSNc',
+              email: 'anEmail@domain.place.com',
+              given_name: 'Name',
+              family_name: ''
+            }
           }
         })
       })

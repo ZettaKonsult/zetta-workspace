@@ -24,6 +24,7 @@ export const getAssignments = async (callback: AWSCallback) => {
   console.log(`Fetched LADOK parse results from database.`)
 
   const faculties = unionAssigner.getFaculties(parseResult)
+  console.log(`Assigned faculties to each user.`)
 
   const newAssignments = unionAssigner.getUnions(
     config.TRF.UnionMapping,
@@ -57,23 +58,9 @@ const getParseResults = async () =>
     })
     .promise()).Items
 
-const getUsers = async () => {
-  let users = await dynamoDB
+const getUsers = async () =>
+  (await dynamoDB
     .scan({
       TableName: 'MembrumUsers'
     })
-    .promise()
-
-  return users.Items.reduce((object, user) => {
-    object[user.ssn] = {
-      ...user,
-      attributes: {
-        family_name: user.family_name,
-        given_name: user.given_name,
-        birthdate: user.ssn,
-        email: user.email
-      }
-    }
-    return object
-  }, {})
-}
+    .promise()).Items
