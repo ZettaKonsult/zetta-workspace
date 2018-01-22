@@ -5,14 +5,14 @@ import {
   LOGOUT_USER
 } from './authenticationActions'
 
-const initialState = {
+export const initialState = {
   token: undefined,
   isAuthenticated: false,
   isAuthenticating: false,
   statusText: undefined
 }
 
-export function authentication(state = initialState, action) {
+export function reducer(state = initialState, action) {
   switch (action.type) {
     case LOGIN_USER_REQUEST:
       return {
@@ -53,3 +53,7 @@ export function authentication(state = initialState, action) {
       return state
   }
 }
+
+export const isUserAuthenticated = state => state.isAuthenticated
+
+export const getUserData = state => state.token

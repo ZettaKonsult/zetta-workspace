@@ -1,6 +1,14 @@
-import {combineReducers} from 'redux'
+import { combineReducers } from 'redux'
 
-import {authentication} from './authenticationReducer'
-import {registration} from './registrationReducer'
+import * as authentication from './authenticationReducer'
+import * as profile from './profileReducer'
 
-export default combineReducers({authentication, registration})
+export default combineReducers({
+  authentication: authentication.reducer,
+  profile: profile.reducer
+})
+
+export const isUserAuthenticated = state =>
+  authentication.isUserAuthenticated(state.authentication)
+
+export const getUserData = state => profile.getUserData(state.profile)

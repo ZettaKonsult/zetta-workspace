@@ -2,21 +2,21 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { toISODateString } from 'date-primitive-utils'
 
-import { getPayments, getPlanDetails } from './membershipReducer'
+import { getPayments, getPlanById } from './membershipReducer'
 
 import MembershipForm from './MembershipForm'
 import PaymentStatus from './PaymentStatus'
 
 import './membership.css'
 
-let Payments = ({ payments, getPlanDetails }) => (
+let Payments = ({ payments, getPlanById }) => (
   <div>
     Your payments
     {payments.map((payment, i) => (
       <p key={i}>
         {toISODateString(payment.date)}
         {payment.specification.map((plan, i) => (
-          <span key={i}>{getPlanDetails(plan).name} </span>
+          <span key={i}>{getPlanById(plan).name} </span>
         ))}
       </p>
     ))}
@@ -25,7 +25,7 @@ let Payments = ({ payments, getPlanDetails }) => (
 
 const mapStateToProps = (state, props) => ({
   payments: getPayments(state.membershipReducer),
-  getPlanDetails: getPlanDetails(state.membershipReducer)
+  getPlanById: planId => getPlanById(state.membershipReducer, planId)
 })
 
 Payments = connect(mapStateToProps)(Payments)

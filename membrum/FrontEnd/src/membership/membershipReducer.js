@@ -1,52 +1,55 @@
+/* @flow */
 import * as utilDate from 'date-primitive-utils'
-
+import { MEMBERSHIP_UPDATE_PLANS, MEMBERSHIP_PAY } from './membershipActions'
 import {
-  MEMBERSHIP_ADD_PLAN,
-  MEMBERSHIP_REMOVE_PLAN,
-  MEMBERSHIP_UPDATE_PLANS,
-  MEMBERSHIP_ALL_PLANS,
-  MEMBERSHIP_PAY
-} from './membershipActions'
+  PLAN_LOAD_FAILURE,
+  PLAN_LOAD_REQUEST,
+  PLAN_LOAD_SUCCESS,
+  PLAN_UPDATE
+} from './planActions'
+import * as plan from './planReducer'
+import type { PlanState } from './planReducer'
+import { LOAD_USER_REQUEST, LOAD_USER_SUCCESS } from '../user/profileActions'
 
-import {
-  LOAD_USER_REQUEST,
-  LOAD_USER_SUCCESS,
-  LOAD_USER_FAILURE
-} from '../user/authenticationActions'
+type MembershipState = {
+  +subscription: string[],
+  +plan: PlanState,
+  +payments: Object[],
+  +isFetching: boolean
+}
+
+type Action = {
+  type: string,
+  payload: Object
+}
 
 const initialState = {
-  allPlans: [],
-  plans: [],
+  subscription: [],
+  plan: plan.reducer(undefined, { type: '' }),
   payments: [],
-  pristine: true,
   isFetching: false
 }
 
-export const membership = (state = initialState, action) => {
+export const membership = (
+  state: MembershipState = initialState,
+  action: Action
+): MembershipState => {
   switch (action.type) {
-    case MEMBERSHIP_ADD_PLAN:
+    case PLAN_LOAD_SUCCESS:
+    case PLAN_UPDATE:
       return {
         ...state,
-        plans: [...state.plans, action.payload.plan]
+        plan: plan.reducer(state.plan, action)
       }
-    case MEMBERSHIP_REMOVE_PLAN:
-      return {
-        ...state,
-        plans: [...state.plans.filter(plan => plan !== action.payload.plan)]
-      }
+
     case MEMBERSHIP_UPDATE_PLANS:
       return {
         ...state,
-        plans: [...action.payload.plans],
-        pristine: false
-      }
-    case MEMBERSHIP_ALL_PLANS:
-      return {
-        ...state,
-        allPlans: [...action.payload.allPlans]
+        subscription: [...action.payload.plans]
       }
 
     case LOAD_USER_REQUEST:
+    case PLAN_LOAD_REQUEST:
       return {
         ...state,
         isFetching: true
@@ -55,120 +58,120 @@ export const membership = (state = initialState, action) => {
     case LOAD_USER_SUCCESS:
       return {
         ...state,
-        plans: action.payload.user.plans,
+        subscription: action.payload.user.subscription,
         isFetching: false
       }
-    case LOAD_USER_FAILURE:
+
+    case PLAN_LOAD_FAILURE:
       return {
-        isFetching: false
+        ...state,
+        isFetching: false,
+        error: action.payload.error
       }
 
     case MEMBERSHIP_PAY:
       return {
         ...state,
-        pristine: true,
-        payments: [...state.payments, action.payload]
+        payments: [
+          ...state.payments,
+          {
+            ...action.payload,
+            specification: action.payload.specification.map(planId =>
+              getPlanById(state, planId)
+            )
+          }
+        ]
       }
     default:
       return state
   }
 }
 
-export const getUnpaidPlans = (state, date) => {
-  if (state.payments.length === 0) {
-    return state.plans
+export const getUnpaidPlans = (
+  state: MembershipState,
+  date: number
+): string[] => {
+  const payments = getAllPaymentsForInterval(state, date)
+  const subscription = getSubscription(state)
+  if (payments.length === 0) {
+    return subscription
+  } else {
+    const totalSpecification = payments.reduce(
+      (result, payment) => [...result, ...payment.specification],
+      []
+    )
+    const result = subscription.filter(
+      planId => totalSpecification.findIndex(plan => plan.id === planId) === -1
+    )
+    return result
   }
-  const validPayments = state.payments.filter(
-    payment => payment.validUntil > date
-  )
-  return state.plans.filter(
-    planId =>
-      !validPayments.find(payment =>
-        payment.specification.find(id => id === planId)
-      )
-  )
 }
 
-export const getPayments = state => state.payments
+export const getPayments = (state: MembershipState) => state.payments
 
-export const isSubscriptionPaid = (state, date) => {
+export const isSubscriptionPaid = (state: MembershipState, date: number) =>
+  getSubscription(state).length > 0 && getUnpaidPlans(state, date).length === 0
+
+export const getNextPayment = (state: MembershipState, date: number) => ({
+  date: getNextPaymentDate(state, date),
+  amount: getUnpaidPlans(state, date).reduce(
+    (total, planId) => total + getPlanById(state, planId).amount,
+    0
+  ),
+  subscription: getUnpaidPlans(state, date).map(planId =>
+    getPlanById(state, planId)
+  )
+})
+
+export const getNextPaymentDate = (state: MembershipState, date: number) => {
+  if (!isSubscriptionPaid(state, date)) {
+    return date
+  }
+
   const payment = getLastPayment(state)
-  if (!payment) {
-    return false
-  }
-  if (state.pristine) {
-    return payment.validUntil > date
-  }
-
-  return getUnpaidPlans(state, date).length === 0
-}
-
-export const getNextPayment = (state, date) => {
-  if (state.pristine || state.payments.length === 0) {
-    return {
-      date: getNextPaymentDate(state),
-      amount: state.plans.reduce(
-        (total, planId) => total + Number(getPlanDetails(state)(planId).amount),
-        0
-      ),
-      plans: state.plans
-    }
-  }
-
-  return {
-    date: getNextPaymentDate(state),
-    amount: getUnpaidPlans(state, date).reduce(
-      (total, planId) => total + Number(getPlanDetails(state)(planId).amount),
-      0
-    ),
-    plans: getUnpaidPlans(state, date)
-  }
-}
-
-export const getPlanDetails = state => id =>
-  state.allPlans.find(plan => plan.id === id)
-
-export const getNextPaymentDate = state => {
-  if (state.payments.length === 0) {
-    return Date.now()
-  }
-
-  const { interval, intervalCount } = getPlanDetails(state)(state.plans[0])
-
+  const { interval, intervalCount } = payment.specification[0]
   if (interval === 'month') {
     const result = utilDate.incrementToNextLowerBound(
-      getLastPayment(state).date,
+      payment.date,
       intervalCount
     )
     return result
   }
 }
 
-const getLastPayment = state =>
-  state.payments.length > 0 && state.payments.slice(-1)[0]
-
-export const getPlanOptions = state => planId => {
-  const detailedPlan = getPlanDetails(state)(planId)
-  if (detailedPlan.type === 'default') {
-    return state.allPlans
+const getLastPayment = (state: MembershipState): Object => {
+  if (state.payments.length > 0) {
+    return state.payments.slice(-1)[0]
   } else {
-    return state.allPlans.filter(
-      p =>
-        detailedPlan.type === 'trail'
-          ? trailLogic(p, detailedPlan)
-          : planLogic(p, detailedPlan)
-    )
+    return {}
   }
 }
 
-const trailLogic = (trail, plan) =>
-  plan.group.every(group => trail.group.some(g => g === group)) &&
-  plan.labels.every(label => trail.labels.some(l => l === label))
+export const getAllPaymentsForInterval = (
+  state: MembershipState,
+  date: number
+): Object[] =>
+  state.payments.filter(payment => {
+    const validUntil = utilDate.incrementToNextLowerBound(
+      payment.date,
+      payment.specification[0].intervalCount
+    )
+    return validUntil > date
+  })
 
-const planLogic = (plan1, plan2) => {
-  return (
-    plan1.type !== 'trail' &&
-    (plan2.group.some(group => plan1.group.some(g => g === group)) ||
-      plan2.labels.some(label => plan1.labels.some(l => l === label)))
-  )
-}
+export const getPlanById = (state: MembershipState, planId: string) =>
+  plan.getPlanById(state.plan, planId)
+
+export const getAllPlans = (state: MembershipState) =>
+  plan.getAllPlans(state.plan)
+
+export const getPlanOptions = (state: MembershipState) => (planId: string) =>
+  plan.getPlanOptions(state.plan)(planId)
+
+export const getSubscription = (state: MembershipState): string[] =>
+  state.subscription
+
+export const getDefaultPlan = (state: MembershipState) =>
+  plan.getDefaultPlan(state.plan)
+
+export const getIsFetching = (state: MembershipState) => state.isFetching

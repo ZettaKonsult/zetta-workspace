@@ -1,18 +1,15 @@
-import React from "react"
-import { Link } from "react-router-dom"
+import React from 'react'
 
 const Footer = props => (
-  <Link to={props.link}>
-    <div className="CardFooter">
-      <span>View Details</span>
-      <span>
-        <i className="fa fa-arrow-circle-right" />
-      </span>
-    </div>
-  </Link>
+  <div className="CardFooter">
+    <span>View Details</span>
+    <span>
+      <i className="fa fa-arrow-circle-right" />
+    </span>
+  </div>
 )
 
 Footer.defaultProps = {
-  link: "/"
+  link: '/'
 }
 export default Footer

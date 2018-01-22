@@ -1,6 +1,6 @@
-import React from "react"
+import React from 'react'
 
-import "./style.css"
+import './Footer.css'
 
 const Footer = () => (
   <div className="Footer">
@@ -9,8 +9,7 @@ const Footer = () => (
     <div className="FooterSocialMedia">
       <a
         className="FooterSocialMediaIcon"
-        href="https://www.facebook.com/Studentlund/"
-      >
+        href="https://www.facebook.com/Studentlund/">
         <span className="fa-stack fa-2x ">
           <i className="fa fa-circle fa-stack-2x" />
           <i className="fa fa-facebook fa-inverse fa-stack-1x" />
@@ -18,8 +17,7 @@ const Footer = () => (
       </a>
       <a
         className="FooterSocialMediaIcon"
-        href="https://twitter.com/studentlund?lang=en"
-      >
+        href="https://twitter.com/studentlund?lang=en">
         <span className="fa-stack fa-2x ">
           <i className="fa fa-circle fa-stack-2x" />
           <i className="fa fa-twitter fa-inverse fa-stack-1x" />
@@ -27,8 +25,7 @@ const Footer = () => (
       </a>
       <a
         className="FooterSocialMediaIcon"
-        href="https://www.instagram.com/studentlund/"
-      >
+        href="https://www.instagram.com/studentlund/">
         <span className="fa-stack fa-2x ">
           <i className="fa fa-circle fa-stack-2x" />
           <i className="fa fa-instagram fa-inverse fa-stack-1x" />

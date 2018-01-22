@@ -1,31 +1,33 @@
-import {authentication} from './authenticationReducer'
+import { reducer, initialState } from './authenticationReducer'
 import {
-  LOGIN_USER_FAILURE,
-  LOGIN_USER_REQUEST,
-  LOGIN_USER_SUCCESS,
+  loginUserSuccess,
+  loginUserFailure,
+  loginUserRequest,
   LOGOUT_USER
 } from './authenticationActions'
 
 describe('authenticationReduer', () => {
   it('defaults to inital state', () => {
-    expect(authentication(undefined, {})).toEqual(createState())
+    expect(reducer(undefined, {})).toEqual(createState())
   })
 
-  it('should handle LOGIN_USER_REQUEST', () => {
-    expect(authentication(createState(), {type: LOGIN_USER_REQUEST})).toEqual(
-      createState({isAuthenticating: true, statusText: undefined})
+  it('should handle loginUserRequest', () => {
+    expect(reducer(createState(), loginUserRequest())).toEqual(
+      createState({ isAuthenticating: true, statusText: undefined })
     )
   })
 
-  it('should handle LOGIN_USER_FAILURE', () => {
+  it('should handle loginUserFailure', () => {
     expect(
-      authentication(createState(), {
-        type: LOGIN_USER_FAILURE,
-        payload: {
-          status: '500',
-          statusText: 'User not found'
-        }
-      })
+      reducer(
+        createState(),
+        loginUserFailure({
+          response: {
+            status: '500',
+            statusText: 'User not found'
+          }
+        })
+      )
     ).toEqual(
       createState({
         statusText: 'Authentication Error: 500 User not found',
@@ -35,12 +37,21 @@ describe('authenticationReduer', () => {
       })
     )
   })
+
+  it('should handle loginUserSuccess', () => {
+    let token = 'q1238+jasj34ng98u'
+    expect(reducer(createState(), loginUserSuccess(token))).toEqual(
+      createState({
+        statusText: 'You have been successfully logged in.',
+        isAuthenticating: false,
+        isAuthenticated: true,
+        token
+      })
+    )
+  })
 })
 
 const createState = state => ({
-  token: undefined,
-  isAuthenticated: false,
-  isAuthenticating: false,
-  statusText: undefined,
+  ...initialState,
   ...state
 })
