@@ -1,5 +1,5 @@
-import React, { Component } from 'react'
-import { Route } from 'react-router-dom'
+import React from 'react'
+import { Route, Switch } from 'react-router-dom'
 import { Line } from 'react-chartjs-2'
 
 import AdminActionMenu from './AdminActionMenu'
@@ -13,13 +13,12 @@ import mock from '../mocks/statisticsMock'
 import './style.css'
 import './AdminActionMenu.css'
 
-const Dashboard = () => (
+const Dashboard = ({ match }) => (
   <div className="AdminDashboardLayout">
     <AdminCardPanel />
     <div className="AdminStatistic">
       <Line data={mock()} />
     </div>
-    <AdminActionMenu />
   </div>
 )
 
@@ -27,7 +26,9 @@ export default ({ match }) => (
   <div>
     <h1 className="DashboardTitle">Dashboard</h1>
     <FadedLine />
-    <Route to={`${match.path}`} exact component={Dashboard} />
-    <Route to={`${match.path}/find`} component={MemberFind} />
+    {console.log(match)}
+    <Route exact path={`${match.path}`} component={Dashboard} />
+    <Route path={`${match.path}/find`} component={MemberFind} />
+    <Route path={`${match.path}`} component={AdminActionMenu} />
   </div>
 )

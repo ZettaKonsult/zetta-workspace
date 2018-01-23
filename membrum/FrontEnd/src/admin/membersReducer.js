@@ -1,3 +1,4 @@
+/* @flow */
 import {
   MEMBERS_FETCH_FAILURE,
   MEMBERS_FETCH_SUCCESS,
@@ -5,13 +6,19 @@ import {
 } from './membersActions'
 
 import type { Action } from '../reducers'
+
+type State = {
+  byId: Object,
+  allIds: string[],
+  isFetching: boolean
+}
 const initialState = {
   byId: {},
   allIds: [],
   isFetching: false
 }
 
-const membersReducer = (state = initialState, action: Action) => {
+const membersReducer = (state: State = initialState, action: Action): State => {
   switch (action.type) {
     case MEMBERS_FETCH_REQUEST:
       return {
@@ -39,9 +46,9 @@ const membersReducer = (state = initialState, action: Action) => {
   }
 }
 
-export const getVisibleMembers = (state, value) => {
+export const getVisibleMembers = (state: State, value: string): Object[] => {
   const visibleIds = state.allIds.filter(
-    id => !!state.byId[id].ssn.match(value)
+    id => !!state.byId[id].ssn.includes(value)
   )
   return visibleIds.map(id => state.byId[id])
 }

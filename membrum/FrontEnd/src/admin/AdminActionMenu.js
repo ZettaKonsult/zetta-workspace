@@ -1,26 +1,37 @@
 import React from 'react'
 
-import NavLink from '../components/NavLink'
+import { NavLink } from 'react-router-dom'
 
-export default () => (
+const Header = () => (
+  <div className="AdminActionsHeader">
+    <i className="AdminActionIcon fa fa-tasks" />Actions
+  </div>
+)
+export default ({ match }) => (
   <div className="AdminActionsMenu">
-    <div className="AdminActionsHeader">
-      <i className="AdminActionIcon fa fa-tasks" />Actions
-    </div>
+    <Header />
+    <NavLink to={`${match.path}/find`} className="AdminAction">
+      Find Member
+    </NavLink>
 
-    <NavLink label="Find Member" className="AdminAction" />
-    <NavLink to="/signup" label="Create New Member" className="AdminAction" />
-    <NavLink
-      to="/statistics"
-      label="Check Statistics"
-      className="AdminAction"
-    />
-    <NavLink label="Create/Edit Plans" to="/plans" className="AdminAction" />
-    <NavLink
-      to="/uploadmembers"
-      className="AdminAction"
-      label="Upload Ladok List"
-    />
-    <NavLink className="AdminAction" label="It's Some Kinds Of Magic" />
+    <NavLink to="/" className="AdminAction">
+      Create New Member
+    </NavLink>
+
+    <NavLink to="/" className="AdminAction">
+      Check Statistics
+    </NavLink>
+
+    <NavLink to="/" className="AdminAction">
+      Create/Edit Plans
+    </NavLink>
+
+    <NavLink to="/" className="AdminAction">
+      Upload Ladok List
+    </NavLink>
+
+    <NavLink to="/" className="AdminAction">
+      It's Some Kinds Of Magic
+    </NavLink>
   </div>
 )

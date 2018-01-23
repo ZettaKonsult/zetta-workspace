@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import { withRouter } from 'react-router-dom'
 
 import { membersFetch } from './membersActions'
 import { getVisibleMembers } from './membersReducer'
@@ -26,7 +27,7 @@ VisibleMembersList = connect(mapStateToProps, mapDispatchToProps)(
   VisibleMembersList
 )
 
-export default class MemberFind extends Component {
+class MemberFind extends Component {
   constructor() {
     super()
     this.state = { value: '' }
@@ -47,3 +48,5 @@ export default class MemberFind extends Component {
     )
   }
 }
+
+export default withRouter(MemberFind)

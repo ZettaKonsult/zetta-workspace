@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { BrowserRouter } from 'react-router-dom'
+import { BrowserRouter, Route } from 'react-router-dom'
 import { Provider } from 'react-redux'
 import registerServiceWorker from './registerServiceWorker'
 
@@ -16,7 +16,7 @@ let store = configureStore()
 ReactDOM.render(
   <Provider store={store}>
     <BrowserRouter>
-      <Layout />
+      <Route to="/" component={Layout} />
     </BrowserRouter>
   </Provider>,
   document.getElementById('root')

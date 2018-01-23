@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { withRouter, Redirect } from 'react-router-dom'
+import { Redirect } from 'react-router-dom'
 import { Route, Switch } from 'react-router-dom'
 
 import { fetchAllPlans } from '../membership/planActions'
@@ -70,4 +70,4 @@ const mapDispatchToProps = {
   logout
 }
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Layout))
+export default connect(mapStateToProps, mapDispatchToProps)(Layout)
