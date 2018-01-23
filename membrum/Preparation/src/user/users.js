@@ -4,7 +4,7 @@
  * @date 2018-01-05
  */
 
-import type { AttributeData, UnionPartition, UserDataWithNames } from '../types'
+import type { UnionPartition, UserData } from '../types'
 import { Account } from 'zk-aws-users'
 import { config } from '../config'
 import dbLib from 'zk-dynamodb-wrapper'
@@ -31,8 +31,7 @@ const updateUsers = async (users: { [string]: UserData }) => {
 }
 
 const registerUser = async (user: UserData): Promise<string> => {
-  const { ssn, credits, nation, unionName } = user
-  const attributes = buildAttributes(user)
+  const { ssn, attributes, credits, nation, unionName } = user
 
   try {
     await Account.signUp({
@@ -57,9 +56,6 @@ const registerUser = async (user: UserData): Promise<string> => {
       TableName: config.Database.Users.Name,
       Item: {
         ssn: ssn,
-        email: attributes.email,
-        given_name: attributes.given_name,
-        family_name: attributes.family_name,
         credits: credits,
         nation: nation,
         unionName: unionName
@@ -75,16 +71,12 @@ const registerUser = async (user: UserData): Promise<string> => {
 
 const updateUser = async (user: UserData): Promise<string> => {
   const { ssn, credits, nation, unionName } = user
-  const attributes = buildAttributes(user)
 
   try {
     await db.update({
       TableName: config.Database.Users.Name,
       Key: { ssn: ssn },
       Values: {
-        email: attributes.email,
-        given_name: attributes.given_name,
-        family_name: attributes.family_name,
         credits: credits,
         nation: nation,
         unionName: unionName
@@ -121,15 +113,4 @@ export const saveUnions = async (users: UnionPartition) => {
   }
 
   return result
-}
-
-export const buildAttributes = (user: UserDataWithNames): AttributeData => {
-  const { ssn, given_name, family_name, email } = user
-
-  return {
-    birthdate: ssn,
-    given_name: given_name,
-    family_name: family_name,
-    email: email
-  }
 }
