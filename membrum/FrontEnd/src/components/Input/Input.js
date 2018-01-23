@@ -13,7 +13,7 @@ const Input = ({ name, value, onChange, id, type, label }) => (
 
 Input.propTypes = {
   name: PropTypes.string,
-  value: PropTypes.string,
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   onChange: PropTypes.func.isRequired,
   type: PropTypes.string
 }

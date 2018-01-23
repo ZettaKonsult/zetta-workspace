@@ -1,6 +1,6 @@
-import React from "react"
+import React from 'react'
 
-import NavLink from "../../components/NavLink"
+import NavLink from '../components/NavLink'
 
 export default () => (
   <div className="AdminActionsMenu">

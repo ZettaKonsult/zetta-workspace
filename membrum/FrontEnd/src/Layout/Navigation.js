@@ -25,8 +25,8 @@ export default class TopNavigation extends Component {
         <NavLink to="/" exact activeClassName="active">
           Home
         </NavLink>
-        <NavLink to="/member/membership" activeClassName="active">
-          Membership
+        <NavLink to="/admin" activeClassName="active">
+          admin
         </NavLink>
         <NavLink to="/login" activeClassName="active">
           Login

@@ -1,0 +1,44 @@
+.AdminDashboardLayout {
+  margin: 10px;
+  display: flex;
+  flex-flow: column wrap;
+}
+
+.AdminDashboardLayout > div {
+  margin: 5px;
+}
+
+.DashboardTitle {
+  margin-left: 1em;
+  text-align: left;
+}
+
+@supports (display: grid) {
+  .AdminDashboardLayout {
+    display: grid;
+    grid-gap: 0.5em;
+    grid-template-columns: repeat(12, 1fr);
+  }
+
+  .AdminStatistic,
+  .AdminCard,
+  .AdminActionsMenu {
+    grid-column: span 12;
+  }
+
+  @media (min-width: 800px) {
+    .AdminCard {
+      grid-column: span 6;
+    }
+  }
+
+  @media (min-width: 1000px) {
+    .AdminCard,
+    .AdminActionsMenu {
+      grid-column: span 3;
+    }
+    .AdminStatistic {
+      grid-column: span 9;
+    }
+  }
+}

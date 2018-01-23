@@ -14,6 +14,7 @@ import LoginForm from '../user/LoginForm'
 import NotFound from './NotFound'
 import Home from '../containers/Home/'
 import Plan from '../membership/Plan'
+import Admin from '../admin/Admin'
 
 import Navigation from './Navigation'
 import Footer from './Footer'
@@ -33,6 +34,7 @@ const Layout = props => {
           <Route path="/login" component={LoginForm} />
           <AuthorizedRoute path="/plan" component={Plan} />
           <AuthorizedRoute path="/user" component={User} />
+          <AuthorizedRoute path="/admin" component={Admin} />
           <Route component={NotFound} />
         </Switch>
       </div>
