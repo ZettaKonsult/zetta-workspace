@@ -1,10 +1,9 @@
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
 import { NavLink } from 'react-router-dom'
 
 import './Navigation.css'
 
-export default class TopNavigation extends Component {
+class TopNavigation extends Component {
   constructor(props) {
     super(props)
 
@@ -12,43 +11,33 @@ export default class TopNavigation extends Component {
       toggled: false
     }
   }
+  getToggled = () =>
+    this.state.toggled ? 'TopNavigation responsive' : 'TopNavigation'
 
   toggleNav = () => this.setState({ toggled: !this.state.toggled })
 
   render() {
-    const className = this.state.toggled
-      ? 'TopNavigation responsive'
-      : 'TopNavigation'
-
+    const className = this.getToggled()
+    const { authorizedRoutes } = this.props
     return (
       <div className={className}>
-        <NavLink to="/" exact activeClassName="active">
-          Home
-        </NavLink>
-        <NavLink to="/admin" activeClassName="active">
-          admin
-        </NavLink>
-        <NavLink to="/login" activeClassName="active">
-          Login
-        </NavLink>
-        <NavLink to="/user/profile" activeClassName="active">
-          Profile
-        </NavLink>
-        <NavLink to="/plan" activeClassName="active">
-          plan
-        </NavLink>
-
-        <a className="Authentication" onClick={this.props.logout}>
-          Logout
-        </a>
-        <a className="icon" onClick={this.toggleNav}>
-          &#9776;
-        </a>
+        {authorizedRoutes.map((route, i) => (
+          <NavLink key={i} to={`${route.to}`} activeClassName="active">
+            {route.label}
+          </NavLink>
+        ))}
+        <Logout />
+        <Toggle handleClick={this.toggleNav} />
       </div>
     )
   }
 }
 
-TopNavigation.propTypes = {
-  logout: PropTypes.func.isRequired
-}
+const Logout = () => <a className="Authentication">Logout</a>
+const Toggle = ({ handleClick }) => (
+  <a className="icon" onClick={handleClick}>
+    &#9776;
+  </a>
+)
+
+export default TopNavigation

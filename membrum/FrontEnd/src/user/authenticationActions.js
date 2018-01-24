@@ -7,6 +7,8 @@ export const LOGIN_USER_SUCCESS = 'LOGIN_USER_SUCCESS'
 
 export const LOGOUT_USER = 'LOGOUT_USER'
 
+export const USER_REDIRECTED = 'USER_REDIRECTED'
+
 export const USER_PASSWORD_RESET_REQUEST = 'USER_PASSWORD_RESET_REQUEST'
 export const USER_PASSWORD_RESET_SUCCESS = 'USER_PASSWORD_RESET_SUCCESS'
 export const USER_PASSWORD_RESET_FAILURE = 'USER_PASSWORD_RESET_FAILURE'
@@ -42,6 +44,12 @@ export function logout() {
   localStorage.removeItem('token')
   return {
     type: LOGOUT_USER
+  }
+}
+
+export function userRedirected() {
+  return {
+    type: USER_REDIRECTED
   }
 }
 

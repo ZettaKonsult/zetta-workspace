@@ -1,73 +1,71 @@
-import React from 'react'
+import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Redirect } from 'react-router-dom'
-import { Route, Switch } from 'react-router-dom'
+import { Route, Switch, Redirect } from 'react-router-dom'
 
 import { fetchAllPlans } from '../membership/planActions'
 
-import { logout } from '../user/authenticationActions'
 import { loadUserProfile } from '../user/profileActions'
-import { isUserAuthenticated } from '../user/'
+import { userRedirected } from '../user/authenticationActions'
+import { getAuthorizedRoutes, shouldRedirectUser } from '../user/'
 
-import User from '../user/User'
-import LoginForm from '../user/LoginForm'
+import Routes from './Views'
 import NotFound from './NotFound'
-import Home from '../containers/Home/'
-import Plan from '../membership/Plan'
-import Admin from '../admin/Admin'
 
 import Navigation from './Navigation'
 import Footer from './Footer'
 
 import './App.css'
 
-const Layout = props => {
-  return (
-    <div className="App">
-      <Navigation
-        logout={() => props.logout()}
-        authenticated={props.isAuthenticated}
-      />
-      <div className="AppContent">
-        <Switch>
-          <Route path="/" exact component={Home} />
-          <Route path="/login" component={LoginForm} />
-          <AuthorizedRoute path="/plan" component={Plan} />
-          <AuthorizedRoute path="/user" component={User} />
-          <AuthorizedRoute path="/admin" component={Admin} />
-          <Route component={NotFound} />
-        </Switch>
-      </div>
-      <Footer />
-    </div>
-  )
-}
-
-let AuthorizedRoute = ({ component: Component, isAuthenticated, ...rest }) => {
-  return (
+const renderRoutes = routes =>
+  routes.map((route, i) => (
     <Route
-      {...rest}
-      render={props =>
-        isAuthenticated ? <Component {...props} /> : <Redirect to="/login" />
-      }
+      key={i}
+      path={route.to}
+      exact={route.exact}
+      component={Routes[route.key]}
     />
-  )
+  ))
+
+class Layout extends Component {
+  componentDidUpdate(nextProps) {
+    if (this.props.shouldRedirectUser) {
+      this.props.userRedirected()
+      this.props.history.push('/')
+    }
+  }
+
+  render() {
+    const { authorizedRoutes } = this.props
+
+    return (
+      <div className="App">
+        <Route
+          path="/"
+          render={() => <Navigation authorizedRoutes={authorizedRoutes} />}
+        />
+        <div className="AppContent">
+          <Switch>
+            {renderRoutes(authorizedRoutes)}
+            <Route component={NotFound} />
+          </Switch>
+        </div>
+        <Footer />
+      </div>
+    )
+  }
 }
 
-const stateToProps = state => ({
-  isAuthenticated: isUserAuthenticated(state.userReducer)
-})
-
-AuthorizedRoute = connect(stateToProps)(AuthorizedRoute)
-
-const mapStateToProps = state => ({
-  isAuthenticated: isUserAuthenticated(state.userReducer)
-})
+const mapStateToProps = (state, props) => {
+  return {
+    authorizedRoutes: getAuthorizedRoutes(state.userReducer),
+    shouldRedirectUser: shouldRedirectUser(state.userReducer)
+  }
+}
 
 const mapDispatchToProps = {
   loadUserProfile,
   fetchAllPlans,
-  logout
+  userRedirected
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Layout)

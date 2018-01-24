@@ -2,14 +2,26 @@ import {
   LOGIN_USER_REQUEST,
   LOGIN_USER_SUCCESS,
   LOGIN_USER_FAILURE,
-  LOGOUT_USER
+  LOGOUT_USER,
+  USER_REDIRECTED
 } from './authenticationActions'
 
 export const initialState = {
   token: undefined,
+  group: 'guest',
   isAuthenticated: false,
   isAuthenticating: false,
-  statusText: undefined
+  statusText: undefined,
+  shouldRedirect: false,
+  authorizedRoutes: {
+    guest: [{ to: '/login', label: 'Login', key: 'login' }],
+    user: [{ to: '/user', label: 'Profile' }],
+    admin: [
+      { to: '/', label: 'Dashboard', key: 'admin' },
+      { to: '/plans', label: 'Plans', key: 'plans' },
+      { to: '/find', label: 'Find Member', key: 'find' }
+    ]
+  }
 }
 
 export function reducer(state = initialState, action) {
@@ -20,13 +32,15 @@ export function reducer(state = initialState, action) {
         isAuthenticating: true,
         statusText: undefined
       }
-
+    //TODO GROUP MUST BE SET MORE DYNAMIC
     case LOGIN_USER_SUCCESS:
       return {
         ...state,
         isAuthenticating: false,
         isAuthenticated: true,
         token: action.payload.token,
+        shouldRedirect: true,
+        group: 'admin',
         statusText: 'You have been successfully logged in.'
       }
 
@@ -46,9 +60,14 @@ export function reducer(state = initialState, action) {
         ...state,
         isAuthenticated: false,
         token: undefined,
+        shouldRedirect: true,
         statusText: 'You have been successfully logged out.'
       }
-
+    case USER_REDIRECTED:
+      return {
+        ...state,
+        shouldRedirect: false
+      }
     default:
       return state
   }
@@ -56,4 +75,10 @@ export function reducer(state = initialState, action) {
 
 export const isUserAuthenticated = state => state.isAuthenticated
 
+export const shouldRedirectUser = state => state.shouldRedirect
+
+export const getUserGroup = state => state.group
+
 export const getUserData = state => state.token
+
+export const getAuthorizedRoutes = state => state.authorizedRoutes[state.group]

@@ -8,7 +8,7 @@ import PaymentStatus from '../membership/PaymentStatus'
 
 export default ({ match }) => (
   <Column>
-    <Route path={`${match.path}/profile`} component={Profile} />
-    <Route path={`${match.path}/profile`} component={PaymentStatus} />
+    <Route path={`${match.path}`} component={Profile} />
+    <Route path={`${match.path}`} component={PaymentStatus} />
   </Column>
 )
