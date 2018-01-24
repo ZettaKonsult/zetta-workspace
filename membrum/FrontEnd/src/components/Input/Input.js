@@ -1,6 +1,6 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import InputStyle from './InputStyle'
+import React from 'react';
+import PropTypes from 'prop-types';
+import InputStyle from './InputStyle';
 const Input = ({ name, value, onChange, id, type, label }) => (
   <InputStyle
     type={type}
@@ -9,18 +9,18 @@ const Input = ({ name, value, onChange, id, type, label }) => (
     value={value}
     onChange={onChange}
   />
-)
+);
 
 Input.propTypes = {
   name: PropTypes.string,
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   onChange: PropTypes.func.isRequired,
-  type: PropTypes.string
-}
+  type: PropTypes.string,
+};
 
 Input.defaultProps = {
   name: 'default',
-  type: 'text'
-}
+  type: 'text',
+};
 
-export default Input
+export default Input;

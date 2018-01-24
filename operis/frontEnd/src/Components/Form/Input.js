@@ -1,13 +1,13 @@
-import React from 'react'
+import React from 'react';
 
-import { Form } from 'semantic-ui-react'
+import { Form } from 'semantic-ui-react';
 
 export const Input = ({
   input,
   type,
   name,
   placeholder,
-  meta: { touched, error, warning }
+  meta: { touched, error, warning },
 }) => (
   <div>
     <Form.Field error={!!touched && !!error}>
@@ -17,4 +17,4 @@ export const Input = ({
         !!error && <span style={{ color: '#ae5856' }}>{error}</span>}
     </Form.Field>
   </div>
-)
+);

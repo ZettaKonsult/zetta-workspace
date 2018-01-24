@@ -1,13 +1,13 @@
 export default {
-  PoolName: 'STRING_VALUE', /* required */
+  PoolName: 'STRING_VALUE' /* required */,
   AdminCreateUserConfig: {
     AllowAdminCreateUserOnly: true || false,
     InviteMessageTemplate: {
       EmailMessage: 'STRING_VALUE',
       EmailSubject: 'STRING_VALUE',
-      SMSMessage: 'STRING_VALUE'
+      SMSMessage: 'STRING_VALUE',
     },
-    UnusedAccountValidityDays: 0
+    UnusedAccountValidityDays: 0,
   },
   AliasAttributes: [
     phone_number | email | preferred_username,
@@ -19,11 +19,11 @@ export default {
   ],
   DeviceConfiguration: {
     ChallengeRequiredOnNewDevice: true || false,
-    DeviceOnlyRememberedOnUserPrompt: true || false
+    DeviceOnlyRememberedOnUserPrompt: true || false,
   },
   EmailConfiguration: {
     ReplyToEmailAddress: 'STRING_VALUE',
-    SourceArn: 'STRING_VALUE'
+    SourceArn: 'STRING_VALUE',
   },
   EmailVerificationMessage: 'STRING_VALUE',
   EmailVerificationSubject: 'STRING_VALUE',
@@ -36,7 +36,7 @@ export default {
     PreAuthentication: 'STRING_VALUE',
     PreSignUp: 'STRING_VALUE',
     PreTokenGeneration: 'STRING_VALUE',
-    VerifyAuthChallengeResponse: 'STRING_VALUE'
+    VerifyAuthChallengeResponse: 'STRING_VALUE',
   },
   MfaConfiguration: OFF | ON | OPTIONAL,
   Policies: {
@@ -45,8 +45,8 @@ export default {
       RequireLowercase: true || false,
       RequireNumbers: true || false,
       RequireSymbols: true || false,
-      RequireUppercase: true || false
-    }
+      RequireUppercase: true || false,
+    },
   },
   Schema: [
     {
@@ -56,24 +56,24 @@ export default {
       Name: 'STRING_VALUE',
       NumberAttributeConstraints: {
         MaxValue: 'STRING_VALUE',
-        MinValue: 'STRING_VALUE'
+        MinValue: 'STRING_VALUE',
       },
       Required: true || false,
       StringAttributeConstraints: {
         MaxLength: 'STRING_VALUE',
-        MinLength: 'STRING_VALUE'
-      }
+        MinLength: 'STRING_VALUE',
+      },
     },
     /* more items */
   ],
   SmsAuthenticationMessage: 'STRING_VALUE',
   SmsConfiguration: {
-    SnsCallerArn: 'STRING_VALUE', /* required */
-    ExternalId: 'STRING_VALUE'
+    SnsCallerArn: 'STRING_VALUE' /* required */,
+    ExternalId: 'STRING_VALUE',
   },
   SmsVerificationMessage: 'STRING_VALUE',
   UserPoolAddOns: {
-    AdvancedSecurityMode: OFF | AUDIT | ENFORCED /* required */
+    AdvancedSecurityMode: OFF | AUDIT | ENFORCED /* required */,
   },
   UserPoolTags: {
     '<StringType>': 'STRING_VALUE',
@@ -89,6 +89,6 @@ export default {
     EmailMessageByLink: 'STRING_VALUE',
     EmailSubject: 'STRING_VALUE',
     EmailSubjectByLink: 'STRING_VALUE',
-    SmsMessage: 'STRING_VALUE'
-  }
-}
+    SmsMessage: 'STRING_VALUE',
+  },
+};

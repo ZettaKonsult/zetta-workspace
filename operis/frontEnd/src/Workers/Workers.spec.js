@@ -1,44 +1,44 @@
-import {UPDATE_WORKER, DELETE_WORKER} from './WorkerActions'
-import Workers from './Workers'
+import { UPDATE_WORKER, DELETE_WORKER } from './WorkerActions';
+import Workers from './Workers';
 
 describe('reducer', () => {
   describe('workers', () => {
     const initialState = {
       byId: {
-        '1': {id: '1', name: 'nej', visible: true},
-        '2': {id: '2', name: 'Fredrik', visible: true}
+        '1': { id: '1', name: 'nej', visible: true },
+        '2': { id: '2', name: 'Fredrik', visible: true },
       },
-      allIds: ['1', '2']
-    }
+      allIds: ['1', '2'],
+    };
 
     it('Should UPDATE_WORKER', () => {
       expect(
         Workers(initialState, {
           type: UPDATE_WORKER,
           id: '1',
-          worker: {id: '1', name: 'hej'}
+          worker: { id: '1', name: 'hej' },
         })
       ).toEqual({
         byId: {
-          '1': {id: '1', name: 'hej', visible: true},
-          '2': {id: '2', name: 'Fredrik', visible: true}
+          '1': { id: '1', name: 'hej', visible: true },
+          '2': { id: '2', name: 'Fredrik', visible: true },
         },
-        allIds: ['1', '2']
-      })
-    })
+        allIds: ['1', '2'],
+      });
+    });
 
     it('should handle DELETE_WORKER', () => {
-      expect(Workers(initialState, {type: DELETE_WORKER, id: '1'})).toEqual({
+      expect(Workers(initialState, { type: DELETE_WORKER, id: '1' })).toEqual({
         byId: {
           '1': {
             id: '1',
             name: 'nej',
-            visible: false
+            visible: false,
           },
-          '2': {id: '2', name: 'Fredrik', visible: true}
+          '2': { id: '2', name: 'Fredrik', visible: true },
         },
-        allIds: ['1', '2']
-      })
-    })
-  })
-})
+        allIds: ['1', '2'],
+      });
+    });
+  });
+});

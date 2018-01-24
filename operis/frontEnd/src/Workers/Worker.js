@@ -1,21 +1,21 @@
-import React, {Component} from 'react'
-import {connect} from 'react-redux'
-import {withRouter} from 'react-router-dom'
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 
-import {Button, Icon} from 'semantic-ui-react'
+import { Button, Icon } from 'semantic-ui-react';
 
-import WorkerForm from './Form/WorkerForm'
-import {deleteWorker} from './WorkerActions'
-import {getVisibleWorkers} from '../reducers'
+import WorkerForm from './Form/WorkerForm';
+import { deleteWorker } from './WorkerActions';
+import { getVisibleWorkers } from '../reducers';
 
 class Worker extends Component {
   callback = () => {
-    this.props.history.push('/worker')
-  }
+    this.props.history.push('/worker');
+  };
 
   newWorker = () => {
-    this.props.history.push('/worker/0')
-  }
+    this.props.history.push('/worker/0');
+  };
 
   renderList = props =>
     props.workers.map(worker => (
@@ -25,10 +25,10 @@ class Worker extends Component {
         onClick={() => this.props.history.push(`/worker/${worker.id}`)}
         delete={() => this.props.deleteWorker(worker.id)}
       />
-    ))
+    ));
 
   render() {
-    const {id} = this.props.match.params
+    const { id } = this.props.match.params;
     return (
       <div>
         {!!id ? (
@@ -48,7 +48,7 @@ class Worker extends Component {
           </div>
         )}
       </div>
-    )
+    );
   }
 }
 
@@ -61,16 +61,16 @@ const WorkerCard = props => (
       display: 'flex',
       flexDirection: 'row',
       justifyContent: 'space-between',
-      borderRadius: '5px'
+      borderRadius: '5px',
     }}
     onClick={props.onClick}
   >
-    <strong style={{fontSize: '1.2em'}}>{props.name}</strong>
+    <strong style={{ fontSize: '1.2em' }}>{props.name}</strong>
     <Icon onClick={props.delete} link name="close" />
   </div>
-)
+);
 const mapStateToProps = (state, props) => ({
-  workers: getVisibleWorkers(state)
-})
+  workers: getVisibleWorkers(state),
+});
 
-export default connect(mapStateToProps, {deleteWorker})(withRouter(Worker))
+export default connect(mapStateToProps, { deleteWorker })(withRouter(Worker));

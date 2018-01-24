@@ -1,14 +1,14 @@
-import React from 'react'
-import { connect } from 'react-redux'
-import { Field, reduxForm } from 'redux-form'
+import React from 'react';
+import { connect } from 'react-redux';
+import { Field, reduxForm } from 'redux-form';
 
-import FormInput from '../components/FormInput'
+import FormInput from '../components/FormInput';
 
-import { getPlanById } from './membershipReducer'
-import { planSave } from './planActions'
+import { getPlanById } from './membershipReducer';
+import { planSave } from './planActions';
 
 let PlanForm = props => {
-  const { handleSubmit, pristine, reset, submitting } = props
+  const { handleSubmit, pristine, reset, submitting } = props;
   return (
     <form onSubmit={handleSubmit}>
       <Field name="name" type="text" component={FormInput} label="name" />
@@ -31,22 +31,22 @@ let PlanForm = props => {
         Submit
       </button>
     </form>
-  )
-}
+  );
+};
 
 PlanForm = reduxForm({
-  form: 'PlanForm'
-})(PlanForm)
+  form: 'PlanForm',
+})(PlanForm);
 
 const mapStateToProps = (state, { match }) => {
   return {
     initialValues: getPlanById(state.membershipReducer, match.params.id),
-    enableReinitialize: true
-  }
-}
+    enableReinitialize: true,
+  };
+};
 
 const mapDispatchToProps = {
-  onSubmit: values => planSave(values)
-}
+  onSubmit: values => planSave(values),
+};
 
-export default connect(mapStateToProps, mapDispatchToProps)(PlanForm)
+export default connect(mapStateToProps, mapDispatchToProps)(PlanForm);

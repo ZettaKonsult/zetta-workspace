@@ -1,12 +1,12 @@
-import React from 'react'
-import Input from './Input/Input'
+import React from 'react';
+import Input from './Input/Input';
 
 const FormInput = ({
   input,
   label,
   type,
   meta: { touched, error },
-  disabled
+  disabled,
 }) => (
   <div>
     <label>{label}</label>
@@ -15,6 +15,6 @@ const FormInput = ({
       {touched && error && <span>{error}</span>}
     </div>
   </div>
-)
+);
 
-export default FormInput
+export default FormInput;

@@ -1,12 +1,12 @@
-import React from 'react'
+import React from 'react';
 
-import { NavLink } from 'react-router-dom'
+import { NavLink } from 'react-router-dom';
 
 const Header = () => (
   <div className="AdminActionsHeader">
     <i className="AdminActionIcon fa fa-tasks" />Actions
   </div>
-)
+);
 export default ({ match }) => (
   <div className="AdminActionsMenu">
     <Header />
@@ -34,4 +34,4 @@ export default ({ match }) => (
       It's Some Kinds Of Magic
     </NavLink>
   </div>
-)
+);

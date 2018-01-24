@@ -6,7 +6,7 @@
 
 export const config = {
   Database: {
-    Name: 'MembrumUsers'
+    Name: 'MembrumUsers',
   },
-  Region: 'eu-central-1'
-}
+  Region: 'eu-central-1',
+};

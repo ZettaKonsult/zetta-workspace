@@ -1,12 +1,12 @@
-import React from 'react'
-import { connect } from 'react-redux'
-import { Route, NavLink } from 'react-router-dom'
-import styled from 'styled-components'
-import { getAllPlans, getPlanById } from './membershipReducer'
-import PlanForm from './PlanForm'
+import React from 'react';
+import { connect } from 'react-redux';
+import { Route, NavLink } from 'react-router-dom';
+import styled from 'styled-components';
+import { getAllPlans, getPlanById } from './membershipReducer';
+import PlanForm from './PlanForm';
 
-import Column from '../components/Column'
-import Row from '../components/Row'
+import Column from '../components/Column';
+import Row from '../components/Row';
 
 const Plan = styled.div`
   color: black;
@@ -19,13 +19,13 @@ const Plan = styled.div`
     background-color: black;
     color: white;
   }
-`
+`;
 
 const PlanLink = ({ to, exact, label }) => (
   <NavLink to={to} exact={exact} style={{ textDecoration: 'none' }}>
     <Plan>{label}</Plan>
   </NavLink>
-)
+);
 
 let PlanList = ({ plans, match, history }) => (
   <Column>
@@ -38,20 +38,20 @@ let PlanList = ({ plans, match, history }) => (
       />
     ))}
   </Column>
-)
+);
 const mapStateToProps = (state, { match, ...props }) => {
   return {
     plans: getAllPlans(state.membershipReducer).map(id =>
       getPlanById(state.membershipReducer, id)
-    )
-  }
-}
+    ),
+  };
+};
 
-PlanList = connect(mapStateToProps)(PlanList)
+PlanList = connect(mapStateToProps)(PlanList);
 
 export default ({ match }) => (
   <Row>
     <Route path={match.path} component={PlanList} />
     <Route path={`${match.path}/:id?`} component={PlanForm} />
   </Row>
-)
+);

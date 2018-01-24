@@ -1,44 +1,44 @@
-import React from "react"
+import React from 'react';
 
 export default function VisibilityChange(Component) {
   return class VisibilityChange extends React.Component {
     constructor(props) {
-      super(props)
+      super(props);
 
       this.state = {
-        visible: true
-      }
+        visible: true,
+      };
     }
     componentDidMount() {
-      document.addEventListener("visibilitychange", this.isPageVisible)
+      document.addEventListener('visibilitychange', this.isPageVisible);
     }
 
     componentWillUnmount() {
-      document.removeEventListener("visibilitychange", this.isPageVisible)
+      document.removeEventListener('visibilitychange', this.isPageVisible);
     }
 
     isPageVisible = () => {
-      if (document.visibilityState === "visible") {
-        this.setState(visible)
+      if (document.visibilityState === 'visible') {
+        this.setState(visible);
       } else {
-        this.setState(invisible)
+        this.setState(invisible);
       }
-    }
+    };
 
     render() {
-      return <Component visible={this.state.visible} {...this.props} />
+      return <Component visible={this.state.visible} {...this.props} />;
     }
-  }
+  };
 }
 
 function visible(state, props) {
   return {
-    visible: true
-  }
+    visible: true,
+  };
 }
 
 function invisible(state, props) {
   return {
-    visible: false
-  }
+    visible: false,
+  };
 }

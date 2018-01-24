@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled from 'styled-components';
 
 const InputField = styled.input`
   font-size: 1.2em;
@@ -13,6 +13,6 @@ const InputField = styled.input`
   padding: 0.5em;
   margin: 1em;
 
-  transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
-`
-export default InputField
+  transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+`;
+export default InputField;

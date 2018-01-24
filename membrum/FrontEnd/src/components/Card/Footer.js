@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 
 const Footer = props => (
   <div className="CardFooter">
@@ -7,9 +7,9 @@ const Footer = props => (
       <i className="fa fa-arrow-circle-right" />
     </span>
   </div>
-)
+);
 
 Footer.defaultProps = {
-  link: '/'
-}
-export default Footer
+  link: '/',
+};
+export default Footer;

@@ -1,17 +1,17 @@
-import React, { Component } from 'react'
-import { withRouter } from 'react-router-dom'
+import React, { Component } from 'react';
+import { withRouter } from 'react-router-dom';
 
-import Calendar from '../../components/Calendar/'
-import Layout from './Layout'
+import Calendar from '../../components/Calendar/';
+import Layout from './Layout';
 
 class Overview extends Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
       isLoading: null,
       rooms: null,
-      reservedDates: null
-    }
+      reservedDates: null,
+    };
   }
 
   async componentWillMount() {
@@ -19,26 +19,26 @@ class Overview extends Component {
       // const results = await this.getReservation()
       const results = await this.props.database.listAllRooms(
         this.props.userToken
-      )
+      );
 
-      const sortedResults = results.concat().sort(this.compareRoomId)
+      const sortedResults = results.concat().sort(this.compareRoomId);
       this.setState({
-        rooms: sortedResults
-      })
+        rooms: sortedResults,
+      });
     } catch (e) {
-      console.error(e)
+      console.error(e);
     }
   }
-  compareRoomId = (a, b) => Number(a.roomId) > Number(b.roomId)
+  compareRoomId = (a, b) => Number(a.roomId) > Number(b.roomId);
 
   render() {
-    const rooms = this.state.rooms
-    let dates = []
+    const rooms = this.state.rooms;
+    let dates = [];
     for (let idRoom in rooms) {
-      let reservedDates = rooms[idRoom].reserved
-      dates[idRoom] = []
+      let reservedDates = rooms[idRoom].reserved;
+      dates[idRoom] = [];
       for (let id in reservedDates) {
-        dates[idRoom] = [...dates[idRoom], ...reservedDates[id].dates]
+        dates[idRoom] = [...dates[idRoom], ...reservedDates[id].dates];
       }
     }
     return (
@@ -53,7 +53,7 @@ class Overview extends Component {
           />
         ))}
       </Layout>
-    )
+    );
   }
 }
-export default withRouter(Overview)
+export default withRouter(Overview);

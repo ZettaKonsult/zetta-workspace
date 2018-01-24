@@ -4,51 +4,51 @@
  * @date 2018-01-05
  */
 
-import type { UnionPartition, UserData } from '../types'
-import { Account } from 'zk-aws-users'
-import { config } from '../config'
-import dbLib from 'zk-dynamodb-wrapper'
-import passwordGenerator from 'password-generator'
+import type { UnionPartition, UserData } from '../types';
+import { Account } from 'zk-aws-users';
+import { config } from '../config';
+import dbLib from 'zk-dynamodb-wrapper';
+import passwordGenerator from 'password-generator';
 
-const db = dbLib(config.Region)
+const db = dbLib(config.Region);
 
 const registerUsers = async (users: {
-  [string]: UserData
+  [string]: UserData,
 }): Promise<Array<string>> => {
-  let result = []
+  let result = [];
   for (const ssn of Object.keys(users)) {
-    result.push(await registerUser(users[ssn]))
+    result.push(await registerUser(users[ssn]));
   }
-  return result
-}
+  return result;
+};
 
 const updateUsers = async (users: { [string]: UserData }) => {
-  let result = []
+  let result = [];
   for (const ssn of Object.keys(users)) {
-    result.push(await updateUser(users[ssn]))
+    result.push(await updateUser(users[ssn]));
   }
-  return result
-}
+  return result;
+};
 
 const registerUser = async (user: UserData): Promise<string> => {
-  const { ssn, attributes, credits, nation, unionName } = user
+  const { ssn, attributes, credits, nation, unionName } = user;
 
   try {
     await Account.signUp({
       userName: ssn,
       names: {
         project: config.Names.project,
-        customer: config.Names.customer
+        customer: config.Names.customer,
       },
       attributes: attributes,
       password: passwordGenerator(
         config.Password.Length,
         config.Password.Pattern
-      )
-    })
+      ),
+    });
   } catch (error) {
-    console.error(error)
-    throw error
+    console.error(error);
+    throw error;
   }
 
   try {
@@ -58,19 +58,19 @@ const registerUser = async (user: UserData): Promise<string> => {
         ssn: ssn,
         credits: credits,
         nation: nation,
-        unionName: unionName
-      }
-    })
+        unionName: unionName,
+      },
+    });
   } catch (error) {
-    console.error(error)
-    throw error
+    console.error(error);
+    throw error;
   }
 
-  return ssn
-}
+  return ssn;
+};
 
 const updateUser = async (user: UserData): Promise<string> => {
-  const { ssn, credits, nation, unionName } = user
+  const { ssn, credits, nation, unionName } = user;
 
   try {
     await db.update({
@@ -79,38 +79,38 @@ const updateUser = async (user: UserData): Promise<string> => {
       Values: {
         credits: credits,
         nation: nation,
-        unionName: unionName
-      }
-    })
+        unionName: unionName,
+      },
+    });
   } catch (error) {
-    console.error(error)
-    throw error
+    console.error(error);
+    throw error;
   }
 
-  return ssn
-}
+  return ssn;
+};
 
 export const saveUnions = async (users: UnionPartition) => {
   let result = {
     registered: [],
-    updated: []
+    updated: [],
+  };
+
+  try {
+    result.registered = await registerUsers(users.created);
+    console.log(`Done registering new users.`);
+  } catch (error) {
+    console.error(error);
+    throw error;
   }
 
   try {
-    result.registered = await registerUsers(users.created)
-    console.log(`Done registering new users.`)
+    result.updated = await updateUsers(users.modified);
+    console.log(`Done updating users with modified unions.`);
   } catch (error) {
-    console.error(error)
-    throw error
+    console.error(error);
+    throw error;
   }
 
-  try {
-    result.updated = await updateUsers(users.modified)
-    console.log(`Done updating users with modified unions.`)
-  } catch (error) {
-    console.error(error)
-    throw error
-  }
-
-  return result
-}
+  return result;
+};

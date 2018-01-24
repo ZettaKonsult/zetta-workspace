@@ -1,4 +1,4 @@
-import cuid from 'cuid'
+import cuid from 'cuid';
 
 const plans = [
   {
@@ -6,7 +6,7 @@ const plans = [
     name: 'Please choose a plan',
     labels: [],
     group: [],
-    type: 'default'
+    type: 'default',
   },
   {
     id: cuid(),
@@ -15,7 +15,7 @@ const plans = [
     interval: 'month',
     intervalCount: 6,
     labels: ['union'],
-    group: ['studentlund']
+    group: ['studentlund'],
   },
   {
     id: cuid(),
@@ -24,7 +24,7 @@ const plans = [
     interval: 'month',
     intervalCount: 6,
     labels: ['union'],
-    group: ['studentlund']
+    group: ['studentlund'],
   },
   {
     id: cuid(),
@@ -33,7 +33,7 @@ const plans = [
     interval: 'month',
     intervalCount: 6,
     labels: ['union'],
-    group: ['studentlund']
+    group: ['studentlund'],
   },
   {
     id: cuid(),
@@ -42,7 +42,7 @@ const plans = [
     interval: 'month',
     intervalCount: 6,
     labels: ['union'],
-    group: ['studentlund']
+    group: ['studentlund'],
   },
   {
     id: cuid(),
@@ -51,7 +51,7 @@ const plans = [
     interval: 'month',
     intervalCount: 6,
     labels: ['nation', 'gudrun'],
-    group: ['studentlund']
+    group: ['studentlund'],
   },
   {
     id: cuid(),
@@ -60,7 +60,7 @@ const plans = [
     interval: 'month',
     intervalCount: 6,
     labels: ['nation', 'city'],
-    group: ['studentlund']
+    group: ['studentlund'],
   },
   {
     id: cuid(),
@@ -69,7 +69,7 @@ const plans = [
     interval: 'month',
     intervalCount: 6,
     labels: ['nation', 'city'],
-    group: ['studentlund']
+    group: ['studentlund'],
   },
   {
     id: cuid(),
@@ -78,7 +78,7 @@ const plans = [
     interval: 'month',
     intervalCount: 6,
     labels: ['nation', 'torna'],
-    group: ['studentlund']
+    group: ['studentlund'],
   },
   {
     id: cuid(),
@@ -87,7 +87,7 @@ const plans = [
     interval: 'month',
     intervalCount: 6,
     labels: ['nation', 'gudrun'],
-    group: ['studentlund']
+    group: ['studentlund'],
   },
   {
     id: cuid(),
@@ -96,7 +96,7 @@ const plans = [
     interval: 'month',
     intervalCount: 6,
     labels: ['nation', 'torna'],
-    group: ['studentlund']
+    group: ['studentlund'],
   },
   {
     id: cuid(),
@@ -105,7 +105,7 @@ const plans = [
     interval: 'month',
     intervalCount: 6,
     labels: ['nation', 'city'],
-    group: ['studentlund']
+    group: ['studentlund'],
   },
   {
     id: cuid(),
@@ -114,7 +114,7 @@ const plans = [
     interval: 'month',
     intervalCount: 6,
     labels: ['nation', 'city'],
-    group: ['studentlund']
+    group: ['studentlund'],
   },
   {
     id: cuid(),
@@ -123,7 +123,7 @@ const plans = [
     interval: 'month',
     intervalCount: 6,
     labels: ['nation', 'city'],
-    group: ['studentlund']
+    group: ['studentlund'],
   },
   {
     id: cuid(),
@@ -132,7 +132,7 @@ const plans = [
     interval: 'month',
     intervalCount: 6,
     labels: ['nation', 'torna'],
-    group: ['studentlund']
+    group: ['studentlund'],
   },
   {
     id: cuid(),
@@ -141,7 +141,7 @@ const plans = [
     interval: 'month',
     intervalCount: 6,
     labels: ['nation', 'torna'],
-    group: ['studentlund']
+    group: ['studentlund'],
   },
   {
     id: cuid(),
@@ -151,7 +151,7 @@ const plans = [
     intervalCount: 6,
     labels: ['nation', 'gudrun'],
     group: ['studentlund'],
-    type: 'plan'
+    type: 'plan',
   },
   {
     id: cuid(),
@@ -161,7 +161,7 @@ const plans = [
     intervalCount: 6,
     labels: ['nation'],
     group: ['studentlund'],
-    type: 'trail'
+    type: 'trail',
   },
   {
     id: cuid(),
@@ -170,7 +170,7 @@ const plans = [
     interval: 'month',
     intervalCount: 6,
     labels: [],
-    group: ['obligatory']
+    group: ['obligatory'],
   },
   {
     id: cuid(),
@@ -179,7 +179,7 @@ const plans = [
     interval: 'month',
     intervalCount: 6,
     labels: [],
-    group: ['studentlund']
+    group: ['studentlund'],
   },
   {
     id: cuid(),
@@ -188,9 +188,9 @@ const plans = [
     interval: 'month',
     intervalCount: 6,
     labels: ['nation'],
-    group: ['Smalands']
-  }
-]
+    group: ['Smalands'],
+  },
+];
 const plantemplates = [
   {
     id: cuid(),
@@ -200,7 +200,7 @@ const plantemplates = [
     key: 'union',
     func: 'only',
     value: '1',
-    error: 'There should be only 1 union'
+    error: 'There should be only 1 union',
   },
   {
     id: cuid(),
@@ -210,7 +210,7 @@ const plantemplates = [
     key: 'nation',
     func: 'atLeast',
     value: '1',
-    error: 'There should be atLeast 1 nation'
+    error: 'There should be atLeast 1 nation',
   },
   {
     id: cuid(),
@@ -220,7 +220,7 @@ const plantemplates = [
     key: plans.find(plan => plan.name === 'Terminsräkningsföreningen').id,
     func: 'only',
     value: '1',
-    error: 'TRF must be part of the subscription'
+    error: 'TRF must be part of the subscription',
   },
   {
     id: cuid(),
@@ -230,7 +230,7 @@ const plantemplates = [
     key: plans.find(plan => plan.name === 'Akademiska Föreningen').id,
     func: 'only',
     value: '1',
-    error: 'AF must be part of the subscription'
+    error: 'AF must be part of the subscription',
   },
   {
     id: cuid(),
@@ -240,9 +240,9 @@ const plantemplates = [
     key: 'nation',
     func: 'lessThan',
     value: '1',
-    error: "can't have any nations as part of this subscription"
-  }
-]
+    error: "can't have any nations as part of this subscription",
+  },
+];
 
 const filteredMembership = plans.reduce(
   (result, plan) =>
@@ -253,7 +253,7 @@ const filteredMembership = plans.reduce(
       ? [...result, plan.id]
       : result,
   []
-)
+);
 const members = [
   {
     ssn: '910504-0035',
@@ -264,14 +264,14 @@ const members = [
     zipcode: '22646',
     mobile: '0709394595',
     email: 'fiddep@telia.com',
-    subscription: filteredMembership
+    subscription: filteredMembership,
   },
   {
     ssn: '901020-1234',
     firstName: 'Sture',
     lastName: 'Student',
-    subscription: filteredMembership
-  }
-]
+    subscription: filteredMembership,
+  },
+];
 
-export default { plans, plantemplates, members }
+export default { plans, plantemplates, members };

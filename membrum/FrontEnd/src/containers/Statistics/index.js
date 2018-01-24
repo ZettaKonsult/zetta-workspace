@@ -1,50 +1,50 @@
-import React, { Component } from "react"
+import React, { Component } from 'react';
 
-import VisibilityChange from "../../components/VisibilityChange"
+import VisibilityChange from '../../components/VisibilityChange';
 
-import StatisticsView from "./Statistics"
-import Menu from "./Menu"
-import mock from "./mock"
+import StatisticsView from './Statistics';
+import Menu from './Menu';
+import mock from './mock';
 
-import "./style.css"
+import './style.css';
 
 class Statistics extends Component {
   constructor(props) {
-    super(props)
-    this.filters = ["all", "mail", "members", "payment"]
-    this.updateInterval = 2000
+    super(props);
+    this.filters = ['all', 'mail', 'members', 'payment'];
+    this.updateInterval = 2000;
 
     this.state = {
       isLoading: true,
-      filter: "all",
-      intervalId: false
-    }
+      filter: 'all',
+      intervalId: false,
+    };
   }
 
   async componentDidMount() {
-    this.updateChart()
-    this.setState(createInterval(this.updateChart, this.updateInterval))
-    this.setState({ isLoading: false })
+    this.updateChart();
+    this.setState(createInterval(this.updateChart, this.updateInterval));
+    this.setState({ isLoading: false });
   }
 
   componentDidUpdate() {
     if (this.props.visible && !this.state.intervalId) {
-      this.setState(createInterval(this.updateChart, this.updateInterval))
+      this.setState(createInterval(this.updateChart, this.updateInterval));
     } else if (!this.props.visible && this.state.intervalId) {
-      this.setState(removeInterval)
+      this.setState(removeInterval);
     }
   }
 
   componentWillUnmount() {
-    removeInterval(this.state)
+    removeInterval(this.state);
   }
 
-  setFilter = e => this.setState({ filter: e.target.id })
+  setFilter = e => this.setState({ filter: e.target.id });
 
-  updateChart = () => this.setState(featchChartData())
+  updateChart = () => this.setState(featchChartData());
 
   render() {
-    const { filter } = this.state
+    const { filter } = this.state;
     return (
       <div>
         <Menu
@@ -56,31 +56,31 @@ class Statistics extends Component {
           <StatisticsView filter={this.state.filter} data={this.state} />
         )}
       </div>
-    )
+    );
   }
 }
 
-export default VisibilityChange(Statistics)
+export default VisibilityChange(Statistics);
 
 function createInterval(func, interval) {
   return function create(state, props) {
     return {
-      intervalId: setInterval(func, interval)
-    }
-  }
+      intervalId: setInterval(func, interval),
+    };
+  };
 }
 
 function removeInterval(state, props) {
-  clearInterval(state.intervalId)
+  clearInterval(state.intervalId);
   return {
-    intervalId: false
-  }
+    intervalId: false,
+  };
 }
 
 function featchChartData() {
   return {
     mail: [mock()],
     members: [mock(), mock()],
-    payment: [mock(), mock(), mock()]
-  }
+    payment: [mock(), mock(), mock()],
+  };
 }

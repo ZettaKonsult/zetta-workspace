@@ -1,98 +1,98 @@
-import AWS from 'aws-sdk'
-import { CognitoUserPool } from 'amazon-cognito-identity-js'
+import AWS from 'aws-sdk';
+import { CognitoUserPool } from 'amazon-cognito-identity-js';
 
-import React, { Component } from 'react'
-import { withRouter, Link } from 'react-router-dom'
-import { Nav, NavItem, Navbar } from 'react-bootstrap'
+import React, { Component } from 'react';
+import { withRouter, Link } from 'react-router-dom';
+import { Nav, NavItem, Navbar } from 'react-bootstrap';
 
-import database from './database'
+import database from './database';
 
-import Routes from './Routes'
-import RouteNavItem from './components/RouteNavItem'
-import config from './config.js'
-import './App.css'
+import Routes from './Routes';
+import RouteNavItem from './components/RouteNavItem';
+import config from './config.js';
+import './App.css';
 
 class App extends Component {
   constructor(props) {
-    super(props)
+    super(props);
 
     this.state = {
       userToken: null,
-      isLoadingUserToken: true
-    }
+      isLoadingUserToken: true,
+    };
   }
 
   async componentDidMount() {
-    const currentUser = this.getCurrentUser()
+    const currentUser = this.getCurrentUser();
 
     if (currentUser === null) {
-      this.setState({ isLoadingUserToken: false })
-      return
+      this.setState({ isLoadingUserToken: false });
+      return;
     }
 
     try {
-      const userToken = await this.getUserToken(currentUser)
-      this.updateUserToken(userToken)
+      const userToken = await this.getUserToken(currentUser);
+      this.updateUserToken(userToken);
     } catch (e) {
-      alert(e)
+      alert(e);
     }
 
-    this.setState({ isLoadingUserToken: false })
+    this.setState({ isLoadingUserToken: false });
   }
 
   updateUserToken = userToken => {
     this.setState({
-      userToken: userToken
-    })
-  }
+      userToken: userToken,
+    });
+  };
 
   handleNavLink = event => {
-    event.preventDefault()
-    this.props.history.push(event.currentTarget.getAttribute('href'))
-  }
+    event.preventDefault();
+    this.props.history.push(event.currentTarget.getAttribute('href'));
+  };
 
   handleLogout = event => {
-    const currentUser = this.getCurrentUser()
+    const currentUser = this.getCurrentUser();
 
     if (currentUser !== null) {
-      currentUser.signOut()
+      currentUser.signOut();
     }
 
     if (AWS.config.credentials) {
-      AWS.config.credentials.clearCachedId()
+      AWS.config.credentials.clearCachedId();
     }
 
-    this.updateUserToken(null)
+    this.updateUserToken(null);
 
-    this.props.history.push('/login')
-  }
+    this.props.history.push('/login');
+  };
 
   getCurrentUser() {
     const userPool = new CognitoUserPool({
       UserPoolId: config.cognito.USER_POOL_ID,
-      ClientId: config.cognito.APP_CLIENT_ID
-    })
-    return userPool.getCurrentUser()
+      ClientId: config.cognito.APP_CLIENT_ID,
+    });
+    return userPool.getCurrentUser();
   }
 
   getUserToken(currentUser) {
     return new Promise((resolve, reject) => {
       currentUser.getSession(function(err, session) {
         if (err) {
-          reject(err)
-          return
+          reject(err);
+          return;
         }
-        resolve(session.getIdToken().getJwtToken())
-      })
-    })
+        resolve(session.getIdToken().getJwtToken());
+      });
+    });
   }
 
   render() {
     const childProps = {
       userToken: this.state.userToken,
       updateUserToken: this.updateUserToken,
-      database: database(this.state.userToken)
-    }
+      database: database(this.state.userToken),
+    };
 
     return (
       !this.state.isLoadingUserToken && (
@@ -111,27 +111,30 @@ class App extends Component {
                       <RouteNavItem
                         key={1}
                         onClick={this.handleNavLink}
-                        href="/bookings">
+                        href="/bookings"
+                      >
                         Bookings
                       </RouteNavItem>,
                       <RouteNavItem
                         key={2}
                         style={{ padding: '0 1em' }}
                         onClick={this.handleNavLink}
-                        href="/overview">
+                        href="/overview"
+                      >
                         Overview
                       </RouteNavItem>,
                       <NavItem key={3} onClick={this.handleLogout}>
                         Logout
-                      </NavItem>
+                      </NavItem>,
                     ]
                   : [
                       <RouteNavItem
                         key={2}
                         onClick={this.handleNavLink}
-                        href="/login">
+                        href="/login"
+                      >
                         Login
-                      </RouteNavItem>
+                      </RouteNavItem>,
                     ]}
               </Nav>
             </Navbar.Collapse>
@@ -139,11 +142,11 @@ class App extends Component {
           <Routes childProps={childProps} />
         </div>
       )
-    )
+    );
   }
 }
 
-export default withRouter(App)
+export default withRouter(App);
 
 // <RouteNavItem
 //   key={1}

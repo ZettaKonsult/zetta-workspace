@@ -1,3 +1,3 @@
 function checkPlan() {
-  return true
+  return true;
 }

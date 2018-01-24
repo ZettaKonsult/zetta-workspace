@@ -1,3 +1,3 @@
-import React from 'react'
+import React from 'react';
 
-export default () => <div>Hej på dig här ska du inte vara 404</div>
+export default () => <div>Hej på dig här ska du inte vara 404</div>;

@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react';
 
 // import {
 //   verifyAttribute,
@@ -7,23 +7,23 @@ import React, {Component} from 'react'
 
 export default class ForgottenPassword extends Component {
   constructor() {
-    super()
+    super();
 
     this.state = {
-      code: ''
-    }
+      code: '',
+    };
   }
 
   verifyEmail = e => {
-    e.preventDefault()
+    e.preventDefault();
     // verifyAttribute(this.state.code)
-  }
+  };
 
   sendEmailVerificationCode = () => {
     // getAttributeVerificationCode()
-  }
+  };
 
-  onChange = e => this.setState({[e.target.id]: e.target.value})
+  onChange = e => this.setState({ [e.target.id]: e.target.value });
 
   render() {
     return (
@@ -38,6 +38,6 @@ export default class ForgottenPassword extends Component {
         />
         <button onClick={this.verifyEmail}>Verify Email</button>
       </div>
-    )
+    );
   }
 }

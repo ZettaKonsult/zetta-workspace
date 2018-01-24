@@ -1,23 +1,23 @@
-import React, { Component } from 'react'
-import { withRouter } from 'react-router-dom'
+import React, { Component } from 'react';
+import { withRouter } from 'react-router-dom';
 import {
   HelpBlock,
   FormGroup,
   FormControl,
-  ControlLabel
-} from 'react-bootstrap'
-import LoaderButton from '../components/LoaderButton'
-import './Signup.css'
+  ControlLabel,
+} from 'react-bootstrap';
+import LoaderButton from '../components/LoaderButton';
+import './Signup.css';
 import {
   AuthenticationDetails,
   CognitoUserPool,
-  CognitoUserAttribute
-} from 'amazon-cognito-identity-js'
-import config from '../config.js'
+  CognitoUserAttribute,
+} from 'amazon-cognito-identity-js';
+import config from '../config.js';
 
 class Signup extends Component {
   constructor(props) {
-    super(props)
+    super(props);
 
     this.state = {
       isLoading: false,
@@ -25,8 +25,8 @@ class Signup extends Component {
       password: '',
       confirmPassword: '',
       confirmationCode: '',
-      newUser: null
-    }
+      newUser: null,
+    };
   }
 
   validateForm() {
@@ -34,69 +34,69 @@ class Signup extends Component {
       this.state.username.length > 0 &&
       this.state.password.length > 0 &&
       this.state.password === this.state.confirmPassword
-    )
+    );
   }
 
   validateConfirmationForm() {
-    return this.state.confirmationCode.length > 0
+    return this.state.confirmationCode.length > 0;
   }
 
   handleChange = event => {
     this.setState({
-      [event.target.id]: event.target.value
-    })
-  }
+      [event.target.id]: event.target.value,
+    });
+  };
 
   handleSubmit = async event => {
-    event.preventDefault()
+    event.preventDefault();
 
-    this.setState({ isLoading: true })
+    this.setState({ isLoading: true });
 
     try {
       const newUser = await this.signup(
         this.state.username,
         this.state.password
-      )
+      );
       this.setState({
-        newUser: newUser
-      })
+        newUser: newUser,
+      });
     } catch (e) {
-      alert(e)
+      alert(e);
     }
 
-    this.setState({ isLoading: false })
-  }
+    this.setState({ isLoading: false });
+  };
 
   handleConfirmationSubmit = async event => {
-    event.preventDefault()
+    event.preventDefault();
 
-    this.setState({ isLoading: true })
+    this.setState({ isLoading: true });
 
     try {
-      await this.confirm(this.state.newUser, this.state.confirmationCode)
+      await this.confirm(this.state.newUser, this.state.confirmationCode);
       const userToken = await this.authenticate(
         this.state.newUser,
         this.state.username,
         this.state.password
-      )
+      );
 
-      this.props.updateUserToken(userToken)
-      this.props.history.push('/')
+      this.props.updateUserToken(userToken);
+      this.props.history.push('/');
     } catch (e) {
-      alert(e)
-      this.setState({ isLoading: false })
+      alert(e);
+      this.setState({ isLoading: false });
     }
-  }
+  };
 
   signup(username, password) {
     const userPool = new CognitoUserPool({
       UserPoolId: config.cognito.USER_POOL_ID,
-      ClientId: config.cognito.APP_CLIENT_ID
-    })
+      ClientId: config.cognito.APP_CLIENT_ID,
+    });
     const attributeEmail = new CognitoUserAttribute({
       Name: 'email',
-      Value: username
-    })
+      Value: username,
+    });
 
     return new Promise((resolve, reject) =>
       userPool.signUp(
@@ -106,41 +106,41 @@ class Signup extends Component {
         null,
         (err, result) => {
           if (err) {
-            reject(err)
-            return
+            reject(err);
+            return;
           }
 
-          resolve(result.user)
+          resolve(result.user);
         }
       )
-    )
+    );
   }
 
   confirm(user, confirmationCode) {
     return new Promise((resolve, reject) =>
       user.confirmRegistration(confirmationCode, true, function(err, result) {
         if (err) {
-          reject(err)
-          return
+          reject(err);
+          return;
         }
-        resolve(result)
+        resolve(result);
       })
-    )
+    );
   }
 
   authenticate(user, username, password) {
     const authenticationData = {
       Username: username,
-      Password: password
-    }
-    const authenticationDetails = new AuthenticationDetails(authenticationData)
+      Password: password,
+    };
+    const authenticationDetails = new AuthenticationDetails(authenticationData);
 
     return new Promise((resolve, reject) =>
       user.authenticateUser(authenticationDetails, {
         onSuccess: result => resolve(result.getIdToken().getJwtToken()),
-        onFailure: err => reject(err)
+        onFailure: err => reject(err),
       })
-    )
+    );
   }
 
   renderConfirmationForm() {
@@ -166,7 +166,7 @@ class Signup extends Component {
           loadingText="Verifying…"
         />
       </form>
-    )
+    );
   }
 
   renderForm() {
@@ -207,7 +207,7 @@ class Signup extends Component {
           loadingText="Signing up…"
         />
       </form>
-    )
+    );
   }
 
   render() {
@@ -217,8 +217,8 @@ class Signup extends Component {
           ? this.renderForm()
           : this.renderConfirmationForm()}
       </div>
-    )
+    );
   }
 }
 
-export default withRouter(Signup)
+export default withRouter(Signup);

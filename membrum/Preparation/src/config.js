@@ -7,36 +7,36 @@
 export const config = {
   Administrator: {
     UserName: 'Administrator',
-    Password: 'DefaultPasswordForAdmin'
+    Password: 'DefaultPasswordForAdmin',
   },
   Database: {
     Organisations: {
       Name: 'MembrumOrganisations',
-      IndexKey: 'organisationName'
+      IndexKey: 'organisationName',
     },
     Users: {
       Name: 'MembrumUsers',
-      IndexKey: ''
-    }
+      IndexKey: '',
+    },
   },
   Ladok: {
     File: {
       ExpectedColumns: ['Pnr', 'Namn', 'Epostadress', 'Registrerade po�ng', ''],
-      IgnoreLines: 8
-    }
+      IgnoreLines: 8,
+    },
   },
   Names: {
     customer: 'TestCustomer',
-    project: 'TestProject'
+    project: 'TestProject',
   },
   Password: {
     Length: 14,
-    Pattern: /[\w]/
+    Pattern: /[\w]/,
   },
   Region: 'eu-central-1',
   TRF: {
     Nations: {
-      Undefined: 'Undefined Nation'
+      Undefined: 'Undefined Nation',
     },
     UnionMapping: {
       EHL: ['Lunda Ekonomerna'],
@@ -47,7 +47,7 @@ export const config = {
       MED: ['Corpus Medicus'],
       NAT: ['Lunds Naturvetarkår'],
       SAM: ['Samhällsvetarkåren'],
-      USV: ['LundaEkonomerna', 'Lunds Naturvetarkår', 'Samhällsvetarkåren']
-    }
-  }
-}
+      USV: ['LundaEkonomerna', 'Lunds Naturvetarkår', 'Samhällsvetarkåren'],
+    },
+  },
+};

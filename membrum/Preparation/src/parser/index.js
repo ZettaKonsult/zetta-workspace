@@ -4,4 +4,4 @@
  * @date 2018-01-16
  */
 
-export * from './ladokParser'
+export * from './ladokParser';

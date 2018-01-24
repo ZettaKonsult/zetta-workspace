@@ -1,45 +1,45 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react';
 
-import config from '../../config'
+import config from '../../config';
 
-import FadedLine from '../../components/FadedLine'
+import FadedLine from '../../components/FadedLine';
 
-import './style.css'
+import './style.css';
 
 export default class UploadMembers extends Component {
   constructor(props) {
-    super(props)
-    this.file = null
+    super(props);
+    this.file = null;
 
     this.state = {
-      isLoading: false
-    }
+      isLoading: false,
+    };
   }
 
   handleFileChange = event => {
-    this.file = event.target.files[0]
-  }
+    this.file = event.target.files[0];
+  };
 
   handleSubmit = async event => {
-    event.preventDefault()
-    let registrationFile = this.file
+    event.preventDefault();
+    let registrationFile = this.file;
     if (
       registrationFile &&
       registrationFile.size > config.MAX_ATTACHMENT_SIZE
     ) {
-      alert('Please pick a file smaller than 5MB')
-      return
+      alert('Please pick a file smaller than 5MB');
+      return;
     }
 
-    this.setState({isLoading: true})
+    this.setState({ isLoading: true });
 
     try {
-      console.log(registrationFile)
+      console.log(registrationFile);
     } catch (e) {
-      alert(e)
-      this.setState({isLoading: false})
+      alert(e);
+      this.setState({ isLoading: false });
     }
-  }
+  };
 
   render() {
     return (
@@ -53,6 +53,6 @@ export default class UploadMembers extends Component {
           </button>
         </form>
       </div>
-    )
+    );
   }
 }

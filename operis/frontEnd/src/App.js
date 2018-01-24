@@ -1,10 +1,10 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react';
 
-import Routes from './Routes'
+import Routes from './Routes';
 
-import {Menu, Divider} from 'semantic-ui-react'
+import { Menu, Divider } from 'semantic-ui-react';
 
-import {Link, Route} from 'react-router-dom'
+import { Link, Route } from 'react-router-dom';
 
 class App extends Component {
   render() {
@@ -27,20 +27,20 @@ class App extends Component {
         <Divider />
         <Routes />
       </div>
-    )
+    );
   }
 }
 
-const NavLink = ({to, activeOnlyWhenExact, children}) => (
+const NavLink = ({ to, activeOnlyWhenExact, children }) => (
   <Route
     path={to}
     exact={activeOnlyWhenExact}
-    children={({match}) => (
+    children={({ match }) => (
       <Menu.Item as={Link} to={to} active={!!match}>
         {children}
       </Menu.Item>
     )}
   />
-)
+);
 
-export default App
+export default App;

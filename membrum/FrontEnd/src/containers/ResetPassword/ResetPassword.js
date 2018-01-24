@@ -1,21 +1,21 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
 
-import Input from '../../components/Input'
-import Button from '../../components/Button'
-import FadedLine from '../../components/FadedLine'
-import Message from '../../components/Message'
+import Input from '../../components/Input';
+import Button from '../../components/Button';
+import FadedLine from '../../components/FadedLine';
+import Message from '../../components/Message';
 
 // import { forgotPassword } from "../../libs/awsPassword"
 // import { isRequired } from "../../libs/Validation"
 
 export default class ResetPassword extends Component {
   constructor(props) {
-    super(props)
+    super(props);
 
     this.state = {
       email: '',
-      error: []
-    }
+      error: [],
+    };
   }
 
   // forgotPassword = e => {
@@ -27,9 +27,9 @@ export default class ResetPassword extends Component {
   //   }
   // }
 
-  closeError = () => this.setState({ error: [] })
+  closeError = () => this.setState({ error: [] });
 
-  onChange = e => this.setState({ [e.target.id]: e.target.value, error: [] })
+  onChange = e => this.setState({ [e.target.id]: e.target.value, error: [] });
 
   render() {
     return (
@@ -54,6 +54,6 @@ export default class ResetPassword extends Component {
           <Button onClick={this.props.resetPassword}>Back to login</Button>
         </div>
       </div>
-    )
+    );
   }
 }

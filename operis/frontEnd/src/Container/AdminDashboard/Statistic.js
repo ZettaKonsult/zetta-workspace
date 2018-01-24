@@ -1,11 +1,11 @@
-import React from 'react'
-import {connect} from 'react-redux'
+import React from 'react';
+import { connect } from 'react-redux';
 
-import {Segment, Statistic} from 'semantic-ui-react'
+import { Segment, Statistic } from 'semantic-ui-react';
 
-import * as selectors from '../../reducers'
+import * as selectors from '../../reducers';
 
-import ReportCard from '../../Components/ReportCard/ReportCard'
+import ReportCard from '../../Components/ReportCard/ReportCard';
 
 const list = props => (
   <div>
@@ -32,27 +32,27 @@ const list = props => (
       />
     ))}
   </div>
-)
+);
 
-const StatisticRow = ({label, value}) => (
+const StatisticRow = ({ label, value }) => (
   <Statistic>
     <Statistic.Label>{label}</Statistic.Label>
     <Statistic.Value>{value}</Statistic.Value>
   </Statistic>
-)
+);
 
 const mapStateToProps = (state, props) => {
   const reports = selectors.getWorkersMonthlyReport(
     state,
     props.filterMonth,
     props.filterWorker
-  )
+  );
   return {
     reports,
     sumReports: selectors.sumWorkedHours(reports),
     getWorkerName: selectors.getWorkerName(state),
-    getWorkplaceById: id => selectors.getWorkplaceById(state, id)
-  }
-}
+    getWorkplaceById: id => selectors.getWorkplaceById(state, id),
+  };
+};
 
-export default connect(mapStateToProps)(list)
+export default connect(mapStateToProps)(list);

@@ -1,9 +1,9 @@
-import React from "react"
-import PropTypes from "prop-types"
+import React from 'react';
+import PropTypes from 'prop-types';
 
-import Button from "../Button"
+import Button from '../Button';
 
-import "./style.css"
+import './style.css';
 
 const Modal = props => (
   <div id="myModal" className="modal">
@@ -13,7 +13,7 @@ const Modal = props => (
       </span>
       {props.children}
       <div className="ButtonGroup">
-        <Button type={"danger"} large onClick={props.accept}>
+        <Button type={'danger'} large onClick={props.accept}>
           Accept
         </Button>
         <Button large onClick={props.canel}>
@@ -22,10 +22,10 @@ const Modal = props => (
       </div>
     </div>
   </div>
-)
+);
 
 Modal.propTypes = {
-  onClick: PropTypes.func.isRequired
-}
+  onClick: PropTypes.func.isRequired,
+};
 
-export default Modal
+export default Modal;

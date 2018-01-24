@@ -1,7 +1,7 @@
-import styled from 'styled-components'
+import styled from 'styled-components';
 
 const InputStyle = styled.input`
   padding: 15px;
-`
+`;
 
-export default InputStyle
+export default InputStyle;

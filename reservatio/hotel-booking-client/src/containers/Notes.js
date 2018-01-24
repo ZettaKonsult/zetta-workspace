@@ -1,12 +1,12 @@
-import React, { Component } from 'react'
-import { withRouter } from 'react-router-dom'
-import { FormGroup, FormControl, ControlLabel } from 'react-bootstrap'
-import LoaderButton from '../components/LoaderButton'
-import './Notes.css'
+import React, { Component } from 'react';
+import { withRouter } from 'react-router-dom';
+import { FormGroup, FormControl, ControlLabel } from 'react-bootstrap';
+import LoaderButton from '../components/LoaderButton';
+import './Notes.css';
 
 class Notes extends Component {
   constructor(props) {
-    super(props)
+    super(props);
 
     this.state = {
       isLoading: null,
@@ -14,76 +14,76 @@ class Notes extends Component {
       roomId: '',
       beds: '',
       costPerNight: '',
-      maxOccupancy: ''
-    }
+      maxOccupancy: '',
+    };
   }
 
   async componentDidMount() {
     try {
       const results = await this.props.database.getRoom(
         this.props.match.params.id
-      )
+      );
       this.setState({
         roomId: results.roomId,
         beds: results.beds,
         costPerNight: results.costPerNight,
-        maxOccupancy: results.maxOccupancy
-      })
+        maxOccupancy: results.maxOccupancy,
+      });
     } catch (e) {
-      alert(e)
+      alert(e);
     }
   }
 
   validateForm() {
-    return this.state.roomId.length > 0
+    return this.state.roomId.length > 0;
   }
 
   handleChange = event => {
     this.setState({
-      [event.target.id]: event.target.value
-    })
-  }
+      [event.target.id]: event.target.value,
+    });
+  };
 
   handleSubmit = async event => {
-    event.preventDefault()
+    event.preventDefault();
 
-    this.setState({ isLoading: true })
+    this.setState({ isLoading: true });
     try {
       await this.props.database.updateRoom(this.props.match.params.id, {
         beds: this.state.beds,
         costPerNight: this.state.costPerNight,
-        maxOccupancy: this.state.maxOccupancy
-      })
-      this.props.history.push('/')
+        maxOccupancy: this.state.maxOccupancy,
+      });
+      this.props.history.push('/');
     } catch (e) {
-      alert(e)
-      this.setState({ isLoading: false })
+      alert(e);
+      this.setState({ isLoading: false });
     }
-  }
+  };
 
   handleDelete = async event => {
-    event.preventDefault()
+    event.preventDefault();
 
     const confirmed = window.confirm(
       'Are you sure you want to delete this room?'
-    )
+    );
 
     if (!confirmed) {
-      return
+      return;
     }
 
-    this.setState({ isDeleting: true })
+    this.setState({ isDeleting: true });
 
     try {
       await this.props.database.removeRoom({
-        Key: { roomId: this.props.match.params.id }
-      })
-      this.props.history.push('/')
+        Key: { roomId: this.props.match.params.id },
+      });
+      this.props.history.push('/');
     } catch (e) {
-      alert(e)
-      this.setState({ isDeleting: false })
+      alert(e);
+      this.setState({ isDeleting: false });
     }
-  }
+  };
 
   render() {
     return (
@@ -148,8 +148,8 @@ class Notes extends Component {
           </form>
         )}
       </div>
-    )
+    );
   }
 }
 
-export default withRouter(Notes)
+export default withRouter(Notes);

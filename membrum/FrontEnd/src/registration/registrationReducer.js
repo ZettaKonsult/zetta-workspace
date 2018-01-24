@@ -1,14 +1,14 @@
 import {
   NEW_USER_FAILURE,
   NEW_USER_REQUEST,
-  NEW_USER_SUCCESS
-} from './registrationActions'
+  NEW_USER_SUCCESS,
+} from './registrationActions';
 
 const initialState = {
   isLoading: false,
   success: false,
-  error: undefined
-}
+  error: undefined,
+};
 
 export function registration(state = initialState, action) {
   switch (action.type) {
@@ -17,15 +17,15 @@ export function registration(state = initialState, action) {
         ...state,
         isLoading: true,
         success: false,
-        error: undefined
-      }
+        error: undefined,
+      };
 
     case NEW_USER_SUCCESS:
       return {
         ...state,
         isLoading: false,
-        success: true
-      }
+        success: true,
+      };
 
     case NEW_USER_FAILURE:
       return {
@@ -33,22 +33,22 @@ export function registration(state = initialState, action) {
         isLoading: false,
         error: `Registration Error: ${action.payload.status} ${
           action.payload.statusText
-        }`
-      }
+        }`,
+      };
     case 'UPLOAD_REGISTRATION_LIST':
     case 'UPLOAD_REGISTRATION_LIST_SUCCESS':
     case 'UPLOAD_REGISTRATION_LIST_FAILURE':
-      return upload(state.upload, action)
+      return upload(state.upload, action);
     default:
-      return state
+      return state;
   }
 }
 
 const initialStateUpload = {
   progress: 0,
   done: false,
-  error: undefined
-}
+  error: undefined,
+};
 
 function upload(state = initialStateUpload, action) {
   switch (action.type) {
@@ -56,6 +56,6 @@ function upload(state = initialStateUpload, action) {
     case 'UPLOAD_REGISTRATION_LIST_SUCCESS':
     case 'UPLOAD_REGISTRATION_LIST_FAILURE':
     default:
-      return state
+      return state;
   }
 }

@@ -3,8 +3,8 @@ import {
   LOGIN_USER_SUCCESS,
   LOGIN_USER_FAILURE,
   LOGOUT_USER,
-  USER_REDIRECTED
-} from './authenticationActions'
+  USER_REDIRECTED,
+} from './authenticationActions';
 
 export const initialState = {
   token: undefined,
@@ -19,10 +19,10 @@ export const initialState = {
     admin: [
       { to: '/', label: 'Dashboard', key: 'admin' },
       { to: '/plans', label: 'Plans', key: 'plans' },
-      { to: '/find', label: 'Find Member', key: 'find' }
-    ]
-  }
-}
+      { to: '/find', label: 'Find Member', key: 'find' },
+    ],
+  },
+};
 
 export function reducer(state = initialState, action) {
   switch (action.type) {
@@ -30,8 +30,8 @@ export function reducer(state = initialState, action) {
       return {
         ...state,
         isAuthenticating: true,
-        statusText: undefined
-      }
+        statusText: undefined,
+      };
     //TODO GROUP MUST BE SET MORE DYNAMIC
     case LOGIN_USER_SUCCESS:
       return {
@@ -41,8 +41,8 @@ export function reducer(state = initialState, action) {
         token: action.payload.token,
         shouldRedirect: true,
         group: 'admin',
-        statusText: 'You have been successfully logged in.'
-      }
+        statusText: 'You have been successfully logged in.',
+      };
 
     case LOGIN_USER_FAILURE:
       return {
@@ -52,8 +52,8 @@ export function reducer(state = initialState, action) {
         token: undefined,
         statusText: `Authentication Error: ${action.payload.status} ${
           action.payload.statusText
-        }`
-      }
+        }`,
+      };
 
     case LOGOUT_USER:
       return {
@@ -61,24 +61,24 @@ export function reducer(state = initialState, action) {
         isAuthenticated: false,
         token: undefined,
         shouldRedirect: true,
-        statusText: 'You have been successfully logged out.'
-      }
+        statusText: 'You have been successfully logged out.',
+      };
     case USER_REDIRECTED:
       return {
         ...state,
-        shouldRedirect: false
-      }
+        shouldRedirect: false,
+      };
     default:
-      return state
+      return state;
   }
 }
 
-export const isUserAuthenticated = state => state.isAuthenticated
+export const isUserAuthenticated = state => state.isAuthenticated;
 
-export const shouldRedirectUser = state => state.shouldRedirect
+export const shouldRedirectUser = state => state.shouldRedirect;
 
-export const getUserGroup = state => state.group
+export const getUserGroup = state => state.group;
 
-export const getUserData = state => state.token
+export const getUserData = state => state.token;
 
-export const getAuthorizedRoutes = state => state.authorizedRoutes[state.group]
+export const getAuthorizedRoutes = state => state.authorizedRoutes[state.group];

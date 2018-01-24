@@ -6,7 +6,7 @@ const plans = [
     interval: 'month',
     intervalCount: '6',
     labels: ['union'],
-    group: ['studentlund']
+    group: ['studentlund'],
   },
   {
     id: 3,
@@ -15,7 +15,7 @@ const plans = [
     interval: 'month',
     intervalCount: '6',
     labels: ['nation', 'torna'],
-    group: ['studentlund']
+    group: ['studentlund'],
   },
   {
     id: 4,
@@ -25,7 +25,7 @@ const plans = [
     intervalCount: '6',
     labels: ['nation', 'gudrun'],
     group: ['studentlund'],
-    type: 'plan'
+    type: 'plan',
   },
   {
     id: 6,
@@ -34,7 +34,7 @@ const plans = [
     interval: 'month',
     intervalCount: '6',
     labels: [],
-    group: ['obligatory']
+    group: ['obligatory'],
   },
   {
     id: 7,
@@ -43,7 +43,7 @@ const plans = [
     interval: 'month',
     intervalCount: '6',
     labels: [],
-    group: ['studentlund']
+    group: ['studentlund'],
   },
   {
     id: 8,
@@ -52,9 +52,9 @@ const plans = [
     interval: 'month',
     intervalCount: '6',
     labels: ['nation'],
-    group: ['Smalands']
-  }
-]
+    group: ['Smalands'],
+  },
+];
 const plantemplates = [
   {
     id: 1,
@@ -64,7 +64,7 @@ const plantemplates = [
     key: 'union',
     func: 'only',
     value: '1',
-    error: 'There should be only 1 union'
+    error: 'There should be only 1 union',
   },
   {
     id: 2,
@@ -74,7 +74,7 @@ const plantemplates = [
     key: 'nation',
     func: 'atLeast',
     value: '1',
-    error: 'There should be atLeast 1 nation'
+    error: 'There should be atLeast 1 nation',
   },
   {
     id: 3,
@@ -84,7 +84,7 @@ const plantemplates = [
     key: plans.find(plan => plan.name === 'Terminsräkningsföreningen').id,
     func: 'only',
     value: '1',
-    error: 'TRF must be part of the subscription'
+    error: 'TRF must be part of the subscription',
   },
   {
     id: 4,
@@ -94,7 +94,7 @@ const plantemplates = [
     key: plans.find(plan => plan.name === 'Akademiska Föreningen').id,
     func: 'only',
     value: '1',
-    error: 'AF must be part of the subscription'
+    error: 'AF must be part of the subscription',
   },
   {
     id: 5,
@@ -104,8 +104,8 @@ const plantemplates = [
     key: 'nation',
     func: 'lessThan',
     value: '1',
-    error: "can't have any nations as part of this subscription"
-  }
-]
+    error: "can't have any nations as part of this subscription",
+  },
+];
 
-export default { plans, plantemplates }
+export default { plans, plantemplates };

@@ -1,24 +1,24 @@
-import React, { Component } from 'react'
-import { NavLink } from 'react-router-dom'
+import React, { Component } from 'react';
+import { NavLink } from 'react-router-dom';
 
-import './Navigation.css'
+import './Navigation.css';
 
 class TopNavigation extends Component {
   constructor(props) {
-    super(props)
+    super(props);
 
     this.state = {
-      toggled: false
-    }
+      toggled: false,
+    };
   }
   getToggled = () =>
-    this.state.toggled ? 'TopNavigation responsive' : 'TopNavigation'
+    this.state.toggled ? 'TopNavigation responsive' : 'TopNavigation';
 
-  toggleNav = () => this.setState({ toggled: !this.state.toggled })
+  toggleNav = () => this.setState({ toggled: !this.state.toggled });
 
   render() {
-    const className = this.getToggled()
-    const { authorizedRoutes } = this.props
+    const className = this.getToggled();
+    const { authorizedRoutes } = this.props;
     return (
       <div className={className}>
         {authorizedRoutes.map((route, i) => (
@@ -29,15 +29,15 @@ class TopNavigation extends Component {
         <Logout />
         <Toggle handleClick={this.toggleNav} />
       </div>
-    )
+    );
   }
 }
 
-const Logout = () => <a className="Authentication">Logout</a>
+const Logout = () => <a className="Authentication">Logout</a>;
 const Toggle = ({ handleClick }) => (
   <a className="icon" onClick={handleClick}>
     &#9776;
   </a>
-)
+);
 
-export default TopNavigation
+export default TopNavigation;

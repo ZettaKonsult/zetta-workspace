@@ -1,6 +1,6 @@
-import React from "react"
-import PropTypes from "prop-types"
-import "./style.css"
+import React from 'react';
+import PropTypes from 'prop-types';
+import './style.css';
 
 const Message = props => (
   <div className={`alert ${props.mode}`}>
@@ -9,14 +9,14 @@ const Message = props => (
     </span>
     {props.children}
   </div>
-)
+);
 
 Message.propTypes = {
-  mode: PropTypes.oneOf(["info", "success", "warning", "danger"]),
-  onClick: PropTypes.func.isRequired
-}
+  mode: PropTypes.oneOf(['info', 'success', 'warning', 'danger']),
+  onClick: PropTypes.func.isRequired,
+};
 
 Message.defaultProps = {
-  mode: "info"
-}
-export default Message
+  mode: 'info',
+};
+export default Message;

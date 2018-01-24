@@ -1,5 +1,5 @@
-import React from 'react'
-import styled from 'styled-components'
+import React from 'react';
+import styled from 'styled-components';
 
 var months = [
   'January',
@@ -13,8 +13,8 @@ var months = [
   'September',
   'October',
   'November',
-  'December'
-]
+  'December',
+];
 
 const DIV = styled.div`
   display: flex;
@@ -23,14 +23,14 @@ const DIV = styled.div`
   justify-content: center;
   text-align: center;
   user-select: none;
-`
+`;
 const Text = styled.span`
   color: rgba(255, 255, 255, 1);
   font-size: 1.5em;
   text-transform: uppercase;
   letter-spacing: 0.1em;
   flex-grow: 1;
-`
+`;
 const Navigation = styled.span`
   padding: 1em 2em;
   color: rgba(0, 0, 0, 1);
@@ -42,9 +42,9 @@ const Navigation = styled.span`
   &:active {
     color: rgba(200, 200, 200, 0.4);
   }
-`
+`;
 
-export default props =>
+export default props => (
   <DIV>
     <Navigation onClick={e => props.prev(e)}>&#10094;</Navigation>
     <Text>
@@ -54,3 +54,4 @@ export default props =>
     </Text>
     <Navigation onClick={e => props.next(e)}>&#10095;</Navigation>
   </DIV>
+);

@@ -1,4 +1,4 @@
-import React from "react"
+import React from 'react';
 
 const SignupForm = ({ handleSubmit, handleChange }) => (
   <form onSubmit={handleSubmit}>
@@ -16,6 +16,6 @@ const SignupForm = ({ handleSubmit, handleChange }) => (
 
     <button type="submit">Signup</button>
   </form>
-)
+);
 
-export default SignupForm
+export default SignupForm;

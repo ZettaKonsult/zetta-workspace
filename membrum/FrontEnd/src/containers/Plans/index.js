@@ -1,65 +1,65 @@
 // @flow
 
-import * as React from "react"
+import * as React from 'react';
 
-import * as actions from "./actions"
+import * as actions from './actions';
 
 // import ConfirmModal from '../../components/Modal/ConfirmModal'
-import CreatePlan from "./CreatePlan"
-import ShowPlans from "./ShowPlans"
-import NoPlans from "./NoPlans"
+import CreatePlan from './CreatePlan';
+import ShowPlans from './ShowPlans';
+import NoPlans from './NoPlans';
 
-import "./style.css"
+import './style.css';
 
 type State = {
   readPlan: boolean,
   plan: Object,
-  data: Object[]
-}
+  data: Object[],
+};
 
 export default class Plans extends React.Component<{}, State> {
   constructor() {
-    super()
+    super();
 
     this.state = {
       showPlans: true,
       plan: {},
       data: [],
-      sort: "labels"
-    }
+      sort: 'labels',
+    };
   }
 
   componentDidMount() {
-    this.setState(actions.fetchPlans())
+    this.setState(actions.fetchPlans());
   }
 
   onCancel = () => {
-    this.setState({ showPlans: true, plan: {} })
-  }
+    this.setState({ showPlans: true, plan: {} });
+  };
   onChangePlan = e => {
-    this.setState(actions.changePlan(e.target.id, e.target.value))
-  }
+    this.setState(actions.changePlan(e.target.id, e.target.value));
+  };
   changeSort = value => {
-    this.setState({ sort: value })
-  }
+    this.setState({ sort: value });
+  };
   toggleCreateMode = e => {
-    this.setState(actions.toggleCreateMode)
-  }
+    this.setState(actions.toggleCreateMode);
+  };
   toggleReadMode = id => {
-    this.setState(actions.toggleReadMode(id))
-  }
+    this.setState(actions.toggleReadMode(id));
+  };
   savePlan = e => {
-    this.setState(actions.savePlan)
-  }
+    this.setState(actions.savePlan);
+  };
   deletePlan = id => {
-    this.setState(actions.deletePlan(id))
-  }
+    this.setState(actions.deletePlan(id));
+  };
 
   render() {
-    const { data } = this.state
+    const { data } = this.state;
 
     if (data.length === 0) {
-      return <NoPlans onClick={this.toggleCreateMode} />
+      return <NoPlans onClick={this.toggleCreateMode} />;
     }
 
     if (this.state.showPlans) {
@@ -72,7 +72,7 @@ export default class Plans extends React.Component<{}, State> {
           attributeToSort={this.state.sort}
           changeSort={this.changeSort}
         />
-      )
+      );
     } else {
       return (
         <CreatePlan
@@ -82,7 +82,7 @@ export default class Plans extends React.Component<{}, State> {
           onCancel={this.onCancel}
           onDelete={this.deletePlan}
         />
-      )
+      );
     }
   }
 }

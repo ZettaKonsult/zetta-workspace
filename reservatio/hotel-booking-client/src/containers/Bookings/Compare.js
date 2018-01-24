@@ -1,6 +1,6 @@
-const date = (a, b) => new Date(a) > new Date(b)
+const date = (a, b) => new Date(a) > new Date(b);
 
-const isToday = booking => booking.start === new Date().toDateString()
+const isToday = booking => booking.start === new Date().toDateString();
 
 const isTomorrow = booking =>
   booking.start ===
@@ -8,16 +8,16 @@ const isTomorrow = booking =>
     new Date().getFullYear(),
     new Date().getMonth(),
     new Date().getDate() + 1
-  ).toDateString()
+  ).toDateString();
 
-const isFuture = booking => new Date(booking.start) > new Date()
+const isFuture = booking => new Date(booking.start) > new Date();
 
-const startDates = (a, b) => new Date(a.start) > new Date(b.start)
+const startDates = (a, b) => new Date(a.start) > new Date(b.start);
 
 export default {
   date,
   isToday,
   isTomorrow,
   isFuture,
-  startDates
-}
+  startDates,
+};

@@ -1,4 +1,4 @@
-import React, { Component } from "react"
+import React, { Component } from 'react';
 
 export default class Home extends Component {
   render() {
@@ -9,6 +9,6 @@ export default class Home extends Component {
           <p>Keep track of your members</p>
         </div>
       </div>
-    )
+    );
   }
 }

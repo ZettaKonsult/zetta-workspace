@@ -1,21 +1,21 @@
-import { reducer, initialState } from './authenticationReducer'
+import { reducer, initialState } from './authenticationReducer';
 import {
   loginUserSuccess,
   loginUserFailure,
   loginUserRequest,
-  LOGOUT_USER
-} from './authenticationActions'
+  LOGOUT_USER,
+} from './authenticationActions';
 
 describe('authenticationReduer', () => {
   it('defaults to inital state', () => {
-    expect(reducer(undefined, {})).toEqual(createState())
-  })
+    expect(reducer(undefined, {})).toEqual(createState());
+  });
 
   it('should handle loginUserRequest', () => {
     expect(reducer(createState(), loginUserRequest())).toEqual(
       createState({ isAuthenticating: true, statusText: undefined })
-    )
-  })
+    );
+  });
 
   it('should handle loginUserFailure', () => {
     expect(
@@ -24,8 +24,8 @@ describe('authenticationReduer', () => {
         loginUserFailure({
           response: {
             status: '500',
-            statusText: 'User not found'
-          }
+            statusText: 'User not found',
+          },
         })
       )
     ).toEqual(
@@ -33,25 +33,25 @@ describe('authenticationReduer', () => {
         statusText: 'Authentication Error: 500 User not found',
         isAuthenticating: false,
         isAuthenticated: false,
-        token: undefined
+        token: undefined,
       })
-    )
-  })
+    );
+  });
 
   it('should handle loginUserSuccess', () => {
-    let token = 'q1238+jasj34ng98u'
+    let token = 'q1238+jasj34ng98u';
     expect(reducer(createState(), loginUserSuccess(token))).toEqual(
       createState({
         statusText: 'You have been successfully logged in.',
         isAuthenticating: false,
         isAuthenticated: true,
-        token
+        token,
       })
-    )
-  })
-})
+    );
+  });
+});
 
 const createState = state => ({
   ...initialState,
-  ...state
-})
+  ...state,
+});

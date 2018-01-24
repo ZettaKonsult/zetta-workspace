@@ -1,15 +1,15 @@
-import React, { Component } from 'react'
-import { Button, Form, Segment } from 'semantic-ui-react'
-import { UserPool } from 'zk-aws-users'
+import React, { Component } from 'react';
+import { Button, Form, Segment } from 'semantic-ui-react';
+import { UserPool } from 'zk-aws-users';
 
 export default class Login extends Component {
   onSubmit = e => {
-    e.preventDefault()
-    console.log('hej')
-  }
+    e.preventDefault();
+    console.log('hej');
+  };
 
   setup() {
-    console.log(UserPool)
+    console.log(UserPool);
   }
 
   render() {
@@ -37,6 +37,6 @@ export default class Login extends Component {
           </Segment>
         </Form>
       </div>
-    )
+    );
   }
 }

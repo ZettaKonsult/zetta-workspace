@@ -1,13 +1,13 @@
-import React from 'react'
-import { connect } from 'react-redux'
-import { toISODateString } from 'date-primitive-utils'
+import React from 'react';
+import { connect } from 'react-redux';
+import { toISODateString } from 'date-primitive-utils';
 
-import { getPayments, getPlanById } from './membershipReducer'
+import { getPayments, getPlanById } from './membershipReducer';
 
-import MembershipForm from './MembershipForm'
-import PaymentStatus from './PaymentStatus'
+import MembershipForm from './MembershipForm';
+import PaymentStatus from './PaymentStatus';
 
-import './membership.css'
+import './membership.css';
 
 let Payments = ({ payments, getPlanById }) => (
   <div>
@@ -21,14 +21,14 @@ let Payments = ({ payments, getPlanById }) => (
       </p>
     ))}
   </div>
-)
+);
 
 const mapStateToProps = (state, props) => ({
   payments: getPayments(state.membershipReducer),
-  getPlanById: planId => getPlanById(state.membershipReducer, planId)
-})
+  getPlanById: planId => getPlanById(state.membershipReducer, planId),
+});
 
-Payments = connect(mapStateToProps)(Payments)
+Payments = connect(mapStateToProps)(Payments);
 
 export default () => (
   <div>
@@ -36,4 +36,4 @@ export default () => (
     <PaymentStatus />
     <Payments />
   </div>
-)
+);

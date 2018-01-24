@@ -1,5 +1,5 @@
 export default props => {
-  const { date, oneRow } = props
+  const { date, oneRow } = props;
 
   const weekdays = [
     'monday',
@@ -8,23 +8,23 @@ export default props => {
     'thursday',
     'friday',
     'saturday',
-    'sunday'
-  ]
+    'sunday',
+  ];
   let startDay = oneRow
     ? new Date(date.getFullYear(), date.getMonth(), 1).getUTCDay()
-    : 0
+    : 0;
 
   const length = oneRow
     ? new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate()
-    : 7
+    : 7;
 
   const mapWeekdays = () => {
-    let result = []
+    let result = [];
     for (let i = 0; i < length; i++) {
-      result = [...result, weekdays[startDay++ % 7]]
+      result = [...result, weekdays[startDay++ % 7]];
     }
-    return result
-  }
+    return result;
+  };
 
-  return mapWeekdays()
-}
+  return mapWeekdays();
+};

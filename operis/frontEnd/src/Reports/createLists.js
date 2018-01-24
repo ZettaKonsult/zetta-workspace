@@ -1,69 +1,69 @@
 /* @flow */
-import { combineReducers } from 'redux'
-import { ADD_REPORT, UPDATE_REPORT_DATE } from './ReportActions'
+import { combineReducers } from 'redux';
+import { ADD_REPORT, UPDATE_REPORT_DATE } from './ReportActions';
 
 const allIds = (state = [], action) => {
   switch (action.type) {
     case ADD_REPORT:
-      return [...state, action.id]
+      return [...state, action.id];
     default:
-      return state
+      return state;
   }
-}
+};
 
-export const getAllIds = state => state.allIds
+export const getAllIds = state => state.allIds;
 
 export const isReportId = (state, id) =>
-  state.allIds.find(compareId => compareId === id)
+  state.allIds.find(compareId => compareId === id);
 
 const idsByYearMonthEpoch = (state = {}, action) => {
   switch (action.type) {
     case ADD_REPORT:
-      const firstDayOfMonth = getFirstDayOfMonth(action.report.date)
+      const firstDayOfMonth = getFirstDayOfMonth(action.report.date);
       return {
         ...state,
-        [firstDayOfMonth]: addToArray(state[firstDayOfMonth], action.id)
-      }
+        [firstDayOfMonth]: addToArray(state[firstDayOfMonth], action.id),
+      };
 
     case UPDATE_REPORT_DATE:
-      return handleDateUpdate(state, action)
+      return handleDateUpdate(state, action);
 
     default:
-      return state
+      return state;
   }
-}
+};
 
 const handleDateUpdate = (state, action) => {
-  const { id, oldDate, newDate } = action
+  const { id, oldDate, newDate } = action;
   if (oldDate === newDate) {
-    return state
+    return state;
   }
-  const oldDateKey = getFirstDayOfMonth(oldDate)
-  const oldIndex = state[oldDateKey].findIndex(idDate => idDate === id)
+  const oldDateKey = getFirstDayOfMonth(oldDate);
+  const oldIndex = state[oldDateKey].findIndex(idDate => idDate === id);
 
   return {
     ...state,
     [oldDateKey]: [
       ...state[oldDateKey].slice(0, oldIndex),
-      ...state[oldDateKey].slice(oldIndex + 1)
+      ...state[oldDateKey].slice(oldIndex + 1),
     ],
-    [newDate]: addToArray(state[newDate], id)
-  }
-}
+    [newDate]: addToArray(state[newDate], id),
+  };
+};
 
 export const getMonthReports = (state, epoch) => {
-  const key = getFirstDayOfMonth(Number(epoch))
-  return state.idsByYearMonthEpoch[key] || []
-}
+  const key = getFirstDayOfMonth(Number(epoch));
+  return state.idsByYearMonthEpoch[key] || [];
+};
 
-const addToArray = (array = [], item) => [...array, item]
+const addToArray = (array = [], item) => [...array, item];
 
 const getFirstDayOfMonth = (date: Number) => {
-  const d = new Date(date)
-  return Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), 1)
-}
+  const d = new Date(date);
+  return Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), 1);
+};
 
 export const getAllMonthReported = state =>
-  Object.keys(state.idsByYearMonthEpoch)
+  Object.keys(state.idsByYearMonthEpoch);
 
-export default combineReducers({ allIds, idsByYearMonthEpoch })
+export default combineReducers({ allIds, idsByYearMonthEpoch });

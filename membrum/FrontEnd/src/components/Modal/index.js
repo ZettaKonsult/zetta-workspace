@@ -1,11 +1,11 @@
-import React, { Component } from "react"
-import PropTypes from "prop-types"
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
-import "./style.css"
+import './style.css';
 
 Modal.propTypes = {
-  onClick: PropTypes.func.isRequired
-}
+  onClick: PropTypes.func.isRequired,
+};
 
 export default class Modal extends Compoent {
   render() {
@@ -18,6 +18,6 @@ export default class Modal extends Compoent {
           {props.children}
         </div>
       </div>
-    )
+    );
   }
 }

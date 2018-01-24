@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled from 'styled-components';
 
 const BaseSpan = styled.span`
   background-color: ${props =>
@@ -10,14 +10,12 @@ const BaseSpan = styled.span`
   font-size: 1.1em;
   user-select: none;
   overflow: hidden;
-`
+`;
 
 export const DateSpan = BaseSpan.extend`
   &:hover {
     color: rgba(0, 0, 0, 1);
   }
-`
-  
-export const WeekDaySpan = BaseSpan.extend`
+`;
 
-`
+export const WeekDaySpan = BaseSpan.extend``;

@@ -4,7 +4,7 @@
  * @date  2018-01-04
  */
 
-import { parseData } from './parse'
+import { parseData } from './parse';
 
 describe('Parse tests.', () => {
   it('parseString()', async () => {
@@ -26,7 +26,7 @@ describe('Parse tests.', () => {
           '9006211537;ZIMON KUHS;zmk.zk.dev@gmail.com; 21,5;',
         'EHL',
         (error, data) => {
-          throw new Error(`Parsing failed.`)
+          throw new Error(`Parsing failed.`);
         }
       )
     ).toEqual([
@@ -34,14 +34,14 @@ describe('Parse tests.', () => {
         credits: { EHL: 35.5 },
         email: 'zmk.zk.dev@gmail.com',
         name: 'FREDRIK PALMQUIST',
-        ssn: '9105040035'
+        ssn: '9105040035',
       },
       {
         credits: { EHL: 21.5 },
         email: 'zmk.zk.dev@gmail.com',
         name: 'ZIMON KUHS',
-        ssn: '9006211537'
-      }
-    ])
-  })
-})
+        ssn: '9006211537',
+      },
+    ]);
+  });
+});

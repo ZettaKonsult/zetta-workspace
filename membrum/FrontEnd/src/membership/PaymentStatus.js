@@ -1,11 +1,11 @@
-import React from 'react'
-import { connect } from 'react-redux'
-import { toISODateString } from 'date-primitive-utils'
+import React from 'react';
+import { connect } from 'react-redux';
+import { toISODateString } from 'date-primitive-utils';
 
-import { isSubscriptionPaid, getNextPayment } from './membershipReducer'
-import { membershipPay } from './membershipActions'
+import { isSubscriptionPaid, getNextPayment } from './membershipReducer';
+import { membershipPay } from './membershipActions';
 
-import Button from '../components/Button'
+import Button from '../components/Button';
 
 const style = {
   display: 'flex',
@@ -13,16 +13,16 @@ const style = {
   border: '1px dotted grey',
   margin: '1em',
   padding: '1em',
-  background: 'var(--danger-light)'
-}
+  background: 'var(--danger-light)',
+};
 
 const PaymentStatus = ({ membershipPay, paid, nextPayment }) => {
   return paid ? (
     <Paid nextPaymentDate={nextPayment.date} />
   ) : (
     <Unpaid paymentProccess={membershipPay} nextPayment={nextPayment} />
-  )
-}
+  );
+};
 
 const Unpaid = ({ paymentProccess, nextPayment }) => (
   <div style={style}>
@@ -39,12 +39,13 @@ const Unpaid = ({ paymentProccess, nextPayment }) => (
         large
         onClick={() =>
           paymentProccess(nextPayment.subscription.map(plan => plan.id))
-        }>
+        }
+      >
         Pay semester fee
       </Button>
     </div>
   </div>
-)
+);
 
 const Paid = ({ getRecipt, getMembershipVerification, nextPaymentDate }) => (
   <div style={style}>
@@ -65,16 +66,16 @@ const Paid = ({ getRecipt, getMembershipVerification, nextPaymentDate }) => (
       </Button>
     </div>
   </div>
-)
+);
 
 const mapStateToProps = (state, props) => {
-  const date = Date.now()
+  const date = Date.now();
   return {
     paid: isSubscriptionPaid(state.membershipReducer, date),
-    nextPayment: getNextPayment(state.membershipReducer, date)
-  }
-}
+    nextPayment: getNextPayment(state.membershipReducer, date),
+  };
+};
 
 export default connect(mapStateToProps, {
-  membershipPay: plans => membershipPay(plans)
-})(PaymentStatus)
+  membershipPay: plans => membershipPay(plans),
+})(PaymentStatus);

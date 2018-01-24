@@ -1,17 +1,17 @@
-import React from 'react'
-import { Route } from 'react-router-dom'
-import { Line } from 'react-chartjs-2'
+import React from 'react';
+import { Route } from 'react-router-dom';
+import { Line } from 'react-chartjs-2';
 
-import AdminActionMenu from './AdminActionMenu'
-import AdminCardPanel from './AdminCardPanel'
-import MemberFind from './MemberFind'
+import AdminActionMenu from './AdminActionMenu';
+import AdminCardPanel from './AdminCardPanel';
+import MemberFind from './MemberFind';
 
-import FadedLine from '../components/FadedLine'
+import FadedLine from '../components/FadedLine';
 
-import mock from '../mocks/statisticsMock'
+import mock from '../mocks/statisticsMock';
 
-import './style.css'
-import './AdminActionMenu.css'
+import './style.css';
+import './AdminActionMenu.css';
 
 const Dashboard = ({ match }) => (
   <div className="AdminDashboardLayout">
@@ -20,7 +20,7 @@ const Dashboard = ({ match }) => (
       <Line data={mock()} />
     </div>
   </div>
-)
+);
 
 export default ({ match }) => (
   <div>
@@ -30,4 +30,4 @@ export default ({ match }) => (
     <Route path={`${match.path}/find`} component={MemberFind} />
     <Route path={`${match.path}`} component={AdminActionMenu} />
   </div>
-)
+);

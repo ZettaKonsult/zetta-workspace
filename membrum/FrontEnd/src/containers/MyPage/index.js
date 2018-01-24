@@ -1,24 +1,24 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
 
 // import {
 //   getUserAttributes,
 //   updateUserAttributes
 // } from "../../libs/awsAttributes"
 
-import IsPaid from './IsPaid'
-import IsNotPaid from './IsNotPaid'
-import ContactInfo from './ContactInfo'
-import ChangePassword from './ChangePassword'
+import IsPaid from './IsPaid';
+import IsNotPaid from './IsNotPaid';
+import ContactInfo from './ContactInfo';
+import ChangePassword from './ChangePassword';
 
-import './style.css'
+import './style.css';
 
-import PageNavigation from '../../components/PageNavigation'
-import Message from '../../components/Message'
+import PageNavigation from '../../components/PageNavigation';
+import Message from '../../components/Message';
 
 export default class MyPage extends Component {
   constructor(props) {
-    super(props)
-    this.pages = ['contact', 'changePassword']
+    super(props);
+    this.pages = ['contact', 'changePassword'];
     this.fields = [
       'ssn',
       'first name',
@@ -27,48 +27,48 @@ export default class MyPage extends Component {
       'city',
       'postcode',
       'mobile',
-      'email'
-    ]
+      'email',
+    ];
     this.state = {
       loading: false,
       isPaid: false,
-      isSuccess: false
-    }
+      isSuccess: false,
+    };
   }
 
   async componentWillMount() {
-    this.fields.map(item => this.setState({ [item]: '' }))
-    this.setInitalPage()
+    this.fields.map(item => this.setState({ [item]: '' }));
+    this.setInitalPage();
     try {
       // const result = await getUserAttributes()
       // result.map((item, i) => this.setState({[item.Name]: item.Value}))
     } catch (e) {
-      console.log(e)
+      console.log(e);
     }
   }
 
   setInitalPage = () => {
-    const page = this.props.match.params.page || this.pages[0]
-    this.setState({ page })
-    this.props.history.push(`/mypage/${page}`)
-  }
+    const page = this.props.match.params.page || this.pages[0];
+    this.setState({ page });
+    this.props.history.push(`/mypage/${page}`);
+  };
 
   changePage = page => {
-    this.props.history.push(`/mypage/${page}`)
-    this.setState({ page })
-  }
+    this.props.history.push(`/mypage/${page}`);
+    this.setState({ page });
+  };
 
-  onChange = e => this.setState({ [e.target.id]: e.target.value })
+  onChange = e => this.setState({ [e.target.id]: e.target.value });
 
-  paymentHandler = () => this.setState({ isPaid: true })
+  paymentHandler = () => this.setState({ isPaid: true });
 
   updateContactInfo = async e => {
-    e.preventDefault()
-    this.setState({ loading: true })
-    const contactInfo = [{ Name: 'email', Value: this.state.email }]
+    e.preventDefault();
+    this.setState({ loading: true });
+    const contactInfo = [{ Name: 'email', Value: this.state.email }];
     // await updateUserAttributes(contactInfo)
-    this.setState({ loading: false, isSuccess: true })
-  }
+    this.setState({ loading: false, isSuccess: true });
+  };
 
   render() {
     return (
@@ -108,6 +108,6 @@ export default class MyPage extends Component {
           <IsNotPaid initiatePaymentProccess={this.paymentHandler} />
         )}
       </div>
-    )
+    );
   }
 }

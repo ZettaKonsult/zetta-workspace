@@ -1,20 +1,20 @@
-import React from 'react'
-import { Route, Switch } from 'react-router-dom'
-import AppliedRoute from './components/AppliedRoute'
-import AuthenticatedRoute from './components/AuthenticatedRoute'
-import UnauthenticatedRoute from './components/UnauthenticatedRoute'
+import React from 'react';
+import { Route, Switch } from 'react-router-dom';
+import AppliedRoute from './components/AppliedRoute';
+import AuthenticatedRoute from './components/AuthenticatedRoute';
+import UnauthenticatedRoute from './components/UnauthenticatedRoute';
 
-import Home from './containers/Home'
-import Login from './containers/Login'
-import Signup from './containers/Signup'
-import NewNote from './containers/NewNote'
-import Notes from './containers/Notes'
-import Reserve from './containers/Reserve/'
-import NotFound from './containers/NotFound'
-import Overview from './containers/Overview/'
-import Bookings from './containers/Bookings/'
+import Home from './containers/Home';
+import Login from './containers/Login';
+import Signup from './containers/Signup';
+import NewNote from './containers/NewNote';
+import Notes from './containers/Notes';
+import Reserve from './containers/Reserve/';
+import NotFound from './containers/NotFound';
+import Overview from './containers/Overview/';
+import Bookings from './containers/Bookings/';
 
-export default ({ childProps }) =>
+export default ({ childProps }) => (
   <Switch>
     <AppliedRoute path="/" exact component={Home} props={childProps} />
     <UnauthenticatedRoute
@@ -67,3 +67,4 @@ export default ({ childProps }) =>
     />
     <Route component={NotFound} />
   </Switch>
+);

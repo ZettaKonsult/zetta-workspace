@@ -1,14 +1,14 @@
-import React from 'react'
-import { connect } from 'react-redux'
-import { Field, reduxForm } from 'redux-form'
+import React from 'react';
+import { connect } from 'react-redux';
+import { Field, reduxForm } from 'redux-form';
 
-import FormInput from '../components/FormInput'
+import FormInput from '../components/FormInput';
 
-import { saveProfile } from './profileActions'
-import { getUserData } from './'
+import { saveProfile } from './profileActions';
+import { getUserData } from './';
 
 let ProfileForm = props => {
-  const { handleSubmit, pristine, reset, submitting } = props
+  const { handleSubmit, pristine, reset, submitting } = props;
   return (
     <form onSubmit={handleSubmit}>
       <Field
@@ -45,24 +45,24 @@ let ProfileForm = props => {
         </button>
       </div>
     </form>
-  )
-}
+  );
+};
 
 ProfileForm = reduxForm({
-  form: 'ProfileFrom'
-})(ProfileForm)
+  form: 'ProfileFrom',
+})(ProfileForm);
 
 const mapStateToProps = state => {
   return {
     initialValues: getUserData(state.userReducer),
-    enableReinitialize: true
-  }
-}
+    enableReinitialize: true,
+  };
+};
 
 const mapDispatchToProps = dispatch => {
   return {
-    onSubmit: values => saveProfile(values)(dispatch)
-  }
-}
+    onSubmit: values => saveProfile(values)(dispatch),
+  };
+};
 
-export default connect(mapStateToProps, mapDispatchToProps)(ProfileForm)
+export default connect(mapStateToProps, mapDispatchToProps)(ProfileForm);

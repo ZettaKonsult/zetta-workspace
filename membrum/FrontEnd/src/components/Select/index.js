@@ -1,7 +1,7 @@
-import React from "react"
-import PropTypes from "prop-types"
+import React from 'react';
+import PropTypes from 'prop-types';
 
-import "./style.css"
+import './style.css';
 
 const Select = ({ onChange, name, value, option }) => (
   <div className="SelectField">
@@ -14,13 +14,13 @@ const Select = ({ onChange, name, value, option }) => (
       ))}
     </select>
   </div>
-)
+);
 
 Select.propTypes = {
   onChange: PropTypes.func,
   option: PropTypes.array.isRequired,
   value: PropTypes.string,
-  name: PropTypes.string
-}
+  name: PropTypes.string,
+};
 
-export default Select
+export default Select;

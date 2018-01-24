@@ -1,4 +1,4 @@
-import { ADD_REPORT, UPDATE_REPORT } from './ReportActions'
+import { ADD_REPORT, UPDATE_REPORT } from './ReportActions';
 
 const report = (state, action) => {
   switch (action.type) {
@@ -6,12 +6,12 @@ const report = (state, action) => {
     case UPDATE_REPORT:
       return {
         id: action.id,
-        ...action.report
-      }
+        ...action.report,
+      };
     default:
-      return state
+      return state;
   }
-}
+};
 
 const byId = (state = {}, action) => {
   switch (action.type) {
@@ -19,11 +19,11 @@ const byId = (state = {}, action) => {
     case UPDATE_REPORT:
       return {
         ...state,
-        [action.id]: report(state[action.id], action)
-      }
+        [action.id]: report(state[action.id], action),
+      };
     default:
-      return state
+      return state;
   }
-}
+};
 
-export default byId
+export default byId;

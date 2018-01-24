@@ -1,40 +1,40 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
 
-import SignupForm from './SignupForm'
-import ConfirmationForm from './ConfirmationForm'
-import * as is from './Validation'
-import './style.css'
+import SignupForm from './SignupForm';
+import ConfirmationForm from './ConfirmationForm';
+import * as is from './Validation';
+import './style.css';
 
 export default class Signup extends Component {
   constructor(props) {
-    super(props)
+    super(props);
 
     this.state = {
       ssn: '',
       email: '',
       password: '',
       confirmPassword: '',
-      confirmationCode: ''
-    }
+      confirmationCode: '',
+    };
   }
 
   validateForm = () =>
     is.email(this.state.email) &&
     is.password(this.state.password) &&
-    is.confirmPassword(this.state.password, this.state.confirmPassword)
+    is.confirmPassword(this.state.password, this.state.confirmPassword);
 
   validateConfirmationForm = () =>
-    is.confirmationCode(this.state.confirmPassword)
+    is.confirmationCode(this.state.confirmPassword);
 
   handleChange = event => {
     this.setState({
-      [event.target.id]: event.target.value
-    })
-  }
+      [event.target.id]: event.target.value,
+    });
+  };
 
   handleSubmit = event => {
-    event.preventDefault()
-  }
+    event.preventDefault();
+  };
 
   render() {
     return (
@@ -49,6 +49,6 @@ export default class Signup extends Component {
           handleChange={this.handleChange}
         />
       </div>
-    )
+    );
   }
 }

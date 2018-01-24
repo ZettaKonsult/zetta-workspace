@@ -1,5 +1,5 @@
-import React from 'react'
-import { Form, Dropdown as Select } from 'semantic-ui-react'
+import React from 'react';
+import { Form, Dropdown as Select } from 'semantic-ui-react';
 
 export const Dropdown = ({
   input,
@@ -8,7 +8,7 @@ export const Dropdown = ({
   placeholder,
   children,
   options,
-  meta: { touched, error, warning }
+  meta: { touched, error, warning },
 }) => (
   <div>
     <Form.Field error={!!touched && !!error}>
@@ -27,4 +27,4 @@ export const Dropdown = ({
         !!error && <span style={{ color: '#ae5856' }}>{error}</span>}
     </Form.Field>
   </div>
-)
+);

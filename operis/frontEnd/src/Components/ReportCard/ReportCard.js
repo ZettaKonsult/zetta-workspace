@@ -1,6 +1,6 @@
-import React from 'react'
+import React from 'react';
 
-const ReportCard = ({date, hours, extra, worker, workplace, onClick}) => (
+const ReportCard = ({ date, hours, extra, worker, workplace, onClick }) => (
   <div
     onClick={onClick}
     style={{
@@ -9,34 +9,34 @@ const ReportCard = ({date, hours, extra, worker, workplace, onClick}) => (
       margin: '0.2em',
       display: 'flex',
       flexDirection: 'column',
-      borderRadius: '5px'
+      borderRadius: '5px',
     }}
   >
-    <div style={{display: 'flex', justifyContent: 'center'}}>
+    <div style={{ display: 'flex', justifyContent: 'center' }}>
       <h3>{date}</h3>
     </div>
     <div
       style={{
         display: 'flex',
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
       }}
     >
       <div
         style={{
           display: 'flex',
-          flexDirection: 'column'
+          flexDirection: 'column',
         }}
       >
-        <h3 style={{margin: 0}}>{worker}</h3>
+        <h3 style={{ margin: 0 }}>{worker}</h3>
         <em>{workplace}</em>
       </div>
 
-      <div style={{display: 'flex', flexDirection: 'column'}}>
+      <div style={{ display: 'flex', flexDirection: 'column' }}>
         <span style={{}}>Hours: {hours}</span>
         <span>Extra: {extra}</span>
       </div>
     </div>
   </div>
-)
+);
 
-export default ReportCard
+export default ReportCard;

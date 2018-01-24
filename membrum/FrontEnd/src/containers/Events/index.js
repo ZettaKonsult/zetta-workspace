@@ -1,14 +1,14 @@
-import React, { Component } from "react"
+import React, { Component } from 'react';
 
-import "./style.css"
+import './style.css';
 
 export default class Events extends Component {
   constructor(props) {
-    super(props)
+    super(props);
 
     this.state = {
-      state: true
-    }
+      state: true,
+    };
   }
 
   render() {
@@ -39,6 +39,6 @@ export default class Events extends Component {
           <span>Name: Sture Student</span>
         </div>
       </div>
-    )
+    );
   }
 }

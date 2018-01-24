@@ -1,8 +1,8 @@
-import * as dynamoDbLib from './libs/dynamodb-lib'
-import { success, failure } from './libs/response-lib'
+import * as dynamoDbLib from './libs/dynamodb-lib';
+import { success, failure } from './libs/response-lib';
 
 export async function main(event, context, callback) {
-  const data = JSON.parse(event.body)
+  const data = JSON.parse(event.body);
   const params = {
     TableName: 'rooms',
     // 'Item' contains the attributes of the item to be created
@@ -17,14 +17,14 @@ export async function main(event, context, callback) {
       maxOccupancy: data.maxOccupancy,
       costPerNight: data.costPerNight,
       reserved: data.reserved,
-      createdAt: new Date().getTime()
-    }
-  }
+      createdAt: new Date().getTime(),
+    },
+  };
 
   try {
-    const result = await dynamoDbLib.call('put', params)
-    callback(null, success(params.Item))
+    const result = await dynamoDbLib.call('put', params);
+    callback(null, success(params.Item));
   } catch (e) {
-    callback(null, failure({ status: false }))
+    callback(null, failure({ status: false }));
   }
 }

@@ -1,8 +1,8 @@
-import React from 'react'
-import { Provider } from 'react-redux'
-import { BrowserRouter as Router } from 'react-router-dom'
+import React from 'react';
+import { Provider } from 'react-redux';
+import { BrowserRouter as Router } from 'react-router-dom';
 
-import App from './App'
+import App from './App';
 
 const Root = ({ store }) => (
   <Provider store={store}>
@@ -10,6 +10,6 @@ const Root = ({ store }) => (
       <App />
     </Router>
   </Provider>
-)
+);
 
-export default Root
+export default Root;

@@ -1,6 +1,6 @@
-import {combineReducers} from 'redux'
+import { combineReducers } from 'redux';
 
-import {ADD_WORKER, UPDATE_WORKER, DELETE_WORKER} from './WorkerActions'
+import { ADD_WORKER, UPDATE_WORKER, DELETE_WORKER } from './WorkerActions';
 
 const worker = (state, action) => {
   switch (action.type) {
@@ -9,17 +9,17 @@ const worker = (state, action) => {
       return {
         id: action.id,
         visible: true,
-        ...action.worker
-      }
+        ...action.worker,
+      };
     case DELETE_WORKER:
       return {
         ...state,
-        visible: false
-      }
+        visible: false,
+      };
     default:
-      return state
+      return state;
   }
-}
+};
 
 const byId = (state = {}, action) => {
   switch (action.type) {
@@ -28,25 +28,25 @@ const byId = (state = {}, action) => {
     case DELETE_WORKER:
       return {
         ...state,
-        [action.id]: worker(state[action.id], action)
-      }
+        [action.id]: worker(state[action.id], action),
+      };
 
     default:
-      return state
+      return state;
   }
-}
+};
 
 const allIds = (state = [], action) => {
   switch (action.type) {
     case ADD_WORKER:
-      return [...state, action.id]
+      return [...state, action.id];
 
     default:
-      return state
+      return state;
   }
-}
+};
 
-export default combineReducers({byId, allIds})
+export default combineReducers({ byId, allIds });
 
 const getWorker = (state, id) =>
   state.byId[id].visible
@@ -56,18 +56,18 @@ const getWorker = (state, id) =>
         name: 'Worker Removed',
         ssn: 'deleted',
         email: 'deleted',
-        visible: false
-      }
+        visible: false,
+      };
 
-export const getWorkers = state => state.allIds.map(id => getWorker(state, id))
+export const getWorkers = state => state.allIds.map(id => getWorker(state, id));
 
 export const getWorkerById = (state, id) =>
-  isWorkerId(state, id) && getWorker(state, id)
+  isWorkerId(state, id) && getWorker(state, id);
 
 export const isWorkerId = (state, id) =>
-  state.allIds.find(compareId => compareId === id)
+  state.allIds.find(compareId => compareId === id);
 
 export const getVisibleWorkers = state =>
-  getWorkers(state).filter(item => item.visible)
+  getWorkers(state).filter(item => item.visible);
 
-export const getWorkerName = (state, id) => getWorker(state, id).name
+export const getWorkerName = (state, id) => getWorker(state, id).name;

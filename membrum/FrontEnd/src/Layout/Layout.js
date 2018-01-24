@@ -1,20 +1,20 @@
-import React, { Component } from 'react'
-import { connect } from 'react-redux'
-import { Route, Switch, Redirect } from 'react-router-dom'
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { Route, Switch, Redirect } from 'react-router-dom';
 
-import { fetchAllPlans } from '../membership/planActions'
+import { fetchAllPlans } from '../membership/planActions';
 
-import { loadUserProfile } from '../user/profileActions'
-import { userRedirected } from '../user/authenticationActions'
-import { getAuthorizedRoutes, shouldRedirectUser } from '../user/'
+import { loadUserProfile } from '../user/profileActions';
+import { userRedirected } from '../user/authenticationActions';
+import { getAuthorizedRoutes, shouldRedirectUser } from '../user/';
 
-import Routes from './Views'
-import NotFound from './NotFound'
+import Routes from './Views';
+import NotFound from './NotFound';
 
-import Navigation from './Navigation'
-import Footer from './Footer'
+import Navigation from './Navigation';
+import Footer from './Footer';
 
-import './App.css'
+import './App.css';
 
 const renderRoutes = routes =>
   routes.map((route, i) => (
@@ -24,18 +24,18 @@ const renderRoutes = routes =>
       exact={route.exact}
       component={Routes[route.key]}
     />
-  ))
+  ));
 
 class Layout extends Component {
   componentDidUpdate(nextProps) {
     if (this.props.shouldRedirectUser) {
-      this.props.userRedirected()
-      this.props.history.push('/')
+      this.props.userRedirected();
+      this.props.history.push('/');
     }
   }
 
   render() {
-    const { authorizedRoutes } = this.props
+    const { authorizedRoutes } = this.props;
 
     return (
       <div className="App">
@@ -51,21 +51,21 @@ class Layout extends Component {
         </div>
         <Footer />
       </div>
-    )
+    );
   }
 }
 
 const mapStateToProps = (state, props) => {
   return {
     authorizedRoutes: getAuthorizedRoutes(state.userReducer),
-    shouldRedirectUser: shouldRedirectUser(state.userReducer)
-  }
-}
+    shouldRedirectUser: shouldRedirectUser(state.userReducer),
+  };
+};
 
 const mapDispatchToProps = {
   loadUserProfile,
   fetchAllPlans,
-  userRedirected
-}
+  userRedirected,
+};
 
-export default connect(mapStateToProps, mapDispatchToProps)(Layout)
+export default connect(mapStateToProps, mapDispatchToProps)(Layout);

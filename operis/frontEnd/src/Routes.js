@@ -1,13 +1,13 @@
-import React from 'react'
-import {Route, Switch} from 'react-router-dom'
+import React from 'react';
+import { Route, Switch } from 'react-router-dom';
 
-import Report from './Reports/Report'
-import Place from './Places/Place'
-import Worker from './Workers/Worker'
-import Home from './Container/Home/Home'
-import AdminDashboard from './Container/AdminDashboard/AdminDashboard'
-import PageNotFound from './Container/PageNotFound/PageNotFound'
-import Login from './Container/Login/Login'
+import Report from './Reports/Report';
+import Place from './Places/Place';
+import Worker from './Workers/Worker';
+import Home from './Container/Home/Home';
+import AdminDashboard from './Container/AdminDashboard/AdminDashboard';
+import PageNotFound from './Container/PageNotFound/PageNotFound';
+import Login from './Container/Login/Login';
 
 export default () => (
   <Switch>
@@ -19,4 +19,4 @@ export default () => (
     <Route path="/Login" exact component={Login} />
     <Route component={PageNotFound} />
   </Switch>
-)
+);

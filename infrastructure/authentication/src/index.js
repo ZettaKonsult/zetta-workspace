@@ -1,7 +1,7 @@
 /* @flow */
 
 const foo = (): string => {
-  return "foo"
-}
+  return 'foo';
+};
 
-export default foo
+export default foo;

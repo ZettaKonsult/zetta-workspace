@@ -1,14 +1,14 @@
-import React from 'react'
-import { connect } from 'react-redux'
-import { Field, reduxForm } from 'redux-form'
+import React from 'react';
+import { connect } from 'react-redux';
+import { Field, reduxForm } from 'redux-form';
 
-import FormInput from '../components/FormInput'
+import FormInput from '../components/FormInput';
 
-import { loginUser } from './authenticationActions'
+import { loginUser } from './authenticationActions';
 
 //TODO add &#x1f441; to password and have onclick for toggling visility
 let LoginForm = props => {
-  const { handleSubmit } = props
+  const { handleSubmit } = props;
   return (
     <form onSubmit={handleSubmit}>
       <Field
@@ -25,10 +25,10 @@ let LoginForm = props => {
       />
       <button type="submit">Submit</button>
     </form>
-  )
-}
-LoginForm = reduxForm({ form: 'LoginForm' })(LoginForm)
+  );
+};
+LoginForm = reduxForm({ form: 'LoginForm' })(LoginForm);
 
 export default connect(undefined, {
-  onSubmit: values => loginUser(values.username, values.password)
-})(LoginForm)
+  onSubmit: values => loginUser(values.username, values.password),
+})(LoginForm);

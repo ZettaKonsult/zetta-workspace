@@ -4,7 +4,7 @@
  * @date 2018-01-16
  */
 
-import type { Plan } from '../types'
+import type { Plan } from '../types';
 
 const plans = [
   {
@@ -12,7 +12,7 @@ const plans = [
     name: 'Please choose a plan',
     labels: [],
     group: [],
-    type: 'default'
+    type: 'default',
   },
   {
     id: 'tek',
@@ -21,7 +21,7 @@ const plans = [
     interval: 'month',
     intervalCount: '6',
     labels: ['union'],
-    group: ['studentlund']
+    group: ['studentlund'],
   },
   {
     id: 'le',
@@ -30,7 +30,7 @@ const plans = [
     interval: 'month',
     intervalCount: '6',
     labels: ['union'],
-    group: ['studentlund']
+    group: ['studentlund'],
   },
   {
     id: 'cm',
@@ -39,7 +39,7 @@ const plans = [
     interval: 'month',
     intervalCount: '6',
     labels: ['union'],
-    group: ['studentlund']
+    group: ['studentlund'],
   },
   {
     id: 'sv',
@@ -48,7 +48,7 @@ const plans = [
     interval: 'month',
     intervalCount: '6',
     labels: ['union'],
-    group: ['studentlund']
+    group: ['studentlund'],
   },
   {
     id: 'luna',
@@ -57,7 +57,7 @@ const plans = [
     interval: 'month',
     intervalCount: '6',
     labels: ['union'],
-    group: ['studentlund']
+    group: ['studentlund'],
   },
   {
     id: 'huots',
@@ -66,7 +66,7 @@ const plans = [
     interval: 'month',
     intervalCount: '6',
     labels: ['union'],
-    group: ['studentlund']
+    group: ['studentlund'],
   },
   {
     id: 'jf',
@@ -75,7 +75,7 @@ const plans = [
     interval: 'month',
     intervalCount: '6',
     labels: ['union'],
-    group: ['studentlund']
+    group: ['studentlund'],
   },
   {
     id: 'svkfim',
@@ -84,7 +84,7 @@ const plans = [
     interval: 'month',
     intervalCount: '6',
     labels: ['union'],
-    group: ['studentlund']
+    group: ['studentlund'],
   },
   {
     id: 'bn',
@@ -93,7 +93,7 @@ const plans = [
     interval: 'month',
     intervalCount: '6',
     labels: ['nation', 'gudrun'],
-    group: ['studentlund']
+    group: ['studentlund'],
   },
   {
     id: 'gn',
@@ -102,7 +102,7 @@ const plans = [
     interval: 'month',
     intervalCount: '6',
     labels: ['nation', 'city'],
-    group: ['studentlund']
+    group: ['studentlund'],
   },
   {
     id: 'han',
@@ -111,7 +111,7 @@ const plans = [
     interval: 'month',
     intervalCount: '6',
     labels: ['nation', 'city'],
-    group: ['studentlund']
+    group: ['studentlund'],
   },
   {
     id: 'hen',
@@ -120,7 +120,7 @@ const plans = [
     interval: 'month',
     intervalCount: '6',
     labels: ['nation', 'torna'],
-    group: ['studentlund']
+    group: ['studentlund'],
   },
   {
     id: 'kan',
@@ -129,7 +129,7 @@ const plans = [
     interval: 'month',
     intervalCount: '6',
     labels: ['nation', 'gudrun'],
-    group: ['studentlund']
+    group: ['studentlund'],
   },
   {
     id: 'krn',
@@ -138,7 +138,7 @@ const plans = [
     interval: 'month',
     intervalCount: '6',
     labels: ['nation', 'torna'],
-    group: ['studentlund']
+    group: ['studentlund'],
   },
   {
     id: 'lunn',
@@ -147,7 +147,7 @@ const plans = [
     interval: 'month',
     intervalCount: '6',
     labels: ['nation', 'city'],
-    group: ['studentlund']
+    group: ['studentlund'],
   },
   {
     id: 'mn',
@@ -156,7 +156,7 @@ const plans = [
     interval: 'month',
     intervalCount: '6',
     labels: ['nation', 'city'],
-    group: ['studentlund']
+    group: ['studentlund'],
   },
   {
     id: 'ön',
@@ -165,7 +165,7 @@ const plans = [
     interval: 'month',
     intervalCount: '6',
     labels: ['nation', 'city'],
-    group: ['studentlund']
+    group: ['studentlund'],
   },
   {
     id: 'sn',
@@ -174,7 +174,7 @@ const plans = [
     interval: 'month',
     intervalCount: '6',
     labels: ['nation', 'torna'],
-    group: ['studentlund']
+    group: ['studentlund'],
   },
   {
     id: 'vn',
@@ -183,7 +183,7 @@ const plans = [
     interval: 'month',
     intervalCount: '6',
     labels: ['nation', 'torna'],
-    group: ['studentlund']
+    group: ['studentlund'],
   },
   {
     id: 'wn',
@@ -193,7 +193,7 @@ const plans = [
     intervalCount: '6',
     labels: ['nation', 'gudrun'],
     group: ['studentlund'],
-    type: 'plan'
+    type: 'plan',
   },
   {
     id: 'un',
@@ -203,7 +203,7 @@ const plans = [
     intervalCount: '6',
     labels: ['nation'],
     group: ['studentlund'],
-    type: 'trail'
+    type: 'trail',
   },
   {
     id: 'trf',
@@ -212,7 +212,7 @@ const plans = [
     interval: 'month',
     intervalCount: '6',
     labels: [],
-    group: ['obligatory']
+    group: ['obligatory'],
   },
   {
     id: 'af',
@@ -221,7 +221,7 @@ const plans = [
     interval: 'month',
     intervalCount: '6',
     labels: [],
-    group: ['studentlund']
+    group: ['studentlund'],
   },
   {
     id: 'sn',
@@ -230,9 +230,9 @@ const plans = [
     interval: 'month',
     intervalCount: '6',
     labels: ['nation'],
-    group: ['Smalands']
-  }
-]
+    group: ['Smalands'],
+  },
+];
 const planTemplates = [
   {
     id: 'ur',
@@ -242,7 +242,7 @@ const planTemplates = [
     key: 'union',
     func: 'only',
     value: '1',
-    error: 'There should be only 1 union'
+    error: 'There should be only 1 union',
   },
   {
     id: 'nr',
@@ -252,7 +252,7 @@ const planTemplates = [
     key: 'nation',
     func: 'atLeast',
     value: '1',
-    error: 'There should be atLeast 1 nation'
+    error: 'There should be atLeast 1 nation',
   },
   {
     id: 'tr',
@@ -262,7 +262,7 @@ const planTemplates = [
     key: 'trf',
     func: 'only',
     value: '1',
-    error: 'TRF must be part of the subscription'
+    error: 'TRF must be part of the subscription',
   },
   {
     id: 'ar',
@@ -272,7 +272,7 @@ const planTemplates = [
     key: 'af',
     func: 'only',
     value: '1',
-    error: 'AF must be part of the subscription'
+    error: 'AF must be part of the subscription',
   },
   {
     id: 'nnr',
@@ -282,9 +282,9 @@ const planTemplates = [
     key: 'nation',
     func: 'lessThan',
     value: '1',
-    error: "can't have any nations as part of this subscription"
-  }
-]
+    error: "can't have any nations as part of this subscription",
+  },
+];
 
 const filteredMembership = plans.reduce(
   (result, plan) =>
@@ -295,22 +295,22 @@ const filteredMembership = plans.reduce(
       ? [...result, plan.id]
       : result,
   []
-)
+);
 const members = [
   {
     ssn: '910504-0035',
     name: 'Fredrik Palmquist',
-    plans: filteredMembership
+    plans: filteredMembership,
   },
   {
     ssn: '901020-1234',
     name: 'Sture Student',
-    plans: filteredMembership
-  }
-]
+    plans: filteredMembership,
+  },
+];
 
-const defaultPlan = (): Plan => plans[0]
+const defaultPlan = (): Plan => plans[0];
 
-const specification = (): Array<Plan> => plans
+const specification = (): Array<Plan> => plans;
 
-export default { defaultPlan, plans, planTemplates, specification, members }
+export default { defaultPlan, plans, planTemplates, specification, members };

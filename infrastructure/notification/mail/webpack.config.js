@@ -1,4 +1,4 @@
-var slsw          = require('serverless-webpack');
+var slsw = require('serverless-webpack');
 var nodeExternals = require('webpack-node-externals');
 
 module.exports = {
@@ -11,11 +11,13 @@ module.exports = {
   externals: [nodeExternals()],
   // Run babel on all .js files and skip those in node_modules
   module: {
-    rules: [{
-      test: /\.js$/,
-      loader: 'babel-loader',
-      include: __dirname,
-      exclude: /node_modules/,
-    }]
-  }
+    rules: [
+      {
+        test: /\.js$/,
+        loader: 'babel-loader',
+        include: __dirname,
+        exclude: /node_modules/,
+      },
+    ],
+  },
 };

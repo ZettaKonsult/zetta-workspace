@@ -22,7 +22,7 @@
     "precommit": "lint-staged",
     "lint": "eslint --fix",
     "prettier":
-      "prettier --write 'membrum/*/*.js' 'membrum/*/!(node_modules)/**/*.js'"
+      "prettier --write --loglevel silent \"{,!(node_modules)/**/}*.js\""
   },
   "lint-staged": {
     "*.js": ["yarn run lint", "prettier --write", "git add"]

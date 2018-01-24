@@ -1,22 +1,22 @@
-import React, {Component} from 'react'
-import {withRouter} from 'react-router-dom'
-import {connect} from 'react-redux'
-import {Button} from 'semantic-ui-react'
+import React, { Component } from 'react';
+import { withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { Button } from 'semantic-ui-react';
 
-import ReportForm from './Form/ReportForm'
+import ReportForm from './Form/ReportForm';
 
-import {getAllReports, getWorkerName, getWorkplaceById} from '../reducers'
+import { getAllReports, getWorkerName, getWorkplaceById } from '../reducers';
 
-import ReportCard from '../Components/ReportCard/ReportCard'
+import ReportCard from '../Components/ReportCard/ReportCard';
 
 class Report extends Component {
   callback = () => {
-    this.props.history.push('/report')
-  }
+    this.props.history.push('/report');
+  };
 
   newReport = () => {
-    this.props.history.push('/report/0')
-  }
+    this.props.history.push('/report/0');
+  };
 
   renderList = props =>
     props.reports.map(report => (
@@ -29,10 +29,10 @@ class Report extends Component {
         workplace={props.getWorkplace(report.place).name}
         onClick={() => this.props.history.push(`/report/${report.id}`)}
       />
-    ))
+    ));
 
   render() {
-    const {id} = this.props.match.params
+    const { id } = this.props.match.params;
     return (
       <div>
         {!!id ? (
@@ -52,14 +52,14 @@ class Report extends Component {
           </div>
         )}
       </div>
-    )
+    );
   }
 }
 
 const mapStateToProps = (state, props) => ({
   reports: getAllReports(state),
   getWorkerName: getWorkerName(state),
-  getWorkplace: id => getWorkplaceById(state, id)
-})
+  getWorkplace: id => getWorkplaceById(state, id),
+});
 
-export default withRouter(connect(mapStateToProps)(Report))
+export default withRouter(connect(mapStateToProps)(Report));

@@ -13,8 +13,8 @@ export type UserData = {
   given_name?: string,
   nation?: string,
   unionName: string | [string],
-  attributes?: { [string]: string }
-}
+  attributes?: { [string]: string },
+};
 
 export type Plan = {
   id: string,
@@ -24,7 +24,7 @@ export type Plan = {
   intervalCount?: string,
   labels: Array<string>,
   group: Array<string>,
-  type?: string
-}
+  type?: string,
+};
 
-export type Subscription = Array<Plan>
+export type Subscription = Array<Plan>;

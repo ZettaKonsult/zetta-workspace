@@ -1,17 +1,17 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
-import { BrowserRouter, Route } from 'react-router-dom'
-import { Provider } from 'react-redux'
-import registerServiceWorker from './registerServiceWorker'
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { BrowserRouter, Route } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import registerServiceWorker from './registerServiceWorker';
 
-import configureStore from './configureStore'
+import configureStore from './configureStore';
 
-import Layout from './Layout/Layout'
+import Layout from './Layout/Layout';
 
-import './index.css'
-import 'normalize.css'
+import './index.css';
+import 'normalize.css';
 
-let store = configureStore()
+let store = configureStore();
 
 ReactDOM.render(
   <Provider store={store}>
@@ -20,6 +20,6 @@ ReactDOM.render(
     </BrowserRouter>
   </Provider>,
   document.getElementById('root')
-)
+);
 
-registerServiceWorker()
+registerServiceWorker();

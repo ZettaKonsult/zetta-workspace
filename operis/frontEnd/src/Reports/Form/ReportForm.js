@@ -1,31 +1,32 @@
-import React from 'react'
-import { connect } from 'react-redux'
-import { reduxForm, Field } from 'redux-form'
-import { Form, Button, Divider } from 'semantic-ui-react'
+import React from 'react';
+import { connect } from 'react-redux';
+import { reduxForm, Field } from 'redux-form';
+import { Form, Button, Divider } from 'semantic-ui-react';
 
-import { addReport, updateReport } from '../ReportActions'
+import { addReport, updateReport } from '../ReportActions';
 
-import { getReportById, isReportId } from '../../reducers'
-import { getWorkers, getPlaces } from '../../reducers'
+import { getReportById, isReportId } from '../../reducers';
+import { getWorkers, getPlaces } from '../../reducers';
 
-import validate from './ReportFormValidation'
-import { TextArea } from '../../Components/Form/TextArea'
-import { Input } from '../../Components/Form/Input'
-import { Dropdown } from '../../Components/Form/Dropdown'
+import validate from './ReportFormValidation';
+import { TextArea } from '../../Components/Form/TextArea';
+import { Input } from '../../Components/Form/Input';
+import { Dropdown } from '../../Components/Form/Dropdown';
 
 let ReportForm = props => (
   <Form
     autoComplete="off"
     onSubmit={props.handleSubmit(values => {
       if (props.idExists) {
-        props.updateReport(values)
+        props.updateReport(values);
       } else {
-        props.addNewReport(values)
+        props.addNewReport(values);
       }
       if (typeof props.callback !== 'undefined') {
-        props.callback()
+        props.callback();
       }
-    })}>
+    })}
+  >
     <Field name="date" component={Input} type="date" placeholder="Date" />
     <Field
       name="worker"
@@ -34,7 +35,7 @@ let ReportForm = props => (
       options={props.workers.map(worker => ({
         key: worker.id,
         value: worker.id,
-        text: worker.name
+        text: worker.name,
       }))}
     />
     <Field
@@ -44,7 +45,7 @@ let ReportForm = props => (
       options={props.places.map(place => ({
         key: place.id,
         value: place.id,
-        text: place.name
+        text: place.name,
       }))}
     />
     <Field name="hours" component={Input} type="number" placeholder="Hours" />
@@ -64,20 +65,20 @@ let ReportForm = props => (
     <Divider />
     <Button type="submit">Save report</Button>
   </Form>
-)
+);
 
-ReportForm = reduxForm({ form: 'reportForm', validate })(ReportForm)
+ReportForm = reduxForm({ form: 'reportForm', validate })(ReportForm);
 
 const mapStateToProps = (state, props) => ({
   idExists: isReportId(state, props.id),
   initialValues: getReportById(state, props.id),
   workers: getWorkers(state),
-  places: getPlaces(state)
-})
+  places: getPlaces(state),
+});
 
 const mapDispatchToProps = dispatch => ({
   addNewReport: values => dispatch(addReport(values)),
-  updateReport: values => dispatch(updateReport(values))
-})
+  updateReport: values => dispatch(updateReport(values)),
+});
 
-export default connect(mapStateToProps, mapDispatchToProps)(ReportForm)
+export default connect(mapStateToProps, mapDispatchToProps)(ReportForm);

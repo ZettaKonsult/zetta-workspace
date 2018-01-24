@@ -4,7 +4,7 @@
  * @date 2018-01-15
  */
 
-import { applyFormatting } from './attributes'
+import { applyFormatting } from './attributes';
 
 describe('Attribute management.', () => {
   describe('Get name.', () => {
@@ -15,15 +15,15 @@ describe('Attribute management.', () => {
             ssn: 'SSN',
             name: '\t ',
             email: 'aMail@mailmail.mail',
-            credits: { EHL: '1.0' }
+            credits: { EHL: '1.0' },
           },
-          formats: ['all']
-        })
-        fail('White-space name should raise an error.')
+          formats: ['all'],
+        });
+        fail('White-space name should raise an error.');
       } catch (error) {
-        expect(error.message).toMatch(/No name/)
+        expect(error.message).toMatch(/No name/);
       }
-    })
+    });
     it('Only family name.', () => {
       expect(
         applyFormatting({
@@ -31,15 +31,15 @@ describe('Attribute management.', () => {
             ssn: 'SSN',
             email: 'aMail@mailmail.mail',
             credits: { EHL: '1.0' },
-            name: ' Family'
+            name: ' Family',
           },
-          formats: ['all']
+          formats: ['all'],
         })
       ).toEqual({
         family_name: 'Family',
-        given_name: ''
-      })
-    })
+        given_name: '',
+      });
+    });
     it('Only given name.', () => {
       expect(
         applyFormatting({
@@ -47,15 +47,15 @@ describe('Attribute management.', () => {
             ssn: 'SSN',
             email: 'aMail@mailmail.mail',
             credits: { EHL: '1.0' },
-            name: 'Given'
+            name: 'Given',
           },
-          formats: ['all']
+          formats: ['all'],
         })
       ).toEqual({
         family_name: '',
-        given_name: 'Given'
-      })
-    })
+        given_name: 'Given',
+      });
+    });
     it('Both names.', () => {
       expect(
         applyFormatting({
@@ -63,15 +63,15 @@ describe('Attribute management.', () => {
             ssn: 'SSN',
             email: 'aMail@mailmail.mail',
             credits: { EHL: '1.0' },
-            name: 'Given Family'
+            name: 'Given Family',
           },
-          formats: ['all']
+          formats: ['all'],
         })
       ).toEqual({
         family_name: 'Family',
-        given_name: 'Given'
-      })
-    })
+        given_name: 'Given',
+      });
+    });
     describe('Specific transformations.', () => {
       it('Lowercase.', () => {
         expect(
@@ -80,15 +80,15 @@ describe('Attribute management.', () => {
               ssn: 'SSN',
               email: 'aMail@mailmail.mail',
               credits: { EHL: '1.0' },
-              name: 'GIVEN FAMILY'
+              name: 'GIVEN FAMILY',
             },
-            formats: ['lowerCase']
+            formats: ['lowerCase'],
           })
         ).toEqual({
           family_name: 'family',
-          given_name: 'given'
-        })
-      })
+          given_name: 'given',
+        });
+      });
       it('Capitalize first.', () => {
         expect(
           applyFormatting({
@@ -96,15 +96,15 @@ describe('Attribute management.', () => {
               ssn: 'SSN',
               email: 'aMail@mailmail.mail',
               credits: { EHL: '1.0' },
-              name: 'given family'
+              name: 'given family',
             },
-            formats: ['capitalizeFirst']
+            formats: ['capitalizeFirst'],
           })
         ).toEqual({
           family_name: 'Family',
-          given_name: 'Given'
-        })
-      })
-    })
-  })
-})
+          given_name: 'Given',
+        });
+      });
+    });
+  });
+});

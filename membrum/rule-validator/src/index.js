@@ -1,1 +1,1 @@
-export { default } from './PlanTemplate'
+export { default } from './PlanTemplate';

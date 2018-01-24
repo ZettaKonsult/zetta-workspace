@@ -4,4 +4,4 @@
  * @date 2018-01-17
  */
 
-export { getSubscriptions, saveSubscriptions } from './plan'
+export { getSubscriptions, saveSubscriptions } from './plan';

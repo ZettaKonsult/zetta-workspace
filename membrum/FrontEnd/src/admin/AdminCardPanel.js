@@ -1,6 +1,6 @@
-import React from 'react'
+import React from 'react';
 
-import Card from '../components/Card'
+import Card from '../components/Card';
 
 export default () => [
   <span key="A" className="AdminCard">
@@ -30,5 +30,5 @@ export default () => [
       value="12"
       link="/events"
     />
-  </span>
-]
+  </span>,
+];
