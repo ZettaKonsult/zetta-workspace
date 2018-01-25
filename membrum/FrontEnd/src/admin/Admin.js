@@ -8,16 +8,17 @@ import MemberFind from './MemberFind';
 
 import FadedLine from '../components/FadedLine';
 
-import mock from '../mocks/statisticsMock';
+import mock, { options } from '../mocks/statisticsMock';
 
 import './style.css';
 import './AdminActionMenu.css';
 
 const Dashboard = ({ match }) => (
   <div className="AdminDashboardLayout">
+    {console.log(mock())}
     <AdminCardPanel />
     <div className="AdminStatistic">
-      <Line data={mock()} />
+      <Line data={mock()} options={options} />
     </div>
   </div>
 );
