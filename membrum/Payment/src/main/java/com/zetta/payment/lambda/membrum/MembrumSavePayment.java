@@ -26,11 +26,6 @@ public final class MembrumSavePayment extends SavePayment {
     private static final DynamoOrderDAO orderDAO = DynamoOrderDAO.instance();
     private static final DynamoUserDAO userDAO = DynamoUserDAO.instance();
 
-    public static void main(String[] args) throws InvalidInput {
-        new MembrumSavePayment().savePaymentToUser(
-                new Payment("cjcuil50v000001064u9inel9", "9105040035", 0));
-    }
-
     public final void membrumSavePayment(InputStream inStream,
             OutputStream outStream, Context context) {
 
@@ -59,7 +54,6 @@ public final class MembrumSavePayment extends SavePayment {
 
         User user = maybeUser.get();
         user.addPayment(id);
-        System.out.println(user);
         userDAO.save(user);
     }
 }

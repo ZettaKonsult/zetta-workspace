@@ -13,10 +13,6 @@ import com.zetta.payment.util.JSON;
 
 public class Plans {
 
-    public static void main(String[] args) {
-        System.out.println(get());
-    }
-
     private static final DynamoPlanDAO planDAO = DynamoPlanDAO.instance();
 
     private static Map<String, JSON> get() {
