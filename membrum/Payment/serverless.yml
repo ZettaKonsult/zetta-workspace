@@ -108,6 +108,10 @@ resources:
                     Resource: arn:aws:dynamodb:eu-central-1:460056602695:table/MembrumOrders
                   - Effect: Allow
                     Action:
+                      - dynamodb:scan
+                    Resource: arn:aws:dynamodb:eu-central-1:460056602695:table/MembrumPlans
+                  - Effect: Allow
+                    Action:
                       - dynamodb:DeleteItem
                       - dynamodb:GetItem
                       - dynamodb:PutItem

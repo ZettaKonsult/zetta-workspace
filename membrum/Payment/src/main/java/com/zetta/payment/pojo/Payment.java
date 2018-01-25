@@ -29,13 +29,19 @@ public class Payment implements Serializable {
 
     public Payment() {}
 
-    public Payment(String orderId, int amount) {
-        this(Cuid.createCuid(), orderId, "", DateUtil.epoch(), false, amount);
+    public Payment(int amount) {
+        this(Cuid.createCuid(), amount);
     }
 
-    public Payment(String paymentId, String orderId, String userId,
-            long created, boolean isPaid, int amount) {
+    public Payment(String orderId, int amount) {
+        this(orderId, "", amount);
+    }
 
+    public Payment(String paymentId, String userId, int amount) {
+        this(paymentId, userId, DateUtil.epoch(), amount);
+    }
+
+    public Payment(String paymentId, String userId, long created, int amount) {
         this.paymentId = paymentId;
         this.userId = userId;
         this.created = created;

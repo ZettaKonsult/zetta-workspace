@@ -35,6 +35,12 @@ public class MembrumNextOrder {
     private static final DynamoOrderDAO orderDAO = DynamoOrderDAO.instance();
     private static final DynamoUserDAO userDAO = DynamoUserDAO.instance();
 
+    public static void main(String[] args) {
+        System.out.println(new MembrumNextOrder().membrumNextOrder(
+                new PaymentRequest("9105040035", 1514764800, 1530489599),
+                null));
+    }
+
     public String membrumNextOrder(PaymentRequest data, Context context) {
 
         Response response = ResponseFactory.unknownError();
@@ -64,7 +70,7 @@ public class MembrumNextOrder {
         log.info("In total, " + totalAmountPaid
                 + " has been paid for the specified time interval.");
 
-        Plans subscription = user.getPlans();
+        Plans subscription = Plans.get(user.getSubscription());
         int subscriptionAmount = subscription.getSum();
         int toPay = subscriptionAmount - totalAmountPaid;
 

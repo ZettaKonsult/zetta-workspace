@@ -14,6 +14,12 @@ public class PaymentRequest implements Serializable {
 
     public PaymentRequest() {}
 
+    public PaymentRequest(String userId, long start, long end) {
+        this.userId = userId;
+        this.start = start;
+        this.end = end;
+    }
+
     public String getUserId() {
         return userId;
     }

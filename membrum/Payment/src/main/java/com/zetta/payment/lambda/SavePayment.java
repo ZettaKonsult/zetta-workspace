@@ -7,6 +7,8 @@ import org.apache.log4j.Logger;
 
 import com.amazonaws.services.lambda.runtime.Context;
 import com.zetta.payment.db.dynamodb.DynamoPaymentDAO;
+import com.zetta.payment.exception.InvalidInput;
+import com.zetta.payment.lambda.response.Response;
 import com.zetta.payment.lambda.response.ResponseFactory;
 import com.zetta.payment.pojo.Payment;
 import com.zetta.payment.util.JSON;
@@ -21,19 +23,32 @@ public abstract class SavePayment extends LambdaHandler {
     private static final DynamoPaymentDAO paymentDAO = DynamoPaymentDAO
             .instance();
 
-    protected abstract void applyModifications(Payment payment);
+    protected abstract void applyModifications(Payment payment)
+            throws InvalidInput;
 
     protected void savePayment(InputStream inStream, OutputStream outStream,
             Context context) {
 
+        Response response = null;
         Payment payment = new JSON(inStream).convertTo(Payment.class);
-        applyModifications(payment);
+
+        try {
+            applyModifications(payment);
+        } catch (InvalidInput error) {
+            response = ResponseFactory.error(error);
+        }
 
         paymentDAO.save(payment);
 
         String message = "Saved payment " + payment + ".";
         log.info(message);
-        ResponseFactory.success(message).emit(outStream);
+
+        if (response == null) {
+            response = ResponseFactory.success(message);
+        } else {
+            response.succeed(message);
+        }
+        response.emit(outStream);
     }
 
 }

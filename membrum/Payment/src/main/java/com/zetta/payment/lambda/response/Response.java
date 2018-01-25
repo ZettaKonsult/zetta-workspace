@@ -3,6 +3,7 @@ package com.zetta.payment.lambda.response;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -49,10 +50,21 @@ public final class Response {
         return message;
     }
 
+    public Response addErrors(Collection<String> messages) {
+        for (String message : messages) {
+            addError(message);
+        }
+        return this;
+    }
+
+    public Response succeed(String message) {
+        Response response = ResponseFactory.success(message);
+        return response.addErrors(this.errors);
+    }
+
     public void emit(OutputStream outStream) {
         String response = asJSON();
-        Logger.getLogger(Response.class)
-                .info("Sending response:\n" + response);
+        Logger.getLogger(Response.class).info("Sending response:\n" + response);
 
         try {
             outStream.write(response.getBytes());
@@ -70,4 +82,5 @@ public final class Response {
         return otherResponse.values.equals(this.values)
                 && otherResponse.errors.equals(this.errors);
     }
+
 }

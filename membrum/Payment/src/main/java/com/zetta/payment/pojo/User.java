@@ -10,7 +10,6 @@ import java.util.Map;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
-import com.zetta.payment.pojo.membrum.Plans;
 
 /**
  * @date 2017-11-15
@@ -24,8 +23,12 @@ public class User implements Serializable {
     private static final String PAYMENT_INDEX = "payments";
     private static final String CREDTIS_INDEX = "credits";
     private static final String SUBSCRIPTION_INDEX = "subscription";
+    private static final String UNION_NAME_INDEX = "unionName";
+    private static final String NATION_INDEX = "nation";
 
     private String userId;
+    private String nation;
+    private List<String> unionName;
     private List<String> subscription;
     private List<String> payments;
     private Map<String, Double> credits;
@@ -40,7 +43,7 @@ public class User implements Serializable {
             Map<String, Double> points) {
 
         this.userId = userId;
-        this.payments = payments;
+        setPayments(payments);
         setSubscription(plans);
         setCredits(points);
     }
@@ -52,6 +55,15 @@ public class User implements Serializable {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    @DynamoDBAttribute(attributeName = NATION_INDEX)
+    public String getNation() {
+        return nation;
+    }
+
+    public void setNation(String nation) {
+        this.nation = nation;
     }
 
     @DynamoDBAttribute(attributeName = CREDTIS_INDEX)
@@ -77,7 +89,7 @@ public class User implements Serializable {
     }
 
     public void setSubscription(List<String> subscription) {
-        this.subscription = subscription;
+        this.subscription = new ArrayList<String>(subscription);
     }
 
     @DynamoDBAttribute(attributeName = PAYMENT_INDEX)
@@ -89,12 +101,31 @@ public class User implements Serializable {
         this.payments = new ArrayList<String>(payments);
     }
 
+    @DynamoDBAttribute(attributeName = UNION_NAME_INDEX)
+    public List<String> getUnionName() {
+        return unionName;
+    }
+
+    public void setUnionName(List<String> unionName) {
+        this.unionName = new ArrayList<String>(unionName);
+    }
+
+    public boolean addPayment(String payment) {
+        if (payments.contains(payment)) {
+            throw new IllegalArgumentException("Payment " + payment
+                    + " already exists for user " + userId + ".");
+        }
+        return this.payments.add(payment);
+    }
+
     @Override
     public String toString() {
-        StringBuilder string = new StringBuilder("Order:");
-        string.append("\n    Id:     " + userId);
-        string.append("\n    Points: {");
-        string.append("\n    Subscription: " + subscription.toString());
+        StringBuilder string = new StringBuilder("User " + userId + ":");
+        string.append("\nSubscription: " + subscription.toString());
+        string.append("\nNation:       " + nation.toString());
+        string.append("\nUnion name:   " + unionName.toString());
+        string.append("\nPayments:     " + payments.toString());
+        string.append("\nPoints: {");
 
         String prefix = "\n";
         for (Map.Entry<String, Double> entry : credits.entrySet()) {
@@ -104,10 +135,6 @@ public class User implements Serializable {
         }
         return string.append((prefix.equals("\n") ? "" : "\n    ") + "}")
                 .toString();
-    }
-
-    public Plans getPlans() {
-        return Plans.get(subscription);
     }
 
 }

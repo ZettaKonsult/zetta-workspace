@@ -4,6 +4,7 @@ import java.time.Instant;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBIndexHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 
 import cool.graph.cuid.Cuid;
@@ -11,7 +12,7 @@ import cool.graph.cuid.Cuid;
 /**
  * @date 2018-01-24
  */
-@DynamoDBTable(tableName = "MembrumPayments")
+@DynamoDBTable(tableName = "MembrumOrders")
 public class Order {
 
     public static final String ORDER_ID_INDEX = "orderId";
@@ -43,7 +44,7 @@ public class Order {
         this.orderId = orderId;
     }
 
-    @DynamoDBAttribute(attributeName = USER_ID_INDEX)
+    @DynamoDBIndexHashKey(globalSecondaryIndexName = USER_ID_INDEX)
     public String getUserId() {
         return userId;
     }
