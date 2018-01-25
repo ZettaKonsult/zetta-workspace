@@ -40,9 +40,11 @@ describe('authenticationReduer', () => {
 
   it('should handle loginUserSuccess', () => {
     let token = 'q1238+jasj34ng98u';
-    expect(reducer(createState(), loginUserSuccess(token))).toEqual(
+    expect(reducer(createState(), loginUserSuccess(token, 'admin'))).toEqual(
       createState({
         statusText: 'You have been successfully logged in.',
+        group: 'admin',
+        shouldRedirect: true,
         isAuthenticating: false,
         isAuthenticated: true,
         token,

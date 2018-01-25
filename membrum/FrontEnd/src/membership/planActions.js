@@ -1,9 +1,8 @@
 /* @flow */
+import type { Plan, ThunkAction, Action } from '../types';
+
 import cuid from 'cuid';
 import db from '../mocks/db';
-
-import type { Plan } from './planReducer';
-import type { ThunkAction, Action } from '../reducers';
 
 export const PLAN_LOAD_REQUEST = 'PLAN_LOAD_REQUEST';
 export const PLAN_LOAD_SUCCESS = 'PLAN_LOAD_SUCCESS';

@@ -8,6 +8,6 @@ export default {
   user: User,
   login: LoginForm,
   home: Home,
-  plan: Plan,
+  plans: Plan,
   admin: AdminDashboard,
 };

@@ -1,4 +1,5 @@
 /* @flow */
+import type { Payment } from '../types';
 import * as utilDate from 'date-primitive-utils';
 import { MEMBERSHIP_UPDATE_PLANS, MEMBERSHIP_PAY } from './membershipActions';
 import {
@@ -15,7 +16,7 @@ import { LOAD_USER_REQUEST, LOAD_USER_SUCCESS } from '../user/profileActions';
 type MembershipState = {
   +subscription: string[],
   +plan: PlanState,
-  +payments: Object[],
+  +payments: Payment[],
   +isFetching: boolean,
 };
 
@@ -170,8 +171,7 @@ export const getAllPlans = (state: MembershipState) =>
 export const getPlanOptions = (state: MembershipState) => (planId: string) =>
   plan.getPlanOptions(state.plan)(planId);
 
-export const getSubscription = (state: MembershipState): string[] =>
-  state.subscription;
+export const getSubscription = (state: MembershipState) => state.subscription;
 
 export const getDefaultPlan = (state: MembershipState) =>
   plan.getDefaultPlan(state.plan);

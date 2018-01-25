@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Route, Switch, Redirect } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 
 import { fetchAllPlans } from '../membership/planActions';
 
@@ -46,6 +46,7 @@ class Layout extends Component {
         <div className="AppContent">
           <Switch>
             {renderRoutes(authorizedRoutes)}
+            <Route path="/" component={Routes['home']} />
             <Route component={NotFound} />
           </Switch>
         </div>

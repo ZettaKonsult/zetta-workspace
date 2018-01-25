@@ -40,7 +40,7 @@ export function reducer(state = initialState, action) {
         isAuthenticated: true,
         token: action.payload.token,
         shouldRedirect: true,
-        group: 'admin',
+        group: action.payload.group,
         statusText: 'You have been successfully logged in.',
       };
 
@@ -60,6 +60,7 @@ export function reducer(state = initialState, action) {
         ...state,
         isAuthenticated: false,
         token: undefined,
+        group: 'guest',
         shouldRedirect: true,
         statusText: 'You have been successfully logged out.',
       };
