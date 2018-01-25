@@ -15,11 +15,11 @@ import com.zetta.payment.form.Form;
 import com.zetta.payment.form.TRFForm;
 import com.zetta.payment.lambda.response.Response;
 import com.zetta.payment.lambda.response.ResponseFactory;
+import com.zetta.payment.pojo.HttpResponse;
 import com.zetta.payment.pojo.Order;
 import com.zetta.payment.pojo.Payment;
 import com.zetta.payment.pojo.PaymentRequest;
 import com.zetta.payment.pojo.Plans;
-import com.zetta.payment.pojo.HttpResponse;
 import com.zetta.payment.pojo.User;
 import com.zetta.payment.util.CollectionUtil;
 import com.zetta.payment.util.JSON;
@@ -52,7 +52,7 @@ public class MembrumNextOrder {
         User user = maybeUser.get();
         log.info("Found user.");
 
-        List<Payment> payments = paymentDAO.get(user, start, end);
+        List<Payment> payments = paymentDAO.getAll(user.getPayments());
 
         log.info("Found user payments for the specified interval:\n"
                 + CollectionUtil.verticalString(payments));

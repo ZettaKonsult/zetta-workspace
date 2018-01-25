@@ -1,23 +1,17 @@
 package com.zetta.payment.db.dynamodb;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.apache.log4j.Logger;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
-import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.zetta.payment.db.DynamoDBManager;
 import com.zetta.payment.db.dao.PaymentDAO;
 import com.zetta.payment.pojo.Payment;
-import com.zetta.payment.pojo.User;
-import com.zetta.payment.util.DateUtil;
 
 /**
  * @date 2017-12-07
@@ -30,7 +24,7 @@ public class DynamoPaymentDAO extends DynamoDB<Payment> implements PaymentDAO {
 
     private static volatile DynamoPaymentDAO instance;
 
-    private DynamoPaymentDAO() {}
+    protected DynamoPaymentDAO() {}
 
     public static DynamoPaymentDAO instance() {
 
@@ -83,35 +77,19 @@ public class DynamoPaymentDAO extends DynamoDB<Payment> implements PaymentDAO {
     }
 
     @Override
-    public Optional<Payment> getLatest(User user) {
-        List<Payment> orders = get(user)
-                .stream().sorted((Payment payment1,
-                        Payment payment2) -> payment1.compareCreated(payment2))
-                .collect(Collectors.toList());
+    public List<Payment> getAll(Collection<String> ids) {
+        List<Payment> payments = new ArrayList<Payment>();
+        for (String id : ids) {
+            Optional<Payment> payment = get(id);
 
-        return orders.isEmpty() ? Optional.empty()
-                : Optional.of(orders.get(orders.size() - 1));
-    }
+            if (!payment.isPresent()) {
+                log.warn("Requested payment " + id + " which does not exist.");
+                continue;
+            }
 
-    @Override
-    public List<Payment> get(User user, long start, long end) {
-        return get(user).stream()
-                .filter((Payment payment) -> DateUtil
-                        .isBetween(payment.getCreated(), start, end))
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<Payment> get(User user) {
-        Map<String, AttributeValue> eav = new HashMap<>();
-        eav.put(":v1", new AttributeValue().withS(user.getUserId()));
-
-        DynamoDBQueryExpression<Payment> query = new DynamoDBQueryExpression<Payment>()
-                .withIndexName(Payment.USER_ID_INDEX).withConsistentRead(false)
-                .withKeyConditionExpression("userId = :v1")
-                .withExpressionAttributeValues(eav);
-
-        return new ArrayList<Payment>(mapper.query(Payment.class, query));
+            payments.add(payment.get());
+        }
+        return payments;
     }
 
 }

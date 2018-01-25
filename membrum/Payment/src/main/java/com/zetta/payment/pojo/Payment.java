@@ -20,12 +20,10 @@ public class Payment implements Serializable {
     public static final String PAYMENT_ID_INDEX = "paymentId";
     public static final String AMOUNT_INDEX = "amount";
     public static final String CREATED_INDEX = "created";
-    public static final String USER_ID_INDEX = "userId";
 
-    private String paymentId;
-    private String userId;
-    private long created;
-    private int amount;
+    protected String paymentId;
+    protected long created;
+    protected int amount;
 
     public Payment() {}
 
@@ -33,17 +31,12 @@ public class Payment implements Serializable {
         this(Cuid.createCuid(), amount);
     }
 
-    public Payment(String orderId, int amount) {
-        this(orderId, "", amount);
+    public Payment(String paymentId, int amount) {
+        this(paymentId, DateUtil.epoch(), amount);
     }
 
-    public Payment(String paymentId, String userId, int amount) {
-        this(paymentId, userId, DateUtil.epoch(), amount);
-    }
-
-    public Payment(String paymentId, String userId, long created, int amount) {
+    public Payment(String paymentId, long created, int amount) {
         this.paymentId = paymentId;
-        this.userId = userId;
         this.created = created;
         this.amount = amount;
     }
@@ -79,7 +72,6 @@ public class Payment implements Serializable {
     public String toString() {
         StringBuilder string = new StringBuilder();
         string.append("Payment    " + paymentId + ":");
-        string.append("\nUser id: " + userId);
         string.append("\nCreated: " + created);
         string.append("\nAmount:  " + amount);
         return string.toString();

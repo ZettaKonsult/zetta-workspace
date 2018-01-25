@@ -4,11 +4,7 @@
  * @date 2018-01-16
  */
 
-<<<<<<< HEAD
-import type { Plan } from '../types';
-=======
 import type { Plan } from '../types'
->>>>>>> stash
 
 const plans = [
   {
@@ -236,7 +232,7 @@ const plans = [
     labels: ['nation'],
     group: ['Smalands'],
   },
-];
+]
 const planTemplates = [
   {
     id: 'ur',
@@ -288,7 +284,7 @@ const planTemplates = [
     value: '1',
     error: "can't have any nations as part of this subscription",
   },
-];
+]
 
 const filteredMembership = plans.reduce(
   (result, plan) =>
@@ -299,7 +295,7 @@ const filteredMembership = plans.reduce(
       ? [...result, plan.id]
       : result,
   []
-);
+)
 const members = [
   {
     ssn: '910504-0035',
@@ -311,14 +307,10 @@ const members = [
     name: 'Sture Student',
     plans: filteredMembership,
   },
-];
+]
 
-const defaultPlan = (): Plan => plans[0];
+const defaultPlan = (): Plan => plans[0]
 
-const specification = (): Array<Plan> => plans;
+const specification = (): Array<Plan> => plans
 
-<<<<<<< HEAD
-export default { defaultPlan, plans, planTemplates, specification, members };
-=======
 export default { defaultPlan, plans, planTemplates, specification, members }
->>>>>>> stash

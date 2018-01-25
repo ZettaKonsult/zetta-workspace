@@ -150,4 +150,8 @@ public class JSON {
         set(destKey, remove(srcKey));
     }
 
+    public static <T> T convertTo(Object object, Class<T> type) {
+        return new JSON(object).convertTo(type);
+    }
+
 }
