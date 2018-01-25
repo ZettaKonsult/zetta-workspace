@@ -17,14 +17,21 @@ import Footer from './Footer';
 import './App.css';
 
 const renderRoutes = routes =>
-  routes.map((route, i) => (
-    <Route
-      key={i}
-      path={route.to}
-      exact={route.exact}
-      component={Routes[route.key]}
-    />
-  ));
+  routes.reduce((total, route, i) => {
+    if (Routes.hasOwnProperty(route.key)) {
+      const Component = Routes[route.key];
+      return [
+        ...total,
+        <Route
+          key={i}
+          path={route.path}
+          render={props => <Component {...props} />}
+        />,
+      ];
+    } else {
+      return total;
+    }
+  }, []);
 
 class Layout extends Component {
   componentDidUpdate(nextProps) {

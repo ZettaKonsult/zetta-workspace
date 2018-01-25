@@ -14,12 +14,17 @@ export const initialState = {
   statusText: undefined,
   shouldRedirect: false,
   authorizedRoutes: {
-    guest: [{ to: '/login', label: 'Login', key: 'login' }],
-    user: [{ to: '/user', label: 'Profile' }],
+    guest: [{ path: '/login', label: 'Login', key: 'login' }],
+    user: [{ path: '/user', label: 'Profile' }],
     admin: [
-      { to: '/', label: 'Dashboard', key: 'admin' },
-      { to: '/plans', label: 'Plans', key: 'plans' },
-      { to: '/find', label: 'Find Member', key: 'find' },
+      { path: '/plans', label: 'Plans', key: 'plans' },
+      { path: '/find', label: 'Find Member', key: 'find' },
+      {
+        path: '/',
+        to: '/',
+        label: 'Dashboard',
+        key: 'admin',
+      },
     ],
   },
 };
