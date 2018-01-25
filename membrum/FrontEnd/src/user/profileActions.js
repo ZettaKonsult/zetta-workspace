@@ -33,11 +33,11 @@ export function loadUserFailure() {
   };
 }
 
-export const loadUserProfile = () => async dispatch => {
+export const loadUserProfile = userId => async dispatch => {
   dispatch(loadUserRequest());
 
   try {
-    const user = await db.members.find(user => user.ssn === '910504-0035');
+    const user = await db.members.find(user => user.ssn === userId);
     dispatch(loadUserSuccess(user));
   } catch (error) {
     dispatch(loadUserFailure(error));

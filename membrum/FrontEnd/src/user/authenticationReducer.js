@@ -16,7 +16,7 @@ export const initialState = {
   authorizedRoutes: {
     guest: ['login'],
     user: ['profile'],
-    admin: ['plans', 'memberfind', 'admin'],
+    admin: ['plans', 'memberfind', 'admin', 'registration'],
   },
 };
 

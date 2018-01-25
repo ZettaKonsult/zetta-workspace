@@ -26,6 +26,7 @@ const renderRoutes = routes =>
         <Route
           key={i}
           path={path}
+          exact
           render={props => <Component {...props} />}
         />,
       ];

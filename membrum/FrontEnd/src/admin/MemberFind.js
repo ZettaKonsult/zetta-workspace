@@ -3,14 +3,16 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 
 import { membersFetch } from './membersActions';
+import { loadUserProfile } from '../user/profileActions';
 import { getVisibleMembers } from './membersReducer';
 
 let VisibleMembersList = props => (
   <div>
-    <button onClick={props.membersFetch}>Fetch Members</button>
     <h3>Members</h3>
     {props.members.map(member => (
-      <div key={member.ssn}>{member.firstName}</div>
+      <div key={member.ssn} onClick={() => props.redirect(member.ssn)}>
+        {member.firstName}
+      </div>
     ))}
   </div>
 );
@@ -19,13 +21,7 @@ const mapStateToProps = (state, props) => ({
   members: getVisibleMembers(state.membersReducer, props.value),
 });
 
-const mapDispatchToProps = {
-  membersFetch,
-};
-
-VisibleMembersList = connect(mapStateToProps, mapDispatchToProps)(
-  VisibleMembersList
-);
+VisibleMembersList = connect(mapStateToProps)(VisibleMembersList);
 
 class MemberFind extends Component {
   constructor() {
@@ -36,17 +32,30 @@ class MemberFind extends Component {
     this.setState({ value });
   };
   render() {
+    const { history, membersFetch, loadUserProfile } = this.props;
     return (
       <div>
+        <button onClick={membersFetch}>Fetch Members</button>
         <input
           value={this.state.value}
           onChange={e => this.handleChange(e.target.value)}
           type="text"
         />
-        <VisibleMembersList value={this.state.value} />
+        <VisibleMembersList
+          value={this.state.value}
+          redirect={userId => {
+            loadUserProfile(userId);
+            history.push('/registration');
+          }}
+        />
       </div>
     );
   }
 }
 
-export default withRouter(MemberFind);
+const mapDispatchToProps = {
+  loadUserProfile,
+  membersFetch,
+};
+
+export default connect(undefined, mapDispatchToProps)(MemberFind);

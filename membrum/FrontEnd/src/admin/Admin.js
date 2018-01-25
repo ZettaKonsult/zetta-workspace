@@ -13,6 +13,17 @@ import mock, { options } from '../mocks/statisticsMock';
 import './style.css';
 import './AdminActionMenu.css';
 
+import ProfileForm from '../user/ProfileForm';
+
+const RegistrationButton = () => <button>Register Member</button>;
+
+export const MemberRegistration = ({ match }) => (
+  <div>
+    <ProfileForm />
+    <RegistrationButton />
+  </div>
+);
+
 const Dashboard = ({ match }) => (
   <div className="AdminDashboardLayout">
     {console.log(mock())}
@@ -27,8 +38,7 @@ export default ({ match }) => (
   <div>
     <h1 className="DashboardTitle">Dashboard</h1>
     <FadedLine />
-    <Route exact path={`${match.path}`} component={Dashboard} />
-    <Route path={`${match.path}/find`} component={MemberFind} />
+    <Dashboard />
     <Route path={`${match.path}`} component={AdminActionMenu} />
   </div>
 );
