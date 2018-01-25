@@ -17,7 +17,6 @@ import com.zetta.payment.db.DynamoDBManager;
 import com.zetta.payment.db.dao.OrderDAO;
 import com.zetta.payment.pojo.Order;
 import com.zetta.payment.pojo.User;
-import com.zetta.payment.pojo.membrum.Order;
 import com.zetta.payment.util.DateUtil;
 
 public class DynamoOrderDAO implements OrderDAO {
@@ -76,7 +75,7 @@ public class DynamoOrderDAO implements OrderDAO {
     }
 
     @Override
-    public List<Order> getByUser(User user) {
+    public List<Order> get(User user) {
         Map<String, AttributeValue> eav = new HashMap<>();
         eav.put(":v1", new AttributeValue().withS(user.getUserId()));
 
@@ -94,10 +93,9 @@ public class DynamoOrderDAO implements OrderDAO {
     }
 
     @Override
-    public List<Order> get(User user, String start, String end) {
-        return getByUser(user)
-                .stream().filter((Order order) -> DateUtil
-                        .isBetween(order.getCreated(), start, end))
+    public List<Order> get(User user, long start, long end) {
+        return get(user).stream().filter(
+                order -> DateUtil.isBetween(order.getCreated(), start, end))
                 .collect(Collectors.toList());
     }
 

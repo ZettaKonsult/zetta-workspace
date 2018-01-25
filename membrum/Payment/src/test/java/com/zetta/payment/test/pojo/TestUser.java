@@ -26,17 +26,17 @@ public class TestUser {
     @Test
     public void points() {
         Map<String, Double> points = pointsMap();
-        user.setPoints(points);
-        assertEquals(pointsMap(), user.getPoints());
+        user.setCredits(points);
+        assertEquals(pointsMap(), user.getCredits());
     }
 
     @Test
     public void pointsIndividual() {
         Map<String, Double> points = pointsMap();
-        user.setPoints(points);
-        assertEquals(123.0, user.getPoints("ABC"), 0.0);
-        assertEquals(12.3, user.getPoints("EFG"), 0.0);
-        assertEquals(1.23, user.getPoints("HIJ"), 0.0);
+        user.setCredits(points);
+        assertEquals(123.0, user.getCredits("ABC"), 0.0);
+        assertEquals(12.3, user.getCredits("EFG"), 0.0);
+        assertEquals(1.23, user.getCredits("HIJ"), 0.0);
     }
 
     private Map<String, Double> pointsMap() {

@@ -7,10 +7,10 @@ public final class URLResponse {
 
     private String providerUrl;
     private String invoiceUrl;
-    private String validUntil;
+    private long validUntil;
     private boolean isPaid;
 
-    public URLResponse(String providerUrl, String invoiceUrl, String validUntil,
+    public URLResponse(String providerUrl, String invoiceUrl, long validUntil,
             boolean isPaid) {
 
         this.providerUrl = providerUrl;
@@ -43,11 +43,11 @@ public final class URLResponse {
         this.providerUrl = providerUrl;
     }
 
-    public String getValidUntil() {
+    public long getValidUntil() {
         return validUntil;
     }
 
-    public void setValidUntil(String validUntil) {
+    public void setValidUntil(long validUntil) {
         this.validUntil = validUntil;
     }
 

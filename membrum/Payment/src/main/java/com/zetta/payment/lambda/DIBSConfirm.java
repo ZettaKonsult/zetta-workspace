@@ -93,10 +93,8 @@ public abstract class DIBSConfirm extends LambdaHandler {
             throws LambdaCall {
 
         String paymentId = payment.getPaymentId();
-        String orderId = payment.getOrderId();
 
-        log.info("Calling lambda to save payment " + paymentId + " for order:\n"
-                + payment);
+        log.info("Calling lambda to save payment " + paymentId);
 
         JSON result = callLambda(lambdaSave, new JSON(payment).toString());
 
@@ -105,8 +103,8 @@ public abstract class DIBSConfirm extends LambdaHandler {
                     + result.get("errorMessage"));
         }
 
-        log.info("Successfully saved payment " + paymentId + " for order "
-                + orderId + " with lambda call.");
+        log.info("Successfully saved payment " + paymentId
+                + " with lambda call.");
     }
 
 }

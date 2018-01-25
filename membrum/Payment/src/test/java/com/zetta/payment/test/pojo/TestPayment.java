@@ -26,7 +26,8 @@ public class TestPayment {
 
     @Test
     public void equalsAllSameButId() {
-        Payment other = new Payment(payment.getOrderId(), payment.getAmount());
+        Payment other = new Payment(payment.getPaymentId(),
+                payment.getAmount());
         other.setCreated(payment.getCreated());
 
         assertFalse(payment.equals(other));

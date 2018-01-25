@@ -1,6 +1,6 @@
 package com.zetta.payment.form;
 
-import com.zetta.payment.pojo.membrum.Order;
+import cool.graph.cuid.Cuid;
 
 /**
  * @date 2017-11-10
@@ -13,8 +13,8 @@ public final class TRFForm extends DIBSForm {
     private static final String ACCEPT_URL = "";
     private static final String CANCEL_URL = "";
 
-    public TRFForm(Order order) {
-        this(order.getOrderId(), order.getAmount());
+    public TRFForm(int amount) {
+        this(Cuid.createCuid(), amount);
     }
 
     public TRFForm(String orderID, int amount) {

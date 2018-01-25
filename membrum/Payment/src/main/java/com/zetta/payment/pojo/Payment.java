@@ -20,8 +20,10 @@ public class Payment implements Serializable {
     public static final String PAYMENT_ID_INDEX = "paymentId";
     public static final String AMOUNT_INDEX = "amount";
     public static final String CREATED_INDEX = "created";
+    public static final String USER_ID_INDEX = "userId";
 
     private String paymentId;
+    private String userId;
     private long created;
     private int amount;
 
@@ -35,6 +37,7 @@ public class Payment implements Serializable {
             long created, boolean isPaid, int amount) {
 
         this.paymentId = paymentId;
+        this.userId = userId;
         this.created = created;
         this.amount = amount;
     }
@@ -69,9 +72,10 @@ public class Payment implements Serializable {
     @Override
     public String toString() {
         StringBuilder string = new StringBuilder();
-        string.append("Payment " + paymentId + ":");
-        string.append("\nCreated:  " + created);
-        string.append("\nAmount:   " + amount);
+        string.append("Payment    " + paymentId + ":");
+        string.append("\nUser id: " + userId);
+        string.append("\nCreated: " + created);
+        string.append("\nAmount:  " + amount);
         return string.toString();
     }
 

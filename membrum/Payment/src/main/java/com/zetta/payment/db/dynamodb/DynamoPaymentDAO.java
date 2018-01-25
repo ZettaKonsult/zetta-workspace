@@ -68,13 +68,13 @@ public class DynamoPaymentDAO extends DynamoDB<Payment> implements PaymentDAO {
     }
 
     @Override
-    public Optional<Payment> get(String orderId) {
-        return Optional.ofNullable(mapper.load(Payment.class, orderId));
+    public Optional<Payment> get(String paymentId) {
+        return Optional.ofNullable(mapper.load(Payment.class, paymentId));
     }
 
     @Override
-    public Optional<Payment> get(Payment order) {
-        return get(order.getOrderId());
+    public Optional<Payment> get(Payment payment) {
+        return get(payment.getPaymentId());
     }
 
     @Override
