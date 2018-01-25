@@ -18,7 +18,10 @@ public class DateUtil {
     }
 
     public static boolean isBetween(long time, long start, long end) {
-        return time > start && end > time;
+        long earlier = Math.min(start, end);
+        long later = Math.max(start, end);
+
+        return time > earlier && later > time;
     }
 
     public static long epoch() {

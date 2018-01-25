@@ -9,16 +9,12 @@ public class PaymentRequest implements Serializable {
     private static final long serialVersionUID = 3150193213130779657L;
 
     private String userId;
+    private String acceptUrl;
+    private String cancelUrl;
     private long start;
     private long end;
 
     public PaymentRequest() {}
-
-    public PaymentRequest(String userId, long start, long end) {
-        this.userId = userId;
-        this.start = start;
-        this.end = end;
-    }
 
     public String getUserId() {
         return userId;
@@ -26,6 +22,22 @@ public class PaymentRequest implements Serializable {
 
     public void setUserId(String id) {
         this.userId = id;
+    }
+
+    public String getAcceptUrl() {
+        return acceptUrl;
+    }
+
+    public void setAcceptUrl(String acceptUrl) {
+        this.acceptUrl = acceptUrl;
+    }
+
+    public String getCancelUrl() {
+        return cancelUrl;
+    }
+
+    public void setCancelUrl(String cancelUrl) {
+        this.cancelUrl = cancelUrl;
     }
 
     public long getStart() {
@@ -48,9 +60,11 @@ public class PaymentRequest implements Serializable {
     public String toString() {
         StringBuilder string = new StringBuilder();
         string.append("PaymentRequest:");
-        string.append("\n    User:       " + userId);
-        string.append("\n    Start:      " + start);
-        string.append("\n    End:        " + end);
+        string.append("\nUser:       " + userId);
+        string.append("\nAccept-url: " + acceptUrl);
+        string.append("\nCancel-url: " + cancelUrl);
+        string.append("\nStart:      " + start);
+        string.append("\nEnd:        " + end);
         return string.toString();
     }
 

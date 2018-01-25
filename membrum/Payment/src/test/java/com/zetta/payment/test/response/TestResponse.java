@@ -10,7 +10,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.zetta.payment.lambda.response.Response;
-import com.zetta.payment.util.CollectionUtil;
 
 public class TestResponse {
     private Map<String, String> headers;
@@ -20,7 +19,7 @@ public class TestResponse {
     public void setUp() {
         this.headers = new LinkedHashMap<String, String>();
         headers.put("content-type", "*/*");
-        this.response = new Response(0, headers, null);
+        this.response = new Response(0, headers);
     }
 
     @Test
@@ -28,9 +27,8 @@ public class TestResponse {
         response.addError("An error.");
         assertEquals("{\r\n" + "  \"statusCode\" : \"0\",\r\n"
                 + "  \"headers\" : {\r\n" + "    \"content-type\" : \"*/*\"\r\n"
-                + "  },\r\n" + "  \"body\" : {\r\n"
-                + "    \"errorMessages\" : [ \"An error.\" ]\r\n" + "  }\r\n"
-                + "}", response.asJSON());
+                + "  },\r\n" + "  \"body\" : [ \"An error.\" ]\r\n" + "}",
+                response.asJSON());
     }
 
     @Test
@@ -46,9 +44,8 @@ public class TestResponse {
         response.addError("An error.");
         assertEquals("{\r\n" + "  \"statusCode\" : \"0\",\r\n"
                 + "  \"headers\" : {\r\n" + "    \"content-type\" : \"*/*\"\r\n"
-                + "  },\r\n" + "  \"body\" : {\r\n"
-                + "    \"errorMessages\" : [ \"An error.\" ]\r\n" + "  }\r\n"
-                + "}", response.asJSON());
+                + "  },\r\n" + "  \"body\" : [ \"An error.\" ]\r\n}",
+                response.asJSON());
     }
 
     @Test
@@ -68,14 +65,13 @@ public class TestResponse {
         response.emit(outStream);
         assertEquals("{\r\n" + "  \"statusCode\" : \"0\",\r\n"
                 + "  \"headers\" : {\r\n" + "    \"content-type\" : \"*/*\"\r\n"
-                + "  },\r\n" + "  \"body\" : {\r\n"
-                + "    \"errorMessages\" : [ \"An error.\" ]\r\n" + "  }\r\n"
-                + "}", new String(outStream.toByteArray()));
+                + "  },\r\n" + "  \"body\" : [ \"An error.\" ]\r\n" + "}",
+                new String(outStream.toByteArray()));
     }
 
     @Test
     public void bodyString() {
-        response.setBody("A body.");
+        response.addBody("message", "A body.");
         assertEquals("{\r\n" + "  \"statusCode\" : \"0\",\r\n"
                 + "  \"headers\" : {\r\n" + "    \"content-type\" : \"*/*\"\r\n"
                 + "  },\r\n" + "  \"body\" : \"A body.\"\r\n" + "}",
@@ -84,7 +80,8 @@ public class TestResponse {
 
     @Test
     public void bodyMap() {
-        response.setBody(CollectionUtil.newMap("derp", 1, 20.0, true));
+        response.addBody("derp", 1);
+        response.addBody(20.0, true);
         assertEquals("{\r\n" + "  \"statusCode\" : \"0\",\r\n"
                 + "  \"headers\" : {\r\n" + "    \"content-type\" : \"*/*\"\r\n"
                 + "  },\r\n" + "  \"body\" : {\r\n" + "    \"derp\" : 1,\r\n"
@@ -94,7 +91,7 @@ public class TestResponse {
 
     @Test
     public void nullBody() {
-        response.setBody(null);
+        response.addBody("value", null);
         assertEquals("{\r\n" + "  \"statusCode\" : \"0\",\r\n"
                 + "  \"headers\" : {\r\n" + "    \"content-type\" : \"*/*\"\r\n"
                 + "  },\r\n" + "  \"body\" : null\r\n" + "}",
@@ -108,5 +105,32 @@ public class TestResponse {
                 + "  \"headers\" : {\r\n" + "    \"content-type\" : \"*/*\"\r\n"
                 + "  },\r\n" + "  \"body\" : null\r\n" + "}",
                 response.asJSON());
+    }
+
+    @Test
+    public void successEmit() {
+        response.succeed("Success! The child doesn't want to swear.");
+        ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+        response.emit(outStream);
+        assertEquals("{\r\n" + "  \"statusCode\" : \"200\",\r\n"
+                + "  \"headers\" : {\r\n" + "    \"content-type\" : \"*/*\"\r\n"
+                + "  },\r\n" + "  \"body\" : "
+                + "\"Success! The child doesn't want to swear." + "\"\r\n"
+                + "}", new String(outStream.toByteArray()));
+    }
+
+    @Test
+    public void successEmitWithErrors() {
+        response.addError("An error!");
+        response.succeed("Success! The child doesn't want to swear.");
+        ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+        response.emit(outStream);
+        assertEquals("{\r\n" + "  \"statusCode\" : \"200\",\r\n"
+                + "  \"headers\" : {\r\n" + "    \"content-type\" : \"*/*\"\r\n"
+                + "  },\r\n" + "  \"body\" : {\r\n"
+                + "    \"errorMessages\" : [ \"An error!\" ],\r\n"
+                + "    \"message\" : \"Success! The child doesn't want "
+                + "to swear.\"\r\n  }\r\n" + "}",
+                new String(outStream.toByteArray()));
     }
 }

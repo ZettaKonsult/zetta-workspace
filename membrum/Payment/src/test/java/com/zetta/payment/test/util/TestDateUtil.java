@@ -1,6 +1,8 @@
 package com.zetta.payment.test.util;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
@@ -27,5 +29,16 @@ public class TestDateUtil {
     public void greater() {
         assertEquals(1, DateUtil.compare("2018-12-01T12:47:48.440Z",
                 "2017-12-01T12:47:48.440Z"));
+    }
+
+    @Test
+    public void isBetween() {
+        long now = DateUtil.epoch();
+        assertTrue(DateUtil.isBetween(now, now - 1, now + 1));
+        assertTrue(DateUtil.isBetween(now, now + 1, now - 1));
+        assertFalse(DateUtil.isBetween(now, now, now + 1));
+        assertFalse(DateUtil.isBetween(now, now, now - 1));
+        assertFalse(DateUtil.isBetween(now, now + 1, now));
+        assertFalse(DateUtil.isBetween(now, now - 1, now));
     }
 }

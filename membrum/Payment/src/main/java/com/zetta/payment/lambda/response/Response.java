@@ -10,33 +10,55 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
-import com.zetta.payment.util.CollectionUtil;
 import com.zetta.payment.util.JSON;
 
 public final class Response {
 
     private List<String> errors;
     private Map<String, Object> values;
+    private Map<Object, Object> body;
 
-    public Response(int code, Map<String, String> headers, Object body) {
+    public Response(int code, Map<String, String> headers) {
         this.errors = new ArrayList<String>();
         this.values = new LinkedHashMap<String, Object>();
+        this.body = new LinkedHashMap<Object, Object>();
 
         setStatus(code);
         values.put("headers", headers);
-        setBody(body);
+        values.put("body", this.body);
     }
 
     public String asJSON() {
-        return JSON.prettyPrint(this.values);
+        Map<String, Object> printValues = new LinkedHashMap<String, Object>(
+                this.values);
+
+        String bodyKey = "body";
+        Object value = null;
+
+        switch (body.size()) {
+            case 0:
+                break;
+            case 1:
+                value = body.get(body.keySet().iterator().next());
+                break;
+            default:
+                value = values.get(bodyKey);
+        }
+
+        printValues.put(bodyKey, value);
+        return JSON.prettyPrint(printValues);
     }
 
-    public void setBody(Object body) {
-        values.put("body", body);
+    public void addBody(Object key, Object value) {
+        body.put(key, value);
     }
 
     public void setStatus(int code) {
         values.put("statusCode", Integer.toString(code));
+    }
+
+    public String getStatus() {
+        return values.get("statusCode").toString();
     }
 
     @Override
@@ -46,7 +68,7 @@ public final class Response {
 
     public String addError(String message) {
         errors.add(message);
-        setBody(CollectionUtil.newMap("errorMessages", errors));
+        addBody("errorMessages", errors);
         return message;
     }
 
@@ -58,8 +80,9 @@ public final class Response {
     }
 
     public Response succeed(String message) {
-        Response response = ResponseFactory.success(message);
-        return response.addErrors(this.errors);
+        addBody("message", message);
+        setStatus(200);
+        return this;
     }
 
     public void emit(OutputStream outStream) {

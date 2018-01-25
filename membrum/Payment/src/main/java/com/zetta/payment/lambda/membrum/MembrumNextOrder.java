@@ -18,9 +18,9 @@ import com.zetta.payment.lambda.response.ResponseFactory;
 import com.zetta.payment.pojo.Order;
 import com.zetta.payment.pojo.Payment;
 import com.zetta.payment.pojo.PaymentRequest;
-import com.zetta.payment.pojo.URLResponse;
+import com.zetta.payment.pojo.Plans;
+import com.zetta.payment.pojo.HttpResponse;
 import com.zetta.payment.pojo.User;
-import com.zetta.payment.pojo.membrum.Plans;
 import com.zetta.payment.util.CollectionUtil;
 import com.zetta.payment.util.JSON;
 
@@ -57,7 +57,7 @@ public class MembrumNextOrder {
         log.info("Found user payments for the specified interval:\n"
                 + CollectionUtil.verticalString(payments));
 
-        URLResponse output = new URLResponse("", "", 0, true);
+        HttpResponse output = new HttpResponse("", "", 0, true);
 
         int totalAmountPaid = payments.stream().mapToInt(Payment::getAmount)
                 .sum();
@@ -78,7 +78,8 @@ public class MembrumNextOrder {
 
         String orderId = registerOrder(user, start, end);
 
-        Form form = new TRFForm(orderId, toPay);
+        Form form = new TRFForm(orderId, toPay, data.getAcceptUrl(),
+                data.getCancelUrl());
         output.setProviderUrl(form.url());
         output.setInvoiceUrl(form.invoiceUrl());
         output.setValidUntil(subscription.getValidUntil());

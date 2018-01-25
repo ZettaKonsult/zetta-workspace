@@ -2,8 +2,6 @@ package com.zetta.payment.test.form;
 
 import static org.junit.Assert.assertEquals;
 
-import java.io.UnsupportedEncodingException;
-
 import org.junit.Before;
 import org.junit.Test;
 
@@ -18,7 +16,7 @@ public class TestTRFForm {
     }
 
     @Test
-    public void values() throws UnsupportedEncodingException {
+    public void values() {
         String[] names = { "accepturl", "amount", "callbackurl", "cancelurl",
                 "currency", "decorator", "ip", "lang", "merchant", "orderid",
                 "test", "uniqueoid" };
@@ -42,4 +40,10 @@ public class TestTRFForm {
         }
     }
 
+    @Test
+    public void allUrls() {
+        form = new TRFForm("orderId", 123, "accepturl", "cancelurl");
+        assertEquals("accepturl", form.get("accepturl"));
+        assertEquals("cancelurl", form.get("cancelurl"));
+    }
 }

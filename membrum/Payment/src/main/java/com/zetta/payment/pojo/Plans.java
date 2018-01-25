@@ -1,4 +1,4 @@
-package com.zetta.payment.pojo.membrum;
+package com.zetta.payment.pojo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,9 +8,11 @@ import java.util.stream.Collectors;
 import org.joda.time.Instant;
 
 import com.zetta.payment.db.dynamodb.DynamoPlanDAO;
-import com.zetta.payment.pojo.Plan;
 import com.zetta.payment.util.JSON;
 
+/**
+ * @date 2018-01-24
+ */
 public class Plans {
 
     private static final DynamoPlanDAO planDAO = DynamoPlanDAO.instance();

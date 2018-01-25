@@ -3,14 +3,14 @@ package com.zetta.payment.pojo;
 /**
  * @date 2017-12-06
  */
-public final class URLResponse {
+public final class HttpResponse {
 
     private String providerUrl;
     private String invoiceUrl;
     private long validUntil;
     private boolean isPaid;
 
-    public URLResponse(String providerUrl, String invoiceUrl, long validUntil,
+    public HttpResponse(String providerUrl, String invoiceUrl, long validUntil,
             boolean isPaid) {
 
         this.providerUrl = providerUrl;

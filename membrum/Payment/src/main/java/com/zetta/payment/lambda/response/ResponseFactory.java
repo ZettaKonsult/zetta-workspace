@@ -21,13 +21,13 @@ public final class ResponseFactory {
     }
 
     public static Response error(String message) {
-        Response response = new Response(500, HEADERS, null);
+        Response response = new Response(500, HEADERS);
         response.addError(message);
         return response;
     }
 
     public static Response success(String message) {
-        return new Response(200, HEADERS, message);
+        return new Response(200, HEADERS).succeed(message);
     }
 
     private static Map<String, String> buildHeaders() {
