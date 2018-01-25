@@ -22,7 +22,7 @@ class TopNavigation extends Component {
     return (
       <div className={className}>
         {authorizedRoutes.map((route, i) => (
-          <NavLink key={i} to={`${route.path}`} activeClassName="active">
+          <NavLink key={i} to={`${route.path}`} exact activeClassName="active">
             {route.label}
           </NavLink>
         ))}

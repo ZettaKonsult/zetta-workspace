@@ -14,18 +14,9 @@ export const initialState = {
   statusText: undefined,
   shouldRedirect: false,
   authorizedRoutes: {
-    guest: [{ path: '/login', label: 'Login', key: 'login' }],
-    user: [{ path: '/user', label: 'Profile' }],
-    admin: [
-      { path: '/plans', label: 'Plans', key: 'plans' },
-      { path: '/find', label: 'Find Member', key: 'find' },
-      {
-        path: '/',
-        to: '/',
-        label: 'Dashboard',
-        key: 'admin',
-      },
-    ],
+    guest: ['login'],
+    user: ['profile'],
+    admin: ['plans', 'memberfind', 'admin'],
   },
 };
 

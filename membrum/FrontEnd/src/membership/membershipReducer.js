@@ -1,7 +1,11 @@
 /* @flow */
 import type { Payment } from '../types';
 import * as utilDate from 'date-primitive-utils';
-import { MEMBERSHIP_UPDATE_PLANS, MEMBERSHIP_PAY } from './membershipActions';
+import {
+  MEMBERSHIP_UPDATE_PLANS,
+  MEMBERSHIP_PAY,
+  MEMBERSHIP_UPGRADE_TRAIL,
+} from './membershipActions';
 import {
   PLAN_LOAD_FAILURE,
   PLAN_LOAD_REQUEST,
@@ -45,12 +49,6 @@ export const membership = (
         plan: plan.reducer(state.plan, action),
       };
 
-    case MEMBERSHIP_UPDATE_PLANS:
-      return {
-        ...state,
-        subscription: [...action.payload.plans],
-      };
-
     case LOAD_USER_REQUEST:
     case PLAN_LOAD_REQUEST:
       return {
@@ -72,6 +70,12 @@ export const membership = (
         error: action.payload.error,
       };
 
+    case MEMBERSHIP_UPDATE_PLANS:
+      return {
+        ...state,
+        subscription: [...action.payload.plans],
+      };
+
     case MEMBERSHIP_PAY:
       return {
         ...state,
@@ -84,6 +88,16 @@ export const membership = (
             ),
           },
         ],
+      };
+    case MEMBERSHIP_UPGRADE_TRAIL:
+      return {
+        ...state,
+        subscription: state.subscription.map(
+          planId =>
+            getPlanById(state, planId).type === 'trail'
+              ? action.payload.planId
+              : planId
+        ),
       };
     default:
       return state;

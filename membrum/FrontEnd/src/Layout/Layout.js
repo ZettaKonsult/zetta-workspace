@@ -8,6 +8,7 @@ import { loadUserProfile } from '../user/profileActions';
 import { userRedirected } from '../user/authenticationActions';
 import { getAuthorizedRoutes, shouldRedirectUser } from '../user/';
 
+import Home from '../containers/Home/';
 import Routes from './Views';
 import NotFound from './NotFound';
 
@@ -53,7 +54,7 @@ class Layout extends Component {
         <div className="AppContent">
           <Switch>
             {renderRoutes(authorizedRoutes)}
-            <Route path="/" component={Routes['home']} />
+            <Route path="/" component={Home} />
             <Route component={NotFound} />
           </Switch>
         </div>
