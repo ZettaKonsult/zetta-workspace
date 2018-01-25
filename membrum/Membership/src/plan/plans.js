@@ -4,7 +4,11 @@
  * @date 2018-01-16
  */
 
+<<<<<<< HEAD
 import type { Plan } from '../types';
+=======
+import type { Plan } from '../types'
+>>>>>>> stash
 
 const plans = [
   {
@@ -35,7 +39,7 @@ const plans = [
   {
     id: 'cm',
     name: 'Corpus Medicus',
-    amount: 'X',
+    amount: '0',
     interval: 'month',
     intervalCount: '6',
     labels: ['union'],
@@ -62,7 +66,7 @@ const plans = [
   {
     id: 'huots',
     name: 'Humanistiska och Teologiska Studentkåren',
-    amount: 'X',
+    amount: '0',
     interval: 'month',
     intervalCount: '6',
     labels: ['union'],
@@ -71,7 +75,7 @@ const plans = [
   {
     id: 'jf',
     name: 'Juridiska Föreningen',
-    amount: 'X',
+    amount: '0',
     interval: 'month',
     intervalCount: '6',
     labels: ['union'],
@@ -80,7 +84,7 @@ const plans = [
   {
     id: 'svkfim',
     name: 'Studentkåren vid Konstnärliga fakulteten i Malmö',
-    amount: 'X',
+    amount: '0',
     interval: 'month',
     intervalCount: '6',
     labels: ['union'],
@@ -313,4 +317,8 @@ const defaultPlan = (): Plan => plans[0];
 
 const specification = (): Array<Plan> => plans;
 
+<<<<<<< HEAD
 export default { defaultPlan, plans, planTemplates, specification, members };
+=======
+export default { defaultPlan, plans, planTemplates, specification, members }
+>>>>>>> stash

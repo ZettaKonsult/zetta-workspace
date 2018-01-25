@@ -9,8 +9,8 @@ public class PaymentRequest implements Serializable {
     private static final long serialVersionUID = 3150193213130779657L;
 
     private String userId;
-    private String start;
-    private String end;
+    private long start;
+    private long end;
 
     public PaymentRequest() {}
 
@@ -22,19 +22,19 @@ public class PaymentRequest implements Serializable {
         this.userId = id;
     }
 
-    public String getStart() {
+    public long getStart() {
         return start;
     }
 
-    public void setStart(String start) {
+    public void setStart(long start) {
         this.start = start;
     }
 
-    public String getEnd() {
+    public long getEnd() {
         return end;
     }
 
-    public void setEnd(String end) {
+    public void setEnd(long end) {
         this.end = end;
     }
 

@@ -1,13 +1,16 @@
 package com.zetta.payment.pojo;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
+import com.zetta.payment.pojo.membrum.Plans;
 
 /**
  * @date 2017-11-15
@@ -17,27 +20,29 @@ public class User implements Serializable {
 
     private static final long serialVersionUID = 4172745746658050408L;
 
-    private static final String EMAIL_INDEX = "email";
-    private static final String ID_INDEX = "userId";
-    private static final String NAME_INDEX = "name";
-    private static final String POINTS_INDEX = "points";
+    private static final String ID_INDEX = "ssn";
+    private static final String PAYMENT_INDEX = "payments";
+    private static final String CREDTIS_INDEX = "credits";
+    private static final String SUBSCRIPTION_INDEX = "subscription";
 
     private String userId;
-    private String name;
-    private String email;
-    private Map<String, Double> points;
+    private List<String> subscription;
+    private List<String> payments;
+    private Map<String, Double> credits;
 
     public User() {
-        this("", "", "", Collections.<String, Double>emptyMap());
+        this("", Collections.<String>emptyList(),
+                Collections.<String>emptyList(),
+                Collections.<String, Double>emptyMap());
     }
 
-    public User(String userId, String name, String email,
+    public User(String userId, List<String> plans, List<String> payments,
             Map<String, Double> points) {
 
         this.userId = userId;
-        this.name = name;
-        this.email = email;
-        setPoints(points);
+        this.payments = payments;
+        setSubscription(plans);
+        setCredits(points);
     }
 
     @DynamoDBHashKey(attributeName = ID_INDEX)
@@ -49,50 +54,50 @@ public class User implements Serializable {
         this.userId = userId;
     }
 
-    @DynamoDBAttribute(attributeName = EMAIL_INDEX)
-    public String getEmail() {
-        return email;
+    @DynamoDBAttribute(attributeName = CREDTIS_INDEX)
+    public Map<String, Double> getCredits() {
+        return credits;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public boolean hasCredits(String key) {
+        return credits.containsKey(key);
     }
 
-    @DynamoDBAttribute(attributeName = NAME_INDEX)
-    public String getName() {
-        return name;
+    public double getCredits(String key) {
+        return credits.get(key);
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setCredits(Map<String, Double> points) {
+        this.credits = new LinkedHashMap<String, Double>(points);
     }
 
-    @DynamoDBAttribute(attributeName = POINTS_INDEX)
-    public Map<String, Double> getPoints() {
-        return points;
+    @DynamoDBAttribute(attributeName = SUBSCRIPTION_INDEX)
+    public List<String> getSubscription() {
+        return subscription;
     }
 
-    public double getPoints(String key) {
-        if (!points.containsKey(key)) {
-            return -1.0;
-        }
-        return points.get(key);
+    public void setSubscription(List<String> subscription) {
+        this.subscription = subscription;
     }
 
-    public void setPoints(Map<String, Double> points) {
-        this.points = new LinkedHashMap<String, Double>(points);
+    @DynamoDBAttribute(attributeName = PAYMENT_INDEX)
+    public List<String> getPayments() {
+        return payments;
+    }
+
+    public void setPayments(List<String> payments) {
+        this.payments = new ArrayList<String>(payments);
     }
 
     @Override
     public String toString() {
         StringBuilder string = new StringBuilder("Order:");
         string.append("\n    Id:     " + userId);
-        string.append("\n    Name:   " + name);
-        string.append("\n    Email:  " + email);
         string.append("\n    Points: {");
+        string.append("\n    Subscription: " + subscription.toString());
 
         String prefix = "\n";
-        for (Map.Entry<String, Double> entry : points.entrySet()) {
+        for (Map.Entry<String, Double> entry : credits.entrySet()) {
             string.append(prefix + "        " + entry.getKey() + " = "
                     + entry.getValue());
             prefix = ",\n";
@@ -100,4 +105,9 @@ public class User implements Serializable {
         return string.append((prefix.equals("\n") ? "" : "\n    ") + "}")
                 .toString();
     }
+
+    public Plans getPlans() {
+        return Plans.get(subscription);
+    }
+
 }

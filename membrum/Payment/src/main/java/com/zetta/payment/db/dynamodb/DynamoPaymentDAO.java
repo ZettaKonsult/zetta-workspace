@@ -22,7 +22,7 @@ import com.zetta.payment.util.DateUtil;
 /**
  * @date 2017-12-07
  */
-public class DynamoPaymentDAO implements PaymentDAO {
+public class DynamoPaymentDAO extends DynamoDB<Payment> implements PaymentDAO {
 
     private static final Logger log = Logger.getLogger(DynamoPaymentDAO.class);
 
@@ -84,8 +84,9 @@ public class DynamoPaymentDAO implements PaymentDAO {
 
     @Override
     public Optional<Payment> getLatest(User user) {
-        List<Payment> orders = get(user).stream().sorted((Payment order1,
-                Payment order2) -> order1.compareCreated(order2))
+        List<Payment> orders = get(user)
+                .stream().sorted((Payment payment1,
+                        Payment payment2) -> payment1.compareCreated(payment2))
                 .collect(Collectors.toList());
 
         return orders.isEmpty() ? Optional.empty()
@@ -93,7 +94,7 @@ public class DynamoPaymentDAO implements PaymentDAO {
     }
 
     @Override
-    public List<Payment> get(User user, String start, String end) {
+    public List<Payment> get(User user, long start, long end) {
         return get(user).stream()
                 .filter((Payment payment) -> DateUtil
                         .isBetween(payment.getCreated(), start, end))

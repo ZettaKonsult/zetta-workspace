@@ -17,8 +17,12 @@ public class DateUtil {
         return Instant.parse(date1).compareTo(Instant.parse(date2));
     }
 
-    public static boolean isBetween(String date, String start, String end) {
-        return compare(date, start) > 0 && compare(date, end) < 0;
+    public static boolean isBetween(long time, long start, long end) {
+        return time > start && end > time;
+    }
+
+    public static long epoch() {
+        return Instant.now().getMillis();
     }
 
 }

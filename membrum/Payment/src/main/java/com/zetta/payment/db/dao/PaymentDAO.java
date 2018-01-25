@@ -15,6 +15,6 @@ public interface PaymentDAO extends DAOInterface<Payment> {
 
     List<Payment> get(User user);
 
-    List<Payment> get(User user, String start, String end);
+    List<Payment> get(User user, long start, long end);
 
 }

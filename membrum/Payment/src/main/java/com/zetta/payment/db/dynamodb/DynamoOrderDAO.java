@@ -15,6 +15,7 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.zetta.payment.db.DynamoDBManager;
 import com.zetta.payment.db.dao.OrderDAO;
+import com.zetta.payment.pojo.Order;
 import com.zetta.payment.pojo.User;
 import com.zetta.payment.pojo.membrum.Order;
 import com.zetta.payment.util.DateUtil;

@@ -11,7 +11,7 @@ import com.zetta.payment.db.DynamoDBManager;
 import com.zetta.payment.db.dao.UserDAO;
 import com.zetta.payment.pojo.User;
 
-public class DynamoUserDAO implements UserDAO {
+public class DynamoUserDAO extends DynamoDB<User> implements UserDAO {
 
     private static final Logger log = Logger.getLogger(DynamoUserDAO.class);
     private static final DynamoDBMapper mapper = DynamoDBManager.mapper();

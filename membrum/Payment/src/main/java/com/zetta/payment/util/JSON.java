@@ -138,4 +138,16 @@ public class JSON {
         return empty;
     }
 
+    public void delete(String key) {
+        remove(key);
+    }
+
+    public Object remove(String key) {
+        return map.remove(key);
+    }
+
+    public void move(String srcKey, String destKey) {
+        set(destKey, remove(srcKey));
+    }
+
 }
