@@ -9,7 +9,7 @@ import { userRedirected } from '../user/authenticationActions';
 import { getAuthorizedRoutes, shouldRedirectUser } from '../user/';
 
 import Home from '../containers/Home/';
-import Routes from './Views';
+import Views from './Views';
 import NotFound from './NotFound';
 
 import Navigation from './Navigation';
@@ -18,14 +18,14 @@ import Footer from './Footer';
 import './App.css';
 
 const renderRoutes = routes =>
-  routes.reduce((total, route, i) => {
-    if (Routes.hasOwnProperty(route.key)) {
-      const Component = Routes[route.key];
+  routes.reduce((total, routeId, i) => {
+    if (Views.hasOwnProperty(routeId)) {
+      const { component: Component, path } = Views[routeId];
       return [
         ...total,
         <Route
           key={i}
-          path={route.path}
+          path={path}
           render={props => <Component {...props} />}
         />,
       ];
@@ -49,7 +49,11 @@ class Layout extends Component {
       <div className="App">
         <Route
           path="/"
-          render={() => <Navigation authorizedRoutes={authorizedRoutes} />}
+          render={() => (
+            <Navigation
+              authorizedRoutes={authorizedRoutes.map(routeId => Views[routeId])}
+            />
+          )}
         />
         <div className="AppContent">
           <Switch>
