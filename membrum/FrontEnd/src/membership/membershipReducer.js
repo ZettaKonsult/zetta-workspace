@@ -1,6 +1,11 @@
 /* @flow */
+import type { Payment } from '../types';
 import * as utilDate from 'date-primitive-utils';
-import { MEMBERSHIP_UPDATE_PLANS, MEMBERSHIP_PAY } from './membershipActions';
+import {
+  MEMBERSHIP_UPDATE_PLANS,
+  MEMBERSHIP_PAY,
+  MEMBERSHIP_UPGRADE_TRAIL,
+} from './membershipActions';
 import {
   PLAN_LOAD_FAILURE,
   PLAN_LOAD_REQUEST,
@@ -15,7 +20,7 @@ import { LOAD_USER_REQUEST, LOAD_USER_SUCCESS } from '../user/profileActions';
 type MembershipState = {
   +subscription: string[],
   +plan: PlanState,
-  +payments: Object[],
+  +payments: Payment[],
   +isFetching: boolean,
 };
 
@@ -44,12 +49,6 @@ export const membership = (
         plan: plan.reducer(state.plan, action),
       };
 
-    case MEMBERSHIP_UPDATE_PLANS:
-      return {
-        ...state,
-        subscription: [...action.payload.plans],
-      };
-
     case LOAD_USER_REQUEST:
     case PLAN_LOAD_REQUEST:
       return {
@@ -71,6 +70,12 @@ export const membership = (
         error: action.payload.error,
       };
 
+    case MEMBERSHIP_UPDATE_PLANS:
+      return {
+        ...state,
+        subscription: [...action.payload.plans],
+      };
+
     case MEMBERSHIP_PAY:
       return {
         ...state,
@@ -83,6 +88,16 @@ export const membership = (
             ),
           },
         ],
+      };
+    case MEMBERSHIP_UPGRADE_TRAIL:
+      return {
+        ...state,
+        subscription: state.subscription.map(
+          planId =>
+            getPlanById(state, planId).type === 'trail'
+              ? action.payload.planId
+              : planId
+        ),
       };
     default:
       return state;
@@ -170,8 +185,7 @@ export const getAllPlans = (state: MembershipState) =>
 export const getPlanOptions = (state: MembershipState) => (planId: string) =>
   plan.getPlanOptions(state.plan)(planId);
 
-export const getSubscription = (state: MembershipState): string[] =>
-  state.subscription;
+export const getSubscription = (state: MembershipState) => state.subscription;
 
 export const getDefaultPlan = (state: MembershipState) =>
   plan.getDefaultPlan(state.plan);

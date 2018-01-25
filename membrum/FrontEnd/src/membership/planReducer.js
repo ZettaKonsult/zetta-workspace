@@ -1,16 +1,7 @@
 /* @flow */
 import { PLAN_LOAD_SUCCESS, PLAN_UPDATE, PLAN_ADD } from './planActions';
-import type { Action } from '../reducers';
-export type Plan = {
-  +id: string,
-  +name: string,
-  +amount: number,
-  +interval: 'month' | 'year',
-  +intervalCount: number,
-  +labels: Array<string>,
-  +group: Array<string>,
-  +type: ?string,
-};
+import type { Action, Plan } from '../types';
+
 export type PlanState = {
   +byId: { [string]: Plan },
   +allIds: Array<string>,

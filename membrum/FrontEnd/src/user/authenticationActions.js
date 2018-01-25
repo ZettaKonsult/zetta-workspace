@@ -13,12 +13,13 @@ export const USER_PASSWORD_RESET_REQUEST = 'USER_PASSWORD_RESET_REQUEST';
 export const USER_PASSWORD_RESET_SUCCESS = 'USER_PASSWORD_RESET_SUCCESS';
 export const USER_PASSWORD_RESET_FAILURE = 'USER_PASSWORD_RESET_FAILURE';
 
-export function loginUserSuccess(token) {
+export function loginUserSuccess(token, group) {
   localStorage.setItem('token', token);
   return {
     type: LOGIN_USER_SUCCESS,
     payload: {
       token: token,
+      group: group,
     },
   };
 }
@@ -66,7 +67,8 @@ export function loginUser(email, password, redirect = '/') {
     try {
       console.warn('No login provider');
       const token = '910504-0035';
-      dispatch(loginUserSuccess(token));
+      const group = 'admin';
+      dispatch(loginUserSuccess(token, group));
       await dispatch(fetchAllPlans(dispatch));
       await loadUserProfile(token)(dispatch);
     } catch (error) {

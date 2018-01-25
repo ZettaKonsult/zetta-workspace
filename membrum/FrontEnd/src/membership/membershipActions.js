@@ -1,19 +1,20 @@
 /* @flow */
-import { getPlanById } from './membershipReducer';
+import type { ThunkAction, Action, Plan } from '../types';
 
-import type { ThunkAction, Action } from '../reducers';
+import { getPlanById } from './membershipReducer';
 
 export const MEMBERSHIP_UPDATE_PLANS = 'MEMBERSHIP_UPDATE_PLANS';
 export const MEMBERSHIP_PAY = 'MEMBERSHIP_PAY';
+export const MEMBERSHIP_UPGRADE_TRAIL = 'MEMBERSHIP_UPGRADE_TRAIL';
 
-export const membershipUpdatePlans = (plans): Action => ({
+export const membershipUpdatePlans = (plans: string[]): Action => ({
   type: MEMBERSHIP_UPDATE_PLANS,
   payload: {
     plans,
   },
 });
 
-export const membershipPay = (plans): Action => {
+export const membershipPay = (plans: string[]): Action => {
   const date = Date.now();
   return {
     type: MEMBERSHIP_PAY,
@@ -24,11 +25,19 @@ export const membershipPay = (plans): Action => {
   };
 };
 
-export const membershipSave = (plans): ThunkAction => (dispatch, getState) => {
+export const membershipSave = (plans: string[]): ThunkAction => (
+  dispatch,
+  getState
+) => {
   const { membershipReducer } = getState();
   const result = plans.filter(
-    plan => getPlanById(membershipReducer, plan).type !== 'default'
+    planId => getPlanById(membershipReducer, planId).type !== 'default'
   );
 
   dispatch(membershipUpdatePlans(result));
 };
+
+export const membershipUpgradeTrail = (planId: string) => ({
+  type: MEMBERSHIP_UPGRADE_TRAIL,
+  payload: { planId },
+});
