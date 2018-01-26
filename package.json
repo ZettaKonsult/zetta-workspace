@@ -21,6 +21,7 @@
   "scripts": {
     "precommit": "lint-staged",
     "lint": "eslint --fix",
+    "update": "sh ./scripts/update.sh",
     "prettier":
       "prettier --write --loglevel silent \"{,!(node_modules)/**/}*.js\""
   },
