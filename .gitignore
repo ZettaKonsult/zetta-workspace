@@ -235,5 +235,8 @@ $RECYCLE.BIN/
 build
 dist
 
-# open-source modules are handled by own git repo
+# Open-source modules are handled by own git repository.
 zk-open-modules
+
+# Visual studio code folder.
+.vscode
