@@ -1,5 +1,5 @@
 /* @flow */
-import type { ThunkAction, Action, Plan } from '../types';
+import type { ThunkAction, Action } from '../types';
 
 import { getPlanById } from './membershipReducer';
 
