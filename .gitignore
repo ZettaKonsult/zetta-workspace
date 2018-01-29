@@ -237,3 +237,6 @@ dist
 
 # open-source modules are handled by own git repo
 zk-open-modules
+
+# Vscode
+.vscode
