@@ -4,7 +4,7 @@ import { Field, reduxForm } from 'redux-form';
 
 import FormInput from '../components/FormInput';
 
-import { getPlanById } from './membershipReducer';
+import { getLoadedPlan } from './membershipReducer';
 import { planSave } from './planActions';
 
 let PlanForm = props => {
@@ -41,7 +41,7 @@ PlanForm = reduxForm({
 
 const mapStateToProps = (state, { match }) => {
   return {
-    initialValues: getPlanById(state.membershipReducer, match.params.id),
+    initialValues: getLoadedPlan(state.membershipReducer),
     enableReinitialize: true,
   };
 };

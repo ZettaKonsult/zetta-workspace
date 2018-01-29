@@ -12,6 +12,7 @@ import {
   PLAN_LOAD_SUCCESS,
   PLAN_UPDATE,
   PLAN_ADD,
+  PLAN_LOAD,
 } from './planActions';
 import * as plan from './planReducer';
 import type { PlanState } from './planReducer';
@@ -44,6 +45,7 @@ export const membership = (
     case PLAN_LOAD_SUCCESS:
     case PLAN_UPDATE:
     case PLAN_ADD:
+    case PLAN_LOAD:
       return {
         ...state,
         plan: plan.reducer(state.plan, action),
@@ -191,3 +193,6 @@ export const getDefaultPlan = (state: MembershipState) =>
   plan.getDefaultPlan(state.plan);
 
 export const getIsFetching = (state: MembershipState) => state.isFetching;
+
+export const getLoadedPlan = (state: MembershipState) =>
+  plan.getLoadedPlan(state.plan);
