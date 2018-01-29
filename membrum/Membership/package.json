@@ -51,6 +51,7 @@
     "yarn.lock": ["git rm --cached"]
   },
   "jest": {
+    "modulePathIgnorePatterns ": ["old/*"],
     "transform": {
       "^.+\\.jsx?$": "babel-jest"
     }
