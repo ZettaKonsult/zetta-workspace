@@ -4,7 +4,7 @@ node_js:
   - lts/*
 
 script:
-  - yarn travis-test
+  - yarn test:staged"
 
 cache:
   yarn: true

@@ -1,0 +1,99 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`returns all selectable values for other attributes 1`] = `
+Array [
+  Object {
+    "amount": 0,
+    "group": "studentlund",
+    "id": "2",
+    "interval": "month",
+    "intervalCount": 6,
+    "labels": Array [
+      "union",
+    ],
+    "name": "Teknologkåren",
+  },
+]
+`;
+
+exports[`returns array with all rules parsed 1`] = `
+Array [
+  Object {
+    "category": "union",
+    "options": Array [
+      Object {
+        "amount": 0,
+        "group": "studentlund",
+        "id": "2",
+        "interval": "month",
+        "intervalCount": 6,
+        "labels": Array [
+          "union",
+        ],
+        "name": "Teknologkåren",
+      },
+    ],
+    "value": 1,
+  },
+  Object {
+    "category": "nation",
+    "options": Array [
+      Object {
+        "amount": 200,
+        "group": "studentlund",
+        "id": "3",
+        "interval": "month",
+        "intervalCount": 6,
+        "labels": Array [
+          "nation",
+          "torna",
+        ],
+        "name": "Västgöta Nation",
+      },
+      Object {
+        "amount": 210,
+        "group": "studentlund",
+        "id": "4",
+        "interval": "month",
+        "intervalCount": 6,
+        "labels": Array [
+          "nation",
+          "gudrun",
+        ],
+        "name": "Wermlands Nation",
+        "type": "plan",
+      },
+    ],
+    "value": 1,
+  },
+  Object {
+    "category": "Akademiska Föreningen",
+    "options": Array [
+      Object {
+        "amount": 100,
+        "group": "studentlund",
+        "id": "7",
+        "interval": "month",
+        "intervalCount": 6,
+        "labels": Array [],
+        "name": "Akademiska Föreningen",
+      },
+    ],
+    "value": 1,
+  },
+]
+`;
+
+exports[`returns only 1 option if the rule depends on a id 1`] = `
+Array [
+  Object {
+    "amount": 100,
+    "group": "studentlund",
+    "id": "7",
+    "interval": "month",
+    "intervalCount": 6,
+    "labels": Array [],
+    "name": "Akademiska Föreningen",
+  },
+]
+`;

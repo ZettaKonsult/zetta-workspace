@@ -11,11 +11,11 @@
   "license": "MIT",
   "scripts": {
     "start": "node src/index",
-    "test": "cross-env BABEL_ENV=test jest --color --env=node",
-    "test:watch": "yarn run test --watch",
+    "test": "jest  --env=node",
+    "test:watch": "yarn test --watch",
     "test:staged": "cross-env CI=true yarn test --findRelatedTests",
     "build": "cross-env BABEL_ENV=production babel src -d dist",
-    "build:watch": "babel src -w -d dist",
+    "build:watch": "yarn build -w",
     "lint": "eslint src/**/*.js",
     "travis:test": "jest",
     "precommit": "lint-staged",
@@ -23,7 +23,6 @@
     "postpublishOnly": "rm -rf dist"
   },
   "dependencies": {
-    "aws-sdk": "^2.169.0",
     "babel-runtime": "^6.26.0"
   },
   "devDependencies": {
@@ -41,8 +40,8 @@
     "eslint-plugin-flowtype": "^2.39.1",
     "flow-bin": "^0.59.0",
     "husky": "^0.14.3",
-    "jest": "^21.2.1",
-    "jest-cli": "^21.2.1",
+    "jest": "22.1.4",
+    "jest-cli": "22.1.4",
     "lint-staged": "^5.0.0",
     "prettier": "^1.8.2"
   },
