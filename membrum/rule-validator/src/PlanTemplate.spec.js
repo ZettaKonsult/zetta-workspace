@@ -12,85 +12,77 @@ const smalands = mockData.plans[5];
 
 const simpleStudentlundPlans = [trf, af, union, nation2];
 const complexStudentlundPlans = [nation1, af, union, nation2, trf, smalands];
-const simpleNotValidPlans = [union, trf, smalands];
-const complexNotValidPlans = [{}];
+const trfPlans = [trf, smalands];
+const notValidPlans = [union, trf, smalands];
 
 describe('PlanTemplate', () => {
-  const pt = PlanTemplate(planTempaltes);
-
-  describe('getOperator()', () => {
-    it('only evaluates correctly', () => {
-      const operator = pt.getOperator('only', 1);
-      expect(operator(1)).toBeTruthy();
-      expect(operator(2)).toBeFalsy();
-    });
-    it('lessThan evaluates correctly', () => {
-      const operator = pt.getOperator('lessThan', 2);
-      expect(operator(1)).toBeTruthy();
-      expect(operator(2)).toBeFalsy();
-    });
-    it('moreThan evaluates correctly', () => {
-      const operator = pt.getOperator('moreThan', 2);
-      expect(operator(3)).toBeTruthy();
-      expect(operator(2)).toBeFalsy();
-    });
-    it('atLeast evaluates correctly', () => {
-      const operator = pt.getOperator('atLeast', 2);
-      expect(operator(3)).toBeTruthy();
-      expect(operator(1)).toBeFalsy();
-    });
-    it('atMost evaluates correctly', () => {
-      const operator = pt.getOperator('atMost', 2);
-      expect(operator(2)).toBeTruthy();
-      expect(operator(3)).toBeFalsy();
-    });
-    it('not evaluates correctly', () => {
-      const operator = pt.getOperator('none', 1);
-      expect(operator(3)).toBeFalsy();
-      expect(operator(1)).toBeFalsy();
-    });
+  let pt;
+  beforeEach(() => {
+    pt = PlanTemplate(planTempaltes, { sortKey: 'group' });
   });
 
-  describe('evaluatePlan()', () => {
-    it('evaluate handles simple case', () => {
-      expect(pt.evaluatePlan(simpleStudentlundPlans)).toBeTruthy();
-    });
-    it('evaluate handles a more complex case', () => {
-      expect(pt.evaluatePlan(complexStudentlundPlans)).toBeTruthy();
-    });
-    it('returns false if the check is not passed', () => {
-      expect(pt.evaluatePlan([])).toBeFalsy();
-    });
-    it('evaluate false for a simple none valid array', () => {
-      expect(pt.evaluatePlan(simpleNotValidPlans)).toBeFalsy();
-    });
+  it('only evaluates correctly', () => {
+    const operator = pt.getOperator('only', 1);
+    expect(operator(1)).toBeTruthy();
+    expect(operator(2)).toBeFalsy();
+  });
+  it('lessThan evaluates correctly', () => {
+    const operator = pt.getOperator('lessThan', 2);
+    expect(operator(1)).toBeTruthy();
+    expect(operator(2)).toBeFalsy();
+  });
+  it('moreThan evaluates correctly', () => {
+    const operator = pt.getOperator('moreThan', 2);
+    expect(operator(3)).toBeTruthy();
+    expect(operator(2)).toBeFalsy();
+  });
+  it('atLeast evaluates correctly', () => {
+    const operator = pt.getOperator('atLeast', 2);
+    expect(operator(3)).toBeTruthy();
+    expect(operator(1)).toBeFalsy();
+  });
+  it('atMost evaluates correctly', () => {
+    const operator = pt.getOperator('atMost', 2);
+    expect(operator(2)).toBeTruthy();
+    expect(operator(3)).toBeFalsy();
+  });
+  it('none evaluates correctly', () => {
+    const operator = pt.getOperator('none', 1);
+    expect(operator(3)).toBeFalsy();
+    expect(operator(1)).toBeFalsy();
   });
 
-  describe('getErrors()', () => {
-    it('returns why the evaluation did not pass, simple example', () => {
-      const expected = { nation: ['There should be atLeast 1 nation'] };
-
-      expect(pt.getErrors(simpleNotValidPlans)).toEqual(
-        expect.objectContaining(expected)
-      );
-    });
-    it('returns why the evaluation did not pass, complex example', () => {
-      const expected = {
-        nation: ['There should be atLeast 1 nation'],
-        union: ['There should be only 1 union'],
-      };
-
-      expect(pt.getErrors(complexNotValidPlans)).toEqual(
-        expect.objectContaining(expected)
-      );
-    });
+  it('evaluate handles simple case', () => {
+    expect(pt.evaluatePlan(simpleStudentlundPlans)).toBeTruthy();
+  });
+  it('evaluate handles a more complex case', () => {
+    expect(pt.evaluatePlan(complexStudentlundPlans)).toBeTruthy();
+  });
+  it('evaluate only evaluates rule for present plans', () => {
+    expect(pt.evaluatePlan(trfPlans)).toBeTruthy();
+  });
+  it('returns true there is nothing to evaluate', () => {
+    expect(pt.evaluatePlan([])).toBeTruthy();
+  });
+  it('evaluate false for a simple none valid array', () => {
+    expect(pt.evaluatePlan(notValidPlans)).toBeFalsy();
   });
 
-  describe('filterPlans()', () => {
-    it('returns only plans where the value of attribute matches key', () => {
-      const result = pt.filterPlans(simpleStudentlundPlans, 'id', nation2.id);
-      expect(result).toHaveLength(1);
-      expect(result).toEqual([nation2]);
-    });
+  it('evaluates all rules if no sortKey is provided', () => {
+    let pt = PlanTemplate(planTempaltes);
+    expect(pt.evaluatePlan(simpleStudentlundPlans)).toBeFalsy();
+  });
+
+  it('getErrors() returns why the evaluation did not pass', () => {
+    const expected = ['7', 'nation'];
+    const result = pt.getErrors(notValidPlans);
+    expect(Object.keys(result)).toEqual(expected);
+  });
+
+  it('filterPlans() returns only plans where the value of attribute matches key', () => {
+    const result = pt.filterPlans(simpleStudentlundPlans, 'id', nation2.id);
+
+    expect(result).toHaveLength(1);
+    expect(result).toEqual([nation2]);
   });
 });

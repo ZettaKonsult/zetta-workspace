@@ -1,1 +1,4 @@
-export { default } from './PlanTemplate';
+import ruleValidator from './PlanTemplate';
+import ruleParse from './ruleParse';
+
+export default { ruleValidator, ruleParse };

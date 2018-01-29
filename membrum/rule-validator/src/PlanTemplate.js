@@ -1,6 +1,8 @@
 /* @flow */
 
-export default function(rules: Object[]) {
+import type { Rule } from './types';
+
+export default function(rules: Rule[], { sortKey }: Object = {}) {
   function evaluatePlan(plans: Object[]) {
     const boolArray = rules.map(rule => getEvaluation(rule, plans));
     return boolArray.reduce((result, bool) => result && bool);
@@ -20,13 +22,18 @@ export default function(rules: Object[]) {
     }, {});
   }
 
-  function getEvaluation(rule: Object, plans: Object[]) {
+  function getEvaluation(rule: Rule, plans: Object[]) {
     const { attribute, key, func, value } = rule;
+    let sorted = plans;
 
-    const filteredByGroup = filterPlans(plans, 'group', rule.group);
-    const filteredByAttribute = filterPlans(filteredByGroup, attribute, key);
-
-    return getOperator(func, Number(value))(filteredByAttribute.length);
+    if (sortKey) {
+      sorted = filterPlans(plans, sortKey, rule[sortKey]);
+      if (sorted.length === 0) {
+        return true;
+      }
+    }
+    sorted = filterPlans(sorted, attribute, key);
+    return getOperator(func, Number(value))(sorted.length);
   }
 
   function filterPlans(plans: Object[], attribute: string, key: string) {

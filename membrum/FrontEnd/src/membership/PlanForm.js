@@ -30,6 +30,7 @@ let PlanForm = props => {
       <button type="submit" disabled={submitting || pristine}>
         Submit
       </button>
+      <button onClick={reset}>Reset</button>
     </form>
   );
 };

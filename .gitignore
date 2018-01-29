@@ -238,5 +238,5 @@ dist
 # Open-source modules are handled by own git repository.
 zk-open-modules
 
-# Visual studio code folder.
+# Vscode
 .vscode

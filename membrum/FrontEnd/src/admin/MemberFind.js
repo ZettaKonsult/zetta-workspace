@@ -1,21 +1,16 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
 
 import { membersFetch } from './membersActions';
 import { loadUserProfile } from '../user/profileActions';
 import { getVisibleMembers } from './membersReducer';
 
-let VisibleMembersList = props => (
-  <div>
-    <h3>Members</h3>
-    {props.members.map(member => (
-      <div key={member.ssn} onClick={() => props.redirect(member.ssn)}>
-        {member.firstName}
-      </div>
-    ))}
-  </div>
-);
+let VisibleMembersList = props =>
+  props.members.map(member => (
+    <div key={member.ssn} onClick={() => props.redirect(member.ssn)}>
+      {member.firstName}
+    </div>
+  ));
 
 const mapStateToProps = (state, props) => ({
   members: getVisibleMembers(state.membersReducer, props.value),
@@ -41,6 +36,7 @@ class MemberFind extends Component {
           onChange={e => this.handleChange(e.target.value)}
           type="text"
         />
+        <h3>Members</h3>
         <VisibleMembersList
           value={this.state.value}
           redirect={userId => {
