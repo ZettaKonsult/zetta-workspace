@@ -1,3 +1,4 @@
+/* @flow */
 import {
   LOGIN_USER_REQUEST,
   LOGIN_USER_SUCCESS,
