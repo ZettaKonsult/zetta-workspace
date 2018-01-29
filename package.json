@@ -5,7 +5,7 @@
     "eslint": "^4.13.1",
     "eslint-config-prettier": "^2.9.0",
     "eslint-config-react-app": "^2.0.1",
-    "eslint-plugin-flowtype": "^2.40.1",
+    "eslint-plugin-flowtype": "2.42.0",
     "eslint-plugin-import": "^2.8.0",
     "eslint-plugin-jest": "^21.5.0",
     "eslint-plugin-jsx-a11y": "^6.0.3",
@@ -17,16 +17,22 @@
     "prettier": "^1.8.2",
     "react-scripts": "1.0.17"
   },
-  "workspaces": ["packages/*", "zk-open-modules"],
+  "workspaces": [
+    "packages/*",
+    "zk-open-modules"
+  ],
   "scripts": {
     "precommit": "lint-staged",
     "lint": "eslint --fix",
     "update": "sh ./scripts/update.sh",
-    "prettier":
-      "prettier --write --loglevel silent \"{,!(node_modules)/**/}*.js\""
+    "prettier": "prettier --write --loglevel silent \"{,!(node_modules)/**/}*.js\""
   },
   "lint-staged": {
-    "*.js": ["yarn run lint", "prettier --write", "git add"]
+    "*.js": [
+      "yarn run lint",
+      "prettier --write",
+      "git add"
+    ]
   },
   "prettier": {
     "singleQuote": true,
