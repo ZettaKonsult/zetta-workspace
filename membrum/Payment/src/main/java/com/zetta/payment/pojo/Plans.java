@@ -20,7 +20,7 @@ public class Plans {
     private static Map<String, JSON> get() {
         if (plans == null) {
             plans = planDAO.getAll().stream().collect(
-                    Collectors.toMap(Plan::getPlanId, plan -> new JSON(plan)));
+                    Collectors.toMap(Plan::getId, plan -> new JSON(plan)));
         }
         return plans;
     }

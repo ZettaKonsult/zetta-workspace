@@ -62,7 +62,7 @@ public class DynamoPlanDAO extends DynamoDB<Plan> implements PlanDAO {
 
     @Override
     public Optional<Plan> get(Plan plan) {
-        return get(plan.getPlanId());
+        return get(plan.getId());
     }
 
     @Override
@@ -72,6 +72,6 @@ public class DynamoPlanDAO extends DynamoDB<Plan> implements PlanDAO {
 
     @Override
     public void delete(Plan plan) {
-        delete(plan.getPlanId());
+        delete(plan.getId());
     }
 }
