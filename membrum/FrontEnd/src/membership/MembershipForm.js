@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Field, FieldArray, reduxForm } from 'redux-form';
-import planTemplate from 'rule-validator';
+import { ruleValidator } from 'rule-validator';
 
 import { membershipSave } from './membershipActions';
 import {
@@ -88,7 +88,8 @@ let MembershipForm = props => {
 
 const validate = (values, { getPlanDetails }) => {
   const rules = db.plantemplates;
-  const validator = planTemplate(rules);
+
+  const validator = ruleValidator(rules);
 
   const mapPlans = values.subscription.map(plan => getPlanDetails(plan));
   const valid = validator.evaluatePlan(mapPlans);
@@ -118,7 +119,7 @@ const mapStateToProps = (state, props) => ({
 });
 
 const mapDispatchToProps = {
-  onSubmit: values => membershipSave(values.plans),
+  onSubmit: values => membershipSave(values.subscription),
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(MembershipForm);

@@ -1,9 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Route, NavLink } from 'react-router-dom';
 import styled from 'styled-components';
 import { getAllPlans, getPlanById } from './membershipReducer';
 import PlanForm from './PlanForm';
+import { loadPlanForEdit } from './planActions';
 
 import Column from '../components/Column';
 import Row from '../components/Row';
@@ -21,19 +21,17 @@ const Plan = styled.div`
   }
 `;
 
-const PlanLink = ({ to, exact, label }) => (
-  <NavLink to={to} exact={exact} style={{ textDecoration: 'none' }}>
-    <Plan>{label}</Plan>
-  </NavLink>
+const PlanLink = ({ handleClick, label }) => (
+  <Plan onClick={handleClick}>{label}</Plan>
 );
 
-let PlanList = ({ plans, match, history }) => (
+let PlanList = ({ plans, match, history, planLoad }) => (
   <Column>
     {plans.map(plan => (
       <PlanLink
         key={plan.id}
         label={plan.name}
-        to={`${match.path}/${plan.id}`}
+        handleClick={() => planLoad(plan.id)}
         exact
       />
     ))}
@@ -47,11 +45,15 @@ const mapStateToProps = (state, { match, ...props }) => {
   };
 };
 
-PlanList = connect(mapStateToProps)(PlanList);
+const mapDispatchToProps = {
+  planLoad: planId => loadPlanForEdit(planId),
+};
+
+PlanList = connect(mapStateToProps, mapDispatchToProps)(PlanList);
 
 export default ({ match }) => (
   <Row>
-    <Route path={match.path} component={PlanList} />
-    <Route path={`${match.path}/:id?`} component={PlanForm} />
+    <PlanList />
+    <PlanForm />
   </Row>
 );

@@ -1,15 +1,22 @@
 /* @flow */
-import { PLAN_LOAD_SUCCESS, PLAN_UPDATE, PLAN_ADD } from './planActions';
+import {
+  PLAN_LOAD_SUCCESS,
+  PLAN_UPDATE,
+  PLAN_ADD,
+  PLAN_LOAD,
+} from './planActions';
 import type { Action, Plan } from '../types';
 
 export type PlanState = {
   +byId: { [string]: Plan },
   +allIds: Array<string>,
+  loadedPlan: Plan,
 };
 
 const initialState = {
   byId: {},
   allIds: [],
+  loadedPlan: {},
 };
 
 export const reducer = (
@@ -42,6 +49,11 @@ export const reducer = (
           [action.payload.id]: action.payload,
         },
         allIds: [...state.allIds, action.payload.id],
+      };
+    case PLAN_LOAD:
+      return {
+        ...state,
+        loadedPlan: state.byId[action.payload.id],
       };
     default:
       return state;
@@ -82,3 +94,5 @@ const planLogic = (plan1, plan2) => {
       plan2.labels.some(label => plan1.labels.some(l => l === label)))
   );
 };
+
+export const getLoadedPlan = (state: PlanState) => state.loadedPlan;
