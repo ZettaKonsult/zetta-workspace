@@ -1,5 +1,5 @@
 import initValidaiton from './subscriptionValidation';
-
+import update from './subscriptionUpdate';
 const options = {
   sortKey: 'group',
   alwaysEvaluateGroups: ['obligatory'],
@@ -16,8 +16,8 @@ const trf = 'cjd1fwht5000j2wcvimbzapif';
   const sub = initValidaiton(organisationId, options);
 
   try {
-    const valid = await sub.isValidSubscription([tlth, nation, trf, af]);
-    console.log(valid);
+    // const valid = await sub.isValidSubscription([tlth, nation, trf, af]);
+    update().findUser('9105040035');
   } catch (err) {
     console.error(err);
   }
