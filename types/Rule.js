@@ -7,7 +7,7 @@ export type Rule = {
   attribute: string,
   key: string,
   func: string,
-  value: number,
+  value: string,
   error: string,
 };
 
