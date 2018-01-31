@@ -8,7 +8,7 @@ import plansDatabase from './plan';
 const dbUsers = db({ TableName: 'MembrumUsers' });
 const dbRules = db({ TableName: 'MembrumPlanRules' });
 
-export default (organisationId: string) => {
+export default (organisationId: string, options) => {
   const dbPlans = plansDatabase(organisationId);
 
   const isValidSubscription = async (planIds: string[]) => {
@@ -29,10 +29,7 @@ export default (organisationId: string) => {
   const checkRules = async planIds => {
     const plans = await dbPlans.getPlans(planIds);
     const rules = await dbRules.list({ organisationId });
-    return ruleValidator(rules, {
-      sortKey: 'group',
-      alwaysEvaluateGroups: ['obligatory'],
-    }).evaluatePlan(plans);
+    return ruleValidator(rules, options).evaluatePlan(plans);
   };
 
   return { isValidSubscription };
