@@ -13,5 +13,5 @@ export type Rule = {
 
 export type validateRuleOptions = {
   sortKey: string,
-  alwaysEvaluateGroup: string[],
+  alwaysEvaluateGroups: string[],
 };
