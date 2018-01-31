@@ -1,6 +1,6 @@
 /* @flow */
 
-import type { PlanQueryObject } from './types';
+import type { Plan } from 'types/Membrum';
 import db from './database';
 
 const database = db({ TableName: 'MembrumPlans' });
@@ -16,7 +16,7 @@ export default (organisationId: string) => {
     return typeof result === 'object';
   };
 
-  const getPlans = async (planIds: string[]) => {
+  const getPlans = async (planIds: string[]): Plan[] => {
     let completed = [];
     const results = planIds.map(
       async id => await database.get({ organisationId, id })
