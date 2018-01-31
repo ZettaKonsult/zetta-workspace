@@ -1,4 +1,4 @@
-import initSubscription from './subscription';
+import initValidaiton from './subscriptionValidation';
 
 const options = {
   sortKey: 'group',
@@ -13,7 +13,7 @@ const af = 'cjd1fwht5000k2wcvmo4xxfln';
 const trf = 'cjd1fwht5000j2wcvimbzapif';
 
 (async function() {
-  const sub = initSubscription(organisationId, options);
+  const sub = initValidaiton(organisationId, options);
 
   try {
     const valid = await sub.isValidSubscription([tlth, nation, trf, af]);

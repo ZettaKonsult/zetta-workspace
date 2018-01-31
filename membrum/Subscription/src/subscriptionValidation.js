@@ -5,10 +5,9 @@ import { ruleValidator } from 'rule-validator';
 
 import plansDatabase from './plan';
 
-const dbUsers = db({ TableName: 'MembrumUsers' });
 const dbRules = db({ TableName: 'MembrumPlanRules' });
 
-export default (organisationId: string, options) => {
+export default (organisationId: string, options: Object) => {
   const dbPlans = plansDatabase(organisationId);
 
   const isValidSubscription = async (planIds: string[]) => {
