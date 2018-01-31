@@ -24,5 +24,13 @@ export default ({ TableName }: { TableName: string }) => {
         Key,
       });
     },
+
+    update: async (Key: Object, Values: Object) => {
+      return await database.update({
+        TableName,
+        Key,
+        Values,
+      });
+    },
   };
 };

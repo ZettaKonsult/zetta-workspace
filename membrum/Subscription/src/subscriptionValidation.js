@@ -1,5 +1,5 @@
 /* @flow */
-
+import type { RuleOptions } from 'types/Rule';
 import db from './database';
 import { ruleValidator } from 'rule-validator';
 
@@ -7,7 +7,7 @@ import plansDatabase from './plan';
 
 const dbRules = db({ TableName: 'MembrumPlanRules' });
 
-export default (organisationId: string, options: Object) => {
+export default (organisationId: string, options: RuleOptions) => {
   const dbPlans = plansDatabase(organisationId);
 
   const isValidSubscription = async (planIds: string[]) => {
