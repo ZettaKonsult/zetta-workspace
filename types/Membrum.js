@@ -29,3 +29,9 @@ export type PaymentStatus = {
     | 'pending',
   +transfered?: { from: string, to: string },
 };
+
+export type Member = {
+  id: string,
+  subscription: string[],
+  payment: string[],
+};
