@@ -35,6 +35,18 @@ public class MembrumNextOrder {
     private static final DynamoOrderDAO orderDAO = DynamoOrderDAO.instance();
     private static final DynamoUserDAO userDAO = DynamoUserDAO.instance();
 
+    public static void main(String[] args) {
+        PaymentRequest req = new PaymentRequest();
+        req.setAcceptUrl("");
+        req.setCancelUrl(
+                "https%3A%2F%2F4acs2nf77c.execute-api.eu-central-1.amazonaws.com%2Fprod%2FconfirmPayment");
+        req.setEnd(1530489599);
+        req.setStart(1514764800);
+        req.setUserId("9105040035");
+
+        System.out.println(new MembrumNextOrder().membrumNextOrder(req, null));
+    }
+
     public String membrumNextOrder(PaymentRequest data, Context context) {
 
         Response response = ResponseFactory.unknownError();
@@ -66,6 +78,7 @@ public class MembrumNextOrder {
 
         Plans subscription = Plans.get(user.getSubscription());
         int subscriptionAmount = subscription.getSum();
+        log.info("Subscription amount: " + subscriptionAmount);
         int toPay = subscriptionAmount - totalAmountPaid;
 
         if (toPay <= 0) {
