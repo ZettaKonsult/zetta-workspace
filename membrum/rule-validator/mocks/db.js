@@ -96,16 +96,6 @@ const plantemplates = [
     value: 1,
     error: 'AF must be part of the subscription',
   },
-  {
-    id: 5,
-    name: 'noNationRule',
-    group: 'stupidGroup',
-    attribute: 'labels',
-    key: 'nation',
-    func: 'lessThan',
-    value: 1,
-    error: "can't have any nations as part of this subscription",
-  },
 ];
 
 export default { plans, plantemplates };

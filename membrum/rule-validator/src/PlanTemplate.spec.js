@@ -13,6 +13,7 @@ const smalands = mockData.plans[5];
 const simpleStudentlundPlans = [trf, af, union, nation2];
 const complexStudentlundPlans = [nation1, af, union, nation2, trf, smalands];
 const trfPlans = [trf, smalands];
+const noneObligatoryGroup = [nation1, union, af];
 const notValidPlans = [union, trf, smalands];
 
 describe('PlanTemplate', () => {
@@ -68,11 +69,6 @@ describe('PlanTemplate', () => {
     expect(pt.evaluatePlan(notValidPlans)).toBeFalsy();
   });
 
-  it('evaluates all rules if no sortKey is provided', () => {
-    let pt = PlanTemplate(planTempaltes);
-    expect(pt.evaluatePlan(simpleStudentlundPlans)).toBeFalsy();
-  });
-
   it('getErrors() returns why the evaluation did not pass', () => {
     const expected = ['7', 'nation'];
     const result = pt.getErrors(notValidPlans);
@@ -84,5 +80,24 @@ describe('PlanTemplate', () => {
 
     expect(result).toHaveLength(1);
     expect(result).toEqual([nation2]);
+  });
+
+  it('evaluates all rules if no sortKey is provided', () => {
+    let pt = PlanTemplate(planTempaltes);
+    expect(pt.evaluatePlan(simpleStudentlundPlans)).toBeTruthy();
+  });
+
+  it('only evaluates the rules that are part of logical grouping provided by sortKey', () => {
+    const result = pt.evaluatePlan(noneObligatoryGroup);
+    expect(result).toBeTruthy();
+  });
+
+  it('alwaysEvaluateGroups should cause all rules from that group to be run', () => {
+    const pt = PlanTemplate(planTempaltes, {
+      sortKey: 'group',
+      alwaysEvaluateGroups: ['obligatory'],
+    });
+    const result = pt.evaluatePlan(noneObligatoryGroup);
+    expect(result).toBeFalsy();
   });
 });

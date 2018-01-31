@@ -15,15 +15,15 @@ or
 ## Usage
 
 ```javascript
-import initDatabase from ('zk-dynamodb-wrapper')
+import { ruleValidator } from ('rule-validator')
 
-const database = initDatabase({region: 'AWS-DATABASE-REGION', auth: function})
+const validator = ruleValidator(rules,
+  {
+    sortKey: /* A attribute used for logical grouping of rules, if no sortKey is provided all rules will be run */
+    alwaysEvaluateGroups: /* Specifiy groups that should be run even if they are not part of the grouping provided by sortKey */
+  }
+)
 
-auth: function that is run before each database call
-
-database.create({TableName: String, Item: {key: value}})
-database.update({TableName: String, Key: {key: value}, Values: {key: value}})
-database.get({TableName: String, Key: {key, value}})
-database.list({TableName: String, Values: {key, value}})
-database.remove({TableName: String, Key: {key, value}})
+validator.evaluatePlan(Array<Plan>): boolean
+validator.getErrors(Array<Plan>): Object
 ```

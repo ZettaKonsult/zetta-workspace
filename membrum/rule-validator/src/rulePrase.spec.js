@@ -1,4 +1,4 @@
-import ruleParser from './newFeature';
+import ruleParser from './ruleParse';
 
 import mockData from '../mocks/db.js';
 

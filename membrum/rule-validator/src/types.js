@@ -10,3 +10,8 @@ export type Rule = {
   value: number,
   error: string,
 };
+
+export type validateRuleOptions = {
+  sortKey: string,
+  alwaysEvaluateGroup: string[],
+};
