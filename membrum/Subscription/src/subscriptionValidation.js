@@ -1,5 +1,6 @@
 /* @flow */
-import type { RuleOptions } from 'types/Rule';
+import type { Plan } from 'types/Membrum';
+import type { Rule, RuleOptions } from 'types/Rule';
 import db from './database';
 import { ruleValidator } from 'rule-validator';
 
@@ -10,7 +11,7 @@ const dbRules = db({ TableName: 'MembrumPlanRules' });
 export default (organisationId: string, options: RuleOptions) => {
   const dbPlans = plansDatabase(organisationId);
 
-  const isValidSubscription = async (planIds: string[]) => {
+  const isValidSubscription = async (planIds: string[]): Promise<boolean> => {
     const validationChecks = [checkPlanIds, checkRules];
     return validationChecks.reduce(
       async (valid, check) => valid && (await check(planIds)),
@@ -25,9 +26,9 @@ export default (organisationId: string, options: RuleOptions) => {
     );
   };
 
-  const checkRules = async planIds => {
-    const plans = await dbPlans.getPlans(planIds);
-    const rules = await dbRules.list({ organisationId });
+  const checkRules = async (planIds: string[]): Promise<boolean> => {
+    const plans: Plan[] = await dbPlans.getPlans(planIds);
+    const rules: Rule[] = await dbRules.list({ organisationId });
     return ruleValidator(rules, options).evaluatePlan(plans);
   };
 

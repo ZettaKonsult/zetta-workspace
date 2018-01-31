@@ -1,5 +1,4 @@
 /* @flow */
-import type { Member } from 'types/Membrum';
 import type { RuleOptions } from 'types/Rule';
 import initValidaiton from './subscriptionValidation';
 import db from './database';
