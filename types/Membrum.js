@@ -9,18 +9,20 @@ export type Plan = {
   +labels: string[],
   +group: string[],
   +type: ?string,
-  +updated: ?string,
+  +createdAt: number,
+  updatedAt: number,
+  updatedTo: ?string,
 };
 
 export type Payment = {
   +id: string,
-  +date: number,
+  +createdAt: number,
   +specification: string[],
 };
 
 export type PaymentStatus = {
   +id: string,
-  +date: number,
+  +createdAt: number,
   +paymentId: string,
   +status:
     | 'refunded'
@@ -33,7 +35,8 @@ export type PaymentStatus = {
 };
 
 export type Member = {
-  id: string,
+  +id: string,
+  +createdAt: number,
   subscription: string[],
   payment: string[],
 };
