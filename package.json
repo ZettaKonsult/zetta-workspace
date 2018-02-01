@@ -24,22 +24,16 @@
     "lint-staged": "^6.1.0",
     "prettier": "^1.8.2"
   },
-  "workspaces": [
-    "packages/*",
-    "zk-open-modules"
-  ],
+  "workspaces": ["packages/*", "zk-open-modules"],
   "scripts": {
     "precommit": "lint-staged",
     "lint": "eslint --fix",
     "update": "sh ./scripts/update.sh",
-    "prettier": "prettier --write --loglevel silent \"{,!(node_modules)/**/}*.js\""
+    "prettier":
+      "prettier --write --loglevel silent \"{,!(node_modules)/**/}*.js\""
   },
   "lint-staged": {
-    "*.js": [
-      "yarn run lint",
-      "prettier --write",
-      "git add"
-    ]
+    "*.js": ["eslint --fix", "prettier --write", "git add"]
   },
   "prettier": {
     "singleQuote": true,

@@ -1,0 +1,14 @@
+{
+  "presets": ["env", "flow"],
+  "plugins": ["transform-object-rest-spread", "transform-runtime"],
+  "env": {
+    "production": {
+      "ignore": ["**/*.spec.js"]
+    },
+    "development": {
+      "targets": {
+        "node": true
+      }
+    }
+  }
+}
