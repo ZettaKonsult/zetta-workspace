@@ -6,18 +6,20 @@ export type Plan = {
   +amount: number,
   +interval: 'month' | 'year',
   +intervalCount: number,
-  +labels: Array,
-  +group: Array,
+  +labels: string[],
+  +group: string[],
   +type: ?string,
+  +updated: ?string,
 };
 
 export type Payment = {
   +id: string,
   +date: number,
-  +specification: Plan[],
+  +specification: string[],
 };
 
 export type PaymentStatus = {
+  +id: string,
   +date: number,
   +paymentId: string,
   +status:
@@ -25,9 +27,9 @@ export type PaymentStatus = {
     | 'payout'
     | 'succeeded'
     | 'failed'
-    | 'transfered'
+    | 'transferred'
     | 'pending',
-  +transfered?: { from: string, to: string },
+  +transferred?: { from: string, to: string },
 };
 
 export type Member = {
