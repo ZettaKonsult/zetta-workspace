@@ -10,13 +10,13 @@ import type { Action, Plan } from '../types';
 export type PlanState = {
   +byId: { [string]: Plan },
   +allIds: Array<string>,
-  loadedPlan: Plan,
+  loadedPlan?: Plan,
 };
 
 const initialState = {
   byId: {},
   allIds: [],
-  loadedPlan: {},
+  loadedPlan: undefined,
 };
 
 export const reducer = (

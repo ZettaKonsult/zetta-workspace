@@ -1,6 +1,6 @@
 /* @flow */
 import db from '../mocks/db';
-import type { Action, ThunkAction } from '../reducers';
+import type { Action, ThunkAction } from 'types/Redux';
 
 export const MEMBERS_FETCH_REQUEST = 'MEMBERS_FETCH_REQUEST';
 export const MEMBERS_FETCH_SUCCESS = 'MEMBERS_FETCH_SUCCESS';

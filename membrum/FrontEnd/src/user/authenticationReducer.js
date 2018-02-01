@@ -6,7 +6,7 @@ import {
   LOGOUT_USER,
   USER_REDIRECTED,
 } from './authenticationActions';
-
+import type { Action } from 'types/Redux';
 export const initialState = {
   token: undefined,
   group: 'guest',
@@ -21,7 +21,7 @@ export const initialState = {
   },
 };
 
-export function reducer(state = initialState, action) {
+export function reducer(state = initialState, action: Action) {
   switch (action.type) {
     case LOGIN_USER_REQUEST:
       return {

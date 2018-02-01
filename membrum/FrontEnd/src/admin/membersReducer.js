@@ -5,7 +5,7 @@ import {
   MEMBERS_FETCH_REQUEST,
 } from './membersActions';
 
-import type { Action } from '../reducers';
+import type { Action } from 'types/Redux';
 
 type State = {
   byId: Object,
