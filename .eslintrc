@@ -9,6 +9,12 @@
         "singleQuote": true
       }
     ],
-    "flowtype/space-after-type-colon": [{ "allowLineBreak": true }]
+    "flowtype/space-after-type-colon": [
+      "error",
+      "always",
+      {
+        "allowLineBreak": true
+      }
+    ]
   }
 }
