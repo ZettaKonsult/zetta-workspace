@@ -1,6 +1,6 @@
 import plandb from './plan';
 import initValidaiton from './subscriptionValidation';
-import update from './subscriptionUpdate';
+import update from './subscription';
 
 const organisationId = 'cjd1fwht400002wcvnclcfbqo';
 const tlth = 'cjd1fwht500022wcvx6k52tyt';
