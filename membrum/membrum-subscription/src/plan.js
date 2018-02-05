@@ -16,7 +16,7 @@ export default (organisationId: string): Object => {
   const getPlan = async (id: string): Promise<Plan> => {
     const result = await database.get({ organisationId, id });
 
-    if (!result.updatedTo) {
+    if (isLatestPlan(result)) {
       return result;
     } else {
       return await getPlan(result.updatedTo);
@@ -41,7 +41,7 @@ export default (organisationId: string): Object => {
   const updatePlan = async (plan: Plan) => {
     try {
       const oldPlan = await getPlan(plan.id);
-      if (isPlan(oldPlan) && isLatestPlan(oldPlan)) {
+      if (isPlan(oldPlan)) {
         const { newPlan, oldUpdatedValues } = createNewPlan({
           oldValues: oldPlan,
           newValues: { ...plan, id: cuid() },
