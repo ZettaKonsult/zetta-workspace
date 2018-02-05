@@ -18,7 +18,11 @@ const options = {
 
 (async function() {
   try {
-    const result = await planDatabase.getPlan('cjd4n2tzf0000g4cvpiwp93kz');
+    const result = await planDatabase.updatePlan({
+      id: 'cjd4nsjv00000yocvtcpisewk',
+      amount: 110,
+    });
+    // const result = await planDatabase.getPlan('cjd4njlfo0000gscv6gnowm47');
     console.log(result);
   } catch (err) {
     console.error(err);
