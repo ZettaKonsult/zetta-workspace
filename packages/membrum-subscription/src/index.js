@@ -1,6 +1,6 @@
 import plandb from './plan';
 import initValidaiton from './subscriptionValidation';
-import update from './subscription';
+import sub from './subscriptionStatus';
 
 const organisationId = 'cjd1fwht400002wcvnclcfbqo';
 const tlth = 'cjd1fwht500022wcvx6k52tyt';
@@ -9,20 +9,17 @@ const smalands = 'cjd1fwht5000l2wcvd1p5nqth';
 const af = 'cjd1fwht5000k2wcvmo4xxfln';
 const trf = 'cjd1fwht5000j2wcvimbzapif';
 
-const planDatabase = plandb(organisationId);
-
-const options = {
-  sortKey: 'group',
-  alwaysEvaluateGroups: ['obligatory'],
-};
+// const planDatabase = plandb(organisationId);
+const status = sub(organisationId);
 
 (async function() {
   try {
-    const result = await planDatabase.updatePlan({
-      id: 'cjd4nsjv00000yocvtcpisewk',
-      amount: 110,
-    });
-    // const result = await planDatabase.getPlan('cjd4njlfo0000gscv6gnowm47');
+    // const result = await planDatabase.updatePlan({
+    //   id: 'cjd4nsjv00000yocvtcpisewk',
+    //   amount: 110,
+    // });
+    const result = await status.getUnpaidPlans('cjdbcy1i80001d0cvct9y23vs');
+
     console.log(result);
   } catch (err) {
     console.error(err);

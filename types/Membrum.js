@@ -16,6 +16,7 @@ export type Plan = {
 
 export type Payment = {
   +id: string,
+  +memberId: string,
   +createdAt: number,
   +specification: string[],
 };
