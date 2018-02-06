@@ -1,5 +1,7 @@
 import { fetchAllPlans } from '../membership/planActions';
 import { loadUserProfile } from './profileActions';
+import zkAwsUsers from 'zk-aws-users'
+import config from '../config'
 
 export const LOGIN_USER_REQUEST = 'LOGIN_USER_REQUEST';
 export const LOGIN_USER_FAILURE = 'LOGIN_USER_FAILURE';
@@ -12,6 +14,14 @@ export const USER_REDIRECTED = 'USER_REDIRECTED';
 export const USER_PASSWORD_RESET_REQUEST = 'USER_PASSWORD_RESET_REQUEST';
 export const USER_PASSWORD_RESET_SUCCESS = 'USER_PASSWORD_RESET_SUCCESS';
 export const USER_PASSWORD_RESET_FAILURE = 'USER_PASSWORD_RESET_FAILURE';
+
+const { Account } = zkAwsUsers({config: {
+  AWS_ACCESS_KEY_ID:        config.AWS_ACCESS_KEY_ID,
+  AWS_ACCOUNT_ID:           config.ACCOUNT_ID,
+  AWS_IDENTITY_ID:          config.IDENTITY_POOL_ID,
+  AWS_UNAUTH_ROLE_ARN:      config.AWS_UNAUTH_ROLE_ARN,
+  AWS_AUTH_ROLE_ARN:        config.AWS_AUTH_ROLE_ARN,
+}})
 
 export function loginUserSuccess(token, group) {
   localStorage.setItem('token', token);
@@ -61,13 +71,16 @@ export function logoutAndRedirect() {
   };
 }
 
-export function loginUser(email, password, redirect = '/') {
+export function loginUser(userName, password, redirect = '/') {
   return async function(dispatch) {
     dispatch(loginUserRequest());
     try {
-      console.warn('No login provider');
-      const token = '910504-0035';
-      const group = 'admin';
+      const {token, group} = await Account.loginUser({
+        names: { customer: 'user-pool', project: 'membrum' },
+        userName,
+        password,
+      });
+      console.log(token)
       dispatch(loginUserSuccess(token, group));
       await dispatch(fetchAllPlans(dispatch));
       await loadUserProfile(token)(dispatch);
