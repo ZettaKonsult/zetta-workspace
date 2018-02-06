@@ -1,4 +1,3 @@
-import { calcPayouts } from './payout';
+import { payout } from './payout';
 
-const result = calcPayouts();
-console.log(result);
+export default { payout };

@@ -26,7 +26,9 @@
     "babel-runtime": "^6.26.0",
     "cuid": "2.0.2",
     "date-primitive-utils": "^1.1.1",
-    "zk-dynamodb-wrapper": "^1.0.5"
+    "zk-dynamodb-wrapper": "^1.0.5",
+    "membrum-payout": "1.0.0",
+    "rule-validator": "1.0.0"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
@@ -42,18 +44,9 @@
     "jest-cli": "22.1.4"
   },
   "lint-staged": {
-    "*.{js}": [
-      "eslint --fix",
-      "prettier --write",
-      "yarn test:staged"
-    ],
-    "*.json": [
-      "prettier --write",
-      "git add"
-    ],
-    "yarn.lock": [
-      "git rm --cached"
-    ]
+    "*.{js}": ["eslint --fix", "prettier --write", "yarn test:staged"],
+    "*.json": ["prettier --write", "git add"],
+    "yarn.lock": ["git rm --cached"]
   },
   "jest": {
     "transform": {

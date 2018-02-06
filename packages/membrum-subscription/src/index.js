@@ -19,7 +19,6 @@ const status = sub(organisationId);
     //   amount: 110,
     // });
     const result = await status.getUnpaidPlans('cjdbcy1i80001d0cvct9y23vs');
-
     console.log(result);
   } catch (err) {
     console.error(err);
