@@ -18,7 +18,7 @@ export const USER_PASSWORD_RESET_FAILURE = 'USER_PASSWORD_RESET_FAILURE';
 const { Account } = zkAwsUsers({config: {
   AWS_ACCESS_KEY_ID:        env.AWS_ACCESS_KEY_ID,
   AWS_ACCOUNT_ID:           env.ACCOUNT_ID,
-  AWS_IDENTITY_ID:          config.IDENTITY_POOL_ID,
+  AWS_IDENTITY_ID:          config.cognito.IDENTITY_POOL_ID,
   AWS_UNAUTH_ROLE_ARN:      env.AWS_UNAUTH_ROLE_ARN,
   AWS_AUTH_ROLE_ARN:        env.AWS_AUTH_ROLE_ARN,
 }})
