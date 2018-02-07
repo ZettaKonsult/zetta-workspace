@@ -11,7 +11,7 @@ const status = sub(organisationId);
 
 (async function() {
   try {
-    const result = await status.getUnpaidPlans('cjdbcy1i80001d0cvct9y23vs');
+    const result = await status.fetchUnpaidPlans('cjdbcy1i80001d0cvct9y23vs');
     console.log(result);
   } catch (err) {
     console.error(err);
