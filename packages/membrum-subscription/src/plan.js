@@ -6,7 +6,7 @@ import db from './database';
 
 const database = db({ TableName: 'MembrumPlans' });
 
-export default (organisationId: string): Object => {
+export default (organisationId: string) => {
   const listPlans = async (): Promise<Plan[]> => {
     const result = await database.list({ organisationId });
 
@@ -32,7 +32,6 @@ export default (organisationId: string): Object => {
   const getPlans = async (planIds: string[]): Promise<Plan[]> => {
     let completed = [];
     const results = planIds.map(async id => await getPlan(id));
-
     await Promise.all(results).then(res => (completed = res));
 
     return completed;
@@ -62,7 +61,8 @@ export default (organisationId: string): Object => {
   return { listPlans, getPlan, isPlanId, getPlans, updatePlan };
 };
 
-const isLatestPlan = plan => plan.id === plan.updatedTo;
+const isLatestPlan = plan =>
+  plan.id === plan.updatedTo || typeof plan.updatedTo === 'undefined';
 
 const isPlan = plan => typeof plan === 'object';
 
