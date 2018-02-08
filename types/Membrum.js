@@ -19,6 +19,7 @@ export type Payment = {
   +memberId: string,
   +createdAt: number,
   +specification: string[],
+  status: PaymentStatus[],
 };
 
 export type PaymentStatus = {
