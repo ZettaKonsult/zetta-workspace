@@ -6,14 +6,14 @@ export type Payment = {
   +createdAt: number,
   +type: 'invoice' | 'card',
   +specification: string[],
-  status: PaymentStatus[],
+  stage: PaymentStatus[],
 };
 
 export type PaymentStatus = {
   +id: string,
   +createdAt: number,
   +paymentId: string,
-  +status:
+  +stage:
     | 'refunded'
     | 'payout'
     | 'succeeded'
