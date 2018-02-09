@@ -14,29 +14,6 @@ export type Plan = {
   updatedTo: ?string,
 };
 
-export type Payment = {
-  +id: string,
-  +memberId: string,
-  +createdAt: number,
-  +type: 'invoice' | 'card',
-  +specification: string[],
-  status: PaymentStatus[],
-};
-
-export type PaymentStatus = {
-  +id: string,
-  +createdAt: number,
-  +paymentId: string,
-  +status:
-    | 'refunded'
-    | 'payout'
-    | 'succeeded'
-    | 'failed'
-    | 'transferred'
-    | 'pending',
-  +transferred?: { from: string, to: string },
-};
-
 export type Member = {
   +id: string,
   +createdAt: number,
