@@ -36,8 +36,8 @@ provider:
         - { "Fn::GetAtt": ["InvoiceDynamoDBTable", "Arn" ] }
         - { "Fn::GetAtt": ["BillableRowDynamoDBTable", "Arn" ] }
   environment:
-    BillableRow: ${self:custom.BillableRow}
-    Invoice: ${self:custom.Invoice}
+    BillableRowTable: ${self:custom.BillableRow}
+    InvoiceTable: ${self:custom.Invoice}
 
 functions:
   createInvoice:
