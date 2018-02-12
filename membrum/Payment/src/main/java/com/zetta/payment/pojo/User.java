@@ -23,12 +23,8 @@ public class User implements Serializable {
     private static final String PAYMENT_INDEX = "payments";
     private static final String CREDTIS_INDEX = "credits";
     private static final String SUBSCRIPTION_INDEX = "subscription";
-    private static final String UNION_NAME_INDEX = "unionName";
-    private static final String NATION_INDEX = "nation";
 
-    private String userId;
-    private String nation;
-    private List<String> unionName;
+    private String ssn;
     private List<String> subscription;
     private List<String> payments;
     private Map<String, Double> credits;
@@ -37,33 +33,25 @@ public class User implements Serializable {
         this("", Collections.<String>emptyList(),
                 Collections.<String>emptyList(),
                 Collections.<String, Double>emptyMap());
+        this.subscription = new ArrayList<String>();
     }
 
-    public User(String userId, List<String> plans, List<String> payments,
+    public User(String ssn, List<String> plans, List<String> payments,
             Map<String, Double> points) {
 
-        this.userId = userId;
+        this.ssn = ssn;
         setPayments(payments);
-        setSubscription(plans);
+        this.subscription = new ArrayList<String>(plans);
         setCredits(points);
     }
 
     @DynamoDBHashKey(attributeName = ID_INDEX)
-    public String getUserId() {
-        return userId;
+    public String getSsn() {
+        return ssn;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
-    @DynamoDBAttribute(attributeName = NATION_INDEX)
-    public String getNation() {
-        return nation;
-    }
-
-    public void setNation(String nation) {
-        this.nation = nation;
+    public void setSsn(String ssn) {
+        this.ssn = ssn;
     }
 
     @DynamoDBAttribute(attributeName = CREDTIS_INDEX)
@@ -101,29 +89,19 @@ public class User implements Serializable {
         this.payments = new ArrayList<String>(payments);
     }
 
-    @DynamoDBAttribute(attributeName = UNION_NAME_INDEX)
-    public List<String> getUnionName() {
-        return unionName;
-    }
-
-    public void setUnionName(List<String> unionName) {
-        this.unionName = new ArrayList<String>(unionName);
-    }
-
-    public boolean addPayment(String payment) {
-        if (payments.contains(payment)) {
-            throw new IllegalArgumentException("Payment " + payment
-                    + " already exists for user " + userId + ".");
+    public boolean addPayment(Payment payment) {
+        String paymentId = payment.getId();
+        if (payments.contains(paymentId)) {
+            throw new IllegalArgumentException("Payment " + paymentId
+                    + " already exists for user " + ssn + ".");
         }
-        return this.payments.add(payment);
+        return this.payments.add(paymentId);
     }
 
     @Override
     public String toString() {
-        StringBuilder string = new StringBuilder("User " + userId + ":");
+        StringBuilder string = new StringBuilder("User " + ssn + ":");
         string.append("\nSubscription: " + subscription.toString());
-        string.append("\nNation:       " + nation.toString());
-        string.append("\nUnion name:   " + unionName.toString());
         string.append("\nPayments:     " + payments.toString());
         string.append("\nPoints: {");
 

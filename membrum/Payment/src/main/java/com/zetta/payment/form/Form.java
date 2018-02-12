@@ -34,4 +34,6 @@ public interface Form {
 
     String invoiceUrl();
 
+    Map<String, String> asMap();
+
 }

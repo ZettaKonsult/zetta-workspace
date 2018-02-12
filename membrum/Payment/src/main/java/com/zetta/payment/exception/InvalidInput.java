@@ -1,5 +1,7 @@
 package com.zetta.payment.exception;
 
+import java.io.IOException;
+
 /**
  * @date 2017-11-12
  */
@@ -9,5 +11,9 @@ public class InvalidInput extends PaymentError {
 
     public InvalidInput(String message) {
         super(message);
+    }
+
+    public InvalidInput(IOException error) {
+        this(error.getMessage());
     }
 }

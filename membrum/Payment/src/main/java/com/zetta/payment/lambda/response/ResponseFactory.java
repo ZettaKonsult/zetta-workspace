@@ -12,6 +12,10 @@ public final class ResponseFactory {
             .unmodifiableMap(buildHeaders());
     private static final Response UNKNOWN_ERROR = error("Unknown error.");
 
+    public static Response empty() {
+        return new Response(0, HEADERS);
+    }
+
     public static Response unknownError() {
         return UNKNOWN_ERROR;
     }
@@ -30,9 +34,14 @@ public final class ResponseFactory {
         return new Response(200, HEADERS).succeed(message);
     }
 
+    public static Response success(String key, Object value) {
+        return new Response(200, HEADERS).succeed(key, value);
+    }
+
     private static Map<String, String> buildHeaders() {
         Map<String, String> headers = new LinkedHashMap<String, String>();
         headers.put("content-type", "*/*");
         return headers;
     }
+
 }

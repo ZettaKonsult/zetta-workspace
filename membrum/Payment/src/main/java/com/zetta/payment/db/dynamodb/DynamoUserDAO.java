@@ -45,7 +45,7 @@ public class DynamoUserDAO extends DynamoDB<User> implements UserDAO {
 
     @Override
     public void delete(User user) {
-        delete(user.getUserId());
+        delete(user.getSsn());
     }
 
     @Override
@@ -61,7 +61,7 @@ public class DynamoUserDAO extends DynamoDB<User> implements UserDAO {
 
     @Override
     public Optional<User> get(User user) {
-        return get(user.getUserId());
+        return get(user.getSsn());
     }
 
     @Override

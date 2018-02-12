@@ -99,4 +99,12 @@ public final class CollectionUtil {
         return list.stream().map(transformation).collect(Collectors.toList());
     }
 
+    public static <T> Map<String, T> asMap(List<T> list) {
+        Map<String, T> map = new LinkedHashMap<String, T>();
+        for (int i = 0; i < list.size(); ++i) {
+            map.put(Integer.toString(i), list.get(i));
+        }
+        return map;
+    }
+
 }

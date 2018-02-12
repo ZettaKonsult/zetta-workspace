@@ -17,6 +17,10 @@ public abstract class BasicForm implements Form, Serializable {
     private static final long serialVersionUID = -2131454852375863135L;
     private Map<String, String> fields;
 
+    public final Map<String, String> asMap() {
+        return new LinkedHashMap<String, String>(fields);
+    }
+
     protected BasicForm(String... names) {
         this.fields = new LinkedHashMap<String, String>();
         for (String name : names()) {

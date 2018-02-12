@@ -12,6 +12,7 @@ import com.zetta.payment.exception.PaymentError;
 import com.zetta.payment.exception.ValidationFailed;
 import com.zetta.payment.lambda.response.ResponseFactory;
 import com.zetta.payment.pojo.Payment;
+import com.zetta.payment.pojo.enumerations.Status;
 import com.zetta.payment.util.JSON;
 import com.zetta.payment.util.URLUtil;
 
@@ -24,6 +25,11 @@ public abstract class DIBSConfirm extends LambdaHandler {
 
     protected void dibsConfirm(String lambdaSave, InputStream inStream,
             OutputStream outStream, Context context) {
+
+        log.info(lambdaSave);
+        log.info(inStream);
+        log.info(outStream);
+        log.info(context);
 
         log.info("DIBS executed callback.");
 
@@ -49,7 +55,7 @@ public abstract class DIBSConfirm extends LambdaHandler {
             return;
         }
 
-        Payment payment = new Payment(dibsOrderId, Integer.parseInt(amount));
+        Payment payment = new Payment(dibsOrderId, Status.SUCCEEDED);
 
         try {
             lambdaSavePayment(payment, lambdaSave);
@@ -66,7 +72,6 @@ public abstract class DIBSConfirm extends LambdaHandler {
             throws PaymentError {
 
         JSON json = new JSON(inStream);
-        log.info("Received:\n" + json);
 
         if (!json.has("body")) {
             throw new InvalidInput("No \"body\" key in object.");
@@ -92,7 +97,7 @@ public abstract class DIBSConfirm extends LambdaHandler {
     private void lambdaSavePayment(Payment payment, String lambdaSave)
             throws LambdaCall {
 
-        String paymentId = payment.getPaymentId();
+        String paymentId = payment.getId();
 
         log.info("Calling lambda to save payment " + paymentId);
 

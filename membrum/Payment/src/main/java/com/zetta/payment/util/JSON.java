@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import com.amazonaws.services.lambda.model.InvokeResult;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zetta.payment.exception.JSONFormat;
 
@@ -36,6 +37,10 @@ public class JSON {
                         i -> values[i])));
     }
 
+    public JSON(List<?> list) {
+        this(CollectionUtil.asMap(list));
+    }
+
     public JSON(Map<?, ?> map) {
         this.map = CollectionUtil.removeNull(map).entrySet().stream()
                 .collect(Collectors.toMap(entry -> entry.getKey().toString(),
@@ -46,16 +51,26 @@ public class JSON {
         this(fromInstream(inStream));
     }
 
+    @SuppressWarnings("unchecked")
     private static Map<?, ?> fromInstream(InputStream inStream) {
+
+        String string = StreamUtil.asString(inStream);
         try {
-            return MAPPER.readValue(inStream, Map.class);
+            if (string.startsWith("[")) {
+                return CollectionUtil
+                        .asMap(MAPPER.readValue(string, List.class));
+            }
+            return MAPPER.readValue(string, Map.class);
         } catch (IOException error) {
             throw new JSONFormat(error);
         }
     }
 
+    @SuppressWarnings("unchecked")
     public <T> JSON(T object) {
-        this(MAPPER.convertValue(object, Map.class));
+        this(ClassUtil.isSubClass(object.getClass(), List.class)
+                ? CollectionUtil.asMap(MAPPER.convertValue(object, List.class))
+                : MAPPER.convertValue(object, Map.class));
     }
 
     public JSON(String string) {
@@ -79,16 +94,17 @@ public class JSON {
 
     @Override
     public String toString() {
-        try {
-            return prettyPrint();
-        } catch (IOException error) {
-            throw new JSONFormat(error);
-        }
+        return prettyPrint();
     }
 
-    public <T> String prettyPrint() throws IOException {
+    public <T> String prettyPrint() throws JSONFormat {
 
-        return MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(map);
+        try {
+            return MAPPER.writerWithDefaultPrettyPrinter()
+                    .writeValueAsString(map);
+        } catch (JsonProcessingException error) {
+            throw new JSONFormat(error);
+        }
     }
 
     public void complement(JSON other) {

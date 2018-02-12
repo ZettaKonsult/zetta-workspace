@@ -6,12 +6,14 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.junit.Test;
 
 import com.amazonaws.services.lambda.model.InvokeResult;
+import com.zetta.payment.util.CollectionUtil;
 import com.zetta.payment.util.FileUtil;
 import com.zetta.payment.util.JSON;
 
@@ -204,5 +206,21 @@ public class TestJSON {
         map.put("isBase64Encoded", false);
 
         return map;
+    }
+
+    @Test
+    public void fromList() {
+        assertEquals(
+                new JSON(Arrays
+                        .asList(new Object[] { true, 1.23, 123, "D", "E" })),
+                new JSON("[true, 1.23, 123, \"D\", \"E\"]"));
+    }
+
+    @Test
+    public void fromListString() {
+        assertEquals(
+                new JSON(CollectionUtil.newMap("0", true, "1", 1.23, "2", 123,
+                        "3", "D", "4", "E")),
+                new JSON("[true, 1.23, 123, \"D\", \"E\"]"));
     }
 }

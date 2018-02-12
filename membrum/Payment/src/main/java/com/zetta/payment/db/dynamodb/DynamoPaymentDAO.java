@@ -39,21 +39,21 @@ public class DynamoPaymentDAO extends DynamoDB<Payment> implements PaymentDAO {
 
     @Override
     public void delete(String id) {
-        Optional<Payment> orderToDelete = get(id);
+        Optional<Payment> statusToDelete = get(id);
 
-        if (!orderToDelete.isPresent()) {
+        if (!statusToDelete.isPresent()) {
             String message = "Unable to delete payment " + id
                     + ", it does not exist.";
             log.error(message);
             throw new IllegalArgumentException(message);
         }
 
-        delete(orderToDelete.get());
+        delete(statusToDelete.get());
     }
 
     @Override
-    public void delete(Payment order) {
-        mapper.delete(order);
+    public void delete(Payment payment) {
+        mapper.delete(payment);
     }
 
     @Override
@@ -62,18 +62,23 @@ public class DynamoPaymentDAO extends DynamoDB<Payment> implements PaymentDAO {
     }
 
     @Override
-    public Optional<Payment> get(String paymentId) {
-        return Optional.ofNullable(mapper.load(Payment.class, paymentId));
+    public Optional<Payment> get(String id) {
+        return Optional.ofNullable(mapper.load(Payment.class, id));
+    }
+
+    @Override
+    public Optional<Payment> get(String id, String memberId) {
+        return Optional.ofNullable(mapper.load(Payment.class, id, memberId));
     }
 
     @Override
     public Optional<Payment> get(Payment payment) {
-        return get(payment.getPaymentId());
+        return Optional.ofNullable(mapper.load(payment));
     }
 
     @Override
-    public void save(Payment order) {
-        mapper.save(order);
+    public void save(Payment payment) {
+        mapper.save(payment);
     }
 
     @Override

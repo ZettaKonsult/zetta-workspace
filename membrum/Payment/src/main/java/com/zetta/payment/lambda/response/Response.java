@@ -79,10 +79,14 @@ public final class Response {
         return this;
     }
 
-    public Response succeed(String message) {
-        addBody("message", message);
+    public Response succeed(String key, Object body) {
+        addBody(key, body);
         setStatus(200);
         return this;
+    }
+
+    public Response succeed(String message) {
+        return succeed("message", message);
     }
 
     public void emit(OutputStream outStream) {

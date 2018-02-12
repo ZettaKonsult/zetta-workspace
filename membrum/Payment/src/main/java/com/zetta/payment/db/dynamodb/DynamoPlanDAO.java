@@ -46,7 +46,7 @@ public class DynamoPlanDAO extends DynamoDB<Plan> implements PlanDAO {
 
     @Override
     public void delete(User user) {
-        delete(user.getUserId());
+        delete(user.getSsn());
     }
 
     @Override
@@ -56,8 +56,7 @@ public class DynamoPlanDAO extends DynamoDB<Plan> implements PlanDAO {
 
     @Override
     public Optional<Plan> get(String id) {
-        Plan user = mapper.load(Plan.class, id);
-        return Optional.ofNullable(user);
+        return Optional.ofNullable(mapper.load(Plan.class, id));
     }
 
     @Override

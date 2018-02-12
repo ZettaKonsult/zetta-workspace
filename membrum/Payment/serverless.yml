@@ -17,12 +17,12 @@ functions:
           method: post
           path: confirmPayment
           role: callPaymentLambdas
-  membrumNextOrder:
-    handler: com.zetta.payment.lambda.membrum.MembrumNextOrder::membrumNextOrder
+  membrumNextPayment:
+    handler: com.zetta.payment.lambda.membrum.MembrumNextPayment::membrumNextPayment
     events:
       - http:
          method: get
-         path: getNextOrder
+         path: getNextPayment
          role: paymentDatabaseManager
          cors: true
   membrumSavePayment:
@@ -30,7 +30,7 @@ functions:
     events:
       - http:
          method: put
-         path: updateOrder
+         path: savePayment
          role: paymentDatabaseManager
          cors: true
 
@@ -105,7 +105,7 @@ resources:
                   - Effect: Allow
                     Action:
                       - dynamodb:*
-                    Resource: arn:aws:dynamodb:eu-central-1:460056602695:table/MembrumOrders
+                    Resource: arn:aws:dynamodb:eu-central-1:460056602695:table/MembrumPaymentStatuses
                   - Effect: Allow
                     Action:
                       - dynamodb:scan
@@ -117,7 +117,7 @@ resources:
                       - dynamodb:PutItem
                       - dynamodb:UpdateItem
                       - dynamodb:Query
-                    Resource: arn:aws:dynamodb:eu-central-1:460056602695:table/MembrumOrders/orderId
+                    Resource: arn:aws:dynamodb:eu-central-1:460056602695:table/MembrumPaymentStatuses/statusId
                   - Effect: Allow
                     Action:
                       - dynamodb:DeleteItem
@@ -125,7 +125,7 @@ resources:
                       - dynamodb:PutItem
                       - dynamodb:UpdateItem
                       - dynamodb:Query
-                    Resource: arn:aws:dynamodb:eu-central-1:460056602695:table/MembrumOrders/index/userId
+                    Resource: arn:aws:dynamodb:eu-central-1:460056602695:table/MembrumPaymentStatuses/index/paymentId
                   - Effect: Allow
                     Action:
                       - dynamodb:*

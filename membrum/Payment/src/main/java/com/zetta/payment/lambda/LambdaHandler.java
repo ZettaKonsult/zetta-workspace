@@ -5,7 +5,10 @@ import com.amazonaws.services.lambda.AWSLambdaAsync;
 import com.amazonaws.services.lambda.AWSLambdaAsyncClientBuilder;
 import com.amazonaws.services.lambda.model.InvokeRequest;
 import com.amazonaws.services.lambda.model.InvokeResult;
+import com.zetta.payment.db.dao.DAOInterface;
 import com.zetta.payment.util.JSON;
+
+import cool.graph.cuid.Cuid;
 
 /**
  * @date 2017-11-14
@@ -28,5 +31,14 @@ public abstract class LambdaHandler {
         InvokeResult result = client.invoke(request);
 
         return new JSON(result);
+    }
+
+    public final String nextID(DAOInterface<?> dao) {
+        String candidate = "";
+
+        do {
+            candidate = Cuid.createCuid();
+        } while (dao.get(candidate).isPresent());
+        return candidate;
     }
 }

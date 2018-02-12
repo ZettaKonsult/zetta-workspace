@@ -3,6 +3,7 @@ package com.zetta.payment.lambda;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
+import java.util.Optional;
 
 import org.apache.log4j.Logger;
 
@@ -36,25 +37,27 @@ public abstract class SavePayment extends LambdaHandler {
     }
 
     public Response save(Payment payment) {
-        Response response = null;
+        Response response = ResponseFactory.empty();
 
         try {
             applyModifications(payment);
         } catch (InvalidInput error) {
-            response = ResponseFactory.error(error);
+            response.addError(error.getMessage());
         }
 
-        paymentDAO.save(payment);
+        Payment toSave = payment;
+
+        Optional<Payment> maybeUpdated = paymentDAO.get(payment.getId());
+        if (maybeUpdated.isPresent()) {
+            toSave = maybeUpdated.get();
+            toSave.addStatuses(payment.getStatus());
+        }
+
+        paymentDAO.save(toSave);
 
         String message = "Saved payment " + payment + ".";
         log.info(message);
-
-        if (response == null) {
-            response = ResponseFactory.success(message);
-        } else {
-            response.succeed(message);
-        }
-        return response;
+        return ResponseFactory.success(message);
     }
 
     protected void saveFailedPayment(InputStream inStream,

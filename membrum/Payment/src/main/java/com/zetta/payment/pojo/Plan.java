@@ -12,7 +12,7 @@ public class Plan implements Serializable {
 
     private static final long serialVersionUID = 3568030818804839643L;
 
-    public static final String PLAN_ID_INDEX = "id";
+    public static final String ID_INDEX = "id";
     public static final String PLAN_NAME_INDEX = "planName";
     public static final String AMOUNT_INDEX = "amount";
     public static final String INTERVAL_INDEX = "interval";
@@ -21,11 +21,6 @@ public class Plan implements Serializable {
     public static final String GROUPS_INDEX = "group";
     public static final String TYPE_INDEX = "type";
     public static final String ORGANISATION_ID_INDEX = "organisationId";
-
-    /*
-    "organisationId": "cjd0k470n0000sscvzzm0njuc"
-    }
-     */
 
     private String id;
     private String name;
@@ -39,7 +34,7 @@ public class Plan implements Serializable {
 
     public Plan() {}
 
-    @DynamoDBHashKey(attributeName = PLAN_ID_INDEX)
+    @DynamoDBHashKey(attributeName = ID_INDEX)
     public String getId() {
         return id;
     }
