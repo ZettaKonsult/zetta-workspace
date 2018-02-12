@@ -12,4 +12,4 @@ export type Dispatch = (
   action: Action | ThunkAction | PromiseAction | Array<Action>
 ) => any;
 
-export type State = Object
+export type State = Object;
