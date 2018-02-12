@@ -1,0 +1,18 @@
+[
+  {
+    "customerId": "1",
+    "workplaceId": "a",
+    "unit": 1,
+    "price": 500,
+    "description": "här är en rad",
+    "id": "cjdk8fmb90004a8cvixgnpmnz"
+  },
+  {
+    "customerId": "1",
+    "workplaceId": "a",
+    "unit": 2,
+    "price": 500,
+    "description": "här är en annan rad",
+    "id": "cjdk8fg2j0003a8cvt7up7vqc"
+  }
+]

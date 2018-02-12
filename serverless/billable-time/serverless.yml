@@ -1,0 +1,109 @@
+# NOTE: update this with your service name
+service: operis-billable-time
+
+package:
+
+# Use the serverless-webpack plugin to transpile ES6
+plugins:
+  - serverless-webpack
+  - serverless-dynamodb-local
+  - serverless-offline
+
+# Enable auto-packing of external modules
+custom:
+  serverless-offline:
+    babelOptions:
+      presets: ["env"]
+  webpackIncludeModules: true
+  Invoice: 'GeneratedInvoices-${self:provider.stage}'
+  BillableRow: 'BillableRow-${self:provider.stage}'
+  dynamodb:
+    start:
+      port: 8000
+      inMemory: true
+      migrate: true
+
+provider:
+  name: aws
+  runtime: nodejs6.10
+  stage: dev
+  region: eu-central-1
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:*
+      Resource:
+        - { "Fn::GetAtt": ["InvoiceDynamoDBTable", "Arn" ] }
+        - { "Fn::GetAtt": ["BillableRowDynamoDBTable", "Arn" ] }
+  environment:
+    BillableRow: ${self:custom.BillableRow}
+    Invoice: ${self:custom.Invoice}
+
+functions:
+  createInvoice:
+    handler: src/handler.createInvoice
+    events:
+      - http:
+          path: /invoice
+          method: post
+  addBillableRow:
+    handler: src/handler.addBillableRow
+    events:
+      - http:
+          path: /billrow
+          method: post
+  allBillableRows:
+    handler: src/handler.allBillableRows
+    events:
+      - http:
+          path: /billrows/{customerId}
+          method: get
+
+
+resources:
+  Resources:
+    InvoiceDynamoDBTable:
+      Type: 'AWS::DynamoDB::Table'
+      DeletionPolicy: Retain
+      Properties:
+        AttributeDefinitions:
+          -
+            AttributeName: customerId
+            AttributeType: S
+          -
+            AttributeName: createdAt
+            AttributeType: N
+        KeySchema:
+          -
+            AttributeName: customerId
+            KeyType: HASH
+          -
+            AttributeName: createdAt
+            KeyType: RANGE
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        TableName: ${self:custom.Invoice}
+
+    BillableRowDynamoDBTable:
+      Type: 'AWS::DynamoDB::Table'
+      DeletionPolicy: Retain
+      Properties:
+        AttributeDefinitions:
+          -
+            AttributeName: customerId
+            AttributeType: S
+          -
+            AttributeName: id
+            AttributeType: S
+        KeySchema:
+          -
+            AttributeName: customerId
+            KeyType: HASH
+          -
+            AttributeName: id
+            KeyType: RANGE
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        TableName: ${self:custom.BillableRow}
