@@ -1,0 +1,14 @@
+<form method="post" action="https://payment.architrade.com/paymentweb/start.action" accept-charset="utf-8">
+    <input type="hidden" name="accepturl" value="https://www.yourdomain.com/payment_accepted">
+    <input type="hidden" name="amount" value="100">
+    <input type="hidden" name="callbackurl" value="https://www.yourdomain.com/callback">
+    <input type="hidden" name="cancelurl" value="https://www.yourdomain.com/payment_cancelled">
+    <input type="hidden" name="currency" value="SEK">
+    <input type="hidden" name="decorator" value="responsive">
+    <input type="hidden" name="ip" value="32.64.128.256">
+    <input type="hidden" name="lang" value="en">
+    <input type="hidden" name="merchant" value="INSERT_YOUR_MERCHANT_ID">
+    <input type="hidden" name="orderid" value="Order_ID-123">
+    <input type="hidden" name="test" value="1">
+    <input type="hidden" name="uniqueoid" value="yes">
+</form>
