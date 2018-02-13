@@ -1,5 +1,4 @@
 /* @flow */
-import type { SubscriptionStatus } from 'types/Plan';
 
 export type Receipt = {
   id: string,
@@ -7,6 +6,5 @@ export type Receipt = {
   price: number,
   currency: string,
   provider: 'dibs' | 'manual',
-  subscription: SubscriptionStatus[],
   createdAt: number,
 };

@@ -12,3 +12,6 @@ include_warnings=true
 emoji=true
 
 [strict]
+
+[version]
+0.65.0

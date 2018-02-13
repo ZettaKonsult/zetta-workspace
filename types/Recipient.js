@@ -1,4 +1,6 @@
 /* @flow */
+import type { SubscriptionStatus } from 'types/Plan';
+
 export type Recipient = {
   email: string,
   address?: string,
@@ -8,6 +10,7 @@ export type Recipient = {
   lastname: string,
   ssn?: string,
   company?: string,
+  subscription: SubscriptionStatus[],
 };
 
 export type CompanyCustomer = {
