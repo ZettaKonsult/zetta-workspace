@@ -5,7 +5,7 @@
  */
 
 const settings = {
-  providers: {},
+  providers: { Adyen: {}, DIBS: {} },
 };
 
 export default (configuration: { [string]: string }) => {
