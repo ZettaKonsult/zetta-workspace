@@ -1,5 +1,3 @@
-/* @flow */
-
 /**
  * @date  2017-08-22
  */
@@ -43,7 +41,7 @@ describe('Ladok parser.', () => {
     it('Incorrect file.', async () => {
       try {
         const people = await parseFile('mocks/notLadok/TRF_XXX_XXX.txt');
-        fail(`Parsing an invalid file should generate an error.`);
+        throw new Error(`Parsing an invalid file should generate an error.`);
       } catch (error) {
         expect(error).toEqual(
           new InvalidFile(
@@ -152,7 +150,7 @@ describe('Ladok parser.', () => {
     it('Incorrect case.', () => {
       try {
         getUnion('dummy.txt', [['Lokal klazz: EHL']]);
-        fail(
+        throw new Error(
           `Wrong file name and erroneous lines should raise an error ` +
             `in getUnion.`
         );

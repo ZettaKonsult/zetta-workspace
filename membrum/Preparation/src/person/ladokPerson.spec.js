@@ -1,5 +1,3 @@
-/* @flow */
-
 /**
  * @date 2017-08-22
  */
@@ -64,7 +62,7 @@ describe('Ladok person.', () => {
       const person = newTestPerson();
       try {
         person.join(PERSON2);
-        fail(
+        throw new Error(
           'Combining two people with different SSN' + 'should raise an error.'
         );
       } catch (error) {

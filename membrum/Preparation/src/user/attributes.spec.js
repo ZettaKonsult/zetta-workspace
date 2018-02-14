@@ -1,5 +1,3 @@
-/* @flow */
-
 /**
  * @date 2018-01-15
  */
@@ -19,7 +17,7 @@ describe('Attribute management.', () => {
           },
           formats: ['all'],
         });
-        fail('White-space name should raise an error.');
+        throw new Error('White-space name should raise an error.');
       } catch (error) {
         expect(error.message).toMatch(/No name/);
       }

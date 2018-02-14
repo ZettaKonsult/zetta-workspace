@@ -1,10 +1,7 @@
-/* @flow */
-
 /**
  * @date  2017-08-22
  */
 
-import type { UserData } from '../types';
 import {
   aggregateResults,
   compileUserData,
@@ -22,10 +19,10 @@ const SSN = 'SSN';
 
 const UNION_MAP = config.TRF.UnionMapping;
 
-const newUserData = (ssn: string, name: string, credits: number): UserData =>
+const newUserData = (ssn, name, credits) =>
   compileUserData({ person: newParsedUser(ssn, name, credits) });
 
-const newParsedUser = (ssn: string, name: string, credits: number) => {
+const newParsedUser = (ssn, name, credits) => {
   let person = new LadokPerson(ssn, name, EMAIL, '11.1', 'EHL');
   for (let i = 1; i < credits; ++i) {
     person.join(
