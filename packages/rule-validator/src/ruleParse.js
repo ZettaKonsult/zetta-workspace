@@ -1,5 +1,5 @@
 /* @flow */
-import type { Rule } from './types';
+import type { Rule } from 'types/Rule';
 
 export default function(rules: Rule[]) {
   function parseRules(plans: Object[]) {

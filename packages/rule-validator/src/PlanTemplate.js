@@ -1,10 +1,10 @@
 /* @flow */
 
-import type { Rule, validateRuleOptions } from './types';
+import type { Rule, RuleOptions } from 'types/Rule';
 
 export default function(
   rules: Rule[],
-  { sortKey, alwaysEvaluateGroups = [] }: validateRuleOptions = {}
+  { sortKey, alwaysEvaluateGroups = [] }: RuleOptions = {}
 ) {
   function evaluatePlan(plans: Object[]) {
     const boolArray = rules.map(rule => getEvaluation(rule, plans));
