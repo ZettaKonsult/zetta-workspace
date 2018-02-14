@@ -1,68 +1,40 @@
-import * as payout from './payout';
+import payout from './payout';
+
+import invoiceMock from '../../../fixtures/invoice';
 
 describe('calcPayout', () => {
-  it('removes old id and adds new on transferred', () => {
-    let payment = { id: 'a', specification: ['x'] };
-    let status = [
-      { id: 1, paymentId: 'a', date: Date.now() + 1, status: 'succeeded' },
-      {
-        id: 2,
-        paymentId: 'a',
-        date: Date.now() + 2,
-        status: 'transferred',
-        transferred: { from: 'x', to: 'z' },
-      },
-    ];
+  it('returns nothing when invoice is pending', () => {
+    const subject = [invoiceMock.pendingInvoice];
 
-    const result = payout.calcPayout(payment, status);
+    const result = payout(subject);
 
-    expect(result).toEqual(['z']);
+    expect(result).toEqual({});
   });
 
-  it('adds specification ids to result on succeeded', () => {
-    let payment = { id: 'a', specification: ['x'] };
-    let status = [
-      { id: 1, paymentId: 'a', date: Date.now() + 1, status: 'succeeded' },
-    ];
+  it('returns a map with {id:priceTotal} when invoice is paid', () => {
+    const subject = [invoiceMock.succeededInvoice];
 
-    const result = payout.calcPayout(payment, status);
+    const result = payout(subject);
 
-    expect(result).toEqual(['x']);
+    expect(result).toEqual({ i2ir1: 1 });
   });
 
-  it('if there exists status changes after a payout it should throw an error', () => {
-    let payment = { id: 'a', specification: ['x'] };
-    let status = [
-      { id: 1, paymentId: 'a', date: Date.now() + 1, status: 'succeeded' },
-      { id: 2, paymentId: 'a', date: Date.now() + 2, status: 'payout' },
-      { id: 3, paymentId: 'a', date: Date.now() + 3, status: 'succeeded' },
-    ];
+  it('handles multiple invoiceRows', () => {
+    const subject = [invoiceMock.multipleInvoiceRows];
 
-    function result() {
-      payout.calcPayout(payment, status);
-    }
+    const result = payout(subject);
 
-    expect(result).toThrowErrorMatchingSnapshot();
+    expect(result).toEqual({ i3ir1: 1, i3ir2: 1 });
   });
-});
 
-describe('payout', () => {
-  it('returns total for all payments', () => {
-    let payment = [
-      { id: 'a', specification: ['x', 'z'] },
-      { id: 'b', specification: ['y', 'x'] },
-    ];
-    let status = [
-      { id: 1, paymentId: 'a', date: Date.now() + 1, status: 'succeeded' },
-      { id: 2, paymentId: 'b', date: Date.now() + 2, status: 'succeeded' },
+  it('Returns id with total when there is both paid and refunded invoices', () => {
+    const subject = [
+      invoiceMock.succeededInvoice,
+      invoiceMock.refundSucceededInvoice,
     ];
 
-    const result = payout.payout(payment, status);
+    const result = payout(subject);
 
-    expect(result).toEqual({
-      x: 2,
-      y: 1,
-      z: 1,
-    });
+    expect(result).toEqual({ i2ir1: 0 });
   });
 });

@@ -1,3 +1,1 @@
-import { payout } from './payout';
-
-export default { payout };
+export default from './payout';

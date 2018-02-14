@@ -1,53 +1,32 @@
 /* @flow */
-import type { PaymentStatus, Payment } from 'types/Membrum';
+import type { Invoice } from 'types/Invoice';
 
-import payment from './mock/payment';
-import status from './mock/paymentStatus';
+export default (invoices: Invoice[]) => {
+  let filteredInvoices = invoices.filter(
+    invoice => invoice.itemStatus.itemStatus === 'succeeded'
+  );
 
-const s = status();
-const p = payment();
+  return filteredInvoices.reduce((total, invoice) => {
+    const newMap = mapInvoiceRows(invoice.invoiceRows);
+    const mergedMaps = mergeObjectMaps(newMap, total);
 
-export const payout = (
-  payments: Payment[] = p,
-  paymentStatus: PaymentStatus[] = s
-) =>
-  payments.reduce((total, payment) => {
-    let filteredStatus = paymentStatus.filter(
-      status => status.paymentId === payment.id
-    );
-    let result = calcPayout(payment, filteredStatus);
-
-    result.forEach(id => {
-      let oldValue = total[id] ? total[id] : 0;
-      total[id] = oldValue + 1;
-    });
-    return total;
+    return mergedMaps;
   }, {});
+};
 
-export const calcPayout = (
-  payment: Payment,
-  paymentStatus: PaymentStatus[]
-): string[] =>
-  paymentStatus
-    .sort((a, b) => a.date - b.date)
-    .reduce((total, status: PaymentStatus, index, arr) => {
-      switch (status.status) {
-        case 'succeeded':
-          return [...total, ...payment.specification];
-        case 'transferred':
-          let result = total.filter(
-            paymentId => paymentId !== status.transferred.from
-          );
-          return [...result, status.transferred.to];
-        case 'payout':
-          if (index < arr.length - 1) {
-            throw new Error(
-              `${payment.id} have status changes after a payout id:${status.id}`
-            );
-          } else {
-            return [];
-          }
-        default:
-          return total;
-      }
-    }, []);
+const mapInvoiceRows = invoiceRows =>
+  invoiceRows.reduce(
+    (total, row) => ({
+      ...total,
+      [row.id]: row.price + (total[row.id] || 0),
+    }),
+    {}
+  );
+
+const mergeObjectMaps = (newMap, oldMap) =>
+  Object.keys(newMap).reduce((mergeMap, key) => {
+    return {
+      ...mergeMap,
+      [key]: newMap[key] + (oldMap[key] | 0),
+    };
+  }, {});

@@ -1,3 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`calcPayout if there exists status changes after a payout it should throw an error 1`] = `"a have status changes after a payout id:2"`;
