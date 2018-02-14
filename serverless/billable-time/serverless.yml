@@ -16,7 +16,7 @@ custom:
       presets: ["env"]
   webpackIncludeModules: true
   Invoice: 'GeneratedInvoices-${self:provider.stage}'
-  BillableRow: 'BillableRow-${self:provider.stage}'
+  InvoiceRows: 'InvoiceRows-${self:provider.stage}'
   dynamodb:
     start:
       port: 8000
@@ -31,32 +31,35 @@ provider:
   iamRoleStatements:
     - Effect: Allow
       Action:
-        - dynamodb:*
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:Query
+        - dynamodb:UpdateItem
       Resource:
         - { "Fn::GetAtt": ["InvoiceDynamoDBTable", "Arn" ] }
-        - { "Fn::GetAtt": ["BillableRowDynamoDBTable", "Arn" ] }
+        - { "Fn::GetAtt": ["InvoiceRowDynamoDBTable", "Arn" ] }
   environment:
-    BillableRowTable: ${self:custom.BillableRow}
-    InvoiceTable: ${self:custom.Invoice}
+    InvoiceRowsTable: ${self:custom.InvoiceRows}
+    InvoicesTable: ${self:custom.Invoices}
 
 functions:
   createInvoice:
-    handler: src/handler.createInvoice
+    handler: src/handler.writeInvoice
     events:
       - http:
           path: /invoice
           method: post
   addBillableRow:
-    handler: src/handler.addBillableRow
+    handler: src/handler.writeBillableRow
     events:
       - http:
           path: /billrow
           method: post
   allBillableRows:
-    handler: src/handler.allBillableRows
+    handler: src/handler.getBillableRows
     events:
       - http:
-          path: /billrows/{customerId}
+          path: /billrows/{companyCustomerId}
           method: get
 
 
@@ -85,20 +88,20 @@ resources:
           WriteCapacityUnits: 1
         TableName: ${self:custom.Invoice}
 
-    BillableRowDynamoDBTable:
+    InvoiceRowsDynamoDBTable:
       Type: 'AWS::DynamoDB::Table'
       DeletionPolicy: Retain
       Properties:
         AttributeDefinitions:
           -
-            AttributeName: customerId
+            AttributeName: companyCustomerId
             AttributeType: S
           -
             AttributeName: id
             AttributeType: S
         KeySchema:
           -
-            AttributeName: customerId
+            AttributeName: companyCustomerId
             KeyType: HASH
           -
             AttributeName: id
@@ -106,4 +109,4 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
-        TableName: ${self:custom.BillableRow}
+        TableName: ${self:custom.InvoiceRows}
