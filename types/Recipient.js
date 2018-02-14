@@ -1,5 +1,6 @@
 /* @flow */
-import type { SubscriptionStatus } from 'types/Plan';
+
+import type { InvoiceRow } from 'types/Invoice';
 
 export type Recipient = {
   email: string,
@@ -10,7 +11,7 @@ export type Recipient = {
   lastname: string,
   ssn?: string,
   company?: string,
-  subscription: SubscriptionStatus[],
+  reccuringPayments: InvoiceRow[],
 };
 
 export type CompanyCustomer = {

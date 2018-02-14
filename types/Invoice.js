@@ -1,37 +1,25 @@
 /* @flow */
 import type { Recipient } from 'types/Recipient';
+import type { InvoiceStatus } from 'types/Event';
 
 export type InvoiceRow = {
   +id: string,
-  +companyCustomerId: string,
-  +recipientId: string,
   +createdAt: number,
-  unit: number,
+  companyCustomerId: string,
+  recipientIds: string[],
   price: number,
   description: string,
-  itemStatus: 'pending' | 'billed',
-};
-
-export type InvoiceStatus = {
-  +id: string,
-  +createdAt: number,
-  +paymentId: string,
-  +stage:
-    | 'refunded'
-    | 'payout'
-    | 'overdue'
-    | 'canceled'
-    | 'succeeded'
-    | 'failed'
-    | 'transferred'
-    | 'pending',
-  +transferred?: { from: string, to: string },
+  interval: number,
+  intervalCount: 'days' | 'month' | 'year' | 'once',
+  labels: string[],
+  group: string,
+  epochLastProcessed: number,
 };
 
 export type Invoice = {
   +id: string,
-  +recipient: Recipient,
   +createdAt: number,
+  +recipient: Recipient,
   +invoiceRows: InvoiceRow[],
-  itemStatus: InvoiceStatus[],
+  itemStatus: InvoiceStatus,
 };
