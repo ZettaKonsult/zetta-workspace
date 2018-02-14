@@ -1,10 +1,12 @@
 import cuid from 'cuid';
-import { billableRows } from './billableRow';
+import { fetchInvoiceRows } from './invoiceRows';
 
-if (!process.env.InvoiceTable) {
-  throw new Error('Could not read database table from env.InvoiceTable');
-}
-const invoiceTable = process.env.InvoiceTable;
+const getDbTable = () => {
+  if (!process.env.InvoicesTable) {
+    throw new Error('Could not read database table from env.InvoicesTable');
+  }
+  return process.env.InvoicesTable;
+};
 
 export const invoice = (recipient, invoiceRows) => ({
   id: cuid(),
@@ -17,7 +19,7 @@ export const createInvoice = async (db, data) => {
   const { recipientId, invoiceRowIds } = data;
 
   const recipientPromise = fetchRecipient(db, recipientId);
-  const invoiceRowsPromise = billableRows(db, recipientId, invoiceRowIds);
+  const invoiceRowsPromise = fetchInvoiceRows(db, recipientId, invoiceRowIds);
 
   const [recipient, invoiceRows] = Promise.all([
     recipientPromise,
@@ -25,7 +27,7 @@ export const createInvoice = async (db, data) => {
   ]);
 
   const params = {
-    TableName: invoiceTable,
+    TableName: getDbTable(),
     Item: invoice(recipient, invoiceRows),
   };
   await db('put', params);

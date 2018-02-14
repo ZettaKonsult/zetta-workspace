@@ -15,7 +15,7 @@ custom:
     babelOptions:
       presets: ["env"]
   webpackIncludeModules: true
-  Invoice: 'GeneratedInvoices-${self:provider.stage}'
+  Invoices: 'Invoices-${self:provider.stage}'
   InvoiceRows: 'InvoiceRows-${self:provider.stage}'
   dynamodb:
     start:
@@ -86,7 +86,7 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
-        TableName: ${self:custom.Invoice}
+        TableName: ${self:custom.Invoices}
 
     InvoiceRowsDynamoDBTable:
       Type: 'AWS::DynamoDB::Table'

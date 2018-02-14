@@ -1,5 +1,5 @@
 import parser from './parser';
-import { addBillableRow, allBillableRows } from './billableRow';
+import { addInvoiceRow, allInvoiceRows } from './invoiceRows';
 import { createInvoice } from './invoice';
 import response from './response';
 import db from './database';
@@ -17,7 +17,7 @@ export const writeBillableRow = async (event, context, callback) => {
   let statusCode = 200;
   const { data } = parser(event);
 
-  const result = await addBillableRow(db, data);
+  const result = await addInvoiceRow(db, data);
 
   callback(null, response(statusCode, result));
 };
@@ -26,7 +26,7 @@ export const getBillableRows = async (event, context, callback) => {
   let statusCode = 200;
   const { params } = parser(event);
 
-  const result = await allBillableRows(db, params.companyCustomerId);
+  const result = await allInvoiceRows(db, params.companyCustomerId);
 
   callback(null, response(statusCode, result));
 };

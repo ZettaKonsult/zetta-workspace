@@ -3,26 +3,31 @@ import cuid from 'cuid';
 
 import type { InvoiceRow } from 'types/Invoice';
 
-if (!process.env.InvoiceRowsTable) {
-  throw new Error('Could not read database table from env.InvoiceTable');
-}
-const InvoiceRowsTable = process.env.InvoiceRowsTable;
+const getDbTable = (): string => {
+  if (!process.env.InvoiceRowsTable) {
+    throw new Error('Could not read database table from env.InvoiceRowsTable');
+  }
+  return process.env.InvoiceRowsTable;
+};
 
 const formatData = (data: Object): InvoiceRow => ({
   id: cuid(),
-  createdAt: Date.now(),
   companyCustomerId: data.companyCustomerId,
-  recipientId: data.recipientId,
-  unit: data.unit,
+  createdAt: Date.now(),
+  recipientIds: [data.recipientId],
   price: data.price,
   description: data.description,
-  itemStatus: 'pending',
+  interval: data.unit,
+  intervalCount: 'once',
+  labels: [],
+  group: 'none',
+  epochLastProcessed: 0,
 });
 
-export const addBillableRow = async (db: any, data: Object) => {
+export const addInvoiceRow = async (db: any, data: Object) => {
   try {
     const params = {
-      TableName: InvoiceRowsTable,
+      TableName: getDbTable(),
       Item: formatData(data),
     };
 
@@ -34,10 +39,10 @@ export const addBillableRow = async (db: any, data: Object) => {
   }
 };
 
-export const allBillableRows = async (db: any, customerId: string) => {
+export const allInvoiceRows = async (db: any, customerId: string) => {
   try {
     const result = await db('query', {
-      TableName: InvoiceRowsTable,
+      TableName: getDbTable(),
       KeyConditionExpression: 'companyCustomerId = :companyCustomerId',
       ExpressionAttributeValues: {
         ':companyCustomerId': customerId,
@@ -50,14 +55,14 @@ export const allBillableRows = async (db: any, customerId: string) => {
   }
 };
 
-export const billableRows = async (
+export const fetchInvoiceRows = async (
   db: any,
   companyCustomerId: string,
   ids: string[]
 ) => {
   try {
     const fetchRows = ids.map(id =>
-      billableRow(db, { companyCustomerId: companyCustomerId, id })
+      invoiceRow(db, { companyCustomerId: companyCustomerId, id })
     );
     let result = await Promise.all(fetchRows);
     return result.map(item => item.Item);
@@ -66,8 +71,8 @@ export const billableRows = async (
   }
 };
 
-const billableRow = async (db, Key) =>
+const invoiceRow = async (db, Key) =>
   await db('get', {
-    TableName: InvoiceRowsTable,
+    TableName: getDbTable(),
     Key,
   });
