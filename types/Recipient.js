@@ -16,10 +16,12 @@ export type Recipient = {
 
 export type CompanyCustomer = {
   id: string,
-  name: string,
+  firstName: string,
+  lastName: string,
   address: string,
   zipcode: string,
   city: string,
   email: string,
+  company: string,
   createdAt: string,
 };
