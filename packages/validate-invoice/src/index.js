@@ -1,1 +1,3 @@
-export default from './payout';
+import validator from './validator';
+
+export default validator;
