@@ -8,32 +8,48 @@ const getDbTable = () => {
   return process.env.InvoicesTable;
 };
 
-export const invoice = (recipient, invoiceRows) => ({
+const invoice = ({ recipient, companyCustomerId, invoiceRows }) => ({
   id: cuid(),
   createdAt: Date.now(),
+  companyCustomerId,
   recipient,
   invoiceRows,
 });
 
 export const createInvoice = async (db, data) => {
-  const { recipientId, invoiceRowIds } = data;
+  const { companyCustomerId, invoiceRowIds } = data;
 
-  const recipientPromise = fetchRecipient(db, recipientId);
-  const invoiceRowsPromise = fetchInvoiceRows(db, recipientId, invoiceRowIds);
+  const invoiceRows = await fetchInvoiceRows(
+    db,
+    companyCustomerId,
+    invoiceRowIds
+  );
 
-  const [recipient, invoiceRows] = Promise.all([
-    recipientPromise,
-    invoiceRowsPromise,
-  ]);
+  const recipients = await fetchRecipients(db, invoiceRows);
 
-  const params = {
-    TableName: getDbTable(),
-    Item: invoice(recipient, invoiceRows),
-  };
-  await db('put', params);
+  const invoicePromise = recipients.map(recipient => {
+    const params = {
+      TableName: getDbTable(),
+      Item: invoice({ recipient, companyCustomerId, invoiceRows }),
+    };
+    return db('put', params);
+  });
 
-  return params.Item;
+  await Promise.all(invoicePromise);
+
+  await db('scan', { TableName: getDbTable() });
+
+  return true;
 };
 
-const fetchRecipient = async (db, id) =>
-  await db('get', { TableName: 'CompanyCustomers', Key: { id } });
+const fetchRecipients = async (db, invoiceRows) => {
+  const ids = invoiceRows.reduce(
+    (total, row) => [...total, ...row.recipientIds],
+    []
+  );
+  const fetchPromise = ids.map(id =>
+    db('get', { TableName: 'Recipients-dev', Key: { id } })
+  );
+  const result = await Promise.all(fetchPromise);
+  return result.map(item => item.Item);
+};

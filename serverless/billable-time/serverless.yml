@@ -17,12 +17,21 @@ custom:
   webpackIncludeModules: true
   Invoices: 'Invoices-${self:provider.stage}'
   InvoiceRows: 'InvoiceRows-${self:provider.stage}'
+  Recipients: 'Recipients-${self:provider.stage}'
   dynamodb:
     start:
       port: 8000
       inMemory: true
       migrate: true
+      seed: true
 
+    seed:
+      dev:
+        sources:
+          - table: Recipients-dev
+            sources: [./offline/recipientMock.json]
+          - table: InvoiceRows-dev
+            sources: [./offline/invoiceRowsMock.json]
 provider:
   name: aws
   runtime: nodejs6.10
@@ -71,14 +80,14 @@ resources:
       Properties:
         AttributeDefinitions:
           -
-            AttributeName: customerId
+            AttributeName: companyCustomerId
             AttributeType: S
           -
             AttributeName: createdAt
             AttributeType: N
         KeySchema:
           -
-            AttributeName: customerId
+            AttributeName: companyCustomerId
             KeyType: HASH
           -
             AttributeName: createdAt
@@ -110,3 +119,21 @@ resources:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
         TableName: ${self:custom.InvoiceRows}
+
+    RecipientsDynamoDBTable:
+        Type: 'AWS::DynamoDB::Table'
+        DeletionPolicy: Retain
+        Properties:
+          AttributeDefinitions:
+            -
+              AttributeName: id
+              AttributeType: S
+          KeySchema:
+            -
+              AttributeName: id
+              KeyType: HASH
+          ProvisionedThroughput:
+            ReadCapacityUnits: 1
+            WriteCapacityUnits: 1
+          TableName: ${self:custom.Recipients}
+

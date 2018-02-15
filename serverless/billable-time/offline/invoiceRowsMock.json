@@ -1,0 +1,15 @@
+[
+  {
+    "id": "ir1",
+    "companyCustomerId": "c1",
+    "createdAt": 1518684271129,
+    "recipientIds": ["r1"],
+    "price": 500,
+    "description": "här är en rad",
+    "interval": 2,
+    "intervalCount": "once",
+    "labels": [],
+    "group": "none",
+    "epochLastProcessed": 0
+  }
+]
