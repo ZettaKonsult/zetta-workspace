@@ -1,0 +1,68 @@
+# NOTE: update this with your service name
+service: operis-billable-time
+
+package:
+
+# Use the serverless-webpack plugin to transpile ES6
+plugins:
+  - serverless-webpack
+  - serverless-dynamodb-local
+  - serverless-offline
+
+# Enable auto-packing of external modules
+custom:
+  serverless-offline:
+    babelOptions:
+      presets: ["env"]
+  webpackIncludeModules: true
+  CompanyCustomers: 'CompanyCustomer-${self:provider.stage}'
+  dynamodb:
+    start:
+      port: 8000
+      inMemory: true
+      migrate: true
+
+provider:
+  name: aws
+  runtime: nodejs6.10
+  stage: dev
+  region: eu-central-1
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:Query
+        - dynamodb:UpdateItem
+      Resource:
+        - { "Fn::GetAtt": ["InvoiceDynamoDBTable", "Arn" ] }
+  environment:
+    CompanyCustomersTable: ${self:custom.CompanyCustomers}
+
+functions:
+  createInvoice:
+    handler: src/handler.createCompanyCustomer
+    events:
+      - http:
+          path: /companycustomer
+          method: post
+
+resources:
+  Resources:
+    CompanyCustomersDBTable:
+      Type: 'AWS::DynamoDB::Table'
+      DeletionPolicy: Retain
+      Properties:
+        AttributeDefinitions:
+          -
+            AttributeName: id
+            AttributeType: S
+        KeySchema:
+          -
+            AttributeName: id
+            KeyType: HASH
+
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        TableName: ${self:custom.CompanyCustomers}
