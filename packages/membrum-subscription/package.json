@@ -26,7 +26,6 @@
     "babel-runtime": "^6.26.0",
     "cuid": "2.0.2",
     "date-primitive-utils": "^1.1.1",
-    "membrum-membership": "1.0.0",
     "zk-dynamodb-wrapper": "^1.0.5",
     "membrum-payout": "1.0.0",
     "rule-validator": "1.0.0"
