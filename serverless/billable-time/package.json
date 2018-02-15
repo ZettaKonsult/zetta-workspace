@@ -33,6 +33,7 @@
     "aws-sdk": "^2.192.0",
     "babel-runtime": "^6.26.0",
     "cuid": "^2.1.0",
-    "source-map-support": "^0.4.18"
+    "source-map-support": "^0.4.18",
+    "invoice-validator": "1.0.0"
   }
 }

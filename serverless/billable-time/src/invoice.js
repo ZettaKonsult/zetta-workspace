@@ -1,4 +1,6 @@
 import cuid from 'cuid';
+import validator from 'invoice-validator';
+
 import { fetchInvoiceRows } from './invoiceRows';
 
 const getDbTable = () => {
@@ -25,21 +27,26 @@ export const createInvoice = async (db, data) => {
     invoiceRowIds
   );
 
-  const recipients = await fetchRecipients(db, invoiceRows);
+  const isValid = validator(invoiceRows);
+  if (!isValid) {
+    throw Error('Trying to send invoice row to mixed recipients');
+  } else {
+    const recipients = await fetchRecipients(db, invoiceRows);
 
-  const invoicePromise = recipients.map(recipient => {
-    const params = {
-      TableName: getDbTable(),
-      Item: invoice({ recipient, companyCustomerId, invoiceRows }),
-    };
-    return db('put', params);
-  });
+    const invoicePromise = recipients.map(recipient => {
+      const params = {
+        TableName: getDbTable(),
+        Item: invoice({ recipient, companyCustomerId, invoiceRows }),
+      };
+      return db('put', params);
+    });
 
-  await Promise.all(invoicePromise);
+    await Promise.all(invoicePromise);
 
-  await db('scan', { TableName: getDbTable() });
+    await db('scan', { TableName: getDbTable() });
 
-  return true;
+    return 'Invoice succesfully created';
+  }
 };
 
 const fetchRecipients = async (db, invoiceRows) => {

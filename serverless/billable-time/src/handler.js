@@ -8,9 +8,12 @@ export const writeInvoice = async (event, context, callback) => {
   let statusCode = 200;
   const { data } = parser(event);
 
-  const result = await createInvoice(db, data);
-
-  callback(null, response(statusCode, result));
+  try {
+    const result = await createInvoice(db, data);
+    callback(null, response(statusCode, result));
+  } catch (err) {
+    callback(null, response(502, err.message));
+  }
 };
 
 export const writeBillableRow = async (event, context, callback) => {

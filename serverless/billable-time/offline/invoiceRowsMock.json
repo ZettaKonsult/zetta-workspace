@@ -11,5 +11,18 @@
     "labels": [],
     "group": "none",
     "epochLastProcessed": 0
+  },
+  {
+    "id": "ir2",
+    "companyCustomerId": "c1",
+    "createdAt": 1518684271129,
+    "recipientIds": ["r2"],
+    "price": 500,
+    "description": "här är en annan rad",
+    "interval": 2,
+    "intervalCount": "once",
+    "labels": [],
+    "group": "none",
+    "epochLastProcessed": 0
   }
 ]
