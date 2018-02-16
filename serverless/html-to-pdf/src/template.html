@@ -1,0 +1,109 @@
+<html>
+
+<head>
+  <style>
+    body {
+      font-size: 10px;
+    }
+
+    .invoice {
+      margin: 0 2em;
+      background: red;
+    }
+
+    .row {
+      display: -webkit-box;
+      display: -moz-box;
+      display: -ms-flexbox;
+      display: -webkit-flex;
+      display: flex;
+      flex-direction: row;
+      -webkit-flex-direction: row;
+    }
+
+    .column {
+      display: -webkit-box;
+      display: -moz-box;
+      display: -ms-flexbox;
+      display: -webkit-flex;
+      display: flex;
+      flex-direction: column;
+      -webkit-flex-direction: column;
+    }
+
+    .spaceBetween {
+      display: -webkit-box;
+      display: -moz-box;
+      display: -ms-flexbox;
+      display: -webkit-flex;
+      display: flex;
+      justify-content: space-between;
+      -webkit-justify-content: space-between;
+    }
+  </style>
+</head>
+
+<body>
+  <div class='invoice'>
+    <header class='row spaceBetween'>
+      <h2>Fakutra</h2>
+      <h2>${company}</h2>
+    </header>
+
+    <div class='row spaceBetween'>
+      <section class='column'>
+        <p>fakturadatum: ${invoice.createdAt}</p>
+        <p>betalningsvilkor: ${daysToPay}</p>
+        <p>förfallodaturm: ${createdAt+daystoPay}</p>
+      </section>
+
+      <section class='column'>
+        <p>${invoice.id}</p>
+      </section>
+    </div>
+
+    <div class='row spaceBetween'>
+      <section class='column'>
+        <p>vår referens: ${companyCustomer.firstName} ${companyCustomer.lastName}</p>
+        <p>er referens: ${recipient.firstName} ${recipient.lastName}</p>
+
+        <p>Fakturanummer: ${invoice.id}</p>
+      </section>
+
+      <section class='column'>
+        <p>${recipient.company} || ${recipient.firstName}</p>
+        <p>${recipient.address}</p>
+        <p>${recipient.zipcode} ${recipient.city}</p>
+      </section>
+    </div>
+
+    <div>
+
+    </div>
+
+    <div class="row spaceBetween">
+      <section class="column">
+        <h1>betalningsinformation</h1>
+        <p>Mottagarens namn: ${companyCustomer.firstName}${companyCustomer.lastName}</p>
+        <p>Bankens namn: ${companyCustomer.bankName}</p>
+        <p>Bankens adress: ${companyCustomer.bankAddress}</p>
+        <p>Bankgiro: ${companyCustomer.bankGiro}</p>
+        <p>Betalningsvilkor: ${companyCustomer.daysToPay}</p>
+      </section>
+
+      <section class="column">
+        <h1>Övrig Information</h1>
+        <p>${companyCustomer.firstName}${companyCustomer.lastName}</p>
+        <p>${companyCustomer.mobile}</p>
+        <p>${companyCustomer.email}</p>
+        <p>${companyCustomer.address}</p>
+        <p>${companyCustomer.city} ${companyCustomer.zipcode}</p>
+        <p>VAT-nr: ${companyCustomer.VAT}</p>
+      </section>
+    </div>
+
+    <h4>Godkänd för F-skatt</h4>
+  </div>
+</body>
+
+</html>
