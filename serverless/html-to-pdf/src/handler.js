@@ -1,55 +1,28 @@
-import aws from 'aws-sdk';
-import nodemailer from 'nodemailer';
+import puppeteer from 'puppeteer';
 import parser from 'serverless-event-parser';
-import pdf from 'html-pdf';
-import { promisify } from 'util';
-import fs from 'fs';
-import response from './response';
 
-const readFileAsync = promisify(fs.readFile);
-const options = { format: 'Letter' };
+import loadTemplate from './loadTemplate';
+import response from './response';
+import render from './render';
+import testData from './testData';
 
 export const createCompanyCustomer = async (event, context, callback) => {
-  let statusCode = 200;
   const { data } = parser(event);
 
-  const html = await fs.readFileAsync('./src/template.html', 'utf8');
-  pdf.create(html, options).toBuffer((err, buffer) => {
-    if (err) {
-      console.log("you con't know what you are doing");
-    } else {
-      sendMail(buffer);
-      callback(null, response(statusCode, {}));
-    }
-  });
-};
+  let html, browser;
+  try {
+    [html, browser] = await Promise.all([loadTemplate(), puppeteer.launch()]);
 
-const sendMail = contentBuffer => {
-  // create Nodemailer SES transporter
-  let transporter = nodemailer.createTransport({
-    SES: new aws.SES({
-      apiVersion: '2010-12-01',
-      region: 'eu-west-1',
-    }),
-  });
+    const renderedTemplate = render(html, testData);
 
-  transporter.sendMail(
-    {
-      from: 'membrum@membrum.se',
-      to: 'fiddep@telia.com',
-      subject: 'Invoice',
-      text: 'I hope this message gets sent!',
-      attachments: [
-        {
-          filename: 'invoice.pdf',
-          content: contentBuffer,
-          contentType: 'application/pdf',
-        },
-      ],
-    },
-    (err, info) => {
-      console.log(info.envelope);
-      console.log(info.messageId);
-    }
-  );
+    const page = await browser.newPage();
+    page.setContent(renderedTemplate);
+    await page.pdf({ path: './hn.pdf', format: 'A4' });
+
+    callback(null, response(200, true));
+  } catch (err) {
+    callback(err);
+  } finally {
+    browser.close();
+  }
 };

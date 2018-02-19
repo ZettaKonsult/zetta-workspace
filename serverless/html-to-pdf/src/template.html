@@ -3,107 +3,216 @@
 <head>
   <style>
     body {
-      font-size: 10px;
+      font-size: 12px;
+      margin: 0;
+      padding: 0;
+    }
+
+    .border-bottom-grey-big {
+      border-bottom: 6px solid dimgrey;
+    }
+
+    .border-bottom-grey-small {
+      border-bottom: 2px solid dimgrey;
+    }
+
+    .item {
+      border-bottom: lightgrey 1px solid;
+      margin: 0;
+      padding: 0;
+      -webkit-box-flex: 1;
+      -ms-flex: 1 1 100%;
+      flex: 1 1 100%;
+    }
+
+    .item-big {
+      border-bottom: lightgrey 1px solid;
+      margin: 0;
+      padding: 0;
+      -webkit-box-flex: 3;
+      -ms-flex: 3 0 50%;
+      flex: 3 0 50%;
+    }
+
+    .invoiceRow:nth-child(odd) {
+      background: lightyellow;
+    }
+
+    .emphasize {
+      color: Chocolate;
+    }
+
+    .border-bottom--small {
+      border-bottom: 2px solid black;
     }
 
     .invoice {
       margin: 0 2em;
-      background: red;
+    }
+
+    .uppercase {
+      text-transform: uppercase;
+    }
+
+    .bold {
+      font-weight: 600;
     }
 
     .row {
       display: -webkit-box;
-      display: -moz-box;
       display: -ms-flexbox;
-      display: -webkit-flex;
       display: flex;
+      -webkit-box-orient: horizontal;
+      -webkit-box-direction: normal;
+      -ms-flex-direction: row;
       flex-direction: row;
-      -webkit-flex-direction: row;
+    }
+
+    .wrap {
+      -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+    }
+
+    .justify-center {
+      -webkit-box-pack: center;
+      -ms-flex-pack: center;
+      justify-content: center;
+    }
+
+    .justify-end {
+      -webkit-box-pack: end;
+      -ms-flex-pack: end;
+      justify-content: flex-end;
+    }
+
+    .align-items-center {
+      -webkit-box-align: center;
+      -ms-flex-align: center;
+      align-items: center;
     }
 
     .column {
       display: -webkit-box;
-      display: -moz-box;
       display: -ms-flexbox;
-      display: -webkit-flex;
       display: flex;
+      -webkit-box-orient: vertical;
+      -webkit-box-direction: normal;
+      -ms-flex-direction: column;
       flex-direction: column;
-      -webkit-flex-direction: column;
     }
 
     .spaceBetween {
-      display: -webkit-box;
-      display: -moz-box;
-      display: -ms-flexbox;
-      display: -webkit-flex;
-      display: flex;
+      -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
       justify-content: space-between;
-      -webkit-justify-content: space-between;
+    }
+
+    .space-around {
+      -ms-flex-pack: distribute;
+      justify-content: space-around;
+    }
+
+    .text-align-right {
+      text-align: right;
+    }
+
+    .text-align-center {
+      text-align: center;
+    }
+
+    .text-align-left {
+      text-align: left;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 3fr 1fr 1fr;
+    }
+
+    .invoiceSummary {
+      display: grid;
+      grid-template-columns: 100px 100px;
+      justify-content: end;
     }
   </style>
 </head>
 
 <body>
   <div class='invoice'>
-    <header class='row spaceBetween'>
-      <h2>Fakutra</h2>
-      <h2>${company}</h2>
+    <header class='row spaceBetween border-bottom-grey-big'>
+      <h2>{{companyCustomer.company}}</h2>
+      <h2 class="uppercase">Fakutra</h2>
     </header>
 
-    <div class='row spaceBetween'>
+    <div class='row spaceBetween border-bottom--small'>
       <section class='column'>
-        <p>fakturadatum: ${invoice.createdAt}</p>
-        <p>betalningsvilkor: ${daysToPay}</p>
-        <p>förfallodaturm: ${createdAt+daystoPay}</p>
+        <p>Fakturadatum: {{invoice.createdAt}}</p>
+        <p>Förfallodaturm: {{invoice.timeToPay}}</p>
       </section>
 
-      <section class='column'>
-        <p>${invoice.id}</p>
+      <section class='row align-items-center emphasize'>
+        <h1>Fakturanummer: {{invoice.id}}</h1>
       </section>
     </div>
 
-    <div class='row spaceBetween'>
-      <section class='column'>
-        <p>vår referens: ${companyCustomer.firstName} ${companyCustomer.lastName}</p>
-        <p>er referens: ${recipient.firstName} ${recipient.lastName}</p>
+    <div class='row spaceBetween border-bottom-grey-big'>
+      <div class='row'>
+        <div class="column">
+          <p class="bold">Vår Referens:</p>
+          <p class="bold">Er Referens:</p>
 
-        <p>Fakturanummer: ${invoice.id}</p>
-      </section>
+        </div>
+        <div class="column">
+          <p>{{companyCustomer.firstName}} {{companyCustomer.lastName}}</p>
+          <p>{{recipient.firstName}} {{recipient.lastName}}</p>
+        </div>
+      </div>
 
-      <section class='column'>
-        <p>${recipient.company} || ${recipient.firstName}</p>
-        <p>${recipient.address}</p>
-        <p>${recipient.zipcode} ${recipient.city}</p>
-      </section>
+      <div class='column'>
+        <p>{{recipient.company}} || {{recipient.firstName}}</p>
+        <p>{{recipient.address}}</p>
+        <p>{{recipient.zipcode}} {{recipient.city}}</p>
+      </div>
     </div>
 
-    <div>
+    <div class="grid border-bottom-grey-small">
+      <p class="text-align-center">Enhet</p>
+      <p class="text-align-center">Specifikation</p>
+      <p class="text-align-center">á-pris</p>
+      <p class="text-align-center">Summa</p>
 
+      {{#invoiceRows}}
+      <p class="text-align-center">{{interval}}</p>
+      <p class="text-align-center">{{description}}</p>
+      <p class="text-align-center">{{price}}</p>
+      <p class="text-align-center">{{total}}</p>
+      {{/invoiceRows}}
     </div>
 
-    <div class="row spaceBetween">
-      <section class="column">
-        <h1>betalningsinformation</h1>
-        <p>Mottagarens namn: ${companyCustomer.firstName}${companyCustomer.lastName}</p>
-        <p>Bankens namn: ${companyCustomer.bankName}</p>
-        <p>Bankens adress: ${companyCustomer.bankAddress}</p>
-        <p>Bankgiro: ${companyCustomer.bankGiro}</p>
-        <p>Betalningsvilkor: ${companyCustomer.daysToPay}</p>
-      </section>
+    <div class="invoiceSummary">
 
-      <section class="column">
-        <h1>Övrig Information</h1>
-        <p>${companyCustomer.firstName}${companyCustomer.lastName}</p>
-        <p>${companyCustomer.mobile}</p>
-        <p>${companyCustomer.email}</p>
-        <p>${companyCustomer.address}</p>
-        <p>${companyCustomer.city} ${companyCustomer.zipcode}</p>
-        <p>VAT-nr: ${companyCustomer.VAT}</p>
-      </section>
+      <p>Rabatt</p>
+      <p>Summa netto</p>
+      <p>Moms (25%)</p>
+
+      <p>{{discount}}</p>
+      <p>{{netTotal}}</p>
+      <p>{{taxTotal}}</p>
+
     </div>
+  </div>
 
+  <section class="row wrap space-around border-bottom--small">
+    <p>Tel.nr: {{companyCustomer.mobile}}</p>
+    <p>Epost: {{companyCustomer.email}}</p>
+    <p>VAT-nr: {{companyCustomer.VAT}}</p>
+    <p>Bankgiro: {{companyCustomer.bank.giro}}</p>
+  </section>
+
+  <div class="row justify-center">
     <h4>Godkänd för F-skatt</h4>
   </div>
+
 </body>
 
 </html>

@@ -32,8 +32,9 @@
   "dependencies": {
     "aws-sdk": "^2.192.0",
     "babel-runtime": "^6.26.0",
-    "html-pdf": "^2.2.0",
+    "mustache": "^2.3.0",
     "nodemailer": "^4.4.2",
+    "puppeteer": "^1.1.0",
     "source-map-support": "^0.4.18",
     "serverless-event-parser": "1.0.0"
   }
