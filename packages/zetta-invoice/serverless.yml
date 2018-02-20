@@ -10,27 +10,51 @@ package:
   artifact: target/PaymentLambda.jar
 
 functions:
-  membrumDIBSConfirm:
-    handler: com.zetta.payment.lambda.membrum.MembrumDIBSConfirm::membrumDIBSConfirm
+  dibsConfirm:
+    handler: src/lambda/dibs.confirm
     events:
       - http:
           method: post
-          path: confirmPayment
+          path: dibs/confirm
           role: callPaymentLambdas
-  membrumNextPayment:
-    handler: com.zetta.payment.lambda.membrum.MembrumNextPayment::membrumNextPayment
+  createInvoices:
+    handler: src/lambda/invoice.create
     events:
       - http:
-         method: get
-         path: getNextPayment
+         method: post
+         path: /invoice/create
          role: paymentDatabaseManager
          cors: true
-  membrumSavePayment:
-    handler: com.zetta.payment.lambda.membrum.MembrumSavePayment::membrumSavePayment
+  createInvoiceRow:
+    handler: src/lambda/invoice.createRow
     events:
       - http:
-         method: put
-         path: savePayment
+         method: post
+         path: /charge/invoiceRow
+         role: paymentDatabaseManager
+         cors: true
+  createPlanInvoice:
+    handler: src/lambda/plan.createInvoice
+    events:
+      - http:
+         method: post
+         path: /charge/plan
+         role: paymentDatabaseManager
+         cors: true
+  createPlan:
+    handler: src/lambda/plan.create
+    events:
+      - http:
+         method: post
+         path: /plan/create
+         role: paymentDatabaseManager
+         cors: true
+  setInvoiceStatus:
+    handler: src/lambda/invoice.setStatus
+    events:
+      - http:
+         method: post
+         path: /invoice/status
          role: paymentDatabaseManager
          cors: true
 
