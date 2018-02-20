@@ -1,6 +1,7 @@
 import puppeteer from 'puppeteer';
 import parser from 'serverless-event-parser';
 
+import mail from './emailDoc';
 import loadTemplate from './loadTemplate';
 import response from './response';
 import render from './render';
@@ -17,8 +18,8 @@ export const createCompanyCustomer = async (event, context, callback) => {
 
     const page = await browser.newPage();
     page.setContent(renderedTemplate);
-    await page.pdf({ path: './hn.pdf', format: 'A4' });
-
+    const buffer = await page.pdf({ format: 'A4' });
+    mail(buffer);
     callback(null, response(200, true));
   } catch (err) {
     callback(err);

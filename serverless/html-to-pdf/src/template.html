@@ -16,22 +16,8 @@
       border-bottom: 2px solid dimgrey;
     }
 
-    .item {
-      border-bottom: lightgrey 1px solid;
-      margin: 0;
-      padding: 0;
-      -webkit-box-flex: 1;
-      -ms-flex: 1 1 100%;
-      flex: 1 1 100%;
-    }
-
-    .item-big {
-      border-bottom: lightgrey 1px solid;
-      margin: 0;
-      padding: 0;
-      -webkit-box-flex: 3;
-      -ms-flex: 3 0 50%;
-      flex: 3 0 50%;
+    .border-bottom-grey-xsmall {
+      border-bottom: 1px solid dimgrey;
     }
 
     .invoiceRow:nth-child(odd) {
@@ -127,6 +113,16 @@
     .grid {
       display: grid;
       grid-template-columns: 1fr 3fr 1fr 1fr;
+      grid-row-gap: 1px;
+    }
+
+    .grid>p {
+      background: white;
+      padding: 10px;
+    }
+
+    .gridBorder {
+      background-color: black;
     }
 
     .invoiceSummary {
@@ -138,7 +134,7 @@
 </head>
 
 <body>
-  <div class='invoice'>
+  <div class='invoice border-bottom--small'>
     <header class='row spaceBetween border-bottom-grey-big'>
       <h2>{{companyCustomer.company}}</h2>
       <h2 class="uppercase">Fakutra</h2>
@@ -169,44 +165,54 @@
       </div>
 
       <div class='column'>
-        <p>{{recipient.company}} || {{recipient.firstName}}</p>
+        <p>{{receiver}}</p>
         <p>{{recipient.address}}</p>
         <p>{{recipient.zipcode}} {{recipient.city}}</p>
       </div>
     </div>
 
-    <div class="grid border-bottom-grey-small">
-      <p class="text-align-center">Enhet</p>
-      <p class="text-align-center">Specifikation</p>
-      <p class="text-align-center">á-pris</p>
-      <p class="text-align-center">Summa</p>
+    <div class="gridBorder">
+      <div class="grid border-bottom-grey-small">
+        <p class="text-align-center">Enhet</p>
+        <p class="text-align-center">Specifikation</p>
+        <p class="text-align-center">á-pris</p>
+        <p class="text-align-center">Summa</p>
 
-      {{#invoiceRows}}
-      <p class="text-align-center">{{interval}}</p>
-      <p class="text-align-center">{{description}}</p>
-      <p class="text-align-center">{{price}}</p>
-      <p class="text-align-center">{{total}}</p>
-      {{/invoiceRows}}
+        {{#invoiceRows}}
+        <p class="text-align-center">{{interval}}</p>
+        <p class="text-align-center">{{description}}</p>
+        <p class="text-align-center">{{price}}</p>
+        <p class="text-align-center">{{total}}</p>
+        {{/invoiceRows}}
+      </div>
     </div>
 
-    <div class="invoiceSummary">
-
+    <div class="invoiceSummary border-bottom-grey-xsmall">
       <p>Rabatt</p>
-      <p>Summa netto</p>
-      <p>Moms (25%)</p>
-
       <p>{{discount}}</p>
-      <p>{{netTotal}}</p>
-      <p>{{taxTotal}}</p>
 
+      <p>Summa netto</p>
+      <p>{{netTotal}}</p>
+
+      <p>Moms (25%)</p>
+      <p>{{taxTotal}}</p>
+    </div>
+
+    <div class="invoiceSummary emphasize">
+      <h3>SEK TOTAL</h3>
+      <h3>{{total}}</h3>
     </div>
   </div>
 
   <section class="row wrap space-around border-bottom--small">
-    <p>Tel.nr: {{companyCustomer.mobile}}</p>
-    <p>Epost: {{companyCustomer.email}}</p>
-    <p>VAT-nr: {{companyCustomer.VAT}}</p>
-    <p>Bankgiro: {{companyCustomer.bank.giro}}</p>
+    <p>
+      <span class="bold">Tel.nr:</span>{{companyCustomer.mobile}}</p>
+    <p>
+      <span class="bold">Epost:</span>{{companyCustomer.email}}</p>
+    <p>
+      <span class="bold">VAT-nr:</span>{{companyCustomer.VAT}}</p>
+    <p>
+      <span class="bold">Bankgiro:</span>{{companyCustomer.bank.giro}}</p>
   </section>
 
   <div class="row justify-center">

@@ -6,6 +6,7 @@ export default {
     lastName: 'Palmquist',
     company: 'Zetta Konsult',
     address: 'Kämnärsvägen 23F',
+    email: 'fiddep@telia.com',
     zipcode: '22646',
     city: 'Lund',
     mobile: '0709-394595',
@@ -22,6 +23,7 @@ export default {
     address: 'Kämnärsvägen 23F',
     zipcode: '22646',
     city: 'Lund',
+    company: 'Kung företag',
   },
   invoiceRows: [
     {
