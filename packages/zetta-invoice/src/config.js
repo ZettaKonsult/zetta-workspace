@@ -4,7 +4,7 @@
  * @date 2017-02-13
  */
 
-const settings: { [string]: string } = {
+const settings: { [string]: any } = {
   providers: {},
 };
 
