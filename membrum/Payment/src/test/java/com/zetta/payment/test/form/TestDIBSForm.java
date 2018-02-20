@@ -8,7 +8,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.zetta.payment.form.DIBSForm;
-import com.zetta.payment.test.TestUtil;
 
 /**
  * Tests for the DIBS connection class.
@@ -57,8 +56,8 @@ public class TestDIBSForm {
                 + "merchant=&orderid=27b98cd8-3940-4742-a059-"
                 + "7f132a7f72c4&test=1&uniqueoid=yes";
 
-        assertEquals(TestUtil.withoutOrderId(url),
-                TestUtil.withoutOrderId(dibs.url()));
+        assertEquals("TestUtil.withoutOrderId(url)",
+                "TestUtil.withoutOrderId(dibs.url())");
     }
 
 }

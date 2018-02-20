@@ -1,3 +1,0 @@
-function checkPlan() {
-  return true;
-}
