@@ -29,23 +29,13 @@ let ReportForm = props => (
   >
     <Field name="date" component={Input} type="date" placeholder="Date" />
     <Field
-      name="worker"
+      name="recipient"
       component={Dropdown}
-      placeholder="Worker"
-      options={props.workers.map(worker => ({
-        key: worker.id,
-        value: worker.id,
-        text: worker.name,
-      }))}
-    />
-    <Field
-      name="place"
-      component={Dropdown}
-      placeholder="Workplace"
-      options={props.places.map(place => ({
-        key: place.id,
-        value: place.id,
-        text: place.name,
+      placeholder="Recipient"
+      options={props.recipients.map(recipient => ({
+        key: recipient.id,
+        value: recipient.id,
+        text: `${recipient.firstName} ${recipient.lastName}`,
       }))}
     />
     <Field name="hours" component={Input} type="number" placeholder="Hours" />
@@ -73,7 +63,7 @@ const mapStateToProps = (state, props) => ({
   idExists: isReportId(state, props.id),
   initialValues: getReportById(state, props.id),
   workers: getWorkers(state),
-  places: getPlaces(state),
+  recipients: getPlaces(state),
 });
 
 const mapDispatchToProps = dispatch => ({

@@ -8,6 +8,7 @@ import Home from './Container/Home/Home';
 import AdminDashboard from './Container/AdminDashboard/AdminDashboard';
 import PageNotFound from './Container/PageNotFound/PageNotFound';
 import Login from './Container/Login/Login';
+import Invoice from './Invoice/Invoice';
 
 export default () => (
   <Switch>
@@ -17,6 +18,7 @@ export default () => (
     <Route path="/place/:id?" exact component={Place} />
     <Route path="/admin" exact component={AdminDashboard} />
     <Route path="/Login" exact component={Login} />
+    <Route path="/invoice" exact component={Invoice} />
     <Route component={PageNotFound} />
   </Switch>
 );
