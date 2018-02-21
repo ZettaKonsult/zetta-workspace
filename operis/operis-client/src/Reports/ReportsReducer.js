@@ -10,7 +10,10 @@ export const isReportId = (state, id) =>
 export const getAllReports = state =>
   fromCreateLists.getAllIds(state.createLists).map(id => state.byId[id]);
 
-export const getReportById = (state, id) => state.byId[id];
+export const getReportById = (state, id) =>
+  state.byId[id] || {
+    date: new Date().toISOString().split('T')[0],
+  };
 
 export const getAllReportsSubmittedBy = (state, id) => {
   const allReports = getAllReports(state);

@@ -39,19 +39,8 @@ let ReportForm = props => (
       }))}
     />
     <Field name="hours" component={Input} type="number" placeholder="Hours" />
-    <Field
-      name="driving"
-      component={Input}
-      type="number"
-      placeholder="Driving"
-    />
-    <Field name="extrawork" component={TextArea} placeholder="Extra Work" />
-    <Field
-      name="extrahours"
-      component={Input}
-      type="number"
-      placeholder="extrahours"
-    />
+    <Field name="price" component={Input} type="number" placeholder="Price" />
+    <Field name="description" component={TextArea} placeholder="Description" />
     <Divider />
     <Button type="submit">Save report</Button>
   </Form>
