@@ -1,14 +1,14 @@
 import { combineReducers } from 'redux';
 
-import { ADD_PLACE, UPDATE_WORKPLACE } from './PlaceActions';
+import { UPDATE_RECIPIENT, ADD_RECIPIENT } from './RecipientActions';
 
 const place = (state, action) => {
   switch (action.type) {
-    case ADD_PLACE:
-    case UPDATE_WORKPLACE:
+    case ADD_RECIPIENT:
+    case UPDATE_RECIPIENT:
       return {
         id: action.id,
-        ...action.place,
+        ...action.recipient,
       };
     default:
       return state;
@@ -17,8 +17,8 @@ const place = (state, action) => {
 
 export const byId = (state = {}, action) => {
   switch (action.type) {
-    case ADD_PLACE:
-    case UPDATE_WORKPLACE:
+    case ADD_RECIPIENT:
+    case UPDATE_RECIPIENT:
       return {
         ...state,
         [action.id]: place(state[action.id], action),
@@ -30,7 +30,7 @@ export const byId = (state = {}, action) => {
 
 export const allIds = (state = [], action) => {
   switch (action.type) {
-    case ADD_PLACE:
+    case ADD_RECIPIENT:
       return [...state, action.id];
     default:
       return state;

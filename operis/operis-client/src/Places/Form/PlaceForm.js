@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { reduxForm, Field } from 'redux-form';
 
-import { addPlace, updateWorkplace } from '../PlaceActions';
+import { addRecipient, updateRecipient } from '../RecipientActions';
 import { isWorkplaceId, getWorkplaceById } from '../../reducers';
 import validate from './PlaceFormValidation';
 import { Input } from '../../Components/Form/Input';
@@ -22,14 +22,18 @@ let PlaceForm = props => (
       }
     })}
   >
-    <Field name="name" component={Input} placeholder="Name of place" />
-    <Field
-      name="town"
-      component={Input}
-      placeholder="City place is located at"
-    />
+    <Field name="firstName" component={Input} placeholder="First Name" />
+    <Field name="lastName" component={Input} placeholder="Last Name" />
+    <Field name="email" component={Input} placeholder="Email" />
+    <Field name="mobile" component={Input} placeholder="mobile" />
+    <Field name="address" component={Input} placeholder="Address" />
+    <Field name="city" component={Input} placeholder="City" />
+    <Field name="zipcode" component={Input} placeholder="Zipcode" />
     <Divider />
     <Button type="submit">Save</Button>
+    <Button type="button" onClick={props.callback}>
+      Cancel
+    </Button>
   </Form>
 );
 
@@ -41,8 +45,8 @@ const mapStateToProps = (state, props) => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  addNewWorkplace: values => dispatch(addPlace(values)),
-  updateWorkplace: values => dispatch(updateWorkplace(values)),
+  addNewWorkplace: values => dispatch(addRecipient(values)),
+  updateWorkplace: values => dispatch(updateRecipient(values)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(PlaceForm);

@@ -45,8 +45,9 @@ provider:
         - dynamodb:Query
         - dynamodb:UpdateItem
       Resource:
-        - { "Fn::GetAtt": ["InvoiceDynamoDBTable", "Arn" ] }
-        - { "Fn::GetAtt": ["InvoiceRowDynamoDBTable", "Arn" ] }
+        - { "Fn::GetAtt": ["InvoicesDynamoDBTable", "Arn" ] }
+        - { "Fn::GetAtt": ["InvoiceRowsDynamoDBTable", "Arn" ] }
+        - { "Fn::GetAtt": ["RecipientsDynamoDBTable", "Arn" ] }
   environment:
     InvoiceRowsTable: ${self:custom.InvoiceRows}
     InvoicesTable: ${self:custom.Invoices}
@@ -74,7 +75,7 @@ functions:
 
 resources:
   Resources:
-    InvoiceDynamoDBTable:
+    InvoicesDynamoDBTable:
       Type: 'AWS::DynamoDB::Table'
       DeletionPolicy: Retain
       Properties:

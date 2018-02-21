@@ -3,7 +3,7 @@ import { reducer as formReducer } from 'redux-form';
 
 import reports, * as fromReports from './Reports/ReportsReducer';
 import workers, * as fromWorkers from './Workers/WorkersReducer';
-import places, * as fromPlaces from './Places/PlacesReducer';
+import places, * as fromPlaces from './Places/RecipientReducer';
 
 export default combineReducers({
   reports,

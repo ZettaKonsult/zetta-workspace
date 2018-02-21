@@ -14,7 +14,12 @@ module.exports = {
     rules: [
       {
         test: /\.js$/,
-        loader: 'babel-loader',
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: [['env', { targets: { node: '6.10.3' } }]],
+          },
+        },
         include: __dirname,
         exclude: /node_modules/,
       },
