@@ -1,10 +1,43 @@
 import { v4 } from 'uuid';
-
+import { API } from 'aws-amplify';
 import { getReportById } from '../reducers';
 
 export const ADD_REPORT = 'ADD_REPORT';
 export const UPDATE_REPORT = 'UPDATE_REPORT';
 export const UPDATE_REPORT_DATE = 'UPDATE_REPORT_DATE';
+
+export const FETCH_ROWS_PENDING = 'FETCH_ROWS_PENDING';
+export const FETCH_ROWS_SUCCESS = 'FETCH_ROWS_SUCCESS';
+export const FETCH_ROWS_FAILURE = 'FETCH_ROWS_FAILURE';
+
+const fetchAllRowsPending = {
+  type: FETCH_ROWS_PENDING,
+};
+const fetchAllRowsSuccess = payload => ({
+  type: FETCH_ROWS_SUCCESS,
+  payload,
+});
+const fetchAllRowsFailure = payload => ({
+  type: FETCH_ROWS_FAILURE,
+  payload,
+});
+
+export const fetchAllInvoiceRows = () => async dispatch => {
+  dispatch(fetchAllRowsPending);
+
+  try {
+    const { Items } = await API.get(
+      'invoice',
+      '/billrows/cjdvmtzgd000104wgiubpx9ru',
+      {
+        headers: {},
+      }
+    );
+    dispatch(fetchAllRowsSuccess(Items));
+  } catch (err) {
+    dispatch(fetchAllRowsFailure(err.message));
+  }
+};
 
 export const addReport = report => ({
   type: ADD_REPORT,

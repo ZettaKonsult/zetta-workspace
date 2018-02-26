@@ -5,11 +5,15 @@ import { Button } from 'semantic-ui-react';
 
 import ReportForm from './Form/ReportForm';
 
+import { fetchAllInvoiceRows } from './ReportActions';
 import { getAllReports, getWorkerName, getWorkplaceById } from '../reducers';
 
 import ReportCard from '../Components/ReportCard/ReportCard';
 
 class Report extends Component {
+  async componentDidMount() {
+    await fetchAllInvoiceRows()(this.props.dispatch);
+  }
   callback = () => {
     this.props.history.push('/report');
   };
@@ -22,11 +26,8 @@ class Report extends Component {
     props.reports.map(report => (
       <ReportCard
         key={report.id}
-        worker={props.getWorkerName(report.worker)}
-        hours={report.hours}
-        extra={report.extrahours}
-        date={new Date(report.date).toISOString().split('T')[0]}
-        workplace={props.getWorkplace(report.place).name}
+        hours={report.interval}
+        date={new Date(report.createdAt).toISOString().split('T')[0]}
         onClick={() => this.props.history.push(`/report/${report.id}`)}
       />
     ));

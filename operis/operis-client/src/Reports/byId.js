@@ -1,25 +1,17 @@
-import { ADD_REPORT, UPDATE_REPORT } from './ReportActions';
-
-const report = (state, action) => {
-  switch (action.type) {
-    case ADD_REPORT:
-    case UPDATE_REPORT:
-      return {
-        id: action.id,
-        ...action.report,
-      };
-    default:
-      return state;
-  }
-};
+import { FETCH_ROWS_PENDING, FETCH_ROWS_SUCCESS } from './ReportActions';
 
 const byId = (state = {}, action) => {
   switch (action.type) {
-    case ADD_REPORT:
-    case UPDATE_REPORT:
+    case FETCH_ROWS_PENDING:
+      return { ...state, isFetching: true };
+    case FETCH_ROWS_SUCCESS:
       return {
         ...state,
-        [action.id]: report(state[action.id], action),
+        isFetching: false,
+        ...action.payload.reduce(
+          (total, row) => ({ ...total, [row.id]: row }),
+          {}
+        ),
       };
     default:
       return state;

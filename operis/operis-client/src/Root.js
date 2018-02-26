@@ -5,7 +5,7 @@ import Amplify from 'aws-amplify';
 import { withAuthenticator } from 'aws-amplify-react';
 
 import App from './App';
-
+// window.LOG_LEVEL = 'DEBUG';
 Amplify.configure({
   Auth: {
     // REQUIRED - Amazon Cognito Identity Pool ID
@@ -20,8 +20,10 @@ Amplify.configure({
   API: {
     endpoints: [
       {
-        name: 'asd',
-        endpoint: 'https://jdegu4d057.execute-api.eu-central-1.amazonaws.com',
+        name: 'invoice',
+        endpoint:
+          'https://2rkxyjmw02.execute-api.eu-central-1.amazonaws.com/dev',
+        region: 'eu-central-1',
       },
     ],
   },
