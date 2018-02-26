@@ -59,25 +59,30 @@ functions:
       - http:
           path: /invoice
           method: post
+          cors: true
+          authorizer: aws_iam
   addBillableRow:
     handler: src/handler.writeBillableRow
     events:
       - http:
           path: /billrow
           method: post
+          cors: true
+          authorizer: aws_iam
   allBillableRows:
     handler: src/handler.getBillableRows
     events:
       - http:
           path: /billrows/{companyCustomerId}
           method: get
+          cors: true
+          authorizer: aws_iam
 
 
 resources:
   Resources:
     InvoicesDynamoDBTable:
       Type: 'AWS::DynamoDB::Table'
-      DeletionPolicy: Retain
       Properties:
         AttributeDefinitions:
           -
@@ -100,7 +105,6 @@ resources:
 
     InvoiceRowsDynamoDBTable:
       Type: 'AWS::DynamoDB::Table'
-      DeletionPolicy: Retain
       Properties:
         AttributeDefinitions:
           -
@@ -123,7 +127,6 @@ resources:
 
     RecipientsDynamoDBTable:
         Type: 'AWS::DynamoDB::Table'
-        DeletionPolicy: Retain
         Properties:
           AttributeDefinitions:
             -

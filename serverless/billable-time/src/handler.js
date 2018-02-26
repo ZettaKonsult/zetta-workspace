@@ -1,35 +1,40 @@
 import parser from './parser';
 import { addInvoiceRow, allInvoiceRows } from './invoiceRows';
 import { createInvoice } from './invoice';
-import response from './response';
+import { success, failure } from './response';
 import db from './database';
 
 export const writeInvoice = async (event, context, callback) => {
-  let statusCode = 200;
   const { data } = parser(event);
 
   try {
     const result = await createInvoice(db, data);
-    callback(null, response(statusCode, result));
+    callback(null, success(result));
   } catch (err) {
-    callback(null, response(502, err.message));
+    console.error(err);
+    callback(null, failure(err.message));
   }
 };
 
 export const writeBillableRow = async (event, context, callback) => {
-  let statusCode = 200;
   const { data } = parser(event);
-
-  const result = await addInvoiceRow(db, data);
-
-  callback(null, response(statusCode, result));
+  try {
+    const result = await addInvoiceRow(db, data);
+    callback(null, success(result));
+  } catch (err) {
+    console.error(err);
+    callback(null, failure(err.message));
+  }
 };
 
 export const getBillableRows = async (event, context, callback) => {
-  let statusCode = 200;
   const { params } = parser(event);
 
-  const result = await allInvoiceRows(db, params.companyCustomerId);
-
-  callback(null, response(statusCode, result));
+  try {
+    const result = await allInvoiceRows(db, params.companyCustomerId);
+    callback(null, success(result));
+  } catch (err) {
+    console.error(err);
+    callback(null, failure(err.message));
+  }
 };
