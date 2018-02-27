@@ -56,7 +56,7 @@ export const getRecipients = async (event, context, callback) => {
   const { params } = parser(event);
 
   try {
-    const result = await recipient.list(db, params);
+    const result = await recipient.list(db, params.companyCustomerId);
     callback(null, success(result));
   } catch (err) {
     console.error(err);

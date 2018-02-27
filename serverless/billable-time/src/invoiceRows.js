@@ -26,34 +26,26 @@ const formatData = (data: Object): InvoiceRow => ({
 });
 
 export const addInvoiceRow = async (db: any, data: Object) => {
-  try {
-    const params = {
-      TableName: getDbTable(),
-      Item: formatData(data),
-    };
+  const params = {
+    TableName: getDbTable(),
+    Item: formatData(data),
+  };
 
-    await db('put', params);
+  await db('put', params);
 
-    return params.Item;
-  } catch (err) {
-    return err;
-  }
+  return params.Item;
 };
 
 export const allInvoiceRows = async (db: any, customerId: string) => {
-  try {
-    const result = await db('query', {
-      TableName: getDbTable(),
-      KeyConditionExpression: 'companyCustomerId = :companyCustomerId',
-      ExpressionAttributeValues: {
-        ':companyCustomerId': customerId,
-      },
-    });
+  const result = await db('query', {
+    TableName: getDbTable(),
+    KeyConditionExpression: 'companyCustomerId = :companyCustomerId',
+    ExpressionAttributeValues: {
+      ':companyCustomerId': customerId,
+    },
+  });
 
-    return result;
-  } catch (err) {
-    return err;
-  }
+  return result;
 };
 
 export const fetchInvoiceRows = async (
@@ -61,15 +53,11 @@ export const fetchInvoiceRows = async (
   companyCustomerId: string,
   ids: string[]
 ) => {
-  try {
-    const fetchRows = ids.map(id =>
-      invoiceRow(db, { companyCustomerId: companyCustomerId, id })
-    );
-    let result = await Promise.all(fetchRows);
-    return result.map(item => item.Item);
-  } catch (err) {
-    return err;
-  }
+  const fetchRows = ids.map(id =>
+    invoiceRow(db, { companyCustomerId: companyCustomerId, id })
+  );
+  let result = await Promise.all(fetchRows);
+  return result.map(item => item.Item);
 };
 
 const invoiceRow = async (db, Key) =>
