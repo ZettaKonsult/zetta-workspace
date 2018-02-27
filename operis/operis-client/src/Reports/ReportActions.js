@@ -10,9 +10,13 @@ export const FETCH_ROWS_PENDING = 'FETCH_ROWS_PENDING';
 export const FETCH_ROWS_SUCCESS = 'FETCH_ROWS_SUCCESS';
 export const FETCH_ROWS_FAILURE = 'FETCH_ROWS_FAILURE';
 
-const fetchAllRowsPending = {
+export const POST_ROW_PENDING = 'POST_ROW_PENDING';
+export const POST_ROW_SUCCESS = 'POST_ROW_SUCCESS';
+export const POST_ROW_FAILURE = 'POST_ROW_FAILURE';
+
+const fetchAllRowsPending = () => ({
   type: FETCH_ROWS_PENDING,
-};
+});
 const fetchAllRowsSuccess = payload => ({
   type: FETCH_ROWS_SUCCESS,
   payload,
@@ -23,7 +27,7 @@ const fetchAllRowsFailure = payload => ({
 });
 
 export const fetchAllInvoiceRows = () => async dispatch => {
-  dispatch(fetchAllRowsPending);
+  dispatch(fetchAllRowsPending());
 
   try {
     const { Items } = await API.get(
@@ -36,6 +40,35 @@ export const fetchAllInvoiceRows = () => async dispatch => {
     dispatch(fetchAllRowsSuccess(Items));
   } catch (err) {
     dispatch(fetchAllRowsFailure(err.message));
+  }
+};
+
+const postRowPending = () => ({
+  type: POST_ROW_PENDING,
+});
+const postRowSuccess = row => ({
+  type: POST_ROW_SUCCESS,
+  payload: row,
+});
+const postRowFailure = err => ({
+  type: POST_ROW_FAILURE,
+  payload: err,
+});
+
+export const postInvoiceRow = invoiceRow => async dispatch => {
+  dispatch(postRowPending());
+  try {
+    const result = await API.post('invoice', '/billrow', {
+      headers: {},
+      body: {
+        ...invoiceRow,
+        companyCustomerId: 'cjdvmtzgd000104wgiubpx9ru',
+        intervalCount: 'once',
+      },
+    });
+    dispatch(postRowSuccess(result));
+  } catch (err) {
+    dispatch(postRowFailure(err.message));
   }
 };
 

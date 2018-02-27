@@ -10,6 +10,7 @@ const getDbTable = (): string => {
   return process.env.InvoiceRowsTable;
 };
 
+//TODO createdAt check if value is present otherwise todays date
 const formatData = (data: Object): InvoiceRow => ({
   id: cuid(),
   companyCustomerId: data.companyCustomerId,
@@ -17,7 +18,7 @@ const formatData = (data: Object): InvoiceRow => ({
   recipientIds: [data.recipientId],
   price: data.price,
   description: data.description,
-  interval: data.unit,
+  interval: data.interval,
   intervalCount: 'once',
   labels: [],
   group: 'none',

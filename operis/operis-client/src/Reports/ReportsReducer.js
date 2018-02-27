@@ -12,7 +12,7 @@ export const getAllReports = state =>
 
 export const getReportById = (state, id) =>
   state.byId[id] || {
-    date: new Date().toISOString().split('T')[0],
+    createdAt: new Date().toISOString().split('T')[0],
   };
 
 export const getAllReportsSubmittedBy = (state, id) => {

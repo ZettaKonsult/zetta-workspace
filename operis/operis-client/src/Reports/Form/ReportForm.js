@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { reduxForm, Field } from 'redux-form';
 import { Form, Button, Divider } from 'semantic-ui-react';
 
-import { addReport, updateReport } from '../ReportActions';
+import { postInvoiceRow } from '../ReportActions';
 
 import { getReportById, isReportId } from '../../reducers';
 import { getWorkers, getPlaces } from '../../reducers';
@@ -27,7 +27,7 @@ let ReportForm = props => (
       }
     })}
   >
-    <Field name="date" component={Input} type="date" placeholder="Date" />
+    <Field name="createdAt" component={Input} type="date" placeholder="Date" />
     <Field
       name="recipient"
       component={Dropdown}
@@ -38,7 +38,12 @@ let ReportForm = props => (
         text: `${recipient.firstName} ${recipient.lastName}`,
       }))}
     />
-    <Field name="hours" component={Input} type="number" placeholder="Hours" />
+    <Field
+      name="interval"
+      component={Input}
+      type="number"
+      placeholder="Hours"
+    />
     <Field name="price" component={Input} type="number" placeholder="Price" />
     <Field name="description" component={TextArea} placeholder="Description" />
     <Divider />
@@ -56,8 +61,7 @@ const mapStateToProps = (state, props) => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  addNewReport: values => dispatch(addReport(values)),
-  updateReport: values => dispatch(updateReport(values)),
+  addNewReport: values => dispatch(postInvoiceRow(values)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ReportForm);
