@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { reduxForm, Field } from 'redux-form';
 
-import { addRecipient, updateRecipient } from '../RecipientActions';
+import { postRecipient } from '../RecipientActions';
 import { isWorkplaceId, getWorkplaceById } from '../../reducers';
 import validate from './PlaceFormValidation';
 import { Input } from '../../Components/Form/Input';
@@ -12,11 +12,8 @@ let PlaceForm = props => (
   <Form
     autoComplete="off"
     onSubmit={props.handleSubmit(values => {
-      if (props.idExists) {
-        props.updateWorkplace(values);
-      } else {
-        props.addNewWorkplace(values);
-      }
+      props.postRecipient(values);
+
       if (typeof props.callback !== 'undefined') {
         props.callback();
       }
@@ -45,8 +42,7 @@ const mapStateToProps = (state, props) => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  addNewWorkplace: values => dispatch(addRecipient(values)),
-  updateWorkplace: values => dispatch(updateRecipient(values)),
+  postRecipient: values => dispatch(postRecipient(values)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(PlaceForm);

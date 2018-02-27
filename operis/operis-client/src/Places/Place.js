@@ -3,11 +3,16 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import PlaceForm from './Form/PlaceForm';
-import { Button, Icon } from 'semantic-ui-react';
+import { Button } from 'semantic-ui-react';
 
 import { getPlaces } from '../reducers';
+import { fetchAllRecipients } from './RecipientActions';
+import RecipientCard from './RecipientCard';
 
 class Place extends Component {
+  async componentDidMount() {
+    await fetchAllRecipients()(this.props.dispatch);
+  }
   callback = () => {
     this.props.history.push('/place');
   };
@@ -28,42 +33,22 @@ class Place extends Component {
           onClick={this.newRecipient}
           content="New Recipient"
         />
-        {renderRecipients(this.props.recipients)}
+        {renderRecipients(this.props.recipients, id =>
+          this.props.history.push(`/place/${id}`)
+        )}
       </div>
     );
   }
 }
 
-const renderRecipients = recipients =>
+const renderRecipients = (recipients, onClick) =>
   recipients.map(recipient => (
     <RecipientCard
       key={recipient.id}
       recipient={recipient}
-      onClick={() => {
-        this.props.history.push(`/place/${recipient.id}`);
-      }}
+      onClick={() => onClick(recipient.id)}
     />
   ));
-
-const RecipientCard = ({ id, recipient, onClick }) => (
-  <div
-    style={{
-      padding: '0.5em',
-      border: '1px solid grey',
-      margin: '0.2em',
-      display: 'flex',
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      borderRadius: '5px',
-    }}
-    onClick={onClick}
-  >
-    <strong style={{ fontSize: '1.2em' }}>
-      {recipient.firstName} {recipient.lastName}
-    </strong>
-    <Icon onClick={() => console.log('TODO')} link name="close" />
-  </div>
-);
 
 const mapStateToProps = (state, props) => ({
   recipients: getPlaces(state),

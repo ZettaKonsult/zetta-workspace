@@ -22,7 +22,7 @@ Amplify.configure({
       {
         name: 'invoice',
         endpoint:
-          'https://2rkxyjmw02.execute-api.eu-central-1.amazonaws.com/dev',
+          'https://5sefyvqrp4.execute-api.eu-central-1.amazonaws.com/dev',
         region: 'eu-central-1',
       },
     ],
