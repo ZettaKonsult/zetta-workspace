@@ -8,6 +8,7 @@
     "start:dev": "sls offline start",
     "db-setup": "sls dynamodb install",
     "db-remove": "sls dynamodb remove",
+    "deploy:debug": "sls deploy -v",
     "deploy:prod": "sls deploy --stage prod"
   },
   "author": "",
@@ -24,6 +25,7 @@
     "babel-preset-env": "^1.6.1",
     "babel-preset-stage-3": "^6.24.1",
     "jest": "^22.2.2",
+    "serverless": "^1.26.0",
     "serverless-dynamodb-local": "0.2.27",
     "serverless-offline": "3.17.0",
     "serverless-webpack": "^4.2.0",

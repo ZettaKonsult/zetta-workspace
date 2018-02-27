@@ -51,6 +51,7 @@ provider:
   environment:
     InvoiceRowsTable: ${self:custom.InvoiceRows}
     InvoicesTable: ${self:custom.Invoices}
+    RecipientTable: ${self:custom.Recipients}
 
 functions:
   createInvoice:
@@ -74,6 +75,22 @@ functions:
     events:
       - http:
           path: /billrows/{companyCustomerId}
+          method: get
+          cors: true
+          authorizer: aws_iam
+  createRecipient:
+    handler: src/handler.createRecipient
+    events:
+      - http:
+          path: /recipient
+          method: post
+          cors: true
+          authorizer: aws_iam
+  getRecipients:
+    handler: src/handler.getRecipients
+    events:
+      - http:
+          path: /recipient/{companyCustomerId}
           method: get
           cors: true
           authorizer: aws_iam
@@ -130,12 +147,18 @@ resources:
         Properties:
           AttributeDefinitions:
             -
+              AttributeName: companyCustomerId
+              AttributeType: S
+            -
               AttributeName: id
               AttributeType: S
           KeySchema:
             -
-              AttributeName: id
+              AttributeName: companyCustomerId
               KeyType: HASH
+            -
+              AttributeName: id
+              KeyType: RANGE
           ProvisionedThroughput:
             ReadCapacityUnits: 1
             WriteCapacityUnits: 1

@@ -77,3 +77,9 @@ const invoiceRow = async (db, Key) =>
     TableName: getDbTable(),
     Key,
   });
+
+export default {
+  create: addInvoiceRow,
+  list: allInvoiceRows,
+  get: fetchInvoiceRows,
+};
