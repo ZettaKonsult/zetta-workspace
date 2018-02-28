@@ -21,8 +21,9 @@ Amplify.configure({
     endpoints: [
       {
         name: 'invoice',
-        endpoint:
-          'https://5sefyvqrp4.execute-api.eu-central-1.amazonaws.com/dev',
+        // endpoint:
+        //   'https://5sefyvqrp4.execute-api.eu-central-1.amazonaws.com/dev',
+        endpoint: 'http://localhost:4000',
         region: 'eu-central-1',
       },
     ],

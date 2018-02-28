@@ -15,10 +15,9 @@ class App extends Component {
     await Promise.all([
       fetchAllRecipients(companyCustomerId)(this.props.dispatch),
       fetchAllInvoiceRows(companyCustomerId)(this.props.dispatch),
-      // combineRows(companyCustomerId, [
-      //   'cje6v3wej000201pffq7ju8xg',
-      //   'cje72lq10000101pcast4e84e',
-      // ])(this.props.dispatch),
+      // combineRows(companyCustomerId, ['cje79jzid000100cv4qnqq3ry'])(
+      //   this.props.dispatch
+      // ),
     ]);
   }
   async signOut() {

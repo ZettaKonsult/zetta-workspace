@@ -1,11 +1,26 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
+import { API } from 'aws-amplify';
 
 export default class Invoice extends Component {
-  state = {
-    rows: [1, 2, 3, 4, 5],
-    checked: [],
-  };
+  constructor() {
+    super();
+    this.state = {
+      invoices: [],
+    };
+    this.companyCustomerId = 'cjdvmtzgd000104wgiubpx9ru';
+  }
+
+  async componentDidMount() {
+    const invoices = await API.get(
+      'invoice',
+      `/invoice/${this.companyCustomerId}`,
+      {
+        header: {},
+      }
+    );
+    this.setState({ invoices });
+  }
 
   handleCheckbox(value) {
     this.setState(state => {
@@ -17,15 +32,14 @@ export default class Invoice extends Component {
     });
   }
   render() {
+    if (this.state.invoices.length === 0) {
+      return <p>...Loading...</p>;
+    }
     return (
       <div>
-        {this.state.rows.map((row, i) => (
-          <InvoiceRow key={i}>
-            <input type="checkbox" onClick={() => this.handleCheckbox(row)} />
-            {row}
-          </InvoiceRow>
+        {this.state.invoices.map((invoice, i) => (
+          <InvoiceRow key={i}>{invoice.id}</InvoiceRow>
         ))}
-        {this.state.checked.map(id => <p>{id}</p>)}
       </div>
     );
   }
