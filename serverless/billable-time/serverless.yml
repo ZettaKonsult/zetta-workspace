@@ -12,8 +12,7 @@ plugins:
 # Enable auto-packing of external modules
 custom:
   serverless-offline:
-    babelOptions:
-      presets: ["env"]
+    port: 4000
   webpackIncludeModules: true
   Invoices: 'Invoices-${self:provider.stage}'
   InvoiceRows: 'InvoiceRows-${self:provider.stage}'
@@ -23,15 +22,8 @@ custom:
       port: 8000
       inMemory: true
       migrate: true
-      seed: true
+      seed: false
 
-    seed:
-      dev:
-        sources:
-          - table: Recipients-dev
-            sources: [./offline/recipientMock.json]
-          - table: InvoiceRows-dev
-            sources: [./offline/invoiceRowsMock.json]
 provider:
   name: aws
   runtime: nodejs6.10

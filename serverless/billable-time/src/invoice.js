@@ -2,7 +2,7 @@ import cuid from 'cuid';
 import validator from 'invoice-validator';
 
 import { fetchInvoiceRows } from './invoiceRows';
-import recipient from './recipient';
+import recipientDb from './recipient';
 
 const getDbTable = () => {
   if (!process.env.InvoicesTable) {
@@ -61,18 +61,20 @@ const fetchUniqueRecipients = async (db, companyCustomerId, invoiceRows) => {
     (id, index, array) => array.indexOf(id) === index
   );
   const fetchPromise = uniqueIds.map(id =>
-    recipient.get(companyCustomerId, id)
+    recipientDb.get(db, companyCustomerId, id)
   );
   return await Promise.all(fetchPromise);
 };
 
-const list = async (db, companyCustomerId) =>
-  await db('query', {
+const list = async (db, companyCustomerId) => {
+  const result = await db('query', {
     TableName: getDbTable(),
     KeyConditionExpression: 'companyCustomerId = :companyCustomerId',
     ExpressionAttributeValues: {
       ':companyCustomerId': companyCustomerId,
     },
   });
+  return result.Items;
+};
 
 export default { list };

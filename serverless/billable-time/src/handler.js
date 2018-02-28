@@ -1,9 +1,10 @@
-import parser from './parser';
-import invoice, { addInvoiceRow, allInvoiceRows } from './invoiceRows';
-import { createInvoice } from './invoice';
-import { success, failure } from './response';
+import { addInvoiceRow, allInvoiceRows } from './invoiceRows';
+import invoice, { createInvoice } from './invoice';
 import recipient from './recipient';
-import db from './database';
+
+import { success, failure } from './util/response';
+import parser from './util/parser';
+import db from './util/database';
 
 export const writeInvoice = async (event, context, callback) => {
   const { data } = parser(event);
@@ -20,7 +21,7 @@ export const writeInvoice = async (event, context, callback) => {
 export const getInvoices = async (event, context, callback) => {
   const { params } = parser(event);
   try {
-    const result = await invoice.list(db, params.id);
+    const result = await invoice.list(db, params.companyCustomerId);
     callback(null, success(result));
   } catch (error) {
     console.error(error);

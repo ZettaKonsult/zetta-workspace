@@ -37,7 +37,7 @@ const create = async (db, data) => {
 };
 
 const get = async (db, companyCustomerId, id) => {
-  const result = db('get', {
+  const result = await db('get', {
     TableName: 'Recipients-dev',
     Key: { id, companyCustomerId },
   });
