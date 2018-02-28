@@ -62,6 +62,14 @@ functions:
           method: post
           cors: true
           authorizer: aws_iam
+  getInvoices:
+    handler: src/handler.getInvoices
+    events:
+      - http:
+          path: /invoice
+          method: get
+          cors: true
+          authorizer: aws_iam
   addBillableRow:
     handler: src/handler.writeBillableRow
     events:

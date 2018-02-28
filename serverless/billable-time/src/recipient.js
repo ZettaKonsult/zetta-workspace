@@ -36,6 +36,14 @@ const create = async (db, data) => {
   return params.Item;
 };
 
+const get = async (db, companyCustomerId, id) => {
+  const result = db('get', {
+    TableName: 'Recipients-dev',
+    Key: { id, companyCustomerId },
+  });
+  return result.Item;
+};
+
 const list = async (db, companyCustomerId) => {
   const result = await db('query', {
     TableName: getDbTable(),
@@ -46,4 +54,4 @@ const list = async (db, companyCustomerId) => {
   });
   return result.Items;
 };
-export default { create, list };
+export default { create, list, get };
