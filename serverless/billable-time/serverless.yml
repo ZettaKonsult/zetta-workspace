@@ -66,7 +66,7 @@ functions:
     handler: src/handler.getInvoices
     events:
       - http:
-          path: /invoice
+          path: /invoice/{companyCustomerId}
           method: get
           cors: true
           authorizer: aws_iam
