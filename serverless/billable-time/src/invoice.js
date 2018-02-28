@@ -31,7 +31,11 @@ export const createInvoice = async (db, data) => {
   if (!isValid) {
     throw Error('Trying to send invoice row to mixed recipients');
   } else {
-    const recipients = await fetchRecipients(db, invoiceRows);
+    const recipients = await fetchRecipients(
+      db,
+      companyCustomerId,
+      invoiceRows
+    );
 
     const invoicePromise = recipients.map(recipient => {
       const params = {
@@ -43,19 +47,17 @@ export const createInvoice = async (db, data) => {
 
     await Promise.all(invoicePromise);
 
-    await db('scan', { TableName: getDbTable() });
-
     return 'Invoice succesfully created';
   }
 };
 
-const fetchRecipients = async (db, invoiceRows) => {
+const fetchRecipients = async (db, companyCustomerId, invoiceRows) => {
   const ids = invoiceRows.reduce(
     (total, row) => [...total, ...row.recipientIds],
     []
   );
   const fetchPromise = ids.map(id =>
-    db('get', { TableName: 'Recipients-dev', Key: { id } })
+    db('get', { TableName: 'Recipients-dev', Key: { id, companyCustomerId } })
   );
   const result = await Promise.all(fetchPromise);
   return result.map(item => item.Item);

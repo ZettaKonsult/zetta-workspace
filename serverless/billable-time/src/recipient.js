@@ -20,6 +20,7 @@ const formatData = (data: Object): Recipient => ({
   firstName: data.firstName,
   lastName: data.lastName,
   ssn: data.ssn,
+  mobile: data.mobile,
   company: data.company,
   reccuringPayments: [],
 });
