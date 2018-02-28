@@ -1,11 +1,26 @@
 import React, { Component } from 'react';
-import Routes from './Routes';
+import { Link, Route, withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
 import { Auth } from 'aws-amplify';
 import { Menu, Divider } from 'semantic-ui-react';
 
-import { Link, Route } from 'react-router-dom';
+import { fetchAllRecipients } from './Places/RecipientActions';
+import { fetchAllInvoiceRows, combineRows } from './Reports/ReportActions';
+
+import Routes from './Routes';
 
 class App extends Component {
+  async componentDidMount() {
+    const companyCustomerId = 'cjdvmtzgd000104wgiubpx9ru';
+    await Promise.all([
+      fetchAllRecipients(companyCustomerId)(this.props.dispatch),
+      fetchAllInvoiceRows(companyCustomerId)(this.props.dispatch),
+      // combineRows(companyCustomerId, [
+      //   'cje6v3wej000201pffq7ju8xg',
+      //   'cje72lq10000101pcast4e84e',
+      // ])(this.props.dispatch),
+    ]);
+  }
   async signOut() {
     await Auth.signOut();
   }
@@ -51,4 +66,4 @@ const NavLink = ({ to, activeOnlyWhenExact, children }) => (
   />
 );
 
-export default App;
+export default withRouter(connect(undefined)(App));

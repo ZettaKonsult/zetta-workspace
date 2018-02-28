@@ -2,11 +2,12 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { reduxForm, Field } from 'redux-form';
 import { Form, Button, Divider } from 'semantic-ui-react';
+import { Link } from 'react-router-dom';
 
 import { postInvoiceRow } from '../ReportActions';
 
 import { getReportById, isReportId } from '../../reducers';
-import { getWorkers, getPlaces } from '../../reducers';
+import { getPlaces } from '../../reducers';
 
 import validate from './ReportFormValidation';
 import { TextArea } from '../../Components/Form/TextArea';
@@ -29,7 +30,7 @@ let ReportForm = props => (
   >
     <Field name="createdAt" component={Input} type="date" placeholder="Date" />
     <Field
-      name="recipient"
+      name="recipientId"
       component={Dropdown}
       placeholder="Recipient"
       options={props.recipients.map(recipient => ({
@@ -48,6 +49,7 @@ let ReportForm = props => (
     <Field name="description" component={TextArea} placeholder="Description" />
     <Divider />
     <Button type="submit">Save report</Button>
+    <Button as={Link} to={`/report`} content="Cancel" />
   </Form>
 );
 
@@ -56,12 +58,13 @@ ReportForm = reduxForm({ form: 'reportForm', validate })(ReportForm);
 const mapStateToProps = (state, props) => ({
   idExists: isReportId(state, props.id),
   initialValues: getReportById(state, props.id),
-  workers: getWorkers(state),
   recipients: getPlaces(state),
 });
 
+//TODO ABSTRACT COMPANYCUSTOMERID
 const mapDispatchToProps = dispatch => ({
-  addNewReport: values => dispatch(postInvoiceRow(values)),
+  addNewReport: values =>
+    dispatch(postInvoiceRow(values, 'cjdvmtzgd000104wgiubpx9ru')),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ReportForm);

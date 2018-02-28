@@ -1,9 +1,4 @@
-import {
-  FETCH_ROWS_PENDING,
-  FETCH_ROWS_SUCCESS,
-  FETCH_ROWS_FAILURE,
-  POST_ROW_SUCCESS,
-} from './ReportActions';
+import { FETCH_ROWS_SUCCESS, POST_ROW_SUCCESS } from './ReportActions';
 
 const byId = (state = {}, action) => {
   switch (action.type) {
@@ -11,7 +6,10 @@ const byId = (state = {}, action) => {
       return {
         ...state,
         ...action.payload.reduce(
-          (total, row) => ({ ...total, [row.id]: row }),
+          (total, row) => ({
+            ...total,
+            [row.id]: { ...row, recipientId: row.recipientIds[0] },
+          }),
           {}
         ),
       };

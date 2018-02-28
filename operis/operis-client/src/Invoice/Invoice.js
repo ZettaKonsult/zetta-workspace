@@ -19,8 +19,8 @@ export default class Invoice extends Component {
   render() {
     return (
       <div>
-        {this.state.rows.map(row => (
-          <InvoiceRow>
+        {this.state.rows.map((row, i) => (
+          <InvoiceRow key={i}>
             <input type="checkbox" onClick={() => this.handleCheckbox(row)} />
             {row}
           </InvoiceRow>

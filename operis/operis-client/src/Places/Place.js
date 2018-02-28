@@ -6,13 +6,10 @@ import PlaceForm from './Form/PlaceForm';
 import { Button } from 'semantic-ui-react';
 
 import { getPlaces } from '../reducers';
-import { fetchAllRecipients } from './RecipientActions';
+
 import RecipientCard from './RecipientCard';
 
 class Place extends Component {
-  async componentDidMount() {
-    await fetchAllRecipients()(this.props.dispatch);
-  }
   callback = () => {
     this.props.history.push('/place');
   };

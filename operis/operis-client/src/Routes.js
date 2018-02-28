@@ -12,11 +12,11 @@ import Invoice from './Invoice/Invoice';
 export default () => (
   <Switch>
     <Route path="/" exact component={Home} />
-    <Route path="/report/:id?" exact component={Report} />
-    <Route path="/worker/:id?" exact component={Worker} />
-    <Route path="/place/:id?" exact component={Place} />
-    <Route path="/admin" exact component={AdminDashboard} />
-    <Route path="/invoice" exact component={Invoice} />
+    <Route path="/report" component={Report} />
+    <Route path="/worker/:id?" component={Worker} />
+    <Route path="/place/:id?" component={Place} />
+    <Route path="/admin" component={AdminDashboard} />
+    <Route path="/invoice" component={Invoice} />
     <Route component={PageNotFound} />
   </Switch>
 );
