@@ -56,7 +56,10 @@ const fetchRecipients = async (db, companyCustomerId, invoiceRows) => {
     (total, row) => [...total, ...row.recipientIds],
     []
   );
-  const fetchPromise = ids.map(id =>
+  const uniqueIds = ids.filter(
+    (id, index, array) => array.indexOf(id) === index
+  );
+  const fetchPromise = uniqueIds.map(id =>
     db('get', { TableName: 'Recipients-dev', Key: { id, companyCustomerId } })
   );
   const result = await Promise.all(fetchPromise);
