@@ -54,6 +54,14 @@ functions:
           method: post
           cors: true
           authorizer: aws_iam
+  sendInvoice:
+    handler: src/handler.sendInvoice
+    events:
+      - http:
+          path: /invoice/mail/{invoiceId}
+          method: get
+          cors: true
+          authorizer: aws_iam
   getInvoices:
     handler: src/handler.getInvoices
     events:

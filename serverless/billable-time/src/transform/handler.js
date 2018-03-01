@@ -1,29 +1,25 @@
 import puppeteer from 'puppeteer';
-import parser from 'serverless-event-parser';
 
 import mail from './emailDoc';
-import loadTemplate from './loadTemplate';
-import response from './response';
-import render from './render';
-import testData from './testData';
+import prepareTempalte from './prepareTempalte';
 
-export const createCompanyCustomer = async (event, context, callback) => {
-  const { data } = parser(event);
+let browser;
 
-  let html, browser;
-  try {
-    [html, browser] = await Promise.all([loadTemplate(), puppeteer.launch()]);
+const getBrowserPage = async () => {
+  browser = await puppeteer.launch();
+  const page = await browser.newPage();
+  return page;
+};
 
-    const renderedTemplate = render(html, testData);
+export default async data => {
+  let [renderedTemplate, page] = await Promise.all([
+    prepareTempalte(data),
+    getBrowserPage(),
+  ]);
+  page.setContent(renderedTemplate);
 
-    const page = await browser.newPage();
-    page.setContent(renderedTemplate);
-    const buffer = await page.pdf({ format: 'A4' });
-    mail(buffer);
-    callback(null, response(200, true));
-  } catch (err) {
-    callback(err);
-  } finally {
-    browser.close();
-  }
+  const buffer = await page.pdf({ format: 'A4' });
+  browser.close();
+  mail(buffer);
+  return buffer;
 };

@@ -1,11 +1,27 @@
 import Mustache from 'mustache';
+import { promisify } from 'util';
+import fs from 'fs';
 
-export default (htmlView, data) => {
-  return Mustache.to_html(htmlView, prepareData(data));
+export default async data => {
+  let [tempalte, date] = await Promise.all([
+    readTemplateFile(),
+    prepareData(data),
+  ]);
+  return Mustache.to_html(tempalte, date);
 };
 
+const readFileAsync = promisify(fs.readFile);
+const readTemplateFile = async () =>
+  await readFileAsync('./src/template/template.html', 'utf8');
+
 const prepareData = data => {
-  const { createdAt, companyCustomer, recipient, invoiceRows, tax } = data;
+  const {
+    createdAt,
+    companyCustomer,
+    recipient,
+    invoiceRows,
+    tax = 1.25,
+  } = data;
 
   const id = new Date(createdAt);
   const timeToPay = new Date(id.getUTCFullYear(), id.getUTCMonth() + 1);

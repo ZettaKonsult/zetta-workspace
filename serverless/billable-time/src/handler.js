@@ -1,6 +1,7 @@
 import { addInvoiceRow, allInvoiceRows } from './invoiceRows';
 import invoice, { createInvoice } from './invoice';
 import recipient from './recipient';
+import invoicePDF from './transform/handler';
 
 import { success, failure } from './util/response';
 import parser from './util/parser';
@@ -12,6 +13,19 @@ export const writeInvoice = async (event, context, callback) => {
   try {
     const result = await createInvoice(db, data);
     callback(null, success(result));
+  } catch (err) {
+    console.error(err);
+    callback(null, failure(err.message));
+  }
+};
+
+export const sendInvoice = async (event, context, callback) => {
+  const { params } = parser(event);
+
+  try {
+    const result = await invoice.get(db, params.invoiceId);
+    await invoicePDF(result);
+    callback(null, success());
   } catch (err) {
     console.error(err);
     callback(null, failure(err.message));
