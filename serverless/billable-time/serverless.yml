@@ -1,8 +1,6 @@
 # NOTE: update this with your service name
 service: operis-billable-time
 
-package:
-
 # Use the serverless-webpack plugin to transpile ES6
 plugins:
   - serverless-webpack
@@ -11,18 +9,25 @@ plugins:
 
 # Enable auto-packing of external modules
 custom:
-  serverless-offline:
-    port: 4000
   webpackIncludeModules: true
+  stage: ${opt:stage, self:provider.stage}
   Invoices: 'Invoices-${self:provider.stage}'
   InvoiceRows: 'InvoiceRows-${self:provider.stage}'
   Recipients: 'Recipients-${self:provider.stage}'
+  CompanyCustomer: 'CompanyCustomer-${self:provider.stage}'
+  serverless-offline:
+    port: 4000
   dynamodb:
     start:
       port: 8000
       inMemory: true
       migrate: true
-      seed: false
+      seed: true
+    seed:
+      domain:
+        sources:
+          - table: ${self:custom.CompanyCustomer}
+            sources: [./offline/seeds/company-customer.json]
 
 provider:
   name: aws
@@ -44,6 +49,7 @@ provider:
     InvoiceRowsTable: ${self:custom.InvoiceRows}
     InvoicesTable: ${self:custom.Invoices}
     RecipientTable: ${self:custom.Recipients}
+    CompanyCustomerTable: ${self:custom.CompanyCustomer}
 
 functions:
   createInvoice:
@@ -58,8 +64,8 @@ functions:
     handler: src/handler.sendInvoice
     events:
       - http:
-          path: /invoice/mail/{invoiceId}
-          method: get
+          path: /invoice/mail
+          method: post
           cors: true
           authorizer: aws_iam
   getInvoices:
@@ -106,69 +112,12 @@ functions:
 
 resources:
   Resources:
-    InvoicesDynamoDBTable:
-      Type: 'AWS::DynamoDB::Table'
-      Properties:
-        AttributeDefinitions:
-          -
-            AttributeName: companyCustomerId
-            AttributeType: S
-          -
-            AttributeName: createdAt
-            AttributeType: N
-        KeySchema:
-          -
-            AttributeName: companyCustomerId
-            KeyType: HASH
-          -
-            AttributeName: createdAt
-            KeyType: RANGE
-        ProvisionedThroughput:
-          ReadCapacityUnits: 1
-          WriteCapacityUnits: 1
-        TableName: ${self:custom.Invoices}
+    ${file(offline/migrations/companycustomer.yml)}
+    ${file(offline/migrations/invoice.yml)}
+    ${file(offline/migrations/invoicerow.yml)}
+    ${file(offline/migrations/recipient.yml)}
 
-    InvoiceRowsDynamoDBTable:
-      Type: 'AWS::DynamoDB::Table'
-      Properties:
-        AttributeDefinitions:
-          -
-            AttributeName: companyCustomerId
-            AttributeType: S
-          -
-            AttributeName: id
-            AttributeType: S
-        KeySchema:
-          -
-            AttributeName: companyCustomerId
-            KeyType: HASH
-          -
-            AttributeName: id
-            KeyType: RANGE
-        ProvisionedThroughput:
-          ReadCapacityUnits: 1
-          WriteCapacityUnits: 1
-        TableName: ${self:custom.InvoiceRows}
-
-    RecipientsDynamoDBTable:
-        Type: 'AWS::DynamoDB::Table'
-        Properties:
-          AttributeDefinitions:
-            -
-              AttributeName: companyCustomerId
-              AttributeType: S
-            -
-              AttributeName: id
-              AttributeType: S
-          KeySchema:
-            -
-              AttributeName: companyCustomerId
-              KeyType: HASH
-            -
-              AttributeName: id
-              KeyType: RANGE
-          ProvisionedThroughput:
-            ReadCapacityUnits: 1
-            WriteCapacityUnits: 1
-          TableName: ${self:custom.Recipients}
-
+package:
+  exclude:
+    - node_modules/serverless-dynamodb-local/**
+    - node_modules/serverless-offline/**
