@@ -73,7 +73,6 @@ const updateSelectedValue = (key, value) => (state, props) => ({
 
 const mapStateToProps = (state, props) => ({
   workers: selectors.getWorkers(state),
-  months: selectors.getAllMonthReported(state),
 });
 
 export default connect(mapStateToProps)(AdminDashboard);

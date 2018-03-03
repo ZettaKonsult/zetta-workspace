@@ -11,10 +11,10 @@ plugins:
 custom:
   webpackIncludeModules: true
   stage: ${opt:stage, self:provider.stage}
-  Invoices: 'Invoices-${self:provider.stage}'
-  InvoiceRows: 'InvoiceRows-${self:provider.stage}'
-  Recipients: 'Recipients-${self:provider.stage}'
-  CompanyCustomer: 'CompanyCustomer-${self:provider.stage}'
+  Invoices: 'Invoices-${self:custom.stage}'
+  InvoiceRows: 'InvoiceRows-${self:custom.stage}'
+  Recipients: 'Recipients-${self:custom.stage}'
+  CompanyCustomer: 'CompanyCustomer-${self:custom.stage}'
   serverless-offline:
     port: 4000
   dynamodb:
@@ -45,6 +45,7 @@ provider:
         - { "Fn::GetAtt": ["InvoicesDynamoDBTable", "Arn" ] }
         - { "Fn::GetAtt": ["InvoiceRowsDynamoDBTable", "Arn" ] }
         - { "Fn::GetAtt": ["RecipientsDynamoDBTable", "Arn" ] }
+        - { "Fn::GetAtt": ["CompanyCustomerDynamoDBTable", "Arn" ] }
   environment:
     InvoiceRowsTable: ${self:custom.InvoiceRows}
     InvoicesTable: ${self:custom.Invoices}
@@ -112,10 +113,7 @@ functions:
 
 resources:
   Resources:
-    ${file(offline/migrations/companycustomer.yml)}
     ${file(offline/migrations/invoice.yml)}
-    ${file(offline/migrations/invoicerow.yml)}
-    ${file(offline/migrations/recipient.yml)}
 
 package:
   exclude:

@@ -9,10 +9,10 @@ import AdminDashboard from './Container/AdminDashboard/AdminDashboard';
 import PageNotFound from './Container/PageNotFound/PageNotFound';
 import Invoice from './Invoice/Invoice';
 
-export default () => (
+export default props => (
   <Switch>
-    <Route path="/" exact component={Home} />
-    <Route path="/report" component={Report} />
+    <Route path="/" exact render={test => <Home {...props} {...test} />} />
+    <Route path="/report" render={test => <Report {...props} {...test} />} />
     <Route path="/worker/:id?" component={Worker} />
     <Route path="/place/:id?" component={Place} />
     <Route path="/admin" component={AdminDashboard} />

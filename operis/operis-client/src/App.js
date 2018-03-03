@@ -1,24 +1,30 @@
 import React, { Component } from 'react';
+import { API } from 'aws-amplify';
 import { Link, Route, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Auth } from 'aws-amplify';
 import { Menu, Divider } from 'semantic-ui-react';
 
-import { fetchAllRecipients } from './Places/RecipientActions';
-import { fetchAllInvoiceRows, combineRows } from './Reports/ReportActions';
-
 import Routes from './Routes';
 
+const companyCustomerId = 'cjdvmtzgd000104wgiubpx9ru';
+
 class App extends Component {
+  constructor() {
+    super();
+    this.state = {
+      recipients: [],
+    };
+  }
   async componentDidMount() {
-    const companyCustomerId = 'cjdvmtzgd000104wgiubpx9ru';
-    await Promise.all([
-      fetchAllRecipients(companyCustomerId)(this.props.dispatch),
-      fetchAllInvoiceRows(companyCustomerId)(this.props.dispatch),
-      // combineRows(companyCustomerId, ['cje79jzid000100cv4qnqq3ry'])(
-      //   this.props.dispatch
-      // ),
-    ]);
+    const recipients = await API.get(
+      'invoice',
+      `/recipient/${companyCustomerId}`,
+      {
+        header: {},
+      }
+    );
+    this.setState({ recipients });
   }
   async signOut() {
     await Auth.signOut();
@@ -46,7 +52,7 @@ class App extends Component {
         </Menu>
         <Divider />
         <div style={{ margin: '0 1em' }}>
-          <Routes />
+          <Routes recipients={this.state.recipients} />
         </div>
       </div>
     );

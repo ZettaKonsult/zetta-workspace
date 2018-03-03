@@ -41,18 +41,4 @@ const StatisticRow = ({ label, value }) => (
   </Statistic>
 );
 
-const mapStateToProps = (state, props) => {
-  const reports = selectors.getWorkersMonthlyReport(
-    state,
-    props.filterMonth,
-    props.filterWorker
-  );
-  return {
-    reports,
-    sumReports: selectors.sumWorkedHours(reports),
-    getWorkerName: selectors.getWorkerName(state),
-    getWorkplaceById: id => selectors.getWorkplaceById(state, id),
-  };
-};
-
-export default connect(mapStateToProps)(list);
+export default connect()(list);

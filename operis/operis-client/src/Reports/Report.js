@@ -1,44 +1,72 @@
-import React from 'react';
-import { Route, Link } from 'react-router-dom';
-import { connect } from 'react-redux';
-import { Button } from 'semantic-ui-react';
+import React, { Component } from 'react';
+import { API } from 'aws-amplify';
+import { Route } from 'react-router-dom';
 
 import ReportForm from './Form/ReportForm';
+import ReportList from './ReportList';
+import { updateInvoiceState } from './invoice';
 
-import { getAllReports } from '../reducers';
+const companyCustomerId = 'cjdvmtzgd000104wgiubpx9ru';
 
-import ReportCard from '../Components/ReportCard/ReportCard';
+export default class Report extends Component {
+  constructor() {
+    super();
+    this.state = {
+      invoices: [],
+      isFetching: false,
+    };
+  }
+  async componentDidMount() {
+    const invoices = await API.get('invoice', `/invoice/${companyCustomerId}`, {
+      headers: {},
+    });
+    this.setState({ invoices });
+  }
+  async postInvoice(invoice) {
+    try {
+      const result = await API.post('invoice', '/invoice', {
+        headers: {},
+        body: {
+          invoice: {
+            ...invoice,
+            createdAt: new Date(invoice.createdAt).getTime(),
+          },
+          companyCustomerId,
+        },
+      });
+      this.setState(updateInvoiceState(result));
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
-let ReportList = ({ reports }) => (
-  <div>
-    <Button as={Link} to={`/report/0`} fluid primary content="New Report" />
-    {reports.map(report => (
-      <Link key={report.id} to={`/report/${report.id}`}>
-        <ReportCard
-          hours={report.interval}
-          date={new Date(report.createdAt).toISOString().split('T')[0]}
-          worker={report.recipientId}
+  render() {
+    const { match } = this.props;
+    if (this.state.isFetching) {
+      return <p>Loading...</p>;
+    }
+    return (
+      <div>
+        <Route
+          path={`${match.path}/:id`}
+          render={props => (
+            <ReportForm
+              recipients={this.props.recipients}
+              id={props.match.params.id}
+              invoices={this.state.invoices}
+              onSubmit={async values => {
+                await this.postInvoice(values);
+                props.history.push('/report');
+              }}
+            />
+          )}
         />
-      </Link>
-    ))}
-  </div>
-);
-const mapStateToProps = (state, props) => ({
-  reports: getAllReports(state),
-});
-ReportList = connect(mapStateToProps)(ReportList);
-
-export default ({ match }) => (
-  <div>
-    <Route
-      path={`${match.path}/:id`}
-      render={props => (
-        <ReportForm
-          callback={() => props.history.push('/')}
-          id={props.match.params.id}
+        <Route
+          exact
+          path={`${match.path}`}
+          render={() => <ReportList invoices={this.state.invoices} />}
         />
-      )}
-    />
-    <Route exact path={`${match.path}`} render={() => <ReportList />} />
-  </div>
-);
+      </div>
+    );
+  }
+}

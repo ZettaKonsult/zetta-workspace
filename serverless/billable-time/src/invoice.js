@@ -11,59 +11,62 @@ const getDbTable = () => {
   return process.env.InvoicesTable;
 };
 
-const invoice = ({ recipient, companyCustomerId, invoiceRows }) => ({
-  id: cuid(),
-  createdAt: Date.now(),
+const formatInvoice = (
+  { id, recipientId, invoiceRows, createdAt },
+  companyCustomerId
+) => ({
+  id: id || cuid(),
+  createdAt: createdAt || Date.now(),
   companyCustomerId,
-  recipient,
+  recipientId,
   invoiceRows,
 });
 
-export const createInvoice = async (db, data) => {
-  const { companyCustomerId, invoiceRowIds } = data;
-
-  const invoiceRows = await fetchInvoiceRows(
-    db,
-    companyCustomerId,
-    invoiceRowIds
-  );
-
-  const isValid = validator(invoiceRows);
-  if (!isValid) {
-    throw Error('Trying to send invoice row to mixed recipients');
+export const createInvoice = async (db, { invoice, companyCustomerId }) => {
+  if (invoice.id) {
+    await update(db, invoice);
+    return invoice;
   } else {
-    const recipients = await fetchUniqueRecipients(
-      db,
-      companyCustomerId,
-      invoiceRows
-    );
+    // let [recipient, companyCustomer] = await Promise.all([
+    //   db('get', {
+    //     TableName: 'CompanyCustomer-dev',
+    //     Key: { id: 'cjdvmtzgd000104wgiubpx9ru' },
+    //   }),
+    // ]);
+    // companyCustomer = companyCustomer.Item;
+    const invoiceItem = formatInvoice(invoice, companyCustomerId);
+    await put(db, invoiceItem);
 
-    const invoicePromise = recipients.map(recipient => {
-      const params = {
-        TableName: getDbTable(),
-        Item: invoice({ recipient, companyCustomerId, invoiceRows }),
-      };
-      return db('put', params);
-    });
-
-    await Promise.all(invoicePromise);
-
-    return 'Invoice succesfully created';
+    return invoiceItem;
   }
 };
 
-const fetchUniqueRecipients = async (db, companyCustomerId, invoiceRows) => {
-  const ids = invoiceRows.reduce(
-    (total, row) => [...total, ...row.recipientIds],
-    []
-  );
-  const uniqueIds = ids.filter(
-    (id, index, array) => array.indexOf(id) === index
-  );
-  const fetchPromise = uniqueIds.map(id =>
-    recipientDb.get(db, companyCustomerId, id)
-  );
-  return await Promise.all(fetchPromise);
+const update = async (db, invoice) =>
+  await db('update', {
+    TableName: getDbTable(),
+    Key: {
+      companyCustomerId: invoice.companyCustomerId,
+      id: invoice.id,
+    },
+    UpdateExpression: `Set invoiceRows = :invoiceRows, recipientId = :recipientId`,
+    ExpressionAttributeValues: {
+      ':invoiceRows': invoice.invoiceRows,
+      ':recipientId': invoice.recipientId,
+    },
+  });
+
+const put = async (db, invoice) =>
+  await db('put', {
+    TableName: getDbTable(),
+    Item: invoice,
+  });
+
+const get = async (db, companyCustomerId, id) => {
+  const result = await db('get', {
+    TableName: getDbTable(),
+    Key: { companyCustomerId, id },
+  });
+  return result.Item;
 };
 
 const list = async (db, companyCustomerId) => {
@@ -77,4 +80,4 @@ const list = async (db, companyCustomerId) => {
   return result.Items;
 };
 
-export default { list };
+export default { list, get };

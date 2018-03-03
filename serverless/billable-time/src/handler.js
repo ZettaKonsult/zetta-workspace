@@ -20,10 +20,10 @@ export const writeInvoice = async (event, context, callback) => {
 };
 
 export const sendInvoice = async (event, context, callback) => {
-  const { params } = parser(event);
+  const { companyCustomerId, invoiceId } = parser(event).data;
 
   try {
-    const result = await invoice.get(db, params.invoiceId);
+    const result = await invoice.get(db, companyCustomerId, invoiceId);
     await invoicePDF(result);
     callback(null, success());
   } catch (err) {
