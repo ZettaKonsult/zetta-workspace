@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
-import { API } from 'aws-amplify';
 import { Route } from 'react-router-dom';
 
 import ReportForm from './Form/ReportForm';
 import ReportList from './ReportList';
-import { updateInvoiceState } from './invoice';
+import { updateInvoiceState, fetchInvoiceAPI, saveInvoiceAPI } from './invoice';
 
 const companyCustomerId = 'cjdvmtzgd000104wgiubpx9ru';
 
@@ -17,23 +16,12 @@ export default class Report extends Component {
     };
   }
   async componentDidMount() {
-    const invoices = await API.get('invoice', `/invoice/${companyCustomerId}`, {
-      headers: {},
-    });
+    const invoices = await fetchInvoiceAPI(companyCustomerId);
     this.setState({ invoices });
   }
   async postInvoice(invoice) {
     try {
-      const result = await API.post('invoice', '/invoice', {
-        headers: {},
-        body: {
-          invoice: {
-            ...invoice,
-            createdAt: new Date(invoice.createdAt).getTime(),
-          },
-          companyCustomerId,
-        },
-      });
+      const result = await saveInvoiceAPI(invoice, companyCustomerId);
       this.setState(updateInvoiceState(result));
     } catch (error) {
       console.error(error);

@@ -2,7 +2,7 @@ import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 
 import Report from './Reports/Report';
-import Place from './Places/Place';
+import Recipient from './Places/Recipient';
 import Worker from './Workers/Worker';
 import Home from './Container/Home/Home';
 import AdminDashboard from './Container/AdminDashboard/AdminDashboard';
@@ -14,7 +14,10 @@ export default props => (
     <Route path="/" exact render={test => <Home {...props} {...test} />} />
     <Route path="/report" render={test => <Report {...props} {...test} />} />
     <Route path="/worker/:id?" component={Worker} />
-    <Route path="/place/:id?" component={Place} />
+    <Route
+      path="/recipient"
+      render={test => <Recipient {...props} {...test} />}
+    />
     <Route path="/admin" component={AdminDashboard} />
     <Route path="/invoice" component={Invoice} />
     <Route component={PageNotFound} />

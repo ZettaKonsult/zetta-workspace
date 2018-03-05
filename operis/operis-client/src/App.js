@@ -34,12 +34,8 @@ class App extends Component {
     return (
       <div>
         <Menu widths="5" inverted fluid size="large">
-          <NavLink to="/report" activeOnlyWhenExact>
-            Report
-          </NavLink>
-          <NavLink to="/place" activeOnlyWhenExact>
-            Recipient
-          </NavLink>
+          <NavLink to="/report">Report</NavLink>
+          <NavLink to="/recipient">Recipient</NavLink>
           <NavLink to="/Invoice" activeOnlyWhenExact>
             Invoice
           </NavLink>
