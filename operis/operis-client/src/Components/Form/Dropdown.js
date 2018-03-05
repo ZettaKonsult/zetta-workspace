@@ -3,22 +3,18 @@ import { Form, Dropdown as Select } from 'semantic-ui-react';
 
 export const Dropdown = ({
   input,
-  type,
-  name,
   placeholder,
-  children,
-  options,
   meta: { touched, error, warning },
+  ...rest
 }) => (
   <div>
     <Form.Field error={!!touched && !!error}>
       <label>{placeholder}</label>
       <Select
         {...input}
+        {...rest}
         onChange={(param, data) => input.onChange(data.value)}
-        name={name}
         placeholder={placeholder}
-        options={options}
         fluid
         search
         selection
