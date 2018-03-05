@@ -8,13 +8,12 @@ import PageNav from './Components/Nav/PageNav';
 import { fetchRecipientAPI } from './Places/recipientApi';
 import { updateObjectArrayState } from './util/stateUtils';
 
-const companyCustomerId = 'cjdvmtzgd000104wgiubpx9ru';
-
 class App extends Component {
   constructor() {
     super();
     this.state = {
       recipients: [],
+      companyCustomerId: '',
     };
   }
   updateRecipients = newRecipient => {
@@ -22,23 +21,48 @@ class App extends Component {
   };
 
   async componentDidMount() {
+    let userInfo = await Auth.currentUserInfo();
+    const companyCustomerId = userInfo.attributes['custom:companyCustomerId'];
     const recipients = await fetchRecipientAPI(companyCustomerId);
-    this.setState({ recipients });
+    this.setState({
+      recipients,
+      companyCustomerId,
+    });
+    // let user = await Auth.currentAuthenticatedUser();
+    // let result = await Auth.updateUserAttributes(user, {
+    //   'custom:companyCustomerId': 'cjdvmtzgd000104wgiubpx9ru',
+    // });
+    // await this.signUp();
   }
-  async signOut() {
-    await Auth.signOut();
+  signOut = async () => {
+    try {
+      await Auth.signOut();
+      this.setState({ companyCustomerId: '' });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  async signUp() {
+    await Auth.signUp({
+      username: 'be.a.spectator@gmail.com',
+      password: 'qwertyqwerty',
+      attributes: {
+        'custom:companyCustomerId': 'cjdvmtzgd000104wgiubpx9ru',
+      },
+    });
   }
 
   render() {
     return (
       <div>
-        <PageNav />
+        <PageNav onSignOut={this.signOut} />
         <Divider />
         <div style={{ margin: '0 1em' }}>
           <Routes
             recipients={this.state.recipients}
             updateRecipients={this.updateRecipients}
-            companyCustomerId={companyCustomerId}
+            companyCustomerId={this.state.companyCustomerId}
           />
         </div>
       </div>

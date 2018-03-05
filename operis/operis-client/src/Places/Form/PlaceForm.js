@@ -30,7 +30,6 @@ const mapStateToProps = (state, props) => {
   const recipient = props.recipients.find(
     recipient => recipient.id === props.id
   );
-  console.log(recipient);
   if (recipient) {
     return {
       initialValues: recipient,

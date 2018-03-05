@@ -3,12 +3,12 @@ import { Link, Route } from 'react-router-dom';
 
 import { Menu } from 'semantic-ui-react';
 
-const PageNav = ({ match }) => (
+const PageNav = ({ match, onSignOut }) => (
   <Menu widths="4" inverted fluid size="large">
     <NavLink to="/report">Report</NavLink>
     <NavLink to="/recipient">Recipient</NavLink>
     <NavLink to="/invoice">Invoice</NavLink>
-    <Menu.Item as="button" onClick={this.signOut}>
+    <Menu.Item as="button" onClick={onSignOut}>
       Logout
     </Menu.Item>
   </Menu>
