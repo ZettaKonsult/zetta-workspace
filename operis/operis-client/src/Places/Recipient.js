@@ -12,7 +12,7 @@ class Place extends Component {
         recipient,
         'cjdvmtzgd000104wgiubpx9ru'
       );
-      return result;
+      this.props.updateRecipients(result);
     } catch (error) {
       console.error(error);
     }

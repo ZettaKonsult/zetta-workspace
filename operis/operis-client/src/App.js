@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import { API } from 'aws-amplify';
-import { Link, Route, withRouter } from 'react-router-dom';
-import { connect } from 'react-redux';
+import { Link, Route } from 'react-router-dom';
 import { Auth } from 'aws-amplify';
 import { Menu, Divider } from 'semantic-ui-react';
 
 import Routes from './Routes';
+import { fetchRecipientAPI } from './Places/recipientApi';
+import { updateObjectArrayState } from './util/stateUtils';
 
 const companyCustomerId = 'cjdvmtzgd000104wgiubpx9ru';
 
@@ -16,14 +16,12 @@ class App extends Component {
       recipients: [],
     };
   }
+  updateRecipients = newRecipient => {
+    this.setState(updateRecipientState(newRecipient));
+  };
+
   async componentDidMount() {
-    const recipients = await API.get(
-      'invoice',
-      `/recipient/${companyCustomerId}`,
-      {
-        header: {},
-      }
-    );
+    const recipients = await fetchRecipientAPI(companyCustomerId);
     this.setState({ recipients });
   }
   async signOut() {
@@ -48,12 +46,24 @@ class App extends Component {
         </Menu>
         <Divider />
         <div style={{ margin: '0 1em' }}>
-          <Routes recipients={this.state.recipients} />
+          <Routes
+            recipients={this.state.recipients}
+            updateRecipients={this.updateRecipients}
+          />
         </div>
       </div>
     );
   }
 }
+
+const updateRecipientState = newRecipient => state => {
+  const { recipients } = state;
+  const newState = {
+    ...state,
+    recipients: updateObjectArrayState(newRecipient, recipients),
+  };
+  return newState;
+};
 
 const NavLink = ({ to, activeOnlyWhenExact, children }) => (
   <Route
@@ -67,4 +77,4 @@ const NavLink = ({ to, activeOnlyWhenExact, children }) => (
   />
 );
 
-export default withRouter(connect(undefined)(App));
+export default App;

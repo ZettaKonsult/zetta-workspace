@@ -11,7 +11,7 @@ const getDbTable = (): string => {
 };
 
 const formatData = (data: Object, companyCustomerId): Recipient => ({
-  id: cuid(),
+  id: data.id || cuid(),
   companyCustomerId: companyCustomerId,
   email: data.email,
   address: data.address,

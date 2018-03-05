@@ -1,7 +1,6 @@
 import cuid from 'cuid';
-import validator from 'invoice-validator';
 
-import { fetchInvoiceRows } from './invoiceRows';
+import invoicePDF from './transform/handler';
 import recipientDb from './recipient';
 
 const getDbTable = () => {
@@ -20,6 +19,7 @@ const formatInvoice = (
   companyCustomerId,
   recipientId,
   invoiceRows,
+  locked: false,
 });
 
 export const createInvoice = async (db, { invoice, companyCustomerId }) => {
@@ -27,19 +27,49 @@ export const createInvoice = async (db, { invoice, companyCustomerId }) => {
     await update(db, invoice);
     return invoice;
   } else {
-    // let [recipient, companyCustomer] = await Promise.all([
-    //   db('get', {
-    //     TableName: 'CompanyCustomer-dev',
-    //     Key: { id: 'cjdvmtzgd000104wgiubpx9ru' },
-    //   }),
-    // ]);
-    // companyCustomer = companyCustomer.Item;
     const invoiceItem = formatInvoice(invoice, companyCustomerId);
     await put(db, invoiceItem);
 
     return invoiceItem;
   }
 };
+
+export const mailInvoice = async (db, companyCustomerId, invoiceId) => {
+  try {
+    let [companyCustomer, invoice] = await Promise.all([
+      getCompanyCustomer(db, companyCustomerId),
+      get(db, companyCustomerId, invoiceId),
+    ]);
+    let recipient = await recipientDb.get(
+      db,
+      companyCustomerId,
+      invoice.recipientId
+    );
+    const constructed = Object.assign(
+      {},
+      { companyCustomer: companyCustomer },
+      { invoice: invoice },
+      { recipient: recipient }
+    );
+    await invoicePDF(constructed);
+    await lockInvoice(db, companyCustomerId, invoiceId);
+  } catch (error) {
+    throw error;
+  }
+};
+
+const lockInvoice = async (db, companyCustomerId, invoiceId) =>
+  await db('update', {
+    TableName: getDbTable(),
+    Key: {
+      companyCustomerId: companyCustomerId,
+      id: invoiceId,
+    },
+    UpdateExpression: `Set locked=:locked`,
+    ExpressionAttributeValues: {
+      ':locked': true,
+    },
+  });
 
 const update = async (db, invoice) =>
   await db('update', {
@@ -48,8 +78,10 @@ const update = async (db, invoice) =>
       companyCustomerId: invoice.companyCustomerId,
       id: invoice.id,
     },
+    ConditionExpression: 'locked=:shouldNotBeLocked',
     UpdateExpression: `Set invoiceRows = :invoiceRows, recipientId = :recipientId`,
     ExpressionAttributeValues: {
+      ':shouldNotBeLocked': false,
       ':invoiceRows': invoice.invoiceRows,
       ':recipientId': invoice.recipientId,
     },
@@ -81,3 +113,11 @@ const list = async (db, companyCustomerId) => {
 };
 
 export default { list, get };
+
+const getCompanyCustomer = async (db, companyCustomerId) => {
+  const result = await db('get', {
+    TableName: 'CompanyCustomer-dev',
+    Key: { id: companyCustomerId },
+  });
+  return result.Item;
+};

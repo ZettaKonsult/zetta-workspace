@@ -12,14 +12,19 @@ const getBrowserPage = async () => {
 };
 
 export default async data => {
-  let [renderedTemplate, page] = await Promise.all([
-    prepareTempalte(data),
-    getBrowserPage(),
-  ]);
-  page.setContent(renderedTemplate);
+  try {
+    let [renderedTemplate, page] = await Promise.all([
+      prepareTempalte(data),
+      getBrowserPage(),
+    ]);
+    page.setContent(renderedTemplate);
 
-  const buffer = await page.pdf({ format: 'A4' });
-  browser.close();
-  mail(buffer);
-  return buffer;
+    const buffer = await page.pdf({ format: 'A4' });
+    mail(buffer);
+    return buffer;
+  } catch (error) {
+    throw error;
+  } finally {
+    browser.close();
+  }
 };

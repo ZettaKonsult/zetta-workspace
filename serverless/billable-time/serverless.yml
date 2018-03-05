@@ -12,7 +12,6 @@ custom:
   webpackIncludeModules: true
   stage: ${opt:stage, self:provider.stage}
   Invoices: 'Invoices-${self:custom.stage}'
-  InvoiceRows: 'InvoiceRows-${self:custom.stage}'
   Recipients: 'Recipients-${self:custom.stage}'
   CompanyCustomer: 'CompanyCustomer-${self:custom.stage}'
   serverless-offline:
@@ -43,11 +42,9 @@ provider:
         - dynamodb:UpdateItem
       Resource:
         - { "Fn::GetAtt": ["InvoicesDynamoDBTable", "Arn" ] }
-        - { "Fn::GetAtt": ["InvoiceRowsDynamoDBTable", "Arn" ] }
         - { "Fn::GetAtt": ["RecipientsDynamoDBTable", "Arn" ] }
         - { "Fn::GetAtt": ["CompanyCustomerDynamoDBTable", "Arn" ] }
   environment:
-    InvoiceRowsTable: ${self:custom.InvoiceRows}
     InvoicesTable: ${self:custom.Invoices}
     RecipientTable: ${self:custom.Recipients}
     CompanyCustomerTable: ${self:custom.CompanyCustomer}
@@ -74,22 +71,6 @@ functions:
     events:
       - http:
           path: /invoice/{companyCustomerId}
-          method: get
-          cors: true
-          authorizer: aws_iam
-  addBillableRow:
-    handler: src/handler.writeBillableRow
-    events:
-      - http:
-          path: /billrow
-          method: post
-          cors: true
-          authorizer: aws_iam
-  allBillableRows:
-    handler: src/handler.getBillableRows
-    events:
-      - http:
-          path: /billrows/{companyCustomerId}
           method: get
           cors: true
           authorizer: aws_iam
