@@ -8,13 +8,12 @@ export default class Invoice extends Component {
     this.state = {
       invoices: [],
     };
-    this.companyCustomerId = 'cjdvmtzgd000104wgiubpx9ru';
   }
 
   async componentDidMount() {
     const invoices = await API.get(
       'invoice',
-      `/invoice/${this.companyCustomerId}`,
+      `/invoice/${this.props.companyCustomerId}`,
       {
         header: {},
       }
@@ -22,15 +21,16 @@ export default class Invoice extends Component {
     this.setState({ invoices });
   }
 
-  handleCheckbox(value) {
-    this.setState(state => {
-      if (state.checked.includes(value)) {
-        return { checked: state.checked.filter(id => id !== value) };
-      } else {
-        return { checked: [...state.checked, value] };
-      }
+  handleSendInvoice = async id => {
+    await API.post('invoice', `/invoice/mail`, {
+      header: {},
+      body: {
+        companyCustomerId: this.props.companyCustomerId,
+        invoiceId: id,
+      },
     });
-  }
+  };
+
   render() {
     if (this.state.invoices.length === 0) {
       return <p>...Loading...</p>;
@@ -38,15 +38,26 @@ export default class Invoice extends Component {
     return (
       <div>
         {this.state.invoices.map((invoice, i) => (
-          <InvoiceRow key={i}>{invoice.id}</InvoiceRow>
+          <Wrapper key={i}>
+            <p>{invoice.id}</p>
+            <p>
+              skapad: {new Date(invoice.createdAt).toISOString().split('T')[0]}
+            </p>
+            <p>Recipient: {invoice.recipientId}</p>
+            <button onClick={() => this.handleSendInvoice(invoice.id)}>
+              Send invoice by email
+            </button>
+          </Wrapper>
         ))}
       </div>
     );
   }
 }
 
-const InvoiceRow = styled.div`
+const Wrapper = styled.div`
   background: lightgrey;
   border: 1px solid black;
   padding: 1em;
+  display: flex;
+  flex-direction: column;
 `;

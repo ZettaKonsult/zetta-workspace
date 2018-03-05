@@ -1,7 +1,6 @@
 import cuid from 'cuid';
-import validator from 'invoice-validator';
 
-import { fetchInvoiceRows } from './invoiceRows';
+import invoicePDF from './transform/handler';
 import recipientDb from './recipient';
 
 const getDbTable = () => {
@@ -11,59 +10,95 @@ const getDbTable = () => {
   return process.env.InvoicesTable;
 };
 
-const invoice = ({ recipient, companyCustomerId, invoiceRows }) => ({
-  id: cuid(),
-  createdAt: Date.now(),
+const formatInvoice = (
+  { id, recipientId, invoiceRows, createdAt },
+  companyCustomerId
+) => ({
+  id: id || cuid(),
+  createdAt: createdAt || Date.now(),
   companyCustomerId,
-  recipient,
+  recipientId,
   invoiceRows,
+  locked: false,
 });
 
-export const createInvoice = async (db, data) => {
-  const { companyCustomerId, invoiceRowIds } = data;
-
-  const invoiceRows = await fetchInvoiceRows(
-    db,
-    companyCustomerId,
-    invoiceRowIds
-  );
-
-  const isValid = validator(invoiceRows);
-  if (!isValid) {
-    throw Error('Trying to send invoice row to mixed recipients');
+export const createInvoice = async (db, { invoice, companyCustomerId }) => {
+  if (invoice.id) {
+    await update(db, invoice);
+    return invoice;
   } else {
-    const recipients = await fetchUniqueRecipients(
-      db,
-      companyCustomerId,
-      invoiceRows
-    );
+    const invoiceItem = formatInvoice(invoice, companyCustomerId);
+    await put(db, invoiceItem);
 
-    const invoicePromise = recipients.map(recipient => {
-      const params = {
-        TableName: getDbTable(),
-        Item: invoice({ recipient, companyCustomerId, invoiceRows }),
-      };
-      return db('put', params);
-    });
-
-    await Promise.all(invoicePromise);
-
-    return 'Invoice succesfully created';
+    return invoiceItem;
   }
 };
 
-const fetchUniqueRecipients = async (db, companyCustomerId, invoiceRows) => {
-  const ids = invoiceRows.reduce(
-    (total, row) => [...total, ...row.recipientIds],
-    []
-  );
-  const uniqueIds = ids.filter(
-    (id, index, array) => array.indexOf(id) === index
-  );
-  const fetchPromise = uniqueIds.map(id =>
-    recipientDb.get(db, companyCustomerId, id)
-  );
-  return await Promise.all(fetchPromise);
+export const mailInvoice = async (db, companyCustomerId, invoiceId) => {
+  try {
+    let [companyCustomer, invoice] = await Promise.all([
+      getCompanyCustomer(db, companyCustomerId),
+      get(db, companyCustomerId, invoiceId),
+    ]);
+    let recipient = await recipientDb.get(
+      db,
+      companyCustomerId,
+      invoice.recipientId
+    );
+    const constructed = Object.assign(
+      {},
+      { companyCustomer: companyCustomer },
+      { invoice: invoice },
+      { recipient: recipient }
+    );
+    await invoicePDF(constructed);
+    await lockInvoice(db, companyCustomerId, invoiceId);
+  } catch (error) {
+    throw error;
+  }
+};
+
+const lockInvoice = async (db, companyCustomerId, invoiceId) =>
+  await db('update', {
+    TableName: getDbTable(),
+    Key: {
+      companyCustomerId: companyCustomerId,
+      id: invoiceId,
+    },
+    UpdateExpression: `Set locked=:locked`,
+    ExpressionAttributeValues: {
+      ':locked': true,
+    },
+  });
+
+const update = async (db, invoice) =>
+  await db('update', {
+    TableName: getDbTable(),
+    Key: {
+      companyCustomerId: invoice.companyCustomerId,
+      id: invoice.id,
+    },
+    ConditionExpression: 'locked=:shouldNotBeLocked',
+    UpdateExpression: `Set invoiceRows = :invoiceRows, recipientId = :recipientId`,
+    ExpressionAttributeValues: {
+      ':shouldNotBeLocked': false,
+      ':invoiceRows': invoice.invoiceRows,
+      ':recipientId': invoice.recipientId,
+    },
+  });
+
+const put = async (db, invoice) =>
+  await db('put', {
+    TableName: getDbTable(),
+    Item: invoice,
+  });
+
+const get = async (db, companyCustomerId, id) => {
+  const result = await db('get', {
+    TableName: getDbTable(),
+    Key: { companyCustomerId, id },
+  });
+  return result.Item;
 };
 
 const list = async (db, companyCustomerId) => {
@@ -77,4 +112,12 @@ const list = async (db, companyCustomerId) => {
   return result.Items;
 };
 
-export default { list };
+export default { list, get };
+
+const getCompanyCustomer = async (db, companyCustomerId) => {
+  const result = await db('get', {
+    TableName: 'CompanyCustomer-dev',
+    Key: { id: companyCustomerId },
+  });
+  return result.Item;
+};

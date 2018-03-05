@@ -1,5 +1,4 @@
-import { addInvoiceRow, allInvoiceRows } from './invoiceRows';
-import invoice, { createInvoice } from './invoice';
+import invoice, { createInvoice, mailInvoice } from './invoice';
 import recipient from './recipient';
 
 import { success, failure } from './util/response';
@@ -18,8 +17,21 @@ export const writeInvoice = async (event, context, callback) => {
   }
 };
 
+export const sendInvoice = async (event, context, callback) => {
+  const { companyCustomerId, invoiceId } = parser(event).data;
+
+  try {
+    await mailInvoice(db, companyCustomerId, invoiceId);
+    callback(null, success());
+  } catch (err) {
+    console.error(err);
+    callback(null, failure(err.message));
+  }
+};
+
 export const getInvoices = async (event, context, callback) => {
   const { params } = parser(event);
+
   try {
     const result = await invoice.list(db, params.companyCustomerId);
     callback(null, success(result));
@@ -29,34 +41,11 @@ export const getInvoices = async (event, context, callback) => {
   }
 };
 
-export const writeBillableRow = async (event, context, callback) => {
-  const { data } = parser(event);
-  try {
-    const result = await addInvoiceRow(db, data);
-    callback(null, success(result));
-  } catch (err) {
-    console.error(err);
-    callback(null, failure(err.message));
-  }
-};
-
-export const getBillableRows = async (event, context, callback) => {
-  const { params } = parser(event);
-
-  try {
-    const result = await allInvoiceRows(db, params.companyCustomerId);
-    callback(null, success(result));
-  } catch (err) {
-    console.error(err);
-    callback(null, failure(err.message));
-  }
-};
-
 export const createRecipient = async (event, context, callback) => {
   const { data } = parser(event);
 
   try {
-    const result = await recipient.create(db, data);
+    const result = await recipient.save(db, data);
     callback(null, success(result));
   } catch (err) {
     console.error(err);

@@ -1,0 +1,17 @@
+[
+  {
+    "id": "cjdvmtzgd000104wgiubpx9ru",
+    "address": "Kämnärsvägen 23F",
+    "city": "Lund",
+    "company": "Zetta Konsult",
+    "firstName": "Fredrik",
+    "lastName": "Palmquist",
+    "mobile": "+46709-394595",
+    "VAT": "SE910504003501",
+    "zipcode": "22646",
+    "bank": {
+      "giro": "650-4773",
+      "name": "swedbank"
+    }
+  }
+]
