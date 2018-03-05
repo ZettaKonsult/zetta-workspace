@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Route } from 'react-router-dom';
-import { API } from 'aws-amplify';
 
 import PlaceForm from './Form/PlaceForm';
 import RecipientList from './RecipientList';
@@ -43,7 +42,7 @@ class Place extends Component {
             <RecipientList
               recipients={recipients}
               onClick={id => history.push(`/recipient/${id}`)}
-              newRecipient={history.push('/recipient/0')}
+              newRecipient={() => history.push('/recipient/0')}
             />
           )}
         />
