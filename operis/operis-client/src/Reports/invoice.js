@@ -26,3 +26,12 @@ export const saveInvoiceAPI = async (invoice, companyCustomerId) =>
       companyCustomerId,
     },
   });
+
+export const sendInvoice = async (companyCustomerId, invoiceId) =>
+  await API.post('invoice', `/invoice/mail`, {
+    header: {},
+    body: {
+      companyCustomerId,
+      invoiceId,
+    },
+  });

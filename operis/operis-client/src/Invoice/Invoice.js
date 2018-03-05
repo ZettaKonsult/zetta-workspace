@@ -8,13 +8,12 @@ export default class Invoice extends Component {
     this.state = {
       invoices: [],
     };
-    this.companyCustomerId = 'cjdvmtzgd000104wgiubpx9ru';
   }
 
   async componentDidMount() {
     const invoices = await API.get(
       'invoice',
-      `/invoice/${this.companyCustomerId}`,
+      `/invoice/${this.props.companyCustomerId}`,
       {
         header: {},
       }
@@ -26,7 +25,7 @@ export default class Invoice extends Component {
     await API.post('invoice', `/invoice/mail`, {
       header: {},
       body: {
-        companyCustomerId: this.companyCustomerId,
+        companyCustomerId: this.props.companyCustomerId,
         invoiceId: id,
       },
     });

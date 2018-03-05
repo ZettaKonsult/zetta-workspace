@@ -10,7 +10,7 @@ class Place extends Component {
     try {
       const result = await saveRecipientAPI(
         recipient,
-        'cjdvmtzgd000104wgiubpx9ru'
+        this.props.companyCustomerId
       );
       this.props.updateRecipients(result);
     } catch (error) {

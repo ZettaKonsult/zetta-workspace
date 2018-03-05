@@ -5,8 +5,6 @@ import ReportForm from './Form/ReportForm';
 import ReportList from './ReportList';
 import { updateInvoiceState, fetchInvoiceAPI, saveInvoiceAPI } from './invoice';
 
-const companyCustomerId = 'cjdvmtzgd000104wgiubpx9ru';
-
 export default class Report extends Component {
   constructor() {
     super();
@@ -17,12 +15,15 @@ export default class Report extends Component {
   }
   async componentDidMount() {
     this.setState({ isFetching: true });
-    const invoices = await fetchInvoiceAPI(companyCustomerId);
+    const invoices = await fetchInvoiceAPI(this.props.companyCustomerId);
     this.setState({ invoices, isFetching: false });
   }
   async postInvoice(invoice) {
     try {
-      const result = await saveInvoiceAPI(invoice, companyCustomerId);
+      const result = await saveInvoiceAPI(
+        invoice,
+        this.props.companyCustomerId
+      );
       this.setState(updateInvoiceState(result));
     } catch (error) {
       console.error(error);

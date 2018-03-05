@@ -3,7 +3,6 @@ import { Route, Switch } from 'react-router-dom';
 
 import Report from './Reports/Report';
 import Recipient from './Places/Recipient';
-import Worker from './Workers/Worker';
 import Home from './Container/Home/Home';
 import PageNotFound from './Container/PageNotFound/PageNotFound';
 import Invoice from './Invoice/Invoice';
@@ -16,7 +15,7 @@ export default props => (
       path="/recipient"
       render={test => <Recipient {...props} {...test} />}
     />
-    <Route path="/invoice" component={Invoice} />
+    <Route path="/invoice" render={test => <Invoice {...props} {...test} />} />
     <Route component={PageNotFound} />
   </Switch>
 );

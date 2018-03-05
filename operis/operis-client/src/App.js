@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import { Link, Route } from 'react-router-dom';
+
 import { Auth } from 'aws-amplify';
-import { Menu, Divider } from 'semantic-ui-react';
+import { Divider } from 'semantic-ui-react';
 
 import Routes from './Routes';
+import PageNav from './Components/Nav/PageNav';
 import { fetchRecipientAPI } from './Places/recipientApi';
 import { updateObjectArrayState } from './util/stateUtils';
 
@@ -31,24 +32,13 @@ class App extends Component {
   render() {
     return (
       <div>
-        <Menu widths="5" inverted fluid size="large">
-          <NavLink to="/report">Report</NavLink>
-          <NavLink to="/recipient">Recipient</NavLink>
-          <NavLink to="/Invoice" activeOnlyWhenExact>
-            Invoice
-          </NavLink>
-          <NavLink to="/admin" activeOnlyWhenExact>
-            Admin
-          </NavLink>
-          <Menu.Item as="button" onClick={this.signOut}>
-            Logout
-          </Menu.Item>
-        </Menu>
+        <PageNav />
         <Divider />
         <div style={{ margin: '0 1em' }}>
           <Routes
             recipients={this.state.recipients}
             updateRecipients={this.updateRecipients}
+            companyCustomerId={companyCustomerId}
           />
         </div>
       </div>
@@ -64,17 +54,5 @@ const updateRecipientState = newRecipient => state => {
   };
   return newState;
 };
-
-const NavLink = ({ to, activeOnlyWhenExact, children }) => (
-  <Route
-    path={to}
-    exact={activeOnlyWhenExact}
-    children={({ match }) => (
-      <Menu.Item as={Link} to={to} active={!!match}>
-        {children}
-      </Menu.Item>
-    )}
-  />
-);
 
 export default App;
