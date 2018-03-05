@@ -12,8 +12,7 @@ plugins:
 # Enable auto-packing of external modules
 custom:
   serverless-offline:
-    babelOptions:
-      presets: ["env"]
+    port: 4000
   webpackIncludeModules: true
   Invoices: 'Invoices-${self:provider.stage}'
   InvoiceRows: 'InvoiceRows-${self:provider.stage}'
@@ -23,15 +22,8 @@ custom:
       port: 8000
       inMemory: true
       migrate: true
-      seed: true
+      seed: false
 
-    seed:
-      dev:
-        sources:
-          - table: Recipients-dev
-            sources: [./offline/recipientMock.json]
-          - table: InvoiceRows-dev
-            sources: [./offline/invoiceRowsMock.json]
 provider:
   name: aws
   runtime: nodejs6.10
@@ -45,11 +37,13 @@ provider:
         - dynamodb:Query
         - dynamodb:UpdateItem
       Resource:
-        - { "Fn::GetAtt": ["InvoiceDynamoDBTable", "Arn" ] }
-        - { "Fn::GetAtt": ["InvoiceRowDynamoDBTable", "Arn" ] }
+        - { "Fn::GetAtt": ["InvoicesDynamoDBTable", "Arn" ] }
+        - { "Fn::GetAtt": ["InvoiceRowsDynamoDBTable", "Arn" ] }
+        - { "Fn::GetAtt": ["RecipientsDynamoDBTable", "Arn" ] }
   environment:
     InvoiceRowsTable: ${self:custom.InvoiceRows}
     InvoicesTable: ${self:custom.Invoices}
+    RecipientTable: ${self:custom.Recipients}
 
 functions:
   createInvoice:
@@ -58,25 +52,54 @@ functions:
       - http:
           path: /invoice
           method: post
+          cors: true
+          authorizer: aws_iam
+  getInvoices:
+    handler: src/handler.getInvoices
+    events:
+      - http:
+          path: /invoice/{companyCustomerId}
+          method: get
+          cors: true
+          authorizer: aws_iam
   addBillableRow:
     handler: src/handler.writeBillableRow
     events:
       - http:
           path: /billrow
           method: post
+          cors: true
+          authorizer: aws_iam
   allBillableRows:
     handler: src/handler.getBillableRows
     events:
       - http:
           path: /billrows/{companyCustomerId}
           method: get
+          cors: true
+          authorizer: aws_iam
+  createRecipient:
+    handler: src/handler.createRecipient
+    events:
+      - http:
+          path: /recipient
+          method: post
+          cors: true
+          authorizer: aws_iam
+  getRecipients:
+    handler: src/handler.getRecipients
+    events:
+      - http:
+          path: /recipient/{companyCustomerId}
+          method: get
+          cors: true
+          authorizer: aws_iam
 
 
 resources:
   Resources:
-    InvoiceDynamoDBTable:
+    InvoicesDynamoDBTable:
       Type: 'AWS::DynamoDB::Table'
-      DeletionPolicy: Retain
       Properties:
         AttributeDefinitions:
           -
@@ -99,7 +122,6 @@ resources:
 
     InvoiceRowsDynamoDBTable:
       Type: 'AWS::DynamoDB::Table'
-      DeletionPolicy: Retain
       Properties:
         AttributeDefinitions:
           -
@@ -122,16 +144,21 @@ resources:
 
     RecipientsDynamoDBTable:
         Type: 'AWS::DynamoDB::Table'
-        DeletionPolicy: Retain
         Properties:
           AttributeDefinitions:
+            -
+              AttributeName: companyCustomerId
+              AttributeType: S
             -
               AttributeName: id
               AttributeType: S
           KeySchema:
             -
-              AttributeName: id
+              AttributeName: companyCustomerId
               KeyType: HASH
+            -
+              AttributeName: id
+              KeyType: RANGE
           ProvisionedThroughput:
             ReadCapacityUnits: 1
             WriteCapacityUnits: 1

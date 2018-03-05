@@ -1,0 +1,46 @@
+{
+  "name": "operis",
+  "version": "0.1.0",
+  "private": true,
+  "main": "src/index.js",
+  "dependencies": {
+    "aws-amplify": "^0.2.7",
+    "aws-amplify-react": "^0.1.33",
+    "react": "^16.1.0",
+    "react-dom": "^16.1.0",
+    "react-redux": "^5.0.6",
+    "react-router-dom": "^4.2.2",
+    "redux": "^3.7.2",
+    "redux-form": "^7.1.2",
+    "redux-thunk": "^2.2.0",
+    "semantic-ui-css": "^2.2.12",
+    "semantic-ui-react": "^0.77.1",
+    "styled-components": "^2.2.3",
+    "swedish-ssn": "^1.0.3",
+    "uuid": "^3.1.0",
+    "validator": "^9.1.2"
+  },
+  "devDependencies": {
+    "flow-bin": "^0.61.0",
+    "react-scripts": "1.0.17",
+    "redux-devtools-extension": "^2.13.2"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject",
+    "build": "react-scripts build",
+    "predeploy": "yarn run build",
+    "deploy": "aws s3 sync build/ s3://operis-app-client",
+    "postdeploy": "rm -rf ./build",
+    "precommit": "lint-staged"
+  },
+  "lint-staged": {
+    "*.js": [
+      "eslint --fix",
+      "prettier --write",
+      "git add",
+      "jest --color --bail --findRelatedTests"
+    ]
+  }
+}

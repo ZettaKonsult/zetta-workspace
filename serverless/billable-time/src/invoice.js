@@ -2,6 +2,7 @@ import cuid from 'cuid';
 import validator from 'invoice-validator';
 
 import { fetchInvoiceRows } from './invoiceRows';
+import recipientDb from './recipient';
 
 const getDbTable = () => {
   if (!process.env.InvoicesTable) {
@@ -31,7 +32,11 @@ export const createInvoice = async (db, data) => {
   if (!isValid) {
     throw Error('Trying to send invoice row to mixed recipients');
   } else {
-    const recipients = await fetchRecipients(db, invoiceRows);
+    const recipients = await fetchUniqueRecipients(
+      db,
+      companyCustomerId,
+      invoiceRows
+    );
 
     const invoicePromise = recipients.map(recipient => {
       const params = {
@@ -43,20 +48,33 @@ export const createInvoice = async (db, data) => {
 
     await Promise.all(invoicePromise);
 
-    await db('scan', { TableName: getDbTable() });
-
     return 'Invoice succesfully created';
   }
 };
 
-const fetchRecipients = async (db, invoiceRows) => {
+const fetchUniqueRecipients = async (db, companyCustomerId, invoiceRows) => {
   const ids = invoiceRows.reduce(
     (total, row) => [...total, ...row.recipientIds],
     []
   );
-  const fetchPromise = ids.map(id =>
-    db('get', { TableName: 'Recipients-dev', Key: { id } })
+  const uniqueIds = ids.filter(
+    (id, index, array) => array.indexOf(id) === index
   );
-  const result = await Promise.all(fetchPromise);
-  return result.map(item => item.Item);
+  const fetchPromise = uniqueIds.map(id =>
+    recipientDb.get(db, companyCustomerId, id)
+  );
+  return await Promise.all(fetchPromise);
 };
+
+const list = async (db, companyCustomerId) => {
+  const result = await db('query', {
+    TableName: getDbTable(),
+    KeyConditionExpression: 'companyCustomerId = :companyCustomerId',
+    ExpressionAttributeValues: {
+      ':companyCustomerId': companyCustomerId,
+    },
+  });
+  return result.Items;
+};
+
+export default { list };
