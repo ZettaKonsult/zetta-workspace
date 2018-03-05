@@ -20,7 +20,7 @@ export default async data => {
     page.setContent(renderedTemplate);
 
     const buffer = await page.pdf({ format: 'A4' });
-    mail(buffer);
+    mail(data.recipient, buffer);
     return buffer;
   } catch (error) {
     throw error;
