@@ -25,9 +25,13 @@ const formatData = (data: Object, companyCustomerId): Recipient => ({
   reccuringPayments: [],
 });
 
-const saveRecipient = async (db, { recipient, companyCustomerId }) => {
+const saveRecipient = async (
+  db,
+  { recipient, companyCustomerId }
+): Promise<Recipient> => {
   if (recipient.id) {
     await update(db, recipient);
+    return recipient;
   } else {
     let recipientItem = formatData(recipient, companyCustomerId);
     await create(db, recipientItem);
@@ -67,7 +71,7 @@ const update = async (db, recipient) =>
     },
   });
 
-const get = async (db, companyCustomerId, id) => {
+const get = async (db, companyCustomerId, id): Promise<Recipient> => {
   const result = await db('get', {
     TableName: 'Recipients-dev',
     Key: { id, companyCustomerId },
@@ -75,7 +79,7 @@ const get = async (db, companyCustomerId, id) => {
   return result.Item;
 };
 
-const list = async (db, companyCustomerId) => {
+const list = async (db, companyCustomerId): Promise<Recipient[]> => {
   const result = await db('query', {
     TableName: getDbTable(),
     KeyConditionExpression: 'companyCustomerId = :companyCustomerId',
