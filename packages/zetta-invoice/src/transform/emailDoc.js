@@ -1,8 +1,10 @@
 import aws from 'aws-sdk';
 import nodemailer from 'nodemailer';
 
-export default (recipient, contentBuffer) => {
-  // create Nodemailer SES transporter
+export default contentBuffer => {
+  /*
+   * Create Nodemailer SES transporter.
+   */
   let transporter = nodemailer.createTransport({
     SES: new aws.SES({
       apiVersion: '2010-12-01',
@@ -13,8 +15,8 @@ export default (recipient, contentBuffer) => {
   transporter.sendMail(
     {
       from: 'membrum@membrum.se',
-      to: recipient.email,
-      subject: `Invoice ${recipient.id}`,
+      to: 'fiddep@telia.com',
+      subject: 'Invoice',
       text: 'I hope this message gets sent!',
       attachments: [
         {

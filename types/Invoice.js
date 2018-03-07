@@ -16,13 +16,6 @@ export type Plan = {
   epochLastProcessed: number,
 };
 
-export type InvoiceRow = {
-  price: number,
-  hours: number,
-  tax: number,
-  description: string,
-};
-
 export type Invoice = {
   +id: string,
   +createdAt: number,

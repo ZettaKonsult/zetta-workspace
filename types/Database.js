@@ -37,3 +37,5 @@ type Update = (
 ) => Promise<Object>;
 
 export type Database = Put | Get | Query | Delete | Update;
+
+export type DatabaseMethod = (method: string, args: object) => Promise<Object>;

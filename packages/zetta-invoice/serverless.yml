@@ -1,13 +1,50 @@
-service: payment
+service: operis-billable-time
+
+plugins:
+  - serverless-webpack
+  - serverless-dynamodb-local
+  - serverless-offline
+
+custom:
+  webpackIncludeModules: true
+  stage: ${opt:stage, self:provider.stage}
+  Invoices: 'Invoices-${self:custom.stage}'
+  Recipients: 'Recipients-${self:custom.stage}'
+  CompanyCustomers: 'CompanyCustomers-${self:custom.stage}'
+  serverless-offline:
+    port: 4000
+  dynamodb:
+    start:
+      port: 8000
+      inMemory: true
+      migrate: true
+      seed: true
+    seed:
+      domain:
+        sources:
+          - table: CompanyCustomers
+            sources: [./offline/seeds/company-customer.json]
 
 provider:
   name: aws
-  runtime: java8
-  stage: prod
+  runtime: nodejs6.10
+  stage: dev
   region: eu-central-1
-
-package:
-  artifact: target/PaymentLambda.jar
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:Query
+        - dynamodb:UpdateItem
+      Resource:
+        - { "Fn::GetAtt": ["InvoicesDynamoDBTable", "Arn" ] }
+        - { "Fn::GetAtt": ["RecipientsDynamoDBTable", "Arn" ] }
+        - { "Fn::GetAtt": ["CompanyCustomersDynamoDBTable", "Arn" ] }
+  environment:
+    InvoicesTable: ${self:custom.Invoices}
+    RecipientsTable: ${self:custom.Recipients}
+    CompanyCustomersTable: ${self:custom.CompanyCustomers}
 
 functions:
   dibsConfirm:
@@ -17,22 +54,6 @@ functions:
           method: post
           path: dibs/confirm
           role: callPaymentLambdas
-  createInvoices:
-    handler: src/lambda/invoice.create
-    events:
-      - http:
-         method: post
-         path: /invoice/create
-         role: paymentDatabaseManager
-         cors: true
-  createInvoiceRow:
-    handler: src/lambda/invoice.createRow
-    events:
-      - http:
-         method: post
-         path: /charge/invoiceRow
-         role: paymentDatabaseManager
-         cors: true
   createPlanInvoice:
     handler: src/lambda/plan.createInvoice
     events:
@@ -41,6 +62,7 @@ functions:
          path: /charge/plan
          role: paymentDatabaseManager
          cors: true
+         authorizer: aws_iam
   createPlan:
     handler: src/lambda/plan.create
     events:
@@ -49,6 +71,7 @@ functions:
          path: /plan/create
          role: paymentDatabaseManager
          cors: true
+         authorizer: aws_iam
   setInvoiceStatus:
     handler: src/lambda/invoice.setStatus
     events:
@@ -57,6 +80,53 @@ functions:
          path: /invoice/status
          role: paymentDatabaseManager
          cors: true
+         authorizer: aws_iam
+  createInvoice:
+    handler: src/handler.writeInvoice
+    events:
+      - http:
+          path: /invoice
+          method: post
+          cors: true
+          authorizer: aws_iam
+  sendInvoice:
+    handler: src/handler.sendInvoice
+    events:
+      - http:
+          path: /invoice/mail
+          method: post
+          cors: true
+          authorizer: aws_iam
+  getInvoices:
+    handler: src/handler.getInvoices
+    events:
+      - http:
+          path: /invoice/{companyCustomerId}
+          method: get
+          cors: true
+          authorizer: aws_iam
+  createRecipient:
+    handler: src/handler.createRecipient
+    events:
+      - http:
+          path: /recipient
+          method: post
+          cors: true
+          authorizer: aws_iam
+  getRecipients:
+    handler: src/handler.getRecipients
+    events:
+      - http:
+          path: /recipient/{companyCustomerId}
+          method: get
+          cors: true
+          authorizer: aws_iam
+
+
+package:
+  exclude:
+    - node_modules/serverless-dynamodb-local/**
+    - node_modules/serverless-offline/**
 
 resources:
   Resources:
@@ -178,3 +248,55 @@ resources:
                       - dynamodb:UpdateItem
                       - dynamodb:Query
                     Resource: arn:aws:dynamodb:eu-central-1:460056602695:table/MembrumUsers
+    CompanyCustomersTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: CompanyCustomers
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+    InvoicesTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: Invoices
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+    InvoiceStatusesTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: InvoiceStatuses
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+    RecipientsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: Recipients
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1

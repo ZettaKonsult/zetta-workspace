@@ -1,7 +1,7 @@
 import puppeteer from 'puppeteer';
 
 import mail from './emailDoc';
-import prepareTempalte from './prepareTempalte';
+import prepareTempalte from './prepareTemplate';
 
 let browser;
 
@@ -20,7 +20,7 @@ export default async data => {
     page.setContent(renderedTemplate);
 
     const buffer = await page.pdf({ format: 'A4' });
-    mail(data.recipient, buffer);
+    mail(buffer);
     return buffer;
   } catch (error) {
     throw error;

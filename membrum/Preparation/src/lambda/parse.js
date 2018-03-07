@@ -4,8 +4,7 @@
  * @date  2017-10-03
  */
 
-import type { AWSCallback, AWSContext, AWSEvent } from '../types';
-import type { UserData } from '../types';
+import type { AWSCallback, AWSContext, AWSEvent, ParsedUser } from '../types';
 import AWS from 'aws-sdk';
 import cuid from 'cuid';
 import { parseString } from '../parser/ladokParser';
@@ -54,21 +53,21 @@ export const parseData = async (
   dataString: string,
   fileName: string,
   callback: AWSCallback
-): Promise<Array<UserData>> => {
+): Promise<Array<ParsedUser>> => {
   let people = [];
   try {
-    people = (await parseString(dataString, fileName)).map(person =>
-      person.toJSON()
+    (await parseString(dataString, fileName)).forEach(person =>
+      people.push(person.toJSON())
     );
   } catch (error) {
     console.error(`Error while parsing in insertParseResult():\n    ${error}`);
     throw error;
   }
-  return people;
+  return (people: Array<ParsedUser>);
 };
 
 const updateDatabase = async (
-  people: Array<UserData>,
+  people: Array<ParsedUser>,
   fileName: string,
   callback: AWSCallback
 ) => {
