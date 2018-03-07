@@ -2,7 +2,7 @@
 import type { Recipient } from 'types/Recipient';
 import type { InvoiceStatus } from 'types/Event';
 
-export type InvoiceRow = {
+export type Plan = {
   +id: string,
   +createdAt: number,
   companyCustomerId: string,
@@ -14,6 +14,13 @@ export type InvoiceRow = {
   labels: string[],
   group: string,
   epochLastProcessed: number,
+};
+
+export type InvoiceRow = {
+  price: number,
+  hours: number,
+  tax: number,
+  description: string,
 };
 
 export type Invoice = {

@@ -27,19 +27,15 @@ let PlaceForm = props => (
 PlaceForm = reduxForm({ form: 'placeForm', validate })(PlaceForm);
 
 const mapStateToProps = (state, props) => {
-  if (props.recipients.length === 0) {
-    return {};
-  } else if (props.id === '0') {
-    return {
-      initialValues: {},
-    };
-  } else {
-    const recipient = props.recipients.find(
-      recipient => recipient.id === props.id
-    );
+  const recipient = props.recipients.find(
+    recipient => recipient.id === props.id
+  );
+  if (recipient) {
     return {
       initialValues: recipient,
     };
+  } else {
+    return {};
   }
 };
 

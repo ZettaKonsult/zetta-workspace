@@ -30,7 +30,7 @@ class Place extends Component {
                 await this.postRecipient(values);
                 history.push('/recipient');
               }}
-              id={match.params.id}
+              id={props.match.params.id}
               recipients={recipients}
             />
           )}

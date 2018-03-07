@@ -308,9 +308,9 @@ aws-amplify-react@^0.1.33:
   version "0.1.33"
   resolved "https://registry.yarnpkg.com/aws-amplify-react/-/aws-amplify-react-0.1.33.tgz#6812aa5cbf4db062955aa8fd18cf7aa5f601feb4"
 
-aws-amplify@^0.2.7:
-  version "0.2.7"
-  resolved "https://registry.yarnpkg.com/aws-amplify/-/aws-amplify-0.2.7.tgz#57ed81f35614303eb02c62b073b9b79dc6c786c7"
+aws-amplify@^0.2.9:
+  version "0.2.9"
+  resolved "https://registry.yarnpkg.com/aws-amplify/-/aws-amplify-0.2.9.tgz#97cb3bececc70fc8baae9e7c9115f0c4c7e72c46"
   dependencies:
     amazon-cognito-identity-js "^2.0.0"
     aws-sdk "2.198.0"
