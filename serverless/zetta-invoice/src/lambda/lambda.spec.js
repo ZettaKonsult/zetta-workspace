@@ -36,8 +36,8 @@ describe('Lambdas.', () => {
     });
   });
 
-  describe('Invoice status.', async () => {
-    describe('Set.', async () => {
+  describe('Invoice status.', () => {
+    it('Set.', async () => {
       const id = await setStatus(
         {
           body: JSON.stringify({ invoiceId: 'ccc', newStatus: 'succeeded' }),

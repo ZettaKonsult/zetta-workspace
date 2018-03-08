@@ -1,6 +1,8 @@
 /* @flow */
 
 export type Recipient = {
+  +id: string,
+  +companyCustomerId: string,
   email: string,
   address?: string,
   city?: string,
@@ -9,6 +11,7 @@ export type Recipient = {
   lastName: string,
   ssn?: string,
   company?: string,
+  mobile?: string,
 };
 
 export type CompanyCustomer = {

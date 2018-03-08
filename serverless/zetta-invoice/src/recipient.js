@@ -11,7 +11,7 @@ const getDbTable = (): string => {
   return process.env.RecipientTable;
 };
 
-const formatData = (params: {
+const format = (params: {
   data: Object,
   companyCustomerId: string,
 }): Recipient => {
@@ -41,11 +41,11 @@ const saveRecipient = async (params: {
   const { db, recipient, companyCustomerId } = params;
 
   if (recipient.id) {
-    await update(db, recipient);
+    await update({ db, recipient });
     return recipient;
   } else {
-    let recipientItem = formatData(recipient, companyCustomerId);
-    await create(db, recipientItem);
+    let recipientItem = format({ data: recipient, companyCustomerId });
+    await create({ db, recipient: recipientItem });
     return recipientItem;
   }
 };

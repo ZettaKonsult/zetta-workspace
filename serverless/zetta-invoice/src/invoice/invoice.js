@@ -5,7 +5,7 @@
  */
 
 import type { DatabaseMethod } from 'types/Database';
-import type { Invoice } from 'types/Invoice';
+import type { Invoice, InvoiceData } from 'types/Invoice';
 
 import { getDbTable } from '../database';
 import CompanyCustomer from './customer';
@@ -17,15 +17,15 @@ import cuid from 'cuid';
 const table = getDbTable({ name: 'Invoices' });
 
 const newInvoice = (params: {
-  recipientIds: Array<string>,
+  invoice: InvoiceData,
   companyCustomerId: string,
-}) => {
-  const { recipientIds, companyCustomerId } = params;
+}): Invoice => {
+  const { companyCustomerId, invoice } = params;
 
   return create({
     id: cuid(),
     createdAt: Date.now(),
-    recipientIds,
+    recipientIds: invoice.recipientIds,
     companyCustomerId,
   });
 };
@@ -35,21 +35,27 @@ const create = (params: {
   recipientIds: Array<string>,
   createdAt: number,
   companyCustomerId: string,
-}) => {
+}): Invoice => {
   const { id, createdAt, companyCustomerId, recipientIds } = params;
 
+  const invoiceId = id || cuid();
+  const creation = createdAt || Date.now();
+
+  const itemStatus = Status.newStatus({ invoiceId, createdAt: creation });
+
   return {
-    id: id || cuid(),
-    createdAt: createdAt || Date.now(),
-    companyCustomerId,
-    recipientIds,
+    id: invoiceId,
+    createdAt: creation,
+    companyCustomer: companyCustomerId,
+    recipients: recipientIds,
+    itemStatus,
     locked: false,
   };
 };
 
 export const createInvoice = async (params: {
   db: DatabaseMethod,
-  invoice: Invoice,
+  invoice: InvoiceData,
   companyCustomerId: string,
 }) => {
   const { db, invoice, companyCustomerId } = params;
@@ -59,8 +65,8 @@ export const createInvoice = async (params: {
     return invoice;
   } else {
     const invoiceItem = newInvoice({ invoice, companyCustomerId });
-    await put({ db, invoiceItem });
-    await Status.create({ invoiceItem });
+    await put({ db, invoice: invoiceItem });
+    await Status.create({ db, status: invoiceItem.itemStatus });
 
     return invoiceItem;
   }
@@ -120,21 +126,21 @@ export const lockInvoice = async (params: {
   }
 };
 
-const update = async (params: { db: DatabaseMethod, invoice: Invoice }) => {
+const update = async (params: { db: DatabaseMethod, invoice: InvoiceData }) => {
   const { db, invoice } = params;
 
   try {
     await db('update', {
       TableName: table,
       Key: {
-        companyCustomerId: invoice.companyCustomerId,
+        companyCustomer: invoice.companyCustomerId,
         id: invoice.id,
       },
       ConditionExpression: 'locked=:shouldNotBeLocked',
       UpdateExpression: `Set invoiceRows = :invoiceRows, recipientId = :recipientId`,
       ExpressionAttributeValues: {
         ':shouldNotBeLocked': false,
-        ':recipientIds': invoice.recipientIds,
+        ':recipient': invoice.recipientIds,
       },
     });
   } catch (error) {

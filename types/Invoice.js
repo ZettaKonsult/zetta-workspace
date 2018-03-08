@@ -16,10 +16,17 @@ export type Plan = {
   epochLastProcessed: number,
 };
 
+export type InvoiceData = {
+  id?: string,
+  recipientIds: Array<string>,
+  companyCustomerId: string,
+};
+
 export type Invoice = {
   +id: string,
   +createdAt: number,
-  +recipient: Recipient,
-  +companyCustomer: CompanyCustomer,
+  recipients: Array<string> | Array<Recipient>,
+  companyCustomer: string | CompanyCustomer,
   itemStatus: InvoiceStatus,
+  locked: boolean,
 };

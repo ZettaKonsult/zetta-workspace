@@ -18,6 +18,6 @@ export const getDbTable = (params: { name: string }): string => {
   return params.name;
 };
 
-export default async (method, params) => {
+export default async (method: string, params: { [string]: any }) => {
   return await client[method](params).promise();
 };
