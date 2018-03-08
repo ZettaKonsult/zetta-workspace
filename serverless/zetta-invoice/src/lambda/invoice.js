@@ -1,13 +1,8 @@
 import invoice, { createInvoice, mailInvoice } from '../invoice/invoice';
-import recipient from './recipient';
 
 import { success, failure } from './util/response';
 import parser from './util/parser';
 import db from './util/database';
-
-const INVOICE_TABLE = 'Invoices';
-const INVOICE_STATUS_TABLE = 'InvoiceStatuses';
-const RECIPIENT_TABLE = 'Recipients';
 
 export const writeInvoice = async (event, context, callback) => {
   const { data } = parser(event);

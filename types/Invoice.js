@@ -1,11 +1,11 @@
 /* @flow */
-import type { Recipient } from 'types/Recipient';
+import type { CompanyCustomer, Recipient } from 'types/Recipient';
 import type { InvoiceStatus } from 'types/Event';
 
 export type Plan = {
   +id: string,
   +createdAt: number,
-  companyCustomerId: string,
+  +companyCustomerId: string,
   recipientIds: string[],
   price: number,
   description: string,
@@ -20,6 +20,6 @@ export type Invoice = {
   +id: string,
   +createdAt: number,
   +recipient: Recipient,
-  +invoiceRows: InvoiceRow[],
+  +companyCustomer: CompanyCustomer,
   itemStatus: InvoiceStatus,
 };

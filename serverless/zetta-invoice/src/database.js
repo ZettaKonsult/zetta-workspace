@@ -1,3 +1,5 @@
+/* @flow */
+
 import AWS from 'aws-sdk';
 
 const isOffline = process.env.IS_OFFLINE;
@@ -11,6 +13,10 @@ const dynamodbOfflineOptions = {
 const client = isOffline
   ? new AWS.DynamoDB.DocumentClient(dynamodbOfflineOptions)
   : new AWS.DynamoDB.DocumentClient();
+
+export const getDbTable = (params: { name: string }): string => {
+  return params.name;
+};
 
 export default async (method, params) => {
   return await client[method](params).promise();

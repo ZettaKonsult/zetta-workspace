@@ -21,9 +21,9 @@
     "db:remove": "sls dynamodb remove",
     "deploy:debug": "sls deploy -v",
     "deploy:prod": "sls deploy --stage prod",
-    "prestart": "sls dynamodb install",
+    "prestart": "sls dynamodb start --migrate",
     "start": "node dist/index",
-    "test": "sh test/scripts/startDb.sh && sleep 5 && jest --env=node",
+    "test": "jest --env=node",
     "test:staged": "cross-env CI=true yarn test --findRelatedTests",
     "test:watch": "yarn test --watch"
   },

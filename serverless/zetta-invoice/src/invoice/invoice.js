@@ -14,9 +14,23 @@ import invoicePDF from '../transform/handler';
 import recipientDb from '../recipient';
 import cuid from 'cuid';
 
-const table = getDbTable();
+const table = getDbTable({ name: 'Invoices' });
 
 const newInvoice = (params: {
+  recipientIds: Array<string>,
+  companyCustomerId: string,
+}) => {
+  const { recipientIds, companyCustomerId } = params;
+
+  return create({
+    id: cuid(),
+    createdAt: Date.now(),
+    recipientIds,
+    companyCustomerId,
+  });
+};
+
+const create = (params: {
   id: string,
   recipientIds: Array<string>,
   createdAt: number,
@@ -61,14 +75,14 @@ export const mailInvoice = async (params: {
 
   try {
     let [companyCustomer, invoice] = await Promise.all([
-      CompanyCustomer.get(db, companyCustomerId),
+      CompanyCustomer.get({ db, companyCustomerId }),
       get({ db, companyCustomerId, invoiceId }),
     ]);
-    let recipient = await recipientDb.get(
+    let recipient = await recipientDb.get({
       db,
       companyCustomerId,
-      invoice.recipientId
-    );
+      recipientId: invoice.recipientId,
+    });
     const constructed = Object.assign(
       {},
       { companyCustomer: companyCustomer },
