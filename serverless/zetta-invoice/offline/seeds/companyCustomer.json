@@ -1,0 +1,19 @@
+[
+  {
+    "id": "companyCustomerId",
+    "firstName": "FirstName",
+    "lastName": "LastName",
+    "city": "City",
+    "address": "Road 123A",
+    "mobile": "+46761234567",
+    "VAT": "XX123456789101",
+    "zipcode": "12345",
+    "company": "Company AB",
+    "email": "firstName@company.com",
+    "bank": {
+      "giro": "123-4567",
+      "name": "MoneyBank"
+    },
+    "createdAt": 1234567890
+  }
+]

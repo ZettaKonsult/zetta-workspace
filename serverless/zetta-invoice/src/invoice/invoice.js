@@ -57,7 +57,7 @@ export const createInvoice = async (params: {
   db: DatabaseMethod,
   invoice: InvoiceData,
   companyCustomerId: string,
-}): Invoice => {
+}): Promise<Invoice | InvoiceData> => {
   const { db, invoice, companyCustomerId } = params;
 
   if (invoice.id) {
@@ -165,7 +165,7 @@ const get = async (params: {
   db: DatabaseMethod,
   invoiceId: string,
   companyCustomerId: string,
-}): { [string]: any } => {
+}): Promise<{ [string]: any }> => {
   const { db, invoiceId, companyCustomerId } = params;
 
   return (await db('get', {
@@ -177,7 +177,7 @@ const get = async (params: {
 const list = async (params: {
   db: DatabaseMethod,
   companyCustomerId: string,
-}): { [string]: any } => {
+}): Promise<{ [string]: any }> => {
   const { db, companyCustomerId } = params;
 
   return (await db('query', {
