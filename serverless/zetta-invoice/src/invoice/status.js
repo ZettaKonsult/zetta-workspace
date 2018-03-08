@@ -42,18 +42,4 @@ const put = async (params: { db: DatabaseMethod, status: InvoiceStatus }) => {
   }
 };
 
-const update = (params: {
-  status: InvoiceStatus,
-  newStatus: 'pending' | 'canceled' | 'succeeded',
-  createdAt: number,
-}): InvoiceStatus => {
-  const { status, newStatus, createdAt } = params;
-
-  return {
-    ...status,
-    createdAt,
-    itemStatus: newStatus,
-  };
-};
-
-export default { create, newStatus, update };
+export default { create, newStatus };

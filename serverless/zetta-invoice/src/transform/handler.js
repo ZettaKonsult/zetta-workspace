@@ -1,11 +1,13 @@
+/* @flow */
+
 import puppeteer from 'puppeteer';
 
 import mail from './emailDoc';
-import prepareTempalte from './prepareTemplate';
+import prepareTemplate from './prepareTemplate';
 
 let browser;
 
-const getBrowserPage = async () => {
+const getBrowserPage = async (): buffer => {
   browser = await puppeteer.launch();
   const page = await browser.newPage();
   return page;
@@ -14,7 +16,7 @@ const getBrowserPage = async () => {
 export default async data => {
   try {
     let [renderedTemplate, page] = await Promise.all([
-      prepareTempalte(data),
+      prepareTemplate(data),
       getBrowserPage(),
     ]);
     page.setContent(renderedTemplate);

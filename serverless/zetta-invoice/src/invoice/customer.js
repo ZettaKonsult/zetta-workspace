@@ -9,7 +9,7 @@ import type { DatabaseMethod } from 'types/Database';
 const get = async (params: {
   db: DatabaseMethod,
   companyCustomerId: string,
-}) => {
+}): { [string]: any } => {
   const { db, companyCustomerId } = params;
 
   const result = await db('get', {
