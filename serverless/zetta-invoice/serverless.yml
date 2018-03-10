@@ -9,10 +9,11 @@ custom:
   webpackIncludeModules: true
   stage: ${opt:stage, self:provider.stage}
   Invoices: 'Invoices-${self:custom.stage}'
+  InvoiceStatuses: 'InvoiceStatuses-${self:custom.stage}'
   Recipients: 'Recipients-${self:custom.stage}'
   CompanyCustomers: 'CompanyCustomers-${self:custom.stage}'
   serverless-offline:
-    port: 4000
+    port: 8080
   dynamodb:
     start:
       port: 8000
@@ -23,7 +24,13 @@ custom:
       domain:
         sources:
           - table: CompanyCustomers
-            sources: [./offline/seeds/company-customer.json]
+            sources: [./offline/seeds/companyCustomer.json]
+          - table: Invoices
+            sources: [./offline/seeds/invoices.json]
+          - table: InvoiceStatuses
+            sources: [./offline/seeds/invoiceStatuses.json]
+          - table: Recipients
+            sources: [./offline/seeds/recipients.json]
 
 provider:
   name: aws
@@ -51,76 +58,88 @@ functions:
     handler: src/lambda/dibs.confirm
     events:
       - http:
-          method: post
           path: dibs/confirm
+          method: post
           role: callPaymentLambdas
+  dibsUrl:
+    handler: src/lambda/dibs.url
+    events:
+      - http:
+          path: dibs/url
+          method: post
+          role: callPaymentLambda
   createPlanInvoice:
     handler: src/lambda/plan.createInvoice
     events:
       - http:
-         method: post
          path: /charge/plan
+         method: post
          role: paymentDatabaseManager
          cors: true
-         authorizer: aws_iam
   createPlan:
     handler: src/lambda/plan.create
     events:
       - http:
-         method: post
          path: /plan/create
+         method: post
          role: paymentDatabaseManager
          cors: true
-         authorizer: aws_iam
+  confirmPayment:
+    handler: src/lambda/invoice.confirm
+    events:
+      - http:
+         path: /invoice/confirm
+         method: post
+         role: paymentDatabaseManager
+         cors: true
   setInvoiceStatus:
     handler: src/lambda/invoice.setStatus
     events:
       - http:
-         method: post
          path: /invoice/status
+         method: post
          role: paymentDatabaseManager
          cors: true
-         authorizer: aws_iam
   createInvoice:
-    handler: src/handler.writeInvoice
+    handler: src/lambda/invoice.write
     events:
       - http:
-          path: /invoice
+          path: /invoice/create
           method: post
+          role: paymentDatabaseManager
           cors: true
-          authorizer: aws_iam
   sendInvoice:
-    handler: src/handler.sendInvoice
+    handler: src/lambda/invoice.send
     events:
       - http:
           path: /invoice/mail
           method: post
+          role: paymentDatabaseManager
           cors: true
-          authorizer: aws_iam
   getInvoices:
-    handler: src/handler.getInvoices
+    handler: src/lambda/invoice.get
     events:
       - http:
           path: /invoice/{companyCustomerId}
           method: get
+          role: paymentDatabaseManager
           cors: true
-          authorizer: aws_iam
   createRecipient:
-    handler: src/handler.createRecipient
+    handler: src/lambda/recipient.create
     events:
       - http:
           path: /recipient
           method: post
+          role: paymentDatabaseManager
           cors: true
-          authorizer: aws_iam
   getRecipients:
-    handler: src/handler.getRecipients
+    handler: src/lambda/recipient.get
     events:
       - http:
           path: /recipient/{companyCustomerId}
           method: get
+          role: paymentDatabaseManager
           cors: true
-          authorizer: aws_iam
 
 
 package:
@@ -271,6 +290,18 @@ resources:
         AttributeDefinitions:
           - AttributeName: id
             AttributeType: S
+          - AttributeName: companyCustomer
+            AttributeType: S
+        GlobalSecondaryIndexes:
+          - IndexName: companyCustomer
+            KeySchema:
+            - AttributeName: companyCustomer
+              KeyType: HASH
+            Projection:
+              ProjectionType: ALL
+            ProvisionedThroughput:
+              ReadCapacityUnits: 1
+              WriteCapacityUnits: 1
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
@@ -297,6 +328,18 @@ resources:
         AttributeDefinitions:
           - AttributeName: id
             AttributeType: S
+          - AttributeName: companyCustomer
+            AttributeType: S
+        GlobalSecondaryIndexes:
+          - IndexName: companyCustomer
+            KeySchema:
+            - AttributeName: companyCustomer
+              KeyType: HASH
+            Projection:
+              ProjectionType: ALL
+            ProvisionedThroughput:
+              ReadCapacityUnits: 1
+              WriteCapacityUnits: 1
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1

@@ -22,12 +22,19 @@ export type AWSContext = {
 };
 
 export type AWSEvent = {
+  body: string,
   Records: any,
   names: Array<string>,
+  pathParameters: any,
+  queryStringParameters: Array<string>,
+  requestContext: {
+    stage: string,
+    resourcePath: string,
+  },
 };
 
-export type parsedEvent = {
-  data: string,
+export type ParsedEvent = {
+  data: any,
   path: string,
   stage: string,
   params: { [string]: string },

@@ -7,13 +7,13 @@ import prepareTemplate from './prepareTemplate';
 
 let browser;
 
-const getBrowserPage = async (): buffer => {
+const getBrowserPage = async (): Buffer => {
   browser = await puppeteer.launch();
   const page = await browser.newPage();
   return page;
 };
 
-export default async data => {
+export default async (data: any) => {
   try {
     let [renderedTemplate, page] = await Promise.all([
       prepareTemplate(data),

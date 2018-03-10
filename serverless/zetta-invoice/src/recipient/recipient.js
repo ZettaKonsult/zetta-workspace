@@ -2,14 +2,10 @@
 import type { DatabaseMethod } from 'types/Database';
 import type { Recipient } from 'types/Recipient';
 
+import { getDbTable } from '../util/database';
 import cuid from 'cuid';
 
-const getDbTable = (): string => {
-  if (!process.env.RecipientTable) {
-    throw new Error('Could not read database table from env.RecipientTable');
-  }
-  return process.env.RecipientTable;
-};
+const table = getDbTable({ name: 'Recipients' });
 
 const format = (params: {
   data: Object,
@@ -54,7 +50,7 @@ const create = async (params: { db: DatabaseMethod, recipient: Recipient }) => {
   const { db, recipient } = params;
 
   const args = {
-    TableName: getDbTable(),
+    TableName: table,
     Item: recipient,
   };
 
@@ -67,7 +63,7 @@ const update = async (params: { db: DatabaseMethod, recipient: Recipient }) => {
   const { db, recipient } = params;
 
   return await db('update', {
-    TableName: getDbTable(),
+    TableName: table,
     Key: {
       companyCustomerId: recipient.companyCustomerId,
       id: recipient.id,
@@ -92,14 +88,18 @@ const update = async (params: { db: DatabaseMethod, recipient: Recipient }) => {
 
 const get = async (params: {
   db: DatabaseMethod,
-  recipientId: string,
   companyCustomerId: string,
 }): Promise<Recipient> => {
-  const { db, recipientId, companyCustomerId } = params;
+  const { db, companyCustomerId } = params;
 
+  console.log(`Fetching recipients for customer ${companyCustomerId}.`);
+  console.log({
+    TableName: table,
+    Key: { companyCustomer: companyCustomerId, recipientId: 'recipientId' },
+  });
   const result = await db('get', {
-    TableName: 'Recipients-dev',
-    Key: { recipientId, companyCustomerId },
+    TableName: table,
+    Key: { companyCustomer: companyCustomerId, recipientId: 'recipientId' },
   });
   return result.Item;
 };
@@ -107,17 +107,21 @@ const get = async (params: {
 const list = async (params: {
   db: DatabaseMethod,
   companyCustomerId: string,
-}): Promise<Recipient[]> => {
+}): Promise<{ [string]: any }> => {
   const { db, companyCustomerId } = params;
 
-  const result = await db('query', {
-    TableName: getDbTable(),
-    KeyConditionExpression: 'companyCustomerId = :companyCustomerId',
-    ExpressionAttributeValues: {
-      ':companyCustomerId': companyCustomerId,
+  console.log(`Fetching invoices for ${companyCustomerId}.`);
+  return (await db('query', {
+    TableName: table,
+    IndexName: 'companyCustomer',
+    KeyConditionExpression: '#companyCustomer = :companyCustomer',
+    ExpressionAttributeNames: {
+      '#companyCustomer': 'companyCustomer',
     },
-  });
-  return result.Items;
+    ExpressionAttributeValues: {
+      ':companyCustomer': companyCustomerId,
+    },
+  })).Items;
 };
 
 export default { save: saveRecipient, list, get };

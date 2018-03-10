@@ -4,7 +4,7 @@
  * 2018-02
  */
 
-import type { AWSEvent } from 'types/AWS';
+import type { AWSEvent, ParsedEvent } from 'types/AWS';
 
 export default (event: AWSEvent): ParsedEvent => {
   return {

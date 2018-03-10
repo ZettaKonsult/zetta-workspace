@@ -9,11 +9,12 @@ import type { DatabaseMethod } from 'types/Database';
 const get = async (params: {
   db: DatabaseMethod,
   companyCustomerId: string,
-}): { [string]: any } => {
+}): Promise<{ [string]: any }> => {
   const { db, companyCustomerId } = params;
 
+  console.log(`Fetching customer ${companyCustomerId}.`);
   const result = await db('get', {
-    TableName: 'CompanyCustomer-dev',
+    TableName: 'CompanyCustomers',
     Key: { id: companyCustomerId },
   });
   return result.Item;

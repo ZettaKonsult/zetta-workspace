@@ -21,8 +21,8 @@
     "db:remove": "sls dynamodb remove",
     "deploy:debug": "sls deploy -v",
     "deploy:prod": "sls deploy --stage prod",
-    "prestart": "sls dynamodb start --migrate",
-    "start": "node dist/index",
+    "start": "sls dynamodb start --migrate",
+    "dev:test": "yarn test",
     "test": "jest --env=node",
     "test:staged": "cross-env CI=true yarn test --findRelatedTests",
     "test:watch": "yarn test --watch"
@@ -34,7 +34,7 @@
     "mustache": "^2.3.0",
     "nodemailer": "^4.4.2",
     "puppeteer": "^1.1.0",
-    "serverless-dynamodb-local": "^0.2.28",
+    "shelljs": "^0.8.1",
     "source-map-support": "^0.4.18"
   },
   "devDependencies": {
@@ -46,7 +46,7 @@
     "babel-preset-stage-3": "^6.24.1",
     "jest": "^22.2.2",
     "serverless": "^1.26.0",
-    "serverless-dynamodb-local": "0.2.27",
+    "serverless-dynamodb-local": "^0.2.28",
     "serverless-offline": "3.17.0",
     "serverless-webpack": "^4.2.0",
     "webpack": "^3.10.0",

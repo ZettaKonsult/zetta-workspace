@@ -1,7 +1,6 @@
-import * as Plan from '../plan';
-import db from '../database';
-import { getTable } from '../config';
-import parser from 'serverless-event-parser';
+import * as Plan from '../invoice/plan';
+import db, { getTable } from '../util/database';
+import parser from '../../../../packages/serverless-event-parser/src/';
 
 const INVOICE_TABLE = 'Invoices';
 const PLAN_TABLE = 'Plans';

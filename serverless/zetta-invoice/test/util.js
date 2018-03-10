@@ -4,7 +4,7 @@
  * @date 2018-03-05
  */
 
-import db from '../src/database';
+import db from '../src/util/database';
 
 const tableGet = async (params: { table: string, key: { id: string } }) =>
   await db('get', {

@@ -1,8 +1,17 @@
+/* @flow */
+
+/**
+ * @date 2018-02
+ */
+
+import type { HTML } from 'types/General';
+import type { Invoice, InvoiceSpecification } from 'types/Invoice';
+import type { CompanyCustomer, Recipient } from 'types/Recipient';
 import Mustache from 'mustache';
 import { promisify } from 'util';
 import fs from 'fs';
 
-export default async data => {
+export default async (data: any): HTML => {
   let [tempalte, date] = await Promise.all([
     readTemplateFile(),
     prepareData(data),
@@ -14,14 +23,21 @@ const readFileAsync = promisify(fs.readFile);
 const readTemplateFile = async () =>
   await readFileAsync('./src/template/template.html', 'utf8');
 
-const prepareData = data => {
+const prepareData = (data: {
+  companyCustomer: CompanyCustomer,
+  recipient: Recipient,
+  invoice: Invoice,
+  tax?: number,
+}): InvoiceSpecification => {
   const { companyCustomer, recipient, invoice, tax = 1.25 } = data;
 
   const id = new Date(invoice.createdAt);
   const timeToPay = new Date(id.getUTCFullYear(), id.getUTCMonth() + 1);
-  const netTotal = calcNetTotal(invoice.invoiceRows);
-  const total = netTotal * tax;
-  const taxTotal = total - netTotal;
+
+  const { netTotal, taxTotal, total } = calculatePrice({
+    price: invoice.price,
+    tax,
+  });
 
   return {
     companyCustomer,
@@ -31,12 +47,6 @@ const prepareData = data => {
       createdAt: id.toISOString().split('T')[0],
       timeToPay: timeToPay.toISOString().split('T')[0],
     },
-    invoiceRows: invoice.invoiceRows.map(row => ({
-      interval: row.hours,
-      description: row.description,
-      price: row.price,
-      total: Number(row.hours) * Number(row.price),
-    })),
     discount: '',
     netTotal,
     taxTotal,
@@ -45,5 +55,15 @@ const prepareData = data => {
   };
 };
 
-const calcNetTotal = rows =>
-  rows.reduce((total, row) => (total += row.price * row.hours), 0);
+const calculatePrice = (params: {
+  price: number,
+  tax: number,
+}): { netTotal: number, taxTotal: number, total: number } => {
+  const { price, tax } = params;
+
+  const taxTotal = price * tax;
+  const netTotal = price - taxTotal;
+  const total = netTotal + taxTotal;
+
+  return { netTotal, taxTotal, total };
+};

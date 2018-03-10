@@ -7,7 +7,7 @@
 import type { DatabaseMethod } from 'types/Database';
 import type { InvoiceStatus } from 'types/Event';
 
-import { getDbTable } from '../database';
+import { getDbTable } from '../util/database';
 import cuid from 'cuid';
 
 const table = getDbTable({ name: 'InvoiceStatuses' });

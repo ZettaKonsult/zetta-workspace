@@ -8,10 +8,14 @@ const dynamodbOfflineOptions = {
   endpoint: 'http://localhost:8000',
 };
 
+export const getDbTable = (params: { name: string }): string => {
+  return params.name;
+};
+
 const client = isOffline
   ? new AWS.DynamoDB.DocumentClient(dynamodbOfflineOptions)
   : new AWS.DynamoDB.DocumentClient();
 
-export default (method, params): any => {
+export default (method: string, params: any): any => {
   return client[method](params).promise();
 };

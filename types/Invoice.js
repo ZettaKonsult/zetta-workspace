@@ -18,13 +18,30 @@ export type Plan = {
 
 export type InvoiceData = {
   id?: string,
-  recipientIds: Array<string>,
   companyCustomerId: string,
+  recipientIds: Array<string>,
+  price: number,
+};
+
+export type InvoiceSpecification = {
+  companyCustomer: string | CompanyCustomer,
+  recipients: Array<string> | Array<Recipient>,
+  invoice: {
+    id: number,
+    createdAt: string,
+    timeToPay: string,
+  },
+  discount: number,
+  netTotal: number,
+  taxTotal: number,
+  total: number,
+  receiver: string,
 };
 
 export type Invoice = {
   +id: string,
   +createdAt: number,
+  +price: number,
   recipients: Array<string> | Array<Recipient>,
   companyCustomer: string | CompanyCustomer,
   itemStatus: InvoiceStatus,
