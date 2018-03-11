@@ -4,21 +4,46 @@
  * @date 2018-03-10
  */
 
-import type { AWSContext, AWSEvent, AWSCallback } from 'types/AWS';
+import type { DatabaseMethod } from 'types/Database';
+import { getDbTable } from '../util/database';
 import AWS from 'aws-sdk';
-import parser from '../../../../packages/serverless-event-parser/src/';
-import { success, failure } from '../util/response';
+import queryString from 'query-string';
 AWS.config.region = 'eu-west-1';
 
 let lambda = new AWS.Lambda();
+const CALLBACK_URL =
+  'https://eu-central-1.console.aws.amazon.com/lambda/home?region=eu-central-1#/functions/payment-prod-membrumDIBSConfirm?tab=graph';
+const DIBS_URL = 'https://payment.architrade.com/paymentweb/start.action';
 const INVOICE_LAMBDA = 'confirmPayment';
+const INVOICES_TABLE = getDbTable({ name: 'Invoices' });
+
+const requiredValues = [
+  'accepturl',
+  'amount',
+  'callbackurl',
+  'cancelurl',
+  'currency',
+  'decorator',
+  'ip',
+  'lang',
+  'merchant',
+  'orderid',
+  'test',
+  'uniqueoid',
+];
+
+const defaultValues = {
+  currency: 'SEK',
+  decorator: 'responsive',
+  lang: 'sv',
+  test: '1',
+  uniqueoid: 'yes',
+};
 
 const callLambda = function(params: {
   name: string,
-  event: AWSEvent,
-  context: AWSContext,
   payload: any,
-}) {
+}): { [string]: string } {
   const { payload, name } = params;
 
   console.log(`Executing lambda function ${name}(${payload});`);
@@ -29,13 +54,15 @@ const callLambda = function(params: {
     Payload: JSON.stringify(payload),
   };
 
+  let result = {};
   lambda.invoke(args, function(error, data) {
     if (error) {
       throw error;
     } else {
-      return data.payload;
+      result = data.payload;
     }
   });
+  return result;
 };
 
 const confirm = async (params: { invoiceId: string }) => {
@@ -48,20 +75,60 @@ const confirm = async (params: { invoiceId: string }) => {
   }
 };
 
-export const url = async (
-  event: AWSEvent,
-  context: AWSContext,
-  callback: AWSCallback
-) => {
-  const { invoiceId } = parser(event).data;
+export const url = async (params: {
+  db: DatabaseMethod,
+  accepturl: string,
+  cancelurl: string,
+  invoiceId: string,
+  merchant: string,
+}) => {
+  const { accepturl, cancelurl, db, invoiceId, merchant } = params;
+  let form = Object.assign(defaultValues);
 
   try {
-    const result = 'theUrl' + invoiceId;
-    callback(null, success(result));
-  } catch (err) {
-    console.error(err);
-    callback(null, failure(err.message));
+    console.log(`Fetching invoice ${invoiceId}.`);
+    const invoice = (await db('get', {
+      TableName: INVOICES_TABLE,
+      Key: { id: invoiceId },
+    })).Item;
+
+    if (invoice == null || invoice.id == null) {
+      throw new Error(`No such invoice ${invoiceId}!`);
+    }
+
+    form = {
+      ...form,
+      accepturl,
+      amount: invoice.price,
+      callbackurl: CALLBACK_URL,
+      cancelurl,
+      ip: 'DUMMY-IP',
+      merchant,
+      orderid: invoice.id,
+    };
+
+    return DIBS_URL + '?' + queryString.stringify(validateForm(form));
+  } catch (error) {
+    throw error;
   }
+};
+
+const validateForm = (params: { [string]: string }): { [string]: string } => {
+  for (let key: string of Object.keys(params)) {
+    if (requiredValues.indexOf(key) === -1) {
+      throw new Error(`Invalid key '${key}'.`);
+    }
+  }
+  for (let key: string of requiredValues) {
+    if (!(key in params)) {
+      throw new Error(`Missing key '${key}'.`);
+    }
+    if (params[key] == null) {
+      throw new Error(`Missing value for key ${key}.`);
+    }
+  }
+
+  return params;
 };
 
 export default { confirm, url };

@@ -4,9 +4,8 @@
  * @date 2018-03-05
  */
 
-import type { AWSEvent, AWSContext, AWSCallback } from 'types/AWS';
-
 import config from '../util/config';
+import awsMock from '../../test/mocks/aws';
 import fetch from 'isomorphic-fetch';
 
 import Customer from './customer';
@@ -26,39 +25,6 @@ export const getRequest = async (params: { path: string }): any => {
   return await fetch(`${HOST}/${params.path}`);
 };
 
-const awsCall = async (params: {
-  body: any,
-}): Promise<{
-  event: AWSEvent,
-  context: AWSContext,
-  callback: AWSCallback,
-}> => ({
-  event: {
-    body: JSON.stringify(params.body),
-    Records: {},
-    names: [],
-    pathParameters: {},
-    queryStringParameters: [],
-    requestContext: {
-      stage: '',
-      resourcePath: '',
-    },
-  },
-  context: {},
-  callback: () => {},
-});
-
-const lambdaCall = async (params: { method: any, body: any }) => {
-  const { body, method } = params;
-  const aws = await awsCall({ body });
-
-  let x;
-  await method(aws.event, aws.context, (error, data) => {
-    x = data;
-  });
-  return x;
-};
-
 describe('Lambdas.', () => {
   describe('CompanyCustomers.', () => {
     it('Get.', async () => {
@@ -76,7 +42,7 @@ describe('Lambdas.', () => {
           '"+46761234567","VAT":"XX123456789101","company":"Company AB"' +
           ',"id":"companyCustomerId","email":"firstName@company.com"}',
       };
-      const value = await lambdaCall({
+      const value = await awsMock.lambdaCall({
         method: Customer.get,
         body: { companyCustomerId: 'companyCustomerId' },
       });
@@ -87,21 +53,16 @@ describe('Lambdas.', () => {
   describe('Invoices.', () => {
     it('Get.', async () => {
       const expected = {
-        statusCode: 200,
+        body:
+          '[{"createdAt":3456789012,"price":"123","itemStatus":{"createdAt":3456789012,"invoiceId":"invoiceId1","id":"itemStatusId1","itemStatus":"pending"},"recipient":"recipientId","companyCustomer":"companyCustomerId","id":"invoiceId1","locked":false},{"createdAt":5678901234,"price":"789","itemStatus":{"createdAt":5678901234,"invoiceId":"invoiceId3","id":"itemStatusId3","itemStatus":"canceled"},"recipient":"recipientId","companyCustomer":"companyCustomerId","id":"invoiceId3","locked":true},{"createdAt":4567890123,"price":"456","itemStatus":{"createdAt":4567890123,"invoiceId":"invoiceId2","id":"itemStatusId2","itemStatus":"succeeded"},"recipient":"recipientId","companyCustomer":"companyCustomerId","id":"invoiceId2","locked":true}]',
         headers: {
-          'Access-Control-Allow-Origin': '*',
           'Access-Control-Allow-Credentials': true,
+          'Access-Control-Allow-Origin': '*',
           'Content-Type': 'application/json',
         },
-        body:
-          '[{"recipient":"recipientId","createdAt":3456789012,"companyCustomer":"companyCustomerId","id":"invoiceId1","locked":' +
-          'false,"itemStatus":{"createdAt":3456789012,"invoiceId":"invoiceId1","id":"itemStatusId1","itemStatus":"pending"}},{"recipient":"r' +
-          'ecipientId","createdAt":5678901234,"companyCustomer":"companyCustomerId","id":"invoiceId3","locked":true,"itemStatus":{"createdAt' +
-          '":5678901234,"invoiceId":"invoiceId3","id":"itemStatusId3","itemStatus":"canceled"}},{"recipient":"recipientId","createdAt":45678' +
-          '90123,"companyCustomer":"companyCustomerId","id":"invoiceId2","locked":true,"itemStatus":{"createdAt":4567890123,"invoiceId":"inv' +
-          'oiceId2","id":"itemStatusId2","itemStatus":"succeeded"}}]',
+        statusCode: 200,
       };
-      const value = await lambdaCall({
+      const value = await awsMock.lambdaCall({
         method: Invoice.get,
         body: {
           companyCustomerId: 'companyCustomerId',
@@ -121,7 +82,7 @@ describe('Lambdas.', () => {
         id: 'itemStatusId1',
         itemStatus: 'pending',
       };
-      const value = await lambdaCall({
+      const value = await awsMock.lambdaCall({
         method: Invoice.getStatus,
         body: { invoiceId: 'invoiceId1' },
       });
@@ -143,7 +104,7 @@ describe('Lambdas.', () => {
           '34A","city":"RecipientCity","mobile":"+46762345678","companyCustomer":"companyCustomerId","id":"recipientId","email":"firstName@r' +
           'ecipient.com","ssn":"1234567890"}]',
       };
-      const value = await lambdaCall({
+      const value = await awsMock.lambdaCall({
         method: Recipient.get,
         body: {
           companyCustomerId: 'companyCustomerId',

@@ -21,7 +21,7 @@
     "db:remove": "sls dynamodb remove",
     "deploy:debug": "sls deploy -v",
     "deploy:prod": "sls deploy --stage prod",
-    "start": "sls dynamodb start --migrate",
+    "start": "yarn sls dynamodb start --migrate",
     "dev:test": "yarn test",
     "test": "jest --env=node",
     "test:staged": "cross-env CI=true yarn test --findRelatedTests",
@@ -34,6 +34,7 @@
     "mustache": "^2.3.0",
     "nodemailer": "^4.4.2",
     "puppeteer": "^1.1.0",
+    "query-string": "^5.1.0",
     "shelljs": "^0.8.1",
     "source-map-support": "^0.4.18"
   },

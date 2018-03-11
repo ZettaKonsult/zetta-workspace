@@ -16,10 +16,10 @@ export const write = async (
   context: AWSContext,
   callback: AWSCallback
 ) => {
-  const { data } = parser(event);
+  const { invoice, companyCustomerId } = parser(event).data;
 
   try {
-    const result = await Invoice.create({ db, data });
+    const result = await Invoice.newInvoice({ db, invoice, companyCustomerId });
     callback(null, success(result));
   } catch (error) {
     console.error(error);

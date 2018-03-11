@@ -25,11 +25,12 @@ const readTemplateFile = async () =>
 
 const prepareData = (data: {
   companyCustomer: CompanyCustomer,
+  discount: number,
   recipient: Recipient,
   invoice: Invoice,
   tax?: number,
 }): InvoiceSpecification => {
-  const { companyCustomer, recipient, invoice, tax = 1.25 } = data;
+  const { companyCustomer, discount, recipient, invoice, tax = 1.25 } = data;
 
   const id = new Date(invoice.createdAt);
   const timeToPay = new Date(id.getUTCFullYear(), id.getUTCMonth() + 1);
@@ -47,7 +48,7 @@ const prepareData = (data: {
       createdAt: id.toISOString().split('T')[0],
       timeToPay: timeToPay.toISOString().split('T')[0],
     },
-    discount: '',
+    discount: discount | 0,
     netTotal,
     taxTotal,
     total,

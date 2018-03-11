@@ -7,7 +7,7 @@ import prepareTemplate from './prepareTemplate';
 
 let browser;
 
-const getBrowserPage = async (): Buffer => {
+const getBrowserPage = async (): any => {
   browser = await puppeteer.launch();
   const page = await browser.newPage();
   return page;

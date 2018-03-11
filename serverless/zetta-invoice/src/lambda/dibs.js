@@ -32,14 +32,14 @@ export const url = async (
   context: AWSContext,
   callback: AWSCallback
 ) => {
-  const { recipientId } = parser(event).data;
+  const data = parser(event).data;
 
   try {
-    await Dibs.url({ db, recipientId });
-    callback(null, success());
-  } catch (err) {
-    console.error(err);
-    callback(null, failure(err.message));
+    const dibsUrl = await Dibs.url({ db, ...data });
+    callback(null, success(dibsUrl));
+  } catch (error) {
+    console.error(error);
+    callback(null, failure(error.message));
   }
 };
 

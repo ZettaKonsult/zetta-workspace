@@ -155,7 +155,7 @@ const update = async (params: { db: DatabaseMethod, invoice: InvoiceData }) => {
 const updateStatus = async (params: {
   db: DatabaseMethod,
   invoiceId: string,
-  newStatus: InvoiceStatus.itemStatus,
+  newStatus: string,
 }) => {
   const { db, invoiceId, newStatus } = params;
 
@@ -243,4 +243,4 @@ const list = async (params: {
   })).Items;
 };
 
-export default { list, get, getStatus, mail, updateStatus };
+export default { newInvoice, list, get, getStatus, mail, updateStatus };

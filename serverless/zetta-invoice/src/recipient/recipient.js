@@ -124,4 +124,4 @@ const list = async (params: {
   })).Items;
 };
 
-export default { save: saveRecipient, list, get };
+export default { create, save: saveRecipient, list, get };

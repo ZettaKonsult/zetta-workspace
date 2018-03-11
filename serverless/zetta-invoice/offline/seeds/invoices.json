@@ -2,6 +2,7 @@
   {
     "id": "invoiceId1",
     "companyCustomer": "companyCustomerId",
+    "price": "123",
     "recipient": "recipientId",
     "createdAt": 3456789012,
     "itemStatus": {
@@ -15,6 +16,7 @@
   {
     "id": "invoiceId2",
     "companyCustomer": "companyCustomerId",
+    "price": "456",
     "recipient": "recipientId",
     "createdAt": 4567890123,
     "itemStatus": {
@@ -28,6 +30,7 @@
   {
     "id": "invoiceId3",
     "companyCustomer": "companyCustomerId",
+    "price": "789",
     "recipient": "recipientId",
     "createdAt": 5678901234,
     "itemStatus": {
