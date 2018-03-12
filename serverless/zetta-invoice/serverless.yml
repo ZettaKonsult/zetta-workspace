@@ -12,6 +12,7 @@ custom:
   InvoiceStatuses: 'InvoiceStatuses-${self:provider.stage}'
   Recipients: 'Recipients-${self:provider.stage}'
   CompanyCustomers: 'CompanyCustomers-${self:provider.stage}'
+  Plans: 'Plans-${self:provider.stage}'
   serverless-offline:
     port: 8080
     babelOptions:
@@ -33,6 +34,8 @@ custom:
             sources: [./offline/seeds/invoiceStatuses.json]
           - table: ${self:custom.Recipients}
             sources: [./offline/seeds/recipients.json]
+          - table: ${self:custom.Plans}
+            sources: [./offline/seeds/plans.json]
 
 provider:
   name: aws
@@ -56,6 +59,7 @@ provider:
     InvoicesTable: ${self:custom.Invoices}
     InvoiceStatusesTable: ${self:custom.Invoices}
     RecipientsTable: ${self:custom.Recipients}
+    PlansTable: ${self:custom.Plans}
 
 functions:
   dibsConfirm:
@@ -131,6 +135,13 @@ functions:
     events:
       - http:
           path: /recipient/{companyCustomerId}
+          method: get
+          cors: true
+  getPlans:
+    handler: src/lambda/plans.get
+    events:
+      - http:
+          path: /plans/{companyCustomerId}
           method: get
           cors: true
 
@@ -215,6 +226,27 @@ resources:
             ProvisionedThroughput:
               ReadCapacityUnits: 1
               WriteCapacityUnits: 1
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+    PlansTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:custom.Plans}
+        KeySchema:
+          -
+            AttributeName: companyCustomerId
+            KeyType: HASH
+          -
+            AttributeName: id
+            KeyType: RANGE
+        AttributeDefinitions:
+          -
+            AttributeName: companyCustomerId
+            AttributeType: S
+          -
+            AttributeName: id
+            AttributeType: S
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
