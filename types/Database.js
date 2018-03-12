@@ -38,4 +38,4 @@ type Update = (
 
 export type Database = Put | Get | Query | Delete | Update;
 
-export type DatabaseMethod = (method: string, args: object) => Promise<Object>;
+export type DatabaseMethod = (method: string, args: any) => Promise<Object>;

@@ -1,0 +1,44 @@
+[
+  {
+    "id": "invoiceId1",
+    "companyCustomer": "companyCustomerId",
+    "price": "123",
+    "recipient": "recipientId",
+    "createdAt": 3456789012,
+    "itemStatus": {
+      "id": "itemStatusId1",
+      "invoiceId": "invoiceId1",
+      "createdAt": 3456789012,
+      "itemStatus": "pending"
+    },
+    "locked": false
+  },
+  {
+    "id": "invoiceId2",
+    "companyCustomer": "companyCustomerId",
+    "price": "456",
+    "recipient": "recipientId",
+    "createdAt": 4567890123,
+    "itemStatus": {
+      "id": "itemStatusId2",
+      "invoiceId": "invoiceId2",
+      "createdAt": 4567890123,
+      "itemStatus": "succeeded"
+    },
+    "locked": true
+  },
+  {
+    "id": "invoiceId3",
+    "companyCustomer": "companyCustomerId",
+    "price": "789",
+    "recipient": "recipientId",
+    "createdAt": 5678901234,
+    "itemStatus": {
+      "id": "itemStatusId3",
+      "invoiceId": "invoiceId3",
+      "createdAt": 5678901234,
+      "itemStatus": "canceled"
+    },
+    "locked": true
+  }
+]

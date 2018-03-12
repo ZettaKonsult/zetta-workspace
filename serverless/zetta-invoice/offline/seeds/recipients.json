@@ -1,0 +1,15 @@
+[
+  {
+    "id": "recipientId",
+    "ssn": "1234567890",
+    "firstName": "RecipientFirst",
+    "lastName": "RecipientLast",
+    "city": "RecipientCity",
+    "address": "Road 234A",
+    "mobile": "+46762345678",
+    "zipcode": "12345",
+    "companyCustomer": "companyCustomerId",
+    "email": "firstName@recipient.com",
+    "createdAt": 2345678901
+  }
+]

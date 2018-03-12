@@ -1,17 +1,18 @@
 /* @flow */
 
-import type { InvoiceRow } from 'types/Invoice';
-
 export type Recipient = {
+  +id: string,
+  +companyCustomerId: string,
   email: string,
   address?: string,
   city?: string,
+  mobile?: string,
   zipcode?: string,
   firstName: string,
   lastName: string,
   ssn?: string,
   company?: string,
-  reccuringPayments: InvoiceRow[],
+  mobile?: string,
 };
 
 export type CompanyCustomer = {
@@ -19,9 +20,15 @@ export type CompanyCustomer = {
   firstName: string,
   lastName: string,
   address: string,
-  zipcode: string,
+  company: string,
   city: string,
   email: string,
-  company: string,
+  mobile: string,
+  zipcode: string,
   createdAt: string,
+  VAT: string,
+  bank: {
+    giro: string,
+    name: string,
+  },
 };
