@@ -111,17 +111,23 @@ const list = async (params: {
   const { db, companyCustomerId } = params;
 
   console.log(`Fetching invoices for ${companyCustomerId}.`);
-  return (await db('query', {
-    TableName: table,
-    IndexName: 'companyCustomer',
-    KeyConditionExpression: '#companyCustomer = :companyCustomer',
-    ExpressionAttributeNames: {
-      '#companyCustomer': 'companyCustomer',
-    },
-    ExpressionAttributeValues: {
-      ':companyCustomer': companyCustomerId,
-    },
-  })).Items;
+
+  try {
+    return (await db('query', {
+      TableName: table,
+      IndexName: 'companyCustomer',
+      KeyConditionExpression: '#companyCustomer = :companyCustomer',
+      ExpressionAttributeNames: {
+        '#companyCustomer': 'companyCustomer',
+      },
+      ExpressionAttributeValues: {
+        ':companyCustomer': companyCustomerId,
+      },
+    })).Items;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
 };
 
 export default { create, save: saveRecipient, list, get };

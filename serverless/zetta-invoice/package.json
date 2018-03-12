@@ -21,7 +21,7 @@
     "db:remove": "sls dynamodb remove",
     "deploy:debug": "sls deploy -v",
     "deploy:prod": "sls deploy --stage prod",
-    "start": "yarn sls dynamodb start --migrate",
+    "start": "yarn sls offline start -r eu-central-1 --noTimeout",
     "dev:test": "yarn test",
     "test": "jest --env=node",
     "test:staged": "cross-env CI=true yarn test --findRelatedTests",

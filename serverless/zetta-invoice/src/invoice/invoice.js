@@ -6,12 +6,11 @@
 
 import type { DatabaseMethod } from 'types/Database';
 import type { Invoice, InvoiceData } from 'types/Invoice';
-import type { InvoiceStatus } from 'types/Event';
 
 import { getDbTable } from '../util/database';
 import CompanyCustomer from './customer';
 import Status from './status';
-import invoicePDF from '../transform/handler';
+import invoicePDF from '../mail/emailDoc';
 import recipientDb from '../recipient/recipient';
 import cuid from 'cuid';
 
@@ -76,7 +75,7 @@ export const createInvoice = async (params: {
   }
 };
 
-export const mailInvoice = async (params: {
+export const mail = async (params: {
   db: DatabaseMethod,
   invoiceId: string,
   companyCustomerId: string,
@@ -176,14 +175,6 @@ const updateStatus = async (params: {
   }
 };
 
-const mail = (params: {
-  db: DatabaseMethod,
-  companyCustomerId: string,
-  invoiceId: string,
-}) => {
-  throw new Error('TBI.');
-};
-
 const put = async (params: { db: DatabaseMethod, invoice: Invoice }) => {
   const { db, invoice } = params;
 
@@ -230,17 +221,21 @@ const list = async (params: {
   const { db, companyCustomerId } = params;
 
   console.log(`Fetching invoices for ${companyCustomerId}.`);
-  return (await db('query', {
-    TableName: table,
-    IndexName: 'companyCustomer',
-    KeyConditionExpression: '#companyCustomer = :companyCustomer',
-    ExpressionAttributeNames: {
-      '#companyCustomer': 'companyCustomer',
-    },
-    ExpressionAttributeValues: {
-      ':companyCustomer': companyCustomerId,
-    },
-  })).Items;
+  try {
+    return (await db('query', {
+      TableName: table,
+      IndexName: 'companyCustomer',
+      KeyConditionExpression: '#companyCustomer = :companyCustomer',
+      ExpressionAttributeNames: {
+        '#companyCustomer': 'companyCustomer',
+      },
+      ExpressionAttributeValues: {
+        ':companyCustomer': companyCustomerId,
+      },
+    })).Items;
+  } catch (error) {
+    throw error;
+  }
 };
 
 export default { newInvoice, list, get, getStatus, mail, updateStatus };

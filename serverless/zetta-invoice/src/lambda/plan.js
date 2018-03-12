@@ -1,5 +1,6 @@
 import * as Plan from '../invoice/plan';
 import db, { getTable } from '../util/database';
+import { failure, success } from '../util/response';
 import parser from '../../../../packages/serverless-event-parser/src/';
 
 const INVOICE_TABLE = 'Invoices';
@@ -14,9 +15,10 @@ export const create = async (event, context, callback) => {
       TableName: getTable({ name: PLAN_TABLE }),
       Item: plan,
     });
+    callback(null, success(plan));
   } catch (error) {
     console.error(error);
-    callback(error);
+    callback(null, failure(error));
   }
 };
 
@@ -30,8 +32,9 @@ export const createInvoice = async (event, context, callback) => {
       TableName: getTable({ name: INVOICE_TABLE }),
       Item: invoice,
     });
+    callback(null, success(invoice));
   } catch (error) {
     console.error(error);
-    callback(error);
+    callback(null, failure(error));
   }
 };

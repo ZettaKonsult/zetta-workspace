@@ -32,7 +32,7 @@ export const get = async (
   context: AWSContext,
   callback: AWSCallback
 ) => {
-  const { companyCustomerId } = parser(event).data;
+  const { companyCustomerId } = parser(event).params;
 
   try {
     const result = await Recipient.list({ db, companyCustomerId });
@@ -42,5 +42,3 @@ export const get = async (
     callback(null, failure(error.message));
   }
 };
-
-export default { get, create };

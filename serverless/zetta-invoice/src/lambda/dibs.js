@@ -33,6 +33,7 @@ export const url = async (
   callback: AWSCallback
 ) => {
   const data = parser(event).data;
+  console.log(`Received DIBS url request for invoice ${data.invoiceId}.`);
 
   try {
     const dibsUrl = await Dibs.url({ db, ...data });
@@ -42,5 +43,3 @@ export const url = async (
     callback(null, failure(error.message));
   }
 };
-
-export default { confirm, url };

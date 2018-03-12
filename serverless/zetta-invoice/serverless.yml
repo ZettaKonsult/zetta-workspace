@@ -1,4 +1,4 @@
-service: operis-billable-time
+service: zetta-invoice
 
 plugins:
   - serverless-webpack
@@ -8,12 +8,14 @@ plugins:
 custom:
   webpackIncludeModules: true
   stage: ${opt:stage, self:provider.stage}
-  Invoices: 'Invoices-${self:custom.stage}'
-  InvoiceStatuses: 'InvoiceStatuses-${self:custom.stage}'
-  Recipients: 'Recipients-${self:custom.stage}'
-  CompanyCustomers: 'CompanyCustomers-${self:custom.stage}'
+  Invoices: 'Invoices-${self:provider.stage}'
+  InvoiceStatuses: 'InvoiceStatuses-${self:provider.stage}'
+  Recipients: 'Recipients-${self:provider.stage}'
+  CompanyCustomers: 'CompanyCustomers-${self:provider.stage}'
   serverless-offline:
     port: 8080
+    babelOptions:
+      presets: ["env"]
   dynamodb:
     start:
       port: 8000
@@ -23,13 +25,13 @@ custom:
     seed:
       domain:
         sources:
-          - table: CompanyCustomers
-            sources: [./offline/seeds/companyCustomer.json]
-          - table: Invoices
+          - table: ${self:custom.CompanyCustomers}
+            sources: [./offline/seeds/companyCustomers.json]
+          - table: ${self:custom.Invoices}
             sources: [./offline/seeds/invoices.json]
-          - table: InvoiceStatuses
+          - table: ${self:custom.InvoiceStatuses}
             sources: [./offline/seeds/invoiceStatuses.json]
-          - table: Recipients
+          - table: ${self:custom.Recipients}
             sources: [./offline/seeds/recipients.json]
 
 provider:
@@ -45,13 +47,15 @@ provider:
         - dynamodb:Query
         - dynamodb:UpdateItem
       Resource:
-        - { "Fn::GetAtt": ["InvoicesDynamoDBTable", "Arn" ] }
-        - { "Fn::GetAtt": ["RecipientsDynamoDBTable", "Arn" ] }
         - { "Fn::GetAtt": ["CompanyCustomersDynamoDBTable", "Arn" ] }
+        - { "Fn::GetAtt": ["InvoicesDynamoDBTable", "Arn" ] }
+        - { "Fn::GetAtt": ["InvoiceStatusesDynamoDBTable", "Arn" ] }
+        - { "Fn::GetAtt": ["RecipientsDynamoDBTable", "Arn" ] }
   environment:
-    InvoicesTable: ${self:custom.Invoices}
-    RecipientsTable: ${self:custom.Recipients}
     CompanyCustomersTable: ${self:custom.CompanyCustomers}
+    InvoicesTable: ${self:custom.Invoices}
+    InvoiceStatusesTable: ${self:custom.Invoices}
+    RecipientsTable: ${self:custom.Recipients}
 
 functions:
   dibsConfirm:
@@ -60,61 +64,18 @@ functions:
       - http:
           path: dibs/confirm
           method: post
-          role: callPaymentLambdas
   dibsUrl:
     handler: src/lambda/dibs.url
     events:
       - http:
           path: dibs/url
           method: post
-          role: callPaymentLambda
-  createPlanInvoice:
-    handler: src/lambda/plan.createInvoice
-    events:
-      - http:
-         path: /charge/plan
-         method: post
-         role: paymentDatabaseManager
-         cors: true
-  createPlan:
-    handler: src/lambda/plan.create
-    events:
-      - http:
-         path: /plan/create
-         method: post
-         role: paymentDatabaseManager
-         cors: true
-  confirmPayment:
-    handler: src/lambda/invoice.confirm
-    events:
-      - http:
-         path: /invoice/confirm
-         method: post
-         role: paymentDatabaseManager
-         cors: true
-  setInvoiceStatus:
-    handler: src/lambda/invoice.setStatus
-    events:
-      - http:
-         path: /invoice/status
-         method: post
-         role: paymentDatabaseManager
-         cors: true
   createInvoice:
-    handler: src/lambda/invoice.write
+    handler: src/lambda/invoice.create
     events:
       - http:
           path: /invoice/create
           method: post
-          role: paymentDatabaseManager
-          cors: true
-  sendInvoice:
-    handler: src/lambda/invoice.send
-    events:
-      - http:
-          path: /invoice/mail
-          method: post
-          role: paymentDatabaseManager
           cors: true
   getInvoices:
     handler: src/lambda/invoice.get
@@ -122,15 +83,48 @@ functions:
       - http:
           path: /invoice/{companyCustomerId}
           method: get
-          role: paymentDatabaseManager
           cors: true
+  sendInvoice:
+    handler: src/lambda/invoice.send
+    events:
+      - http:
+          path: /invoice/mail
+          method: post
+          cors: true
+  getInvoiceStatuses:
+    handler: src/lambda/invoice.getStatuses
+    events:
+      - http:
+          path: /invoice/status/get/{invoiceId}
+          method: get
+          cors: true
+  setInvoiceStatus:
+    handler: src/lambda/invoice.setStatus
+    events:
+      - http:
+         path: /invoice/status/set/{status}
+         method: post
+         cors: true
+  createPlan:
+    handler: src/lambda/plan.create
+    events:
+      - http:
+         path: /plan/create
+         method: post
+         cors: true
+  createPlanInvoice:
+    handler: src/lambda/plan.createInvoice
+    events:
+      - http:
+         path: /charge/plan
+         method: post
+         cors: true
   createRecipient:
     handler: src/lambda/recipient.create
     events:
       - http:
-          path: /recipient
+          path: /recipient/create
           method: post
-          role: paymentDatabaseManager
           cors: true
   getRecipients:
     handler: src/lambda/recipient.get
@@ -138,7 +132,6 @@ functions:
       - http:
           path: /recipient/{companyCustomerId}
           method: get
-          role: paymentDatabaseManager
           cors: true
 
 
@@ -149,128 +142,10 @@ package:
 
 resources:
   Resources:
-    callPaymentLambdas:
-      Type: AWS::IAM::Role
-      Properties:
-        RoleName: callPaymentLambdas
-        Path: "/"
-        AssumeRolePolicyDocument:
-          Version: '2012-10-17'
-          Statement:
-            - Effect: Allow
-              Principal:
-                Service:
-                  - lambda.amazonaws.com
-              Action: sts:AssumeRole
-        Policies:
-            - PolicyName: CallPaymentDatabaseManagers
-              PolicyDocument:
-                Version: '2012-10-17'
-                Statement:
-                  - Effect: Allow
-                    Action:
-                      - logs:CreateLogGroup
-                      - logs:CreateLogStream
-                      - logs:PutLogEvents
-                    Resource:
-                      - 'Fn::Join':
-                        - ':'
-                        -
-                          - 'arn:aws:logs'
-                          - Ref: 'AWS::Region'
-                          - Ref: 'AWS::AccountId'
-                          - 'log-group:/aws/lambda/*:*:*'
-                  - Effect: Allow
-                    Action:
-                      - lambda:InvokeFunction
-                    Resource: arn:aws:lambda:eu-central-1:460056602695:function:payment-prod-membrumSavePayment
-    paymentDatabaseManager:
-      Type: AWS::IAM::Role
-      Properties:
-        RoleName: paymentDatabaseManager
-        Path: "/"
-        AssumeRolePolicyDocument:
-          Version: '2012-10-17'
-          Statement:
-            - Effect: Allow
-              Principal:
-                Service:
-                  - lambda.amazonaws.com
-              Action: sts:AssumeRole
-        Policies:
-            - PolicyName: ManagePaymentTable
-              PolicyDocument:
-                Version: '2012-10-17'
-                Statement:
-                  - Effect: Allow
-                    Action:
-                      - logs:CreateLogGroup
-                      - logs:CreateLogStream
-                      - logs:PutLogEvents
-                    Resource:
-                      - 'Fn::Join':
-                        - ':'
-                        -
-                          - 'arn:aws:logs'
-                          - Ref: 'AWS::Region'
-                          - Ref: 'AWS::AccountId'
-                          - 'log-group:/aws/lambda/*:*:*'
-                  - Effect: Allow
-                    Action:
-                      - dynamodb:*
-                    Resource: arn:aws:dynamodb:eu-central-1:460056602695:table/MembrumPaymentStatuses
-                  - Effect: Allow
-                    Action:
-                      - dynamodb:scan
-                    Resource: arn:aws:dynamodb:eu-central-1:460056602695:table/MembrumPlans
-                  - Effect: Allow
-                    Action:
-                      - dynamodb:DeleteItem
-                      - dynamodb:GetItem
-                      - dynamodb:PutItem
-                      - dynamodb:UpdateItem
-                      - dynamodb:Query
-                    Resource: arn:aws:dynamodb:eu-central-1:460056602695:table/MembrumPaymentStatuses/statusId
-                  - Effect: Allow
-                    Action:
-                      - dynamodb:DeleteItem
-                      - dynamodb:GetItem
-                      - dynamodb:PutItem
-                      - dynamodb:UpdateItem
-                      - dynamodb:Query
-                    Resource: arn:aws:dynamodb:eu-central-1:460056602695:table/MembrumPaymentStatuses/index/paymentId
-                  - Effect: Allow
-                    Action:
-                      - dynamodb:*
-                    Resource: arn:aws:dynamodb:eu-central-1:460056602695:table/MembrumPayments
-                  - Effect: Allow
-                    Action:
-                      - dynamodb:DeleteItem
-                      - dynamodb:GetItem
-                      - dynamodb:PutItem
-                      - dynamodb:UpdateItem
-                      - dynamodb:Query
-                    Resource: arn:aws:dynamodb:eu-central-1:460056602695:table/MembrumPayments/orderId
-                  - Effect: Allow
-                    Action:
-                      - dynamodb:DeleteItem
-                      - dynamodb:GetItem
-                      - dynamodb:PutItem
-                      - dynamodb:UpdateItem
-                      - dynamodb:Query
-                    Resource: arn:aws:dynamodb:eu-central-1:460056602695:table/MembrumPayments/index/userId
-                  - Effect: Allow
-                    Action:
-                      - dynamodb:DeleteItem
-                      - dynamodb:GetItem
-                      - dynamodb:PutItem
-                      - dynamodb:UpdateItem
-                      - dynamodb:Query
-                    Resource: arn:aws:dynamodb:eu-central-1:460056602695:table/MembrumUsers
     CompanyCustomersTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: CompanyCustomers
+        TableName: ${self:custom.CompanyCustomers}
         KeySchema:
           - AttributeName: id
             KeyType: HASH
@@ -283,7 +158,7 @@ resources:
     InvoicesTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: Invoices
+        TableName: ${self:custom.Invoices}
         KeySchema:
           - AttributeName: id
             KeyType: HASH
@@ -308,7 +183,7 @@ resources:
     InvoiceStatusesTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: InvoiceStatuses
+        TableName: ${self:custom.InvoiceStatuses}
         KeySchema:
           - AttributeName: id
             KeyType: HASH
@@ -321,7 +196,7 @@ resources:
     RecipientsTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: Recipients
+        TableName: ${self:custom.Recipients}
         KeySchema:
           - AttributeName: id
             KeyType: HASH

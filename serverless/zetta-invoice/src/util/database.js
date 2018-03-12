@@ -9,7 +9,8 @@ const dynamodbOfflineOptions = {
 };
 
 export const getDbTable = (params: { name: string }): string => {
-  return params.name;
+  const name = process.env[params.name];
+  return name != null ? name : params.name + '-dev';
 };
 
 const client = isOffline

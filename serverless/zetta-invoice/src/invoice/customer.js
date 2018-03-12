@@ -5,19 +5,26 @@
  */
 
 import type { DatabaseMethod } from 'types/Database';
+import { getDbTable } from '../util/database';
+
+const table = getDbTable({ name: 'CompanyCustomersTable' });
 
 const get = async (params: {
   db: DatabaseMethod,
   companyCustomerId: string,
 }): Promise<{ [string]: any }> => {
   const { db, companyCustomerId } = params;
-
   console.log(`Fetching customer ${companyCustomerId}.`);
-  const result = await db('get', {
-    TableName: 'CompanyCustomers',
-    Key: { id: companyCustomerId },
-  });
-  return result.Item;
+
+  try {
+    const result = await db('get', {
+      TableName: table,
+      Key: { id: companyCustomerId },
+    });
+    return result.Item;
+  } catch (error) {
+    throw error;
+  }
 };
 
 export default { get };

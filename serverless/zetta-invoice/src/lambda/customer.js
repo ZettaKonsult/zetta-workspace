@@ -5,26 +5,23 @@
  */
 
 import type { AWSEvent, AWSContext, AWSCallback } from 'types/AWS';
-import customer from '../invoice/customer';
+import Customer from '../invoice/customer';
 
 import { success, failure } from '../util/response';
 import parser from '../util/parser';
 import db from '../util/database';
 
-const get = async (
+export const get = async (
   event: AWSEvent,
   context: AWSContext,
   callback: AWSCallback
 ) => {
-  const { companyCustomerId } = parser(event).data;
-
   try {
-    const result = await customer.get({ db, companyCustomerId });
+    const { companyCustomerId } = parser(event).data;
+    const result = await Customer.get({ db, companyCustomerId });
     callback(null, success(result));
   } catch (error) {
     console.error(error);
     callback(null, failure(error.message));
   }
 };
-
-export default { get };

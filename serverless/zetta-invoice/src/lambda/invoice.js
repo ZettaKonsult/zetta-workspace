@@ -11,15 +11,55 @@ import { success, failure } from '../util/response';
 import parser from '../util/parser';
 import db from '../util/database';
 
-export const write = async (
+export const confirm = async (
   event: AWSEvent,
   context: AWSContext,
   callback: AWSCallback
 ) => {
-  const { invoice, companyCustomerId } = parser(event).data;
+  const { invoiceId } = parser(event).params;
+  try {
+    let result = {};
+    result.update = await Invoice.updateStatus({
+      db,
+      invoiceId,
+      newStatus: 'succeeded',
+    });
+    result.get = await Invoice.getStatus({ db, invoiceId });
+    callback(null, success(result));
+  } catch (error) {
+    console.error(error);
+    callback(null, failure(error.message));
+  }
+};
+
+export const get = async (
+  event: AWSEvent,
+  context: AWSContext,
+  callback: AWSCallback
+) => {
+  const { companyCustomerId } = parser(event).params;
+  console.log(
+    `Received request for invoices for customer ${companyCustomerId}.`
+  );
 
   try {
-    const result = await Invoice.newInvoice({ db, invoice, companyCustomerId });
+    const result = await Invoice.list({ db, companyCustomerId });
+    console.log(success(result));
+    callback(null, success(result));
+  } catch (error) {
+    console.error(error);
+    callback(failure(error.message));
+  }
+};
+
+export const getStatuses = async (
+  event: AWSEvent,
+  context: AWSContext,
+  callback: AWSCallback
+) => {
+  const { invoiceId } = parser(event).params;
+  try {
+    const result = await Invoice.getStatus({ db, invoiceId });
     callback(null, success(result));
   } catch (error) {
     console.error(error);
@@ -35,57 +75,26 @@ export const send = async (
   const { companyCustomerId, invoiceId } = parser(event).data;
 
   try {
-    await Invoice.mail({ db, companyCustomerId, invoiceId });
-    callback(null, success());
+    const result = await Invoice.mail({ db, companyCustomerId, invoiceId });
+    callback(null, success(result));
   } catch (err) {
     console.error(err);
     callback(null, failure(err.message));
   }
 };
 
-export const get = async (
+export const write = async (
   event: AWSEvent,
   context: AWSContext,
   callback: AWSCallback
 ) => {
-  const { companyCustomerId } = parser(event).data;
+  const { invoice, companyCustomerId } = parser(event).data;
 
   try {
-    const result = await Invoice.list({ db, companyCustomerId });
+    const result = await Invoice.newInvoice({ db, invoice, companyCustomerId });
     callback(null, success(result));
   } catch (error) {
     console.error(error);
     callback(null, failure(error.message));
   }
 };
-
-const getStatus = async (
-  event: AWSEvent,
-  context: AWSContext,
-  callback: AWSCallback
-) => {
-  const { invoiceId } = parser(event).data;
-  try {
-    callback(null, await Invoice.getStatus({ db, invoiceId }));
-  } catch (error) {
-    console.error(error);
-    callback(null, failure(error.message));
-  }
-};
-
-const confirm = async (
-  event: AWSEvent,
-  context: AWSContext,
-  callback: AWSCallback
-) => {
-  const { invoiceId } = parser(event).data;
-  try {
-    await Invoice.updateStatus({ db, invoiceId, newStatus: 'succeeded' });
-    callback(null, await Invoice.getStatus({ db, invoiceId }));
-  } catch (error) {
-    console.error(error);
-    callback(null, failure(error.message));
-  }
-};
-
-export default { confirm, get, getStatus, send, write };

@@ -84,6 +84,7 @@ export const url = async (params: {
 }) => {
   const { accepturl, cancelurl, db, invoiceId, merchant } = params;
   let form = Object.assign(defaultValues);
+  console.log(`Default values set.`);
 
   try {
     console.log(`Fetching invoice ${invoiceId}.`);
@@ -95,6 +96,7 @@ export const url = async (params: {
     if (invoice == null || invoice.id == null) {
       throw new Error(`No such invoice ${invoiceId}!`);
     }
+    console.log(`Invoice fetched.`);
 
     form = {
       ...form,
@@ -107,6 +109,7 @@ export const url = async (params: {
       orderid: invoice.id,
     };
 
+    console.log(`Constructing URL...`);
     return DIBS_URL + '?' + queryString.stringify(validateForm(form));
   } catch (error) {
     throw error;

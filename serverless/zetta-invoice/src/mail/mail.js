@@ -1,5 +1,9 @@
 /* @flow */
 
+/**
+ * @date 2018-03-12
+ */
+
 import puppeteer from 'puppeteer';
 
 import mail from './emailDoc';
@@ -13,11 +17,13 @@ const getBrowserPage = async (): any => {
   return page;
 };
 
-export default async (data: any) => {
+export default async (params: { data: any }) => {
+  const { data } = params;
+
   try {
     let [renderedTemplate, page] = await Promise.all([
-      prepareTemplate(data),
-      getBrowserPage(),
+      await prepareTemplate(data),
+      await getBrowserPage(),
     ]);
     page.setContent(renderedTemplate);
 
