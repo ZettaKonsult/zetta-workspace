@@ -25,7 +25,7 @@ export type InvoiceData = {
 
 export type InvoiceSpecification = {
   companyCustomer: string | CompanyCustomer,
-  recipients: Array<string> | Array<Recipient>,
+  recipient: Recipient,
   invoice: {
     id: number,
     createdAt: string,

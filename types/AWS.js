@@ -38,5 +38,5 @@ export type ParsedEvent = {
   path: string,
   stage: string,
   params: { [string]: string },
-  queryParams: { [string]: string },
+  queryParams: Array<string>,
 };
