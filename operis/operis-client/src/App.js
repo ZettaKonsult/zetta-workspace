@@ -21,18 +21,18 @@ class App extends Component {
   };
 
   async componentDidMount() {
-    let userInfo = await Auth.currentUserInfo();
-    const companyCustomerId = userInfo.attributes['custom:companyCustomerId'];
-    const recipients = await fetchRecipientAPI(companyCustomerId);
+    let userInfo, recipients, companyCustomerId;
+    try {
+      userInfo = await Auth.currentUserInfo();
+      companyCustomerId = userInfo.attributes['custom:companyCustomerId'];
+      recipients = await fetchRecipientAPI(companyCustomerId);
+    } catch (error) {
+      console.error(error);
+    }
     this.setState({
       recipients,
       companyCustomerId,
     });
-    // let user = await Auth.currentAuthenticatedUser();
-    // let result = await Auth.updateUserAttributes(user, {
-    //   'custom:companyCustomerId': 'cjdvmtzgd000104wgiubpx9ru',
-    // });
-    // await this.signUp();
   }
   signOut = async () => {
     try {
@@ -42,16 +42,6 @@ class App extends Component {
       console.error(error);
     }
   };
-
-  async signUp() {
-    await Auth.signUp({
-      username: 'be.a.spectator@gmail.com',
-      password: 'qwertyqwerty',
-      attributes: {
-        'custom:companyCustomerId': 'cjdvmtzgd000104wgiubpx9ru',
-      },
-    });
-  }
 
   render() {
     return (
