@@ -14,7 +14,7 @@ export const membershipUpdatePlans = (plans: string[]): Action => ({
   },
 });
 
-export const membershipPay = (plans: string[]): Action => {
+export const membershipPay = (userId, plans: string[]): Action => {
   const date = Date.now();
   return {
     type: MEMBERSHIP_PAY,

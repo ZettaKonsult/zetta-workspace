@@ -26,14 +26,18 @@ class TopNavigation extends Component {
             {route.label}
           </NavLink>
         ))}
-        <Logout />
+        <Logout handleClick={this.props.logout} />
         <Toggle handleClick={this.toggleNav} />
       </div>
     );
   }
 }
 
-const Logout = () => <a className="Authentication">Logout</a>;
+const Logout = ({ handleClick }) => (
+  <a onClick={handleClick} className="Authentication">
+    Logout
+  </a>
+);
 const Toggle = ({ handleClick }) => (
   <a className="icon" onClick={handleClick}>
     &#9776;

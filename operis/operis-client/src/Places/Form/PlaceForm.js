@@ -7,7 +7,7 @@ import validate from './PlaceFormValidation';
 import { Input } from '../../Components/Form/Input';
 import { Form, Button, Divider } from 'semantic-ui-react';
 
-let PlaceForm = props => (
+let PlaceForm = ({ isLoading, error, ...props }) => (
   <Form autoComplete="off" onSubmit={props.handleSubmit}>
     <Field name="firstName" component={Input} placeholder="First Name" />
     <Field name="lastName" component={Input} placeholder="Last Name" />
@@ -17,10 +17,20 @@ let PlaceForm = props => (
     <Field name="city" component={Input} placeholder="City" />
     <Field name="zipcode" component={Input} placeholder="Zipcode" />
     <Divider />
-    <Button type="submit">Save</Button>
-    <Button as={Link} to={`/recipient`}>
-      Cancel
-    </Button>
+    {error && <strong>{error}</strong>}
+    <div>
+      <Button loading={isLoading} disabled={isLoading} type="submit">
+        Save
+      </Button>
+      <Button
+        loading={isLoading}
+        disabled={isLoading}
+        as={Link}
+        to={`/recipient`}
+      >
+        Cancel
+      </Button>
+    </div>
   </Form>
 );
 
@@ -33,6 +43,7 @@ const mapStateToProps = (state, props) => {
   if (recipient) {
     return {
       initialValues: recipient,
+      isLoading: props.isLoading,
     };
   } else {
     return {};
