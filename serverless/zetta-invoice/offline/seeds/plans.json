@@ -1,0 +1,182 @@
+[
+  {
+    "id": "plan1",
+    "name": "Teknologkåren",
+    "amount": 0,
+    "interval": "month",
+    "intervalCount": 6,
+    "labels": ["union"],
+    "group": ["studentlund"]
+  },
+  {
+    "id": "plan2",
+    "name": "Lunda Ekonomerna",
+    "amount": 100,
+    "interval": "month",
+    "intervalCount": 6,
+    "labels": ["union"],
+    "group": ["studentlund"]
+  },
+  {
+    "id": "plan3",
+    "name": "Samhällsvetarkåren",
+    "amount": 110,
+    "interval": "month",
+    "intervalCount": 6,
+    "labels": ["union"],
+    "group": ["studentlund"]
+  },
+  {
+    "id": "plan4",
+    "name": "Lunds Naturvetarkår",
+    "amount": 120,
+    "interval": "month",
+    "intervalCount": 6,
+    "labels": ["union"],
+    "group": ["studentlund"]
+  },
+  {
+    "id": "plan5",
+    "name": "Blekingska Nationen",
+    "amount": 210,
+    "interval": "month",
+    "intervalCount": 6,
+    "labels": ["nation", "gudrun"],
+    "group": ["studentlund"]
+  },
+  {
+    "id": "plan6",
+    "name": "Göteborgs Nation",
+    "amount": 200,
+    "interval": "month",
+    "intervalCount": 6,
+    "labels": ["nation", "city"],
+    "group": ["studentlund"]
+  },
+  {
+    "id": "plan7",
+    "name": "Hallands Nation",
+    "amount": 200,
+    "interval": "month",
+    "intervalCount": 6,
+    "labels": ["nation", "city"],
+    "group": ["studentlund"]
+  },
+  {
+    "id": "plan8",
+    "name": "Helsingkrona Nation",
+    "amount": 200,
+    "interval": "month",
+    "intervalCount": 6,
+    "labels": ["nation", "torna"],
+    "group": ["studentlund"]
+  },
+  {
+    "id": "plan9",
+    "name": "Kalmar Nation",
+    "amount": 200,
+    "interval": "month",
+    "intervalCount": 6,
+    "labels": ["nation", "gudrun"],
+    "group": ["studentlund"]
+  },
+  {
+    "id": "plan10",
+    "name": "Kristianstads Nation",
+    "amount": 200,
+    "interval": "month",
+    "intervalCount": 6,
+    "labels": ["nation", "torna"],
+    "group": ["studentlund"]
+  },
+  {
+    "id": "plan11",
+    "name": "Lunds Nation",
+    "amount": 200,
+    "interval": "month",
+    "intervalCount": 6,
+    "labels": ["nation", "city"],
+    "group": ["studentlund"]
+  },
+  {
+    "id": "plan12",
+    "name": "Malmö Nation",
+    "amount": 200,
+    "interval": "month",
+    "intervalCount": 6,
+    "labels": ["nation", "city"],
+    "group": ["studentlund"]
+  },
+  {
+    "id": "plan13",
+    "name": "Östgöta Nation",
+    "amount": 200,
+    "interval": "month",
+    "intervalCount": 6,
+    "labels": ["nation", "city"],
+    "group": ["studentlund"]
+  },
+  {
+    "id": "plan15",
+    "name": "Sydskånska Nation",
+    "amount": 200,
+    "interval": "month",
+    "intervalCount": 6,
+    "labels": ["nation", "torna"],
+    "group": ["studentlund"]
+  },
+  {
+    "id": "plan16",
+    "name": "Västgöta Nation",
+    "amount": 200,
+    "interval": "month",
+    "intervalCount": 6,
+    "labels": ["nation", "torna"],
+    "group": ["studentlund"]
+  },
+  {
+    "id": "plan17",
+    "name": "Wermlands Nation",
+    "amount": 210,
+    "interval": "month",
+    "intervalCount": 6,
+    "labels": ["nation", "gudrun"],
+    "group": ["studentlund"]
+  },
+  {
+    "id": "plan18",
+    "name": "Undefined Nation",
+    "amount": 80,
+    "interval": "month",
+    "intervalCount": 6,
+    "labels": ["nation"],
+    "group": ["studentlund"]
+  },
+  {
+    "id": "plan19",
+    "name": "Terminsräkningsföreningen",
+    "amount": 20,
+    "interval": "month",
+    "intervalCount": 6,
+    "labels": [],
+    "group": ["obligatory"]
+  },
+  {
+    "id": "plan20",
+    "name": "Akademiska Föreningen",
+    "amount": 100,
+    "interval": "month",
+    "intervalCount": 6,
+    "labels": [],
+    "group": ["studentlund"]
+  },
+  {
+    "id": "plan21",
+    "name": "Smålands Nation",
+    "amount": 200,
+    "interval": "month",
+    "intervalCount": 6,
+    "labels": ["nation"],
+    "group": ["Smalands"]
+  }
+]
