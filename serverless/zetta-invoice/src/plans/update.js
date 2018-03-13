@@ -1,6 +1,10 @@
 /* @flow */
+import { incrementToNextLowerBound } from 'date-primitive-utils';
+
 import { getDbTable } from '../util/database';
+
 import get from './get';
+
 type Params = {
   db: DatabaseMethod,
   companyCustomerId: string,
@@ -37,4 +41,29 @@ export const updateRecipientIds = async ({
     });
     return result;
   }
+};
+
+export const updateNextProcess = async ({ db, plans }) => {
+  const updatePromise = plans.map(item => {
+    return db('update', {
+      TableName: table,
+      Key: {
+        companyCustomerId: item.companyCustomerId,
+        id: item.id,
+      },
+      ReturnValues: 'ALL_NEW',
+      UpdateExpression: 'set #epochNextProcess = :epochNextProcess',
+      ExpressionAttributeNames: {
+        '#epochNextProcess': 'epochNextProcess',
+      },
+      ExpressionAttributeValues: {
+        ':epochNextProcess': incrementToNextLowerBound(
+          item.epochNextProcess,
+          item.intervalCount
+        ),
+      },
+    });
+  });
+  const result = await Promise.all(updatePromise);
+  return result;
 };
