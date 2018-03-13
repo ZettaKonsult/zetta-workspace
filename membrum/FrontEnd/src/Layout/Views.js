@@ -7,7 +7,7 @@ import { MemberRegistration } from '../admin/Admin';
 import MembershipForm from '../membership/MembershipForm';
 
 export default {
-  user: {
+  profile: {
     path: '/user',
     label: 'Profile',
     component: User,

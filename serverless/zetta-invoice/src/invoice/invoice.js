@@ -11,7 +11,7 @@ import { getDbTable } from '../util/database';
 import CompanyCustomer from './customer';
 import Status from './status';
 import invoicePDF from '../mail/emailDoc';
-import recipientDb from '../recipient/recipient';
+import recipientDb from '../recipient/';
 import cuid from 'cuid';
 
 const table = getDbTable({ name: 'Invoices' });

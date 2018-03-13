@@ -14,25 +14,34 @@ class App extends Component {
     this.state = {
       recipients: [],
       companyCustomerId: '',
+      error: undefined,
     };
   }
   updateRecipients = newRecipient => {
     this.setState(updateRecipientState(newRecipient));
   };
 
-  async componentDidMount() {
-    let userInfo, recipients, companyCustomerId;
+  initializeApp = async () => {
     try {
-      userInfo = await Auth.currentUserInfo();
-      companyCustomerId = userInfo.attributes['custom:companyCustomerId'];
-      recipients = await fetchRecipientAPI(companyCustomerId);
+      let userInfo = await Auth.currentUserInfo();
+      let companyCustomerId = userInfo.attributes['custom:companyCustomerId'];
+      let recipients = await fetchRecipientAPI(companyCustomerId);
+
+      this.setState({
+        recipients,
+        companyCustomerId,
+      });
+    } catch (error) {
+      this.setState(state => ({ ...state, error: error.message }));
+    }
+  };
+
+  async componentDidMount() {
+    try {
+      await this.initializeApp();
     } catch (error) {
       console.error(error);
     }
-    this.setState({
-      recipients,
-      companyCustomerId,
-    });
   }
   signOut = async () => {
     try {
@@ -44,6 +53,13 @@ class App extends Component {
   };
 
   render() {
+    // if (this.state.error) {
+    //   return (
+    //     <div>
+    //       {this.state.error} <button onClick={this.initializeApp}>Retry</button>
+    //     </div>
+    //   );
+    // }
     return (
       <div>
         <PageNav onSignOut={this.signOut} />

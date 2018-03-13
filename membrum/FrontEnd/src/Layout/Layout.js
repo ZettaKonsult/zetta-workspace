@@ -5,7 +5,10 @@ import { Route, Switch } from 'react-router-dom';
 import { fetchAllPlans } from '../membership/planActions';
 
 import { loadUserProfile } from '../user/profileActions';
-import { userRedirected } from '../user/authenticationActions';
+import {
+  userRedirected,
+  logoutAndRedirect,
+} from '../user/authenticationActions';
 import { getAuthorizedRoutes, shouldRedirectUser } from '../user/';
 
 import Home from '../containers/Home/';
@@ -52,6 +55,7 @@ class Layout extends Component {
           path="/"
           render={() => (
             <Navigation
+              logout={this.props.logoutAndRedirect}
               authorizedRoutes={authorizedRoutes.map(routeId => Views[routeId])}
             />
           )}
@@ -80,6 +84,7 @@ const mapDispatchToProps = {
   loadUserProfile,
   fetchAllPlans,
   userRedirected,
+  logoutAndRedirect,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Layout);

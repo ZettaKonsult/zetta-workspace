@@ -4,12 +4,6 @@
 
 import request from '../util/http';
 
-if (!process.env.IS_OFFLINE) {
-  throw new Error(
-    'Database mode must be set to offline in order to run lambda tests.'
-  );
-}
-
 describe('Lambdas.', () => {
   describe('Invoices.', () => {
     it('Get.', async () => {

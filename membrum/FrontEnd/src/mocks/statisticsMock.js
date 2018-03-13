@@ -9,17 +9,17 @@ const getState = () => ({
   datasets: [
     {
       label: 'Number of Members',
-      data: Array(36)
+      data: Array(20)
         .fill('1')
         .map(() => ({
           x: getRandomInt(minDate, maxDate),
-          y: getRandomInt(200, 5000),
+          y: getRandomInt(200, 3000),
         }))
         .sort((a, b) => a.x - b.x),
       backgroundColor: ['rgba(54,162,235,0.6)'],
       hoverBackgroundColor: ['rgba(54,162,235,1)'],
       pointRadius: 5,
-      pointHitRadius: 50,
+      pointHitRadius: 10,
     },
   ],
 });
