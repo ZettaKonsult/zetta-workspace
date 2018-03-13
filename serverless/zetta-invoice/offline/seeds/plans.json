@@ -7,9 +7,9 @@
     "price": 0,
     "interval": "month",
     "intervalCount": 6,
+    "epochNextProcess": 1520640000000,
     "labels": ["union"],
-    "group": ["studentlund"],
-    "epochNextProcess": 1520640000000
+    "group": ["studentlund"]
   },
   {
     "id": "plan2",
@@ -19,6 +19,7 @@
     "price": 100,
     "interval": "month",
     "intervalCount": 6,
+    "epochNextProcess": 1520640000000,
     "labels": ["union"],
     "group": ["studentlund"]
   },
@@ -30,6 +31,7 @@
     "price": 110,
     "interval": "month",
     "intervalCount": 6,
+    "epochNextProcess": 1520640000000,
     "labels": ["union"],
     "group": ["studentlund"]
   },
@@ -41,6 +43,7 @@
     "price": 120,
     "interval": "month",
     "intervalCount": 6,
+    "epochNextProcess": 1520640000000,
     "labels": ["union"],
     "group": ["studentlund"]
   },
@@ -52,6 +55,7 @@
     "price": 210,
     "interval": "month",
     "intervalCount": 6,
+    "epochNextProcess": 1520640000000,
     "labels": ["nation", "gudrun"],
     "group": ["studentlund"]
   },
@@ -63,6 +67,7 @@
     "price": 200,
     "interval": "month",
     "intervalCount": 6,
+    "epochNextProcess": 1520640000000,
     "labels": ["nation", "city"],
     "group": ["studentlund"]
   },
@@ -74,6 +79,7 @@
     "price": 200,
     "interval": "month",
     "intervalCount": 6,
+    "epochNextProcess": 1520640000000,
     "labels": ["nation", "city"],
     "group": ["studentlund"]
   },
@@ -85,6 +91,7 @@
     "price": 200,
     "interval": "month",
     "intervalCount": 6,
+    "epochNextProcess": 1520640000000,
     "labels": ["nation", "torna"],
     "group": ["studentlund"]
   },
@@ -96,6 +103,7 @@
     "price": 200,
     "interval": "month",
     "intervalCount": 6,
+    "epochNextProcess": 1520640000000,
     "labels": ["nation", "gudrun"],
     "group": ["studentlund"]
   },
@@ -107,6 +115,7 @@
     "price": 200,
     "interval": "month",
     "intervalCount": 6,
+    "epochNextProcess": 1520640000000,
     "labels": ["nation", "torna"],
     "group": ["studentlund"]
   },
@@ -118,6 +127,7 @@
     "price": 200,
     "interval": "month",
     "intervalCount": 6,
+    "epochNextProcess": 1520640000000,
     "labels": ["nation", "city"],
     "group": ["studentlund"]
   },
@@ -129,6 +139,7 @@
     "price": 200,
     "interval": "month",
     "intervalCount": 6,
+    "epochNextProcess": 1520640000000,
     "labels": ["nation", "city"],
     "group": ["studentlund"]
   },
@@ -140,6 +151,7 @@
     "price": 200,
     "interval": "month",
     "intervalCount": 6,
+    "epochNextProcess": 1520640000000,
     "labels": ["nation", "city"],
     "group": ["studentlund"]
   },
@@ -151,6 +163,7 @@
     "price": 200,
     "interval": "month",
     "intervalCount": 6,
+    "epochNextProcess": 1520640000000,
     "labels": ["nation", "torna"],
     "group": ["studentlund"]
   },
@@ -162,6 +175,7 @@
     "price": 200,
     "interval": "month",
     "intervalCount": 6,
+    "epochNextProcess": 1520640000000,
     "labels": ["nation", "torna"],
     "group": ["studentlund"]
   },
@@ -173,6 +187,7 @@
     "price": 210,
     "interval": "month",
     "intervalCount": 6,
+    "epochNextProcess": 1520640000000,
     "labels": ["nation", "gudrun"],
     "group": ["studentlund"]
   },
@@ -184,6 +199,7 @@
     "price": 80,
     "interval": "month",
     "intervalCount": 6,
+    "epochNextProcess": 1520640000000,
     "labels": ["nation"],
     "group": ["studentlund"]
   },
@@ -195,6 +211,7 @@
     "price": 20,
     "interval": "month",
     "intervalCount": 6,
+    "epochNextProcess": 1520640000000,
     "labels": [],
     "group": ["obligatory"]
   },
@@ -206,6 +223,7 @@
     "price": 100,
     "interval": "month",
     "intervalCount": 6,
+    "epochNextProcess": 1520640000000,
     "labels": [],
     "group": ["studentlund"]
   },
@@ -217,6 +235,7 @@
     "price": 200,
     "interval": "month",
     "intervalCount": 6,
+    "epochNextProcess": 1520640000000,
     "labels": ["nation"],
     "group": ["Smalands"]
   }
