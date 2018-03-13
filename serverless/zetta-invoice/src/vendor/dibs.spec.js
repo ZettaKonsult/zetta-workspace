@@ -24,7 +24,6 @@ describe('Lambdas.', () => {
           },
         },
       });
-      console.log(result);
       expect(result).toEqual(expected);
     });
   });
