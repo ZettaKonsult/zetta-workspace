@@ -4,7 +4,8 @@
  * @date  2018-01-15
  */
 
-import type { AWSCallback, AWSContext, AWSEvent } from '../types';
+import type { AWSCallback, AWSContext, AWSEvent } from 'types/AWS';
+import { failure, success } from '../util/response';
 import AWS from 'aws-sdk';
 import { getAssignments } from './assign';
 
@@ -14,4 +15,11 @@ export const getNewAssignments = async (
   event: AWSEvent,
   context: AWSContext,
   callback: AWSCallback
-) => callback(null, await getAssignments(callback));
+) => {
+  try {
+    callback(null, success(await getAssignments(callback)));
+  } catch (error) {
+    console.error(error);
+    callback(null, failure(error.message));
+  }
+};

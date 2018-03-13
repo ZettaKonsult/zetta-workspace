@@ -1,0 +1,28 @@
+[
+  {
+    "id": "1234567890",
+    "ssn": "9001011111",
+    "firstName": "Recipient1First",
+    "lastName": "Recipient1Last",
+    "city": "Recipient1City",
+    "address": "Road 1234A",
+    "mobile": "+46762345678",
+    "zipcode": "12345",
+    "companyCustomer": "companyCustomerId",
+    "email": "firstName2@recipient.com",
+    "createdAt": 2345678901
+  },
+  {
+    "id": "2345678901",
+    "ssn": "9001014444",
+    "firstName": "Recipient2First",
+    "lastName": "Recipient2Last",
+    "city": "RecipientCity",
+    "address": "Road 2345B",
+    "mobile": "+46763456789",
+    "zipcode": "23456",
+    "companyCustomer": "companyCustomerId",
+    "email": "firstName2@recipient.com",
+    "createdAt": 3456789012
+  }
+]

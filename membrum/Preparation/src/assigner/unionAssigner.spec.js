@@ -69,10 +69,10 @@ describe('Union assigner.', () => {
       it('No new.', () => {
         expect(
           getUpdatedUnions({
-            NewAssignments: {
+            assignments: {
               '1': ['A'],
             },
-            Users: {
+            users: {
               '1': {
                 ssn: '1',
                 attributes: {
@@ -109,10 +109,10 @@ describe('Union assigner.', () => {
       it('One modified.', () => {
         expect(
           getUpdatedUnions({
-            NewAssignments: {
+            assignments: {
               '1': ['A'],
             },
-            Users: {
+            users: {
               '1': {
                 ssn: '1',
                 attributes: {
@@ -149,10 +149,10 @@ describe('Union assigner.', () => {
       it('One new.', () => {
         expect(
           getUpdatedUnions({
-            NewAssignments: {
+            assignments: {
               '1': ['Aa'],
             },
-            Users: {
+            users: {
               '1': {
                 ssn: '1',
                 attributes: {
@@ -187,10 +187,10 @@ describe('Union assigner.', () => {
       it('One decide.', () => {
         expect(
           getUpdatedUnions({
-            NewAssignments: {
+            assignments: {
               '1': ['Aa', 'Bb'],
             },
-            Users: {
+            users: {
               '1': {
                 ssn: '1',
                 attributes: {
@@ -226,12 +226,12 @@ describe('Union assigner.', () => {
       it('One new, one modified.', () => {
         expect(
           getUpdatedUnions({
-            NewAssignments: {
+            assignments: {
               '1': ['Aa'],
               '2': ['Bb'],
               '3': ['Cc'],
             },
-            Users: {
+            users: {
               '1': {
                 ssn: '1',
                 attributes: {

@@ -4,9 +4,8 @@
  * @date  2018-01-15
  */
 
-import type { AWSCallback, AWSContext, AWSEvent } from '../types';
+import type { AWSCallback, AWSContext, AWSEvent } from 'types/AWS';
 import AWS from 'aws-sdk';
-// import * as Membership from '../../../Membership';
 import * as User from '../user';
 import { getAssignments } from './assign';
 

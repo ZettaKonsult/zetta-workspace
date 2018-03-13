@@ -4,11 +4,14 @@
  * @date  2017-10-03
  */
 
-import type { AWSCallback, AWSContext, AWSEvent, ParsedUser } from '../types';
+import type { AWSCallback, AWSContext, AWSEvent } from 'types/AWS';
+import type { ParsedUser } from '../types';
 import AWS from 'aws-sdk';
 import cuid from 'cuid';
 import { parseString } from '../parser/ladokParser';
+import { getDbTable } from '../util/database';
 
+const table = getDbTable({ name: 'LadokParseResults' });
 const s3 = new AWS.S3();
 AWS.config.update({ region: 'eu-central-1' });
 const dynamoDb = new AWS.DynamoDB.DocumentClient();
@@ -72,7 +75,7 @@ const updateDatabase = async (
   callback: AWSCallback
 ) => {
   const params = {
-    TableName: 'LadokParseResult',
+    TableName: table,
 
     Item: {
       Index: cuid(),

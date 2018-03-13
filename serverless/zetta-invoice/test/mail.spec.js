@@ -14,6 +14,13 @@ if (!process.env.IS_OFFLINE) {
 
 describe('Mail.', () => {
   it('Send.', async () => {
-    await Mail.send({ data: 'Some data.' });
+    await Mail.sendInvoice({
+      data: {
+        invoiceId: 'invoiceId1',
+        recipientId: 'recipientId',
+        discount: 1,
+        tax: 0.05,
+      },
+    });
   });
 });

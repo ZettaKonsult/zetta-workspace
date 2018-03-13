@@ -1,0 +1,58 @@
+[
+  {
+    "id": "id1",
+    "people": [
+      { "ssn": "9001011111",
+        "name": "NAMN ETT",
+        "mail": "namn1@aMail.com",
+        "credits": {
+          "SAM": "13,5"
+        }
+      },
+      { "ssn": "9001012222",
+        "name": "NAMN TVÅ",
+        "mail": "namn2@aMail.com",
+        "credits": {
+          "SAM": "34,5"
+        }
+      },
+      { "ssn": "9001013333",
+        "name": "NAMN 3",
+        "mail": "namn3@aMail.com",
+        "credits": {
+          "EHL": "56,5"
+        }
+      }
+    ],
+    "file": "file1",
+    "createdAt": 12345
+  },
+  {
+    "id": "id2",
+    "people": [
+      { "ssn": "9001011111",
+        "name": "NAMN ETT",
+        "mail": "namn1@aMail.com",
+        "credits": {
+          "EHL": "12,5"
+        }
+      },
+      { "ssn": "9001012222",
+        "name": "NAMN TVÅ",
+        "mail": "namn2@aMail.com",
+        "credits": {
+          "HT": "24,5"
+        }
+      },
+      { "ssn": "9001014444",
+        "name": "NAMN 3",
+        "mail": "namn3@aMail.com",
+        "credits": {
+          "KO": "56,5"
+        }
+      }
+    ],
+    "createdAt": 23456,
+    "file": "file2"
+  }
+]

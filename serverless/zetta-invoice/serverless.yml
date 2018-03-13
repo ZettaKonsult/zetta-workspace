@@ -205,10 +205,21 @@ resources:
             AttributeType: S
           - AttributeName: companyCustomer
             AttributeType: S
+          - AttributeName: ssn
+            AttributeType: S
         GlobalSecondaryIndexes:
           - IndexName: companyCustomer
             KeySchema:
             - AttributeName: companyCustomer
+              KeyType: HASH
+            Projection:
+              ProjectionType: ALL
+            ProvisionedThroughput:
+              ReadCapacityUnits: 1
+              WriteCapacityUnits: 1
+          - IndexName: ssn
+            KeySchema:
+            - AttributeName: ssn
               KeyType: HASH
             Projection:
               ProjectionType: ALL

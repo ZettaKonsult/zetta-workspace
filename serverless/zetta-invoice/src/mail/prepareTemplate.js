@@ -6,7 +6,7 @@
 
 import type { HTML } from 'types/General';
 import type { Invoice, InvoiceSpecification } from 'types/Invoice';
-import type { CompanyCustomer, Recipient } from 'types/Recipient';
+import type { Recipient } from 'types/Recipient';
 import Mustache from 'mustache';
 import { promisify } from 'util';
 import fs from 'fs';
@@ -24,13 +24,13 @@ const readTemplateFile = async () =>
   await readFileAsync('./src/template/template.html', 'utf8');
 
 const prepareData = (data: {
-  companyCustomer: CompanyCustomer,
   discount: number,
   recipient: Recipient,
   invoice: Invoice,
   tax?: number,
 }): InvoiceSpecification => {
-  const { companyCustomer, discount, recipient, invoice, tax = 1.25 } = data;
+  const { discount, recipient, invoice, tax = 1.25 } = data;
+  const { companyCustomer } = invoice;
 
   const id = new Date(invoice.createdAt);
   const timeToPay = new Date(id.getUTCFullYear(), id.getUTCMonth() + 1);

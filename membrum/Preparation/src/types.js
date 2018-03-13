@@ -33,7 +33,7 @@ export type FileResult = {
   people: Array<ParsedUser>,
   createdAt: number,
   file: string,
-  Index: string,
+  id: string,
 };
 
 export type UnionPartition = {

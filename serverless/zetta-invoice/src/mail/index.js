@@ -5,5 +5,5 @@
  */
 
 import invoicePDF from './mail';
-import send from './emailDoc';
-export default { invoicePDF, send };
+import { send, prepareAndSend, sendInvoice } from './emailDoc';
+export default { invoicePDF, send, sendInvoice, prepareAndSend };

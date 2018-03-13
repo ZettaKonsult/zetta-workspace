@@ -2,85 +2,128 @@ service: ladokParser
 
 plugins:
   - serverless-webpack
+  - serverless-dynamodb-local
+  - serverless-offline
 
 custom:
   webpackIncludeModules: true
+  stage: ${opt:stage, self:provider.stage}
+  LadokParseResults: 'LadokParseResults-${self:provider.stage}'
+  Recipients: 'Recipients-${self:provider.stage}'
+  serverless-offline:
+    port: 8080
+    babelOptions:
+      presets: ["env"]
+  dynamodb:
+    start:
+      port: 8000
+      inMemory: true
+      migrate: true
+      seed: true
+    seed:
+      domain:
+        sources:
+          - table: ${self:custom.LadokParseResults}
+            sources: [./offline/seeds/ladokParseResults.json]
+          - table: ${self:custom.Recipients}
+            sources: [./offline/seeds/recipients.json]
 
 provider:
   name: aws
   runtime: nodejs6.10
-  stage: prod
+  stage: dev
   region: eu-central-1
-
   iamRoleStatements:
     - Effect: Allow
       Action:
         - dynamodb:GetItem
         - dynamodb:PutItem
-        - dynamodb:UpdateItem
-        - dynamodb:Scan
-      Resource: "arn:aws:dynamodb:eu-central-1:460056602695:table/LadokParseResult"
-    - Effect: Allow
-      Action:
-        - dynamodb:PutItem
-        - dynamodb:UpdateItem
-      Resource: "arn:aws:dynamodb:eu-central-1:460056602695:table/MembrumUsers"
-    - Effect: Allow
-      Action:
         - dynamodb:Query
-      Resource: "arn:aws:dynamodb:eu-central-1:460056602695:table/MembrumOrganisations/index/organisationName"
-    - Effect: Allow
-      Action:
-        - dynamodb:Scan
-      Resource: "arn:aws:dynamodb:eu-central-1:460056602695:table/MembrumUsers"
-    - Effect: Allow
-      Action:
-        - cognito-idp:ListUsers
-        - cognito-idp:ListUserPoolClients
-      Resource: "arn:aws:cognito-idp:eu-central-1:460056602695:userpool/eu-central-1_ZKcdfXJ1W"
-    - Effect: Allow
-      Action:
-        - cognito-idp:ListUserPools
-      Resource: "*"
-    - Effect: Allow
-      Action:
-        - s3:getObject
+        - dynamodb:UpdateItem
       Resource:
-        - arn:aws:s3:::ladok-files/*
+        - { "Fn::GetAtt": ["LadokParseResultsDynamoDBTable", "Arn" ] }
+        - { "Fn::GetAtt": ["RecipientsDynamoDBTable", "Arn" ] }
+  environment:
+    LadokParseResults: ${self:custom.LadokParseResults}
+    Recipients: ${self:custom.Recipients}
 
 functions:
   getNewAssignments:
-    handler: dist/lambda/getAssignments.getNewAssignments
+    handler: src/lambda/getAssignments.getNewAssignments
     events:
       - http:
-          path: assignLadok
+          path: assignments/get
           method: get
           cors: true
-          authorizer: aws_iam
 
   saveNewAssignments:
-    handler: dist/lambda/saveAssignments.saveNewAssignments
+    handler: src/lambda/saveAssignments.saveNewAssignments
     events:
       - http:
-          path: assignLadok
+          path: assignments/save
           method: put
           cors: true
-          authorizer: aws_iam
 
   parseUploadedFile:
-    handler: dist/lambda/parse.parseUploadedFile
+    handler: src/lambda/parse.parseUploadedFile
     events:
       - http:
-          path: parseLadok
+          path: ladok/parse
           method: post
           cors: true
-          authorizer: aws_iam
+package:
+  exclude:
+    - node_modules/serverless-dynamodb-local/**
+    - node_modules/serverless-offline/**
 
-  registerOrganisations:
-    handler: dist/lambda/organisation.registerOrganisations
-    events:
-      - http:
-          path: registerOrganisation
-          method: post
-          cors: true
-          authorizer: aws_iam
+resources:
+  Resources:
+    LadokParseResultsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:custom.LadokParseResults}
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+    RecipientsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:custom.Recipients}
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+          - AttributeName: companyCustomer
+            AttributeType: S
+          - AttributeName: ssn
+            AttributeType: S
+        GlobalSecondaryIndexes:
+          - IndexName: companyCustomer
+            KeySchema:
+            - AttributeName: companyCustomer
+              KeyType: HASH
+            Projection:
+              ProjectionType: ALL
+            ProvisionedThroughput:
+              ReadCapacityUnits: 1
+              WriteCapacityUnits: 1
+          - IndexName: ssn
+            KeySchema:
+            - AttributeName: ssn
+              KeyType: HASH
+            Projection:
+              ProjectionType: ALL
+            ProvisionedThroughput:
+              ReadCapacityUnits: 1
+              WriteCapacityUnits: 1
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1

@@ -10,13 +10,16 @@ import Dibs from '../vendor/dibs';
 import { success, failure } from '../util/response';
 import parser from '../util/parser';
 import db from '../util/database';
+import queryString from 'query-string';
 
 export const confirm = async (
   event: AWSEvent,
   context: AWSContext,
   callback: AWSCallback
 ) => {
-  const { invoiceId } = parser(event).data;
+  const { parsed } = parser(event).data;
+  const invoiceId = queryString.parse(parsed);
+  console.log(`Received callback for invoice ${invoiceId}.`);
 
   try {
     const result = await Dibs.confirm({ db, invoiceId });

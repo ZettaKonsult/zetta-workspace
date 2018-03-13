@@ -4,63 +4,85 @@
  * @date  2017-11-07
  */
 
-import type { AWSCallback } from '../types';
+import db, { getDbTable } from '../util/database';
 import * as unionAssigner from '../assigner';
-import AWS from 'aws-sdk';
 import { config } from '../config';
 
-AWS.config.update({ region: 'eu-central-1' });
-const dynamoDB = new AWS.DynamoDB.DocumentClient();
+const RESULTS_TABLE = getDbTable({ name: 'LadokParseResults' });
+const USERS_TABLE = getDbTable({ name: 'Recipients' });
 
-export const getAssignments = async (callback: AWSCallback) => {
+export const getAssignments = async () => {
   console.log(`Fetching LADOK parse results.`);
 
   let parseResult = {};
   try {
-    parseResult = await unionAssigner.aggregateResults(await getParseResults());
+    parseResult = await getParseResults();
   } catch (error) {
-    callback(error);
+    console.error(error);
+    throw error;
   }
-  console.log(`Fetched LADOK parse results from database.`);
+  console.log(`Aggregating results.`);
+  const aggregated = await unionAssigner.aggregateResults(parseResult);
 
-  const faculties = unionAssigner.getFaculties(parseResult);
-  console.log(`Assigned faculties to each user.`);
+  const faculties = unionAssigner.getFaculties(aggregated);
+  console.log(faculties);
 
-  const newAssignments = unionAssigner.getUnions(
-    config.TRF.UnionMapping,
-    faculties
-  );
+  let newAssignments = {};
+  try {
+    newAssignments = unionAssigner.getUnions(
+      config.TRF.UnionMapping,
+      faculties
+    );
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
 
   let users = {};
-  try {
-    users = await getUsers();
-  } catch (error) {
-    callback(error);
-  }
-  console.log(`Fetched user data from database.`);
-
-  for (const ssn of Object.keys(parseResult)) {
-    if (!(ssn in users)) {
-      users[ssn] = parseResult[ssn];
+  for (const ssn of Object.keys(aggregated)) {
+    const user = await getUser({ ssn });
+    if (user == null) {
+      users[ssn] = aggregated[ssn];
+    } else {
+      users[ssn] = user;
     }
   }
 
-  return unionAssigner.getUpdatedUnions({
-    NewAssignments: newAssignments,
-    Users: users,
-  });
+  try {
+    return unionAssigner.getUpdatedUnions({
+      assignments: newAssignments,
+      users,
+    });
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
 };
 
 const getParseResults = async () =>
-  (await dynamoDB
-    .scan({
-      TableName: 'LadokParseResult',
-    })
-    .promise()).Items;
+  (await db('scan', {
+    TableName: RESULTS_TABLE,
+  })).Items;
 
-const getUsers = async () =>
-  (await dynamoDB
-    .scan({
-      TableName: 'MembrumUsers',
-    })
-    .promise()).Items;
+const getUser = async (params: { ssn: string }): Promise<{ [string]: any }> => {
+  const { ssn } = params;
+
+  console.log(`Fetching user with SSN ${ssn}.`);
+
+  try {
+    return (await db('query', {
+      TableName: USERS_TABLE,
+      IndexName: 'ssn',
+      KeyConditionExpression: '#ssn = :ssn',
+      ExpressionAttributeNames: {
+        '#ssn': 'ssn',
+      },
+      ExpressionAttributeValues: {
+        ':ssn': ssn,
+      },
+    })).Items[0];
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};

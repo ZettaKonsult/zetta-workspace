@@ -21,7 +21,14 @@ const getAssignment = (person: UserData): string => {
   let maxValue: number = Number.MIN_VALUE;
 
   for (let [union, unionCredits] of Object.entries(credits)) {
-    const points = Number(unionCredits);
+    // Allows either string xx,xx (Swedish format) or number
+    // xx.xx by replacing commas if it's a string.
+    const points = Number(
+      typeof unionCredits === 'string'
+        ? unionCredits.replace(/,/g, '.')
+        : unionCredits
+    );
+
     if (points > maxValue || (points === maxValue && Math.random() >= 0.5)) {
       maxKey = union;
       maxValue = points;
@@ -37,7 +44,11 @@ export const getUnions = (
 ): { [string]: [string] } => {
   let unions = {};
   for (let [ssn: string, faculty: string] of Object.entries(facultyMap)) {
-    unions[ssn] = unionMap[String(faculty)];
+    const key = String(faculty);
+    if (!(key in unionMap)) {
+      throw new Error(`Invalid faculty ${key}.`);
+    }
+    unions[ssn] = unionMap[key];
   }
   return unions;
 };
@@ -98,10 +109,10 @@ export const getFaculties = (people: {
   );
 
 export const getUpdatedUnions = (params: {
-  NewAssignments: { [string]: any },
-  Users: { [string]: UserData },
+  assignments: { [string]: any },
+  users: { [string]: UserData },
 }): UnionPartition => {
-  const { NewAssignments: assignments, Users: users } = params;
+  const { assignments, users } = params;
 
   let result = {
     created: {},
