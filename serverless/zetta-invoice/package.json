@@ -18,8 +18,8 @@
   "scripts": {
     "build": "cross-env BABEL_ENV=lambda babel src -d dist",
     "build:watch": "yarn build -w",
-    "db:remove": "sls dynamodb remove",
     "deploy:debug": "sls deploy -v",
+    "db:remove": "sls dynamodb remove",
     "deploy:prod": "sls deploy --stage prod",
     "prestart": "yarn sls dynamodb install",
     "start": "yarn sls offline start",
@@ -37,7 +37,6 @@
     "nodemailer": "^4.4.2",
     "puppeteer": "^1.1.0",
     "query-string": "^5.1.0",
-    "shelljs": "^0.8.1",
     "source-map-support": "^0.4.18"
   },
   "devDependencies": {

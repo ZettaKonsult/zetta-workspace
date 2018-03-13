@@ -5,7 +5,7 @@
  */
 
 import db, { getDbTable } from '../util/database';
-import * as unionAssigner from '../assigner';
+import * as unionAssigner from '../assigner/unionAssigner';
 import { config } from '../config';
 
 const RESULTS_TABLE = getDbTable({ name: 'LadokParseResults' });
@@ -40,10 +40,14 @@ export const getAssignments = async () => {
 
   let users = {};
   for (const ssn of Object.keys(aggregated)) {
+    console.log(`Fetching user ${ssn}.`);
     const user = await getUser({ ssn });
+
     if (user == null) {
+      console.log(`No such user. A new one will be created.`);
       users[ssn] = aggregated[ssn];
     } else {
+      console.log(`User existed.`);
       users[ssn] = user;
     }
   }
@@ -66,8 +70,6 @@ const getParseResults = async () =>
 
 const getUser = async (params: { ssn: string }): Promise<{ [string]: any }> => {
   const { ssn } = params;
-
-  console.log(`Fetching user with SSN ${ssn}.`);
 
   try {
     return (await db('query', {

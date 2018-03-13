@@ -78,7 +78,7 @@ const updateDatabase = async (
     TableName: table,
 
     Item: {
-      Index: cuid(),
+      id: cuid(),
       file: fileName,
       people: people,
       createdAt: new Date().getTime(),

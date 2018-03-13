@@ -5,7 +5,6 @@
  */
 
 import type { UnionPartition, UserData } from '../types';
-import { Account } from 'zk-aws-users';
 import { config } from '../config';
 import dbLib from 'zk-dynamodb-wrapper';
 import passwordGenerator from 'password-generator';
@@ -33,23 +32,23 @@ const updateUsers = async (users: { [string]: UserData }) => {
 const registerUser = async (user: UserData): Promise<string> => {
   const { ssn, attributes, credits, nation, unionName } = user;
 
-  try {
-    await Account.signUp({
-      userName: ssn,
-      names: {
-        project: config.Names.project,
-        customer: config.Names.customer,
-      },
-      attributes: attributes,
-      password: passwordGenerator(
-        config.Password.Length,
-        config.Password.Pattern
-      ),
-    });
-  } catch (error) {
-    console.error(error);
-    throw error;
-  }
+  // try {
+  //   await Account.signUp({
+  //     userName: ssn,
+  //     names: {
+  //       project: config.Names.project,
+  //       customer: config.Names.customer,
+  //     },
+  //     attributes: attributes,
+  //     password: passwordGenerator(
+  //       config.Password.Length,
+  //       config.Password.Pattern
+  //     ),
+  //   });
+  // } catch (error) {
+  //   console.error(error);
+  //   throw error;
+  // }
 
   try {
     await db.create({
