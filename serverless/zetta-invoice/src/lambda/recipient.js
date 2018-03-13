@@ -5,7 +5,7 @@
  */
 
 import type { AWSEvent, AWSContext, AWSCallback } from 'types/AWS';
-import Recipient from '../recipient/recipient';
+import Recipient from '../recipient/';
 
 import { success, failure } from '../util/response';
 import parser from '../util/parser';
