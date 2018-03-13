@@ -3,6 +3,7 @@ service: zetta-invoice
 plugins:
   - serverless-webpack
   - serverless-dynamodb-local
+  - serverless-offline-scheduler
   - serverless-offline
 
 custom:
@@ -144,6 +145,10 @@ functions:
           path: /plans/{companyCustomerId}
           method: get
           cors: true
+  cronTest:
+    handler: src/lambda/cron.main
+    events:
+      - schedule: rate(1 minute)
 
 
 package:
