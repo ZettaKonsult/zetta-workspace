@@ -148,6 +148,10 @@ functions:
   cronTest:
     handler: src/lambda/cron.main
     events:
+      - http:
+          path: /plans/test
+          method: get
+          cors: true
       - schedule: rate(1 minute)
 
 
