@@ -9,6 +9,7 @@ import type { AWSEvent, AWSContext, AWSCallback } from 'types/AWS';
 import { success, failure } from '../util/response';
 import parser from '../util/parser';
 import db from '../util/database';
+
 import plans from '../plans/';
 
 export const get = async (
@@ -20,6 +21,27 @@ export const get = async (
 
   try {
     const result = await plans.list({ db, companyCustomerId });
+    callback(null, success(result));
+  } catch (error) {
+    console.error(error);
+    callback(null, failure(error.message));
+  }
+};
+
+export const addRecipientToPlan = async (
+  event: AWSEvent,
+  context: AWSContext,
+  callback: AWSCallback
+) => {
+  const { companyCustomerId, recipientId, planId } = parser(event).data;
+
+  try {
+    const result = await plans.updateRecipientIds({
+      db,
+      companyCustomerId,
+      recipientId,
+      id: planId,
+    });
     callback(null, success(result));
   } catch (error) {
     console.error(error);

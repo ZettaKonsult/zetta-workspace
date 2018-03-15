@@ -18,6 +18,5 @@ export default async ({ db }) => {
 
   const result = await updateNextProcess({ db, plans });
 
-  console.log(`Processed the following plans`);
-  console.log(result);
+  return result;
 };
