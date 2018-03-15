@@ -17,14 +17,14 @@
   "license": "MIT",
   "scripts": {
     "build": "cross-env BABEL_ENV=lambda babel src -d dist",
-    "build:watch": "yarn build -w",
+    "build:watch": "build -w",
     "deploy:debug": "sls deploy -v",
     "db:remove": "sls dynamodb remove",
     "deploy:prod": "sls deploy --stage prod",
-    "prestart": "yarn sls dynamodb install",
-    "start": "yarn sls offline start",
-    "dev:test": "yarn test",
+    "prestart": "sls dynamodb install",
+    "start": "sls offline start",
     "test": "jest",
+    "dev:test": "yarn test",
     "test:staged": "cross-env CI=true yarn test --findRelatedTests",
     "test:watch": "yarn test --watch"
   },
