@@ -145,6 +145,13 @@ functions:
           path: /plans/{companyCustomerId}
           method: get
           cors: true
+  addRecipientToPlan:
+    handler: src/lambda/plans.addRecipientToPlan
+    events:
+      - http:
+          path: /plans/recipient/
+          method: post
+          cors: true
   cronTest:
     handler: src/lambda/cron.main
     events:
@@ -152,7 +159,7 @@ functions:
           path: /plans/test
           method: get
           cors: true
-      - schedule: rate(1 minute)
+      - schedule: rate(1 hour)
 
 
 package:
