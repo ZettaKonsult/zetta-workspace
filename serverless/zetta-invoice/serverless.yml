@@ -156,7 +156,7 @@ functions:
     handler: src/lambda/cron.main
     events:
       - http:
-          path: /plans/test
+          path: /plans/test/{epoch}
           method: get
           cors: true
       - schedule: rate(1 hour)

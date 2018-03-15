@@ -1,8 +1,8 @@
 import { listAllPlansToProcess } from './list';
 import { updateNextProcess } from './update';
 
-export default async ({ db }) => {
-  const plans = await listAllPlansToProcess({ db });
+export default async ({ db, epoch }) => {
+  const plans = await listAllPlansToProcess({ db, epoch });
 
   /*
     How often should the cron job run?
@@ -15,7 +15,6 @@ export default async ({ db }) => {
 
     DO SOME KIND OF PROCESS TO SEND INVOICE TO ALL PLANS
   */
-
   const result = await updateNextProcess({ db, plans });
 
   return result;

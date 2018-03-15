@@ -26,14 +26,14 @@ export default async (params: Params): Promise<{ [string]: any }> => {
   }
 };
 
-export const listAllPlansToProcess = async ({ db }) => {
+export const listAllPlansToProcess = async ({ db, epoch }) => {
   const result = await db('query', {
     TableName: table,
     KeyConditionExpression: 'companyCustomerId = :companyCustomerId',
     FilterExpression: 'epochNextProcess < :epochNextProcess',
     ExpressionAttributeValues: {
       ':companyCustomerId': 'companyCustomerId123',
-      ':epochNextProcess': Date.now(),
+      ':epochNextProcess': Number(epoch),
     },
   });
   return result.Items;
