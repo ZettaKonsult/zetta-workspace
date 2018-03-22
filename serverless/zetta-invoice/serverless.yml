@@ -160,6 +160,13 @@ functions:
           method: get
           cors: true
       - schedule: rate(1 hour)
+  adyenCheckout:
+    handler: src/lambda/adyen.get
+    events:
+      - http:
+          path: /adyen
+          method: get
+          cors: true
 
 
 package:
