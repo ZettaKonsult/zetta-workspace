@@ -36,7 +36,10 @@ export const url = async (
   callback: AWSCallback
 ) => {
   const data = parser(event).data;
-  console.log(`Received DIBS url request for invoice ${data.invoiceId}.`);
+  const { companyCustomerId, invoiceId } = data;
+  console.log(
+    `Received DIBS url request for invoice ${invoiceId}, customer ${companyCustomerId}.`
+  );
 
   try {
     const dibsUrl = await Dibs.url({ db, ...data });

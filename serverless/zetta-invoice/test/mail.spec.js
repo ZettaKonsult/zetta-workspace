@@ -1,13 +1,27 @@
-/* @flow */
-
 /**
  * @date 2018-03-12
  */
 
-import Mail from '../src/mail';
+import request from '../src/util/http';
+import mailTest from './mailTest';
+import testConfig from '../src/util/testConfig';
+
+const host = testConfig.Host;
 
 describe('Mail.', () => {
-  it.skip('Send.', async () => {
-    await Mail.send({ data: 'Some data.' });
+  it('Send.', async () => {
+    expect(
+      await request({
+        host,
+        path: 'invoice/mail',
+        payload: {
+          method: 'post',
+          body: {
+            companyCustomerId: 'companyCustomerId',
+            invoiceId: 'invoiceId1',
+          },
+        },
+      })
+    ).toEqual(mailTest.get({ method: 'post', path: [`mail`, `send`] }));
   });
 });

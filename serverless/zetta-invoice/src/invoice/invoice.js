@@ -8,13 +8,12 @@ import type { DatabaseMethod } from 'types/Database';
 import type { Invoice, InvoiceData } from 'types/Invoice';
 
 import { getDbTable } from '../util/database';
-import CompanyCustomer from './customer';
+import Mail from '../mail/mail';
 import Status from './status';
-import invoicePDF from '../mail/emailDoc';
-import recipientDb from '../recipient/';
 import cuid from 'cuid';
 
-const table = getDbTable({ name: 'Invoices' });
+const INVOICES_TABLE = getDbTable({ name: 'Invoices' });
+const INVOICESTATUS_TABLE = getDbTable({ name: 'InvoiceStatuses' });
 
 const newInvoice = (params: {
   invoice: InvoiceData,
@@ -63,10 +62,13 @@ export const createInvoice = async (params: {
 }): Promise<Invoice | InvoiceData> => {
   const { db, invoice, companyCustomerId } = params;
 
+  console.log(`Creating invoice...`);
   if (invoice.id) {
+    console.log(`ID specified. Updating...`);
     await update({ db, invoice });
     return invoice;
   } else {
+    console.log(`No ID specified. Creating...`);
     const invoiceItem = newInvoice({ invoice, companyCustomerId });
     await put({ db, invoice: invoiceItem });
     await Status.create({ db, status: invoiceItem.itemStatus });
@@ -79,31 +81,38 @@ export const mail = async (params: {
   db: DatabaseMethod,
   invoiceId: string,
   companyCustomerId: string,
-}) => {
+  discount?: number,
+  tax?: number,
+}): Promise<string> => {
   const { db, invoiceId, companyCustomerId } = params;
+  let { discount, tax } = params;
 
+  console.log(`Checking discount and tax: ${discount} and ${tax}.`);
+  [discount, tax] = zeroIfNull({ numbers: [discount, tax] });
+  console.log(`Found discount and tax: ${discount} and ${tax}.`);
+
+  console.log(
+    `Mailing process for invoice ${invoiceId}, customer ${companyCustomerId} started.`
+  );
   try {
-    let [companyCustomer, invoice] = await Promise.all([
-      CompanyCustomer.get({ db, companyCustomerId }),
-      get({ db, companyCustomerId, invoiceId }),
-    ]);
-    let recipient = await recipientDb.get({
-      db,
+    await Mail.sendInvoice({
       companyCustomerId,
-      recipientId: invoice.recipientId,
+      invoiceId,
+      discount,
+      tax,
     });
-    const constructed = Object.assign(
-      {},
-      { companyCustomer: companyCustomer },
-      { invoice: invoice },
-      { recipient: recipient }
-    );
-    await invoicePDF(constructed);
     await lockInvoice({ db, companyCustomerId, invoiceId });
+    return 'Successfully sent invoice.';
   } catch (error) {
     throw error;
   }
 };
+
+const zeroIfNull = (params: { numbers: Array<any> }): Array<number> =>
+  params.numbers.reduce(
+    (result, arg) => [...result, typeof arg === 'number' ? arg : 0.0],
+    []
+  );
 
 export const lockInvoice = async (params: {
   db: DatabaseMethod,
@@ -112,11 +121,14 @@ export const lockInvoice = async (params: {
 }) => {
   const { db, invoiceId, companyCustomerId } = params;
 
+  console.log(
+    `Locking invoice ${invoiceId} for customer ${companyCustomerId}.`
+  );
   try {
     await db('update', {
-      TableName: table,
+      TableName: INVOICES_TABLE,
       Key: {
-        companyCustomerId: companyCustomerId,
+        companyCustomer: companyCustomerId,
         id: invoiceId,
       },
       UpdateExpression: `Set locked=:locked`,
@@ -131,19 +143,21 @@ export const lockInvoice = async (params: {
 
 const update = async (params: { db: DatabaseMethod, invoice: InvoiceData }) => {
   const { db, invoice } = params;
+  const { id, companyCustomerId, recipientIds } = invoice;
 
+  console.log(`Updating invoice ${id}, customer ${companyCustomerId}.`);
   try {
     await db('update', {
-      TableName: table,
+      TableName: INVOICES_TABLE,
       Key: {
-        companyCustomer: invoice.companyCustomerId,
-        id: invoice.id,
+        companyCustomer: companyCustomerId,
+        id: id,
       },
       ConditionExpression: 'locked=:shouldNotBeLocked',
       UpdateExpression: `Set invoiceRows = :invoiceRows, recipientId = :recipientId`,
       ExpressionAttributeValues: {
         ':shouldNotBeLocked': false,
-        ':recipient': invoice.recipientIds,
+        ':recipient': recipientIds,
       },
     });
   } catch (error) {
@@ -158,9 +172,12 @@ const updateStatus = async (params: {
 }) => {
   const { db, invoiceId, newStatus } = params;
 
+  console.log(
+    `Updating invoice status for invoice ${invoiceId} to ${newStatus}.`
+  );
   try {
     await db('update', {
-      TableName: table,
+      TableName: INVOICES_TABLE,
       Key: {
         id: invoiceId,
       },
@@ -178,9 +195,10 @@ const updateStatus = async (params: {
 const put = async (params: { db: DatabaseMethod, invoice: Invoice }) => {
   const { db, invoice } = params;
 
+  console.log(`Putting invoice ${invoice.id}.`);
   try {
     await db('put', {
-      TableName: table,
+      TableName: INVOICES_TABLE,
       Item: invoice,
     });
   } catch (error) {
@@ -190,28 +208,48 @@ const put = async (params: { db: DatabaseMethod, invoice: Invoice }) => {
 
 const get = async (params: {
   db: DatabaseMethod,
-  invoiceId: string,
   companyCustomerId: string,
+  invoiceId: string,
 }): Promise<{ [string]: any }> => {
-  const { db, invoiceId } = params;
+  const { db, companyCustomerId, invoiceId } = params;
 
-  return (await db('get', {
-    TableName: table,
-    Key: { id: invoiceId },
-  })).Item;
+  console.log(`Fetching invoice ${invoiceId}, customer ${companyCustomerId}.`);
+
+  return (await db('query', {
+    TableName: INVOICES_TABLE,
+    KeyConditionExpression: 'companyCustomer = :companyCustomerId AND id = :id',
+    ExpressionAttributeValues: {
+      ':companyCustomerId': companyCustomerId,
+      ':id': invoiceId,
+    },
+  })).Items[0];
 };
 
 const getStatus = async (params: {
   db: DatabaseMethod,
+  companyCustomerId: string,
+  invoiceId: string,
+}): Promise<{ [string]: any }> => (await get(params)).itemStatus;
+
+const getStatuses = async (params: {
+  db: DatabaseMethod,
+  companyCustomerId: string,
   invoiceId: string,
 }): Promise<{ [string]: any }> => {
   const { db, invoiceId } = params;
 
-  console.log(`Fetching status for invoice ${invoiceId}.`);
-  return (await db('get', {
-    TableName: table,
-    Key: { id: invoiceId },
-  })).Item.itemStatus;
+  console.log(`Fetching statuses for invoice ${invoiceId}.`);
+
+  return (await db('query', {
+    TableName: INVOICESTATUS_TABLE,
+    KeyConditionExpression: '#invoiceId = :invoiceId',
+    ExpressionAttributeNames: {
+      '#invoiceId': 'invoiceId',
+    },
+    ExpressionAttributeValues: {
+      ':invoiceId': invoiceId,
+    },
+  })).Items;
 };
 
 const list = async (params: {
@@ -220,11 +258,10 @@ const list = async (params: {
 }): Promise<{ [string]: any }> => {
   const { db, companyCustomerId } = params;
 
-  console.log(`Fetching invoices for ${companyCustomerId}.`);
+  console.log(`Fetching invoices for customer ${companyCustomerId}.`);
   try {
     return (await db('query', {
-      TableName: table,
-      IndexName: 'companyCustomer',
+      TableName: INVOICES_TABLE,
       KeyConditionExpression: '#companyCustomer = :companyCustomer',
       ExpressionAttributeNames: {
         '#companyCustomer': 'companyCustomer',
@@ -238,4 +275,12 @@ const list = async (params: {
   }
 };
 
-export default { newInvoice, list, get, getStatus, mail, updateStatus };
+export default {
+  newInvoice,
+  list,
+  get,
+  getStatus,
+  getStatuses,
+  mail,
+  updateStatus,
+};

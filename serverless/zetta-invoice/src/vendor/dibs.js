@@ -5,7 +5,7 @@
  */
 
 import type { DatabaseMethod } from 'types/Database';
-import { getDbTable } from '../util/database';
+import Invoice from '../invoice/invoice';
 import AWS from 'aws-sdk';
 import queryString from 'query-string';
 AWS.config.region = 'eu-west-1';
@@ -15,7 +15,6 @@ const CALLBACK_URL =
   'https://eu-central-1.console.aws.amazon.com/lambda/home?region=eu-central-1#/functions/payment-prod-membrumDIBSConfirm?tab=graph';
 const DIBS_URL = 'https://payment.architrade.com/paymentweb/start.action';
 const INVOICE_LAMBDA = 'confirmPayment';
-const INVOICES_TABLE = getDbTable({ name: 'Invoices' });
 
 const requiredValues = [
   'accepturl',
@@ -79,20 +78,33 @@ export const url = async (params: {
   db: DatabaseMethod,
   accepturl: string,
   cancelurl: string,
+  companyCustomerId: string,
   invoiceId: string,
   merchant: string,
 }) => {
-  const { accepturl, cancelurl, db, invoiceId, merchant } = params;
+  const {
+    accepturl,
+    cancelurl,
+    db,
+    companyCustomerId,
+    invoiceId,
+    merchant,
+  } = params;
+
   let form = Object.assign(defaultValues);
   console.log(`Default values set.`);
 
   try {
-    console.log(`Fetching invoice ${invoiceId}.`);
-    const invoice = (await db('get', {
-      TableName: INVOICES_TABLE,
-      Key: { id: invoiceId },
-    })).Item;
+    console.log(
+      `Fetching invoice ${invoiceId}, customer ${companyCustomerId}.`
+    );
+    const invoice = await Invoice.get({
+      db,
+      companyCustomerId,
+      invoiceId,
+    });
 
+    console.log(invoice);
     if (invoice == null || invoice.id == null) {
       throw new Error(`No such invoice ${invoiceId}!`);
     }

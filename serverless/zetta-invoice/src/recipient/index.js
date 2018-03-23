@@ -1,7 +1,10 @@
 /* @flow */
 
-import save from './save';
+import { create, save } from './save';
 import list from './list';
-import get from './get';
+import Getting from './get';
 
-export default { save, list, get };
+const get = Getting.get;
+const getAll = Getting.getAll;
+
+export default { create, save, list, get, getAll };

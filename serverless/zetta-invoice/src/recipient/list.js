@@ -3,7 +3,7 @@ import type { DatabaseMethod } from 'types/Database';
 
 import { getDbTable } from '../util/database';
 
-const table = getDbTable({ name: 'Recipients' });
+const RECIPIENTS_TABLE = getDbTable({ name: 'Recipients' });
 
 export default async (params: {
   db: DatabaseMethod,
@@ -11,18 +11,17 @@ export default async (params: {
 }): Promise<{ [string]: any }> => {
   const { db, companyCustomerId } = params;
 
-  console.log(`Fetching invoices for ${companyCustomerId}.`);
+  console.log(`Fetching recipients for ${companyCustomerId}.`);
 
   try {
     return (await db('query', {
-      TableName: table,
-      IndexName: 'companyCustomer',
-      KeyConditionExpression: '#companyCustomer = :companyCustomer',
+      TableName: RECIPIENTS_TABLE,
+      KeyConditionExpression: '#companyCustomerId = :companyCustomerId',
       ExpressionAttributeNames: {
-        '#companyCustomer': 'companyCustomer',
+        '#companyCustomerId': 'companyCustomerId',
       },
       ExpressionAttributeValues: {
-        ':companyCustomer': companyCustomerId,
+        ':companyCustomerId': companyCustomerId,
       },
     })).Items;
   } catch (error) {

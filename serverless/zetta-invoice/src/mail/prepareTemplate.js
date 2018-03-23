@@ -12,11 +12,12 @@ import { promisify } from 'util';
 import fs from 'fs';
 
 export default async (data: any): HTML => {
-  let [tempalte, date] = await Promise.all([
+  let [template, date] = await Promise.all([
     readTemplateFile(),
     prepareData(data),
   ]);
-  return Mustache.to_html(tempalte, date);
+  console.log(`Prepared template. Translating via Mustache.`);
+  return Mustache.to_html(template, date);
 };
 
 const readFileAsync = promisify(fs.readFile);

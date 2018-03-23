@@ -3,6 +3,9 @@
  */
 
 import request from '../util/http';
+import testConfig from '../util/testConfig';
+
+const host = testConfig.Host;
 
 describe('Lambdas.', () => {
   describe('Invoices.', () => {
@@ -24,20 +27,6 @@ describe('Lambdas.', () => {
         },
         {
           companyCustomer: 'companyCustomerId',
-          createdAt: 5678901234,
-          id: 'invoiceId3',
-          itemStatus: {
-            createdAt: 5678901234,
-            id: 'itemStatusId3',
-            invoiceId: 'invoiceId3',
-            itemStatus: 'canceled',
-          },
-          locked: true,
-          price: '789',
-          recipient: 'recipientId',
-        },
-        {
-          companyCustomer: 'companyCustomerId',
           createdAt: 4567890123,
           id: 'invoiceId2',
           itemStatus: {
@@ -50,22 +39,54 @@ describe('Lambdas.', () => {
           price: '456',
           recipient: 'recipientId',
         },
+        {
+          companyCustomer: 'companyCustomerId',
+          createdAt: 5678901234,
+          id: 'invoiceId3',
+          itemStatus: {
+            createdAt: 5678901234,
+            id: 'itemStatusId3',
+            invoiceId: 'invoiceId3',
+            itemStatus: 'canceled',
+          },
+          locked: true,
+          price: '789',
+          recipient: 'recipientId',
+        },
       ];
-      const result = await request({ path: 'invoice/companyCustomerId' });
+      const result = await request({
+        payload: {
+          method: 'get',
+        },
+        host,
+        path: 'invoice/companyCustomerId',
+      });
       expect(result).toEqual(expected);
     });
   });
 
   describe('InvoiceStatuses.', () => {
     it('Get.', async () => {
-      const expected = {
-        createdAt: 3456789012,
-        id: 'itemStatusId1',
-        invoiceId: 'invoiceId1',
-        itemStatus: 'pending',
-      };
+      const expected = [
+        {
+          createdAt: 3456789012,
+          id: 'itemStatusId1',
+          invoiceId: 'invoiceId1',
+          itemStatus: 'pending',
+        },
+        {
+          createdAt: 6789012345,
+          id: 'itemStatusId2',
+          invoiceId: 'invoiceId1',
+          itemStatus: 'succeeded',
+        },
+      ];
       const result = await request({
-        path: 'invoice/status/get/invoiceId1',
+        payload: {
+          method: 'get',
+        },
+        host,
+        path: 'invoice/status/get/companyCustomerId/invoiceId1',
       });
       expect(result).toEqual(expected);
     });
@@ -77,7 +98,7 @@ describe('Lambdas.', () => {
         {
           address: 'Road 234A',
           city: 'RecipientCity',
-          companyCustomer: 'companyCustomerId',
+          companyCustomerId: 'companyCustomerId',
           createdAt: 2345678901,
           email: 'firstName@recipient.com',
           firstName: 'RecipientFirst',
@@ -88,7 +109,13 @@ describe('Lambdas.', () => {
           zipcode: '12345',
         },
       ];
-      const result = await request({ path: 'recipient/companyCustomerId' });
+      const result = await request({
+        host,
+        path: 'recipient/companyCustomerId',
+        payload: {
+          method: 'get',
+        },
+      });
       expect(result).toEqual(expected);
     });
   });

@@ -4,65 +4,66 @@
  * @date 2018-02
  */
 
-import Invoice from '../invoice/invoice';
-import db from '../util/database';
-import aws from 'aws-sdk';
+import ses from '../util/ses';
 import nodemailer from 'nodemailer';
-import Template from './prepareTemplate';
 
-export const sendInvoice = async (params: { invoiceId: string }) => {
-  const { invoiceId } = params;
+const ERROR_MESSAGES = {
+  'Email address is not verified. The following identities failed the check in region ':
+    'Unverified e-mail address.',
+};
+
+const isError = (params: { message: string }) => {
+  Object.keys(ERROR_MESSAGES).forEach((base: string) => {
+    if (base.startsWith(params.message)) {
+      return ERROR_MESSAGES[base];
+    }
+  });
+  return false;
+};
+
+export const send = (contentBuffer: any) => {
+  console.log(`Constructing transporter for e-mail.`);
+  let transporter = nodemailer.createTransport({
+    SES: ses.get(),
+  });
+  console.log(`SES instance successfully created.`);
+
+  const email = 'zmk.zk.dev@gmail.com';
+
   try {
-    const invoice = Invoice.get({ db, invoiceId });
-    return prepareAndSend({ data: { invoice } });
+    transporter.sendMail(
+      {
+        from: 'admin@membrum.se',
+        to: email,
+        subject: 'Invoice',
+        text: 'I hope this message gets sent!',
+        attachments: [
+          {
+            filename: 'invoice.pdf',
+            content: contentBuffer,
+            contentType: 'application/pdf',
+          },
+        ],
+      },
+      (error, info) => {
+        if (error) {
+          console.log(`ERROR: ${error.message}`);
+          const fault = isError({ message: error.message });
+          if (fault) {
+            console.log(`ERROR: ${fault}`);
+            throw new Error(`${fault}`);
+          } else {
+            console.error(error);
+          }
+        } else {
+          console.log(`Email sent.`);
+        }
+      }
+    );
   } catch (error) {
     console.error(error);
     throw error;
   }
 };
 
-export const prepareAndSend = async (params: {
-  data: {
-    invoiceId: string,
-    recipientId: string,
-    discount: number,
-    tax: number,
-  },
-}) => await send(await Template(params.data));
-
-export const send = (contentBuffer: any) => {
-  console.log(`Constructing transporter for e-mail.`);
-  let transporter = nodemailer.createTransport({
-    SES: new aws.SES({
-      apiVersion: '2010-12-01',
-      region: 'eu-west-1',
-    }),
-  });
-
-  console.log(`Sending email.`);
-  transporter.sendMail(
-    {
-      from: 'admin@membrum.se',
-      to: 'zmk.zk.dev@gmail.com',
-      subject: 'Invoice',
-      text: 'I hope this message gets sent!',
-      attachments: [
-        {
-          filename: 'invoice.pdf',
-          content: contentBuffer,
-          contentType: 'application/pdf',
-        },
-      ],
-    },
-    (err, info) => {
-      if (err) {
-        console.error(err);
-      }
-      console.error(err);
-      console.log(info.envelope);
-      console.log(info.messageId);
-    }
-  );
-};
-
-export default { prepareAndSend, send };
+export default { send };

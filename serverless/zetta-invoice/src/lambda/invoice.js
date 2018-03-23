@@ -52,6 +52,26 @@ export const get = async (
   }
 };
 
+export const getStatus = async (
+  event: AWSEvent,
+  context: AWSContext,
+  callback: AWSCallback
+) => {
+  const { companyCustomerId, invoiceId } = parser(event).params;
+  console.log(`parser(event).params`);
+  try {
+    const result = await Invoice.getStatus({
+      db,
+      companyCustomerId,
+      invoiceId,
+    });
+    callback(null, success(result));
+  } catch (error) {
+    console.error(error);
+    callback(null, failure(error.message));
+  }
+};
+
 export const getStatuses = async (
   event: AWSEvent,
   context: AWSContext,
@@ -59,7 +79,7 @@ export const getStatuses = async (
 ) => {
   const { invoiceId } = parser(event).params;
   try {
-    const result = await Invoice.getStatus({ db, invoiceId });
+    const result = await Invoice.getStatuses({ db, invoiceId });
     callback(null, success(result));
   } catch (error) {
     console.error(error);
@@ -73,6 +93,10 @@ export const send = async (
   callback: AWSCallback
 ) => {
   const { companyCustomerId, invoiceId } = parser(event).data;
+
+  console.log(
+    `Received invoice mail request for ${invoiceId}, customer ${companyCustomerId}.`
+  );
 
   try {
     const result = await Invoice.mail({ db, companyCustomerId, invoiceId });

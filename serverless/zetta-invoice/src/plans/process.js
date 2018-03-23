@@ -11,13 +11,19 @@ export default async ({ db }) => {
     {
       recipientId: [planId1, planId2, ....]
     }
-    To make sure that they get as few mail as possible
+    To make sure that they get as few mail as possible.
 
-    DO SOME KIND OF PROCESS TO SEND INVOICE TO ALL PLANS
+    TODO: DO SOME KIND OF PROCESS TO SEND INVOICE TO ALL PLANS.
+    TODO: We really want to log all plans attributes? Is not the ID enough? It clutters stdout a bit.
   */
 
+  console.log(`Checking for plans to update...`);
   const result = await updateNextProcess({ db, plans });
 
-  console.log(`Processed the following plans`);
-  console.log(result);
+  if (result.length !== 0) {
+    console.log(`Processed the following plans`);
+    console.log(result);
+  } else {
+    console.log(`No plans were processed.`);
+  }
 };

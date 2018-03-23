@@ -1,4 +1,6 @@
 /* @flow */
+
+import type { Recipient } from 'types/Recipient';
 import cuid from 'cuid';
 
 export const format = (params: {

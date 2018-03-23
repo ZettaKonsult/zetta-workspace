@@ -7,12 +7,18 @@
   },
   {
     "id": "itemStatusId2",
+    "invoiceId": "invoiceId1",
+    "createdAt": 6789012345,
+    "itemStatus": "succeeded"
+  },
+  {
+    "id": "itemStatusId3",
     "invoiceId": "invoiceId2",
     "createdAt": 4567890123,
     "itemStatus": "succeeded"
   },
   {
-    "id": "itemStatusId3",
+    "id": "itemStatusId4",
     "invoiceId": "invoiceId3",
     "createdAt": 5678901234,
     "itemStatus": "canceled"

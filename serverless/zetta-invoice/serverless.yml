@@ -54,13 +54,14 @@ provider:
         - { "Fn::GetAtt": ["CompanyCustomersDynamoDBTable", "Arn" ] }
         - { "Fn::GetAtt": ["InvoicesDynamoDBTable", "Arn" ] }
         - { "Fn::GetAtt": ["InvoiceStatusesDynamoDBTable", "Arn" ] }
+        - { "Fn::GetAtt": ["PlansDynamoDBTable", "Arn" ] }
         - { "Fn::GetAtt": ["RecipientsDynamoDBTable", "Arn" ] }
   environment:
     CompanyCustomersTable: ${self:custom.CompanyCustomers}
     InvoicesTable: ${self:custom.Invoices}
     InvoiceStatusesTable: ${self:custom.Invoices}
-    RecipientsTable: ${self:custom.Recipients}
     PlansTable: ${self:custom.Plans}
+    RecipientsTable: ${self:custom.Recipients}
 
 functions:
   dibsConfirm:
@@ -95,6 +96,13 @@ functions:
       - http:
           path: /invoice/mail
           method: post
+          cors: true
+  getInvoiceStatus:
+    handler: src/lambda/invoice.getStatuses
+    events:
+      - http:
+          path: /invoice/status/get/{companyCustomerId}/{invoiceId}/
+          method: get
           cors: true
   getInvoiceStatuses:
     handler: src/lambda/invoice.getStatuses
@@ -176,39 +184,52 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
-    InvoicesTable:
-      Type: AWS::DynamoDB::Table
-      Properties:
-        TableName: ${self:custom.Invoices}
-        KeySchema:
-          - AttributeName: id
-            KeyType: HASH
-        AttributeDefinitions:
-          - AttributeName: id
-            AttributeType: S
-          - AttributeName: companyCustomer
-            AttributeType: S
-        GlobalSecondaryIndexes:
-          - IndexName: companyCustomer
-            KeySchema:
-            - AttributeName: companyCustomer
-              KeyType: HASH
-            Projection:
-              ProjectionType: ALL
-            ProvisionedThroughput:
-              ReadCapacityUnits: 1
-              WriteCapacityUnits: 1
-        ProvisionedThroughput:
-          ReadCapacityUnits: 1
-          WriteCapacityUnits: 1
     InvoiceStatusesTable:
       Type: AWS::DynamoDB::Table
       Properties:
         TableName: ${self:custom.InvoiceStatuses}
         KeySchema:
-          - AttributeName: id
+          - AttributeName: invoiceId
             KeyType: HASH
+          - AttributeName: id
+            KeyType: RANGE
         AttributeDefinitions:
+          - AttributeName: invoiceId
+            AttributeType: S
+          - AttributeName: id
+            AttributeType: S
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+    InvoicesTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:custom.Invoices}
+        KeySchema:
+          - AttributeName: companyCustomer
+            KeyType: HASH
+          - AttributeName: id
+            KeyType: RANGE
+        AttributeDefinitions:
+          - AttributeName: companyCustomer
+            AttributeType: S
+          - AttributeName: id
+            AttributeType: S
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+    PlansTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:custom.Plans}
+        KeySchema:
+          - AttributeName: companyCustomerId
+            KeyType: HASH
+          - AttributeName: id
+            KeyType: RANGE
+        AttributeDefinitions:
+          - AttributeName: companyCustomerId
+            AttributeType: S
           - AttributeName: id
             AttributeType: S
         ProvisionedThroughput:
@@ -219,54 +240,14 @@ resources:
       Properties:
         TableName: ${self:custom.Recipients}
         KeySchema:
-          - AttributeName: id
+          - AttributeName: companyCustomerId
             KeyType: HASH
-        AttributeDefinitions:
           - AttributeName: id
-            AttributeType: S
-          - AttributeName: companyCustomer
-            AttributeType: S
-          - AttributeName: ssn
-            AttributeType: S
-        GlobalSecondaryIndexes:
-          - IndexName: companyCustomer
-            KeySchema:
-            - AttributeName: companyCustomer
-              KeyType: HASH
-            Projection:
-              ProjectionType: ALL
-            ProvisionedThroughput:
-              ReadCapacityUnits: 1
-              WriteCapacityUnits: 1
-          - IndexName: ssn
-            KeySchema:
-            - AttributeName: ssn
-              KeyType: HASH
-            Projection:
-              ProjectionType: ALL
-            ProvisionedThroughput:
-              ReadCapacityUnits: 1
-              WriteCapacityUnits: 1
-        ProvisionedThroughput:
-          ReadCapacityUnits: 1
-          WriteCapacityUnits: 1
-    PlansTable:
-      Type: AWS::DynamoDB::Table
-      Properties:
-        TableName: ${self:custom.Plans}
-        KeySchema:
-          -
-            AttributeName: companyCustomerId
-            KeyType: HASH
-          -
-            AttributeName: id
             KeyType: RANGE
         AttributeDefinitions:
-          -
-            AttributeName: companyCustomerId
+          - AttributeName: companyCustomerId
             AttributeType: S
-          -
-            AttributeName: id
+          - AttributeName: id
             AttributeType: S
         ProvisionedThroughput:
           ReadCapacityUnits: 1
