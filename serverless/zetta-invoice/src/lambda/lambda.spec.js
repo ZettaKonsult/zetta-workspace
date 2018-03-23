@@ -15,6 +15,9 @@ describe('Lambdas.', () => {
           companyCustomer: 'companyCustomerId',
           createdAt: 3456789012,
           id: 'invoiceId1',
+          invoiceRows: [
+            { description: '1an', hours: 12, price: 123, tax: 0.01 },
+          ],
           itemStatus: {
             createdAt: 3456789012,
             id: 'itemStatusId1',
@@ -24,11 +27,21 @@ describe('Lambdas.', () => {
           locked: false,
           price: '123',
           recipient: 'recipientId',
+          unit: 'Timmar',
         },
         {
           companyCustomer: 'companyCustomerId',
           createdAt: 4567890123,
           id: 'invoiceId2',
+          invoiceRows: [
+            {
+              description: '2an A',
+              hours: 23,
+              price: 234,
+              tax: 0.02,
+            },
+            { description: '2an B', hours: 23, price: 234, tax: 0.02 },
+          ],
           itemStatus: {
             createdAt: 4567890123,
             id: 'itemStatusId2',
@@ -38,20 +51,27 @@ describe('Lambdas.', () => {
           locked: true,
           price: '456',
           recipient: 'recipientId',
+          unit: 'Timmar',
         },
         {
           companyCustomer: 'companyCustomerId',
           createdAt: 5678901234,
           id: 'invoiceId3',
+          invoiceRows: [
+            { description: '3an A', hours: 34, price: 345, tax: 0.25 },
+            { description: '3an B', hours: 34, price: 345, tax: 0.25 },
+            { description: '3an C', hours: 34, price: 345, tax: 0.25 },
+          ],
           itemStatus: {
             createdAt: 5678901234,
             id: 'itemStatusId3',
             invoiceId: 'invoiceId3',
             itemStatus: 'canceled',
           },
-          locked: true,
+          locked: false,
           price: '789',
           recipient: 'recipientId',
+          unit: 'Timmar',
         },
       ];
       const result = await request({

@@ -16,15 +16,16 @@ export const confirm = async (
   context: AWSContext,
   callback: AWSCallback
 ) => {
-  const { invoiceId } = parser(event).params;
+  const { companyCustomerId, invoiceId } = parser(event).params;
   try {
     let result = {};
     result.update = await Invoice.updateStatus({
       db,
+      companyCustomerId,
       invoiceId,
       newStatus: 'succeeded',
     });
-    result.get = await Invoice.getStatus({ db, invoiceId });
+    result.get = await Invoice.getStatus({ db, companyCustomerId, invoiceId });
     callback(null, success(result));
   } catch (error) {
     console.error(error);
@@ -101,9 +102,9 @@ export const send = async (
   try {
     const result = await Invoice.mail({ db, companyCustomerId, invoiceId });
     callback(null, success(result));
-  } catch (err) {
-    console.error(err);
-    callback(null, failure(err.message));
+  } catch (error) {
+    console.error(error);
+    callback(null, failure(error.message));
   }
 };
 

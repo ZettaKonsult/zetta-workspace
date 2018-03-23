@@ -1,14 +1,19 @@
 /* @flow */
-import { getDbTable } from '../util/database';
 
-type Params = {
-  db: DatabaseMethod,
-  companyCustomerId: string,
-};
+/**
+ * @date 2018-02
+ */
+
+import type { DatabaseMethod } from 'types/Database';
+import type { Plan } from 'types/Invoice';
+import { getDbTable } from '../util/database';
 
 const table = getDbTable({ name: 'Plans' });
 
-export default async (params: Params): Promise<{ [string]: any }> => {
+export default async (params: {
+  db: DatabaseMethod,
+  companyCustomerId: string,
+}): Promise<{ [string]: any }> => {
   const { db, companyCustomerId } = params;
   try {
     const result = await db('query', {
@@ -26,8 +31,10 @@ export default async (params: Params): Promise<{ [string]: any }> => {
   }
 };
 
-export const listAllPlansToProcess = async ({ db }) => {
-  const result = await db('query', {
+export const listAllPlansToProcess = async (params: {
+  db: DatabaseMethod,
+}): Array<Plan> => {
+  const result = await params.db('query', {
     TableName: table,
     KeyConditionExpression: 'companyCustomerId = :companyCustomerId',
     FilterExpression: 'epochNextProcess < :epochNextProcess',
@@ -39,7 +46,7 @@ export const listAllPlansToProcess = async ({ db }) => {
   return result.Items;
 };
 
-export const getPlansToPay = async ({ db }) => {
+export const getPlansToPay = async (params: { db: DatabaseMethod }) => {
   /*
   send invoice
   wait until interval + intervalCount has passed

@@ -95,14 +95,14 @@ export const mail = async (params: {
     `Mailing process for invoice ${invoiceId}, customer ${companyCustomerId} started.`
   );
   try {
-    await Mail.sendInvoice({
+    const result = await Mail.sendInvoice({
       companyCustomerId,
       invoiceId,
       discount,
       tax,
     });
     await lockInvoice({ db, companyCustomerId, invoiceId });
-    return 'Successfully sent invoice.';
+    return result;
   } catch (error) {
     throw error;
   }
@@ -233,7 +233,6 @@ const getStatus = async (params: {
 
 const getStatuses = async (params: {
   db: DatabaseMethod,
-  companyCustomerId: string,
   invoiceId: string,
 }): Promise<{ [string]: any }> => {
   const { db, invoiceId } = params;

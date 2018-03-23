@@ -137,7 +137,7 @@
   <div class='invoice border-bottom--small'>
     <header class='row spaceBetween border-bottom-grey-big'>
       <h2>{{companyCustomer.company}}</h2>
-      <h2 class="uppercase">Fakutra</h2>
+      <h2 class="uppercase">Faktura</h2>
     </header>
 
     <div class='row spaceBetween border-bottom--small'>
@@ -173,13 +173,13 @@
 
     <div class="gridBorder">
       <div class="grid border-bottom-grey-small">
-        <p class="text-align-center">Enhet</p>
+        <p class="text-align-center">{{unit}}</p>
         <p class="text-align-center">Specifikation</p>
         <p class="text-align-center">á-pris</p>
         <p class="text-align-center">Summa</p>
 
         {{#invoiceRows}}
-        <p class="text-align-center">{{interval}}</p>
+        <p class="text-align-center">{{hours}}</p>
         <p class="text-align-center">{{description}}</p>
         <p class="text-align-center">{{price}}</p>
         <p class="text-align-center">{{total}}</p>
@@ -200,7 +200,7 @@
 
     <div class="invoiceSummary emphasize">
       <h3>SEK TOTAL</h3>
-      <h3>{{total}}</h3>
+      <h3>{{sum}}</h3>
     </div>
   </div>
 

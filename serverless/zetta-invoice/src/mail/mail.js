@@ -28,32 +28,33 @@ export const sendInvoice = async (params: {
     Invoice.get({ db, companyCustomerId, invoiceId }),
   ]);
 
-  try {
-    if (companyCustomer == null) {
-      throw new Error(`No such customer: ${companyCustomerId}.`);
-    }
-    if (invoice == null) {
-      throw new Error(`No such invoice: ${invoiceId}.`);
-    }
-    console.log(`Fetched invoice ${invoice.id}.`);
-    console.log(`Fetched customer ${companyCustomer.id}.`);
-    const recipient = await RecipientManager.get({
-      db,
-      companyCustomerId,
-      recipientId: invoice.recipient,
-    });
-
-    if (recipient == null) {
-      throw new Error(`No such recipient: ${invoice.recipient}.`);
-    }
-    console.log(`Fetched recipient ${recipient.id}.`);
-    console.log(recipient);
-
-    return await send({ invoice, recipient, discount, tax });
-  } catch (error) {
-    console.error(error);
-    throw error;
+  if (companyCustomer == null) {
+    throw new Error(`No such customer (${companyCustomerId})!`);
   }
+  if (invoice == null) {
+    throw new Error(`No such invoice (${invoiceId})!`);
+  }
+  if (invoice.locked) {
+    throw new Error(`Can not pay with a locked invoice (${invoiceId})!`);
+  }
+
+  console.log(`Fetched invoice ${invoice.id}.`);
+  console.log(`Fetched customer ${companyCustomer.id}.`);
+  const recipient = await RecipientManager.get({
+    db,
+    companyCustomerId,
+    recipientId: invoice.recipient,
+  });
+
+  if (recipient == null) {
+    throw new Error(`No such recipient (${invoice.recipient})!`);
+  }
+  console.log(`Fetched recipient ${recipient.id}.`);
+
+  await send({ invoice, recipient, discount, tax });
+  return {
+    reference: invoice.createdAt,
+  };
 };
 
 const getBrowserPage = async (): any => {
@@ -78,7 +79,6 @@ export const send = async (params: any) => {
 
     console.log(`Sending buffer.`);
     await emailDoc.send(buffer);
-    return buffer;
   } catch (error) {
     throw error;
   } finally {

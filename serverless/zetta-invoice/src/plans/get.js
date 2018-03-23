@@ -1,19 +1,25 @@
 /* @flow */
-import { getDbTable } from '../util/database';
 
-type Params = {
-  db: DatabaseMethod,
-  companyCustomerId: string,
-};
+/**
+ * @date 2018-02
+ */
+
+import type { DatabaseMethod } from 'types/Database';
+import { getDbTable } from '../util/database';
 
 const table = getDbTable({ name: 'Plans' });
 
-export default async (params: Params): Promise<{ [string]: any }> => {
-  const { db, companyCustomerId, id } = params;
+export default async (params: {
+  db: DatabaseMethod,
+  planId: string,
+  companyCustomerId: string,
+}): Promise<{ [string]: any }> => {
+  const { db, companyCustomerId, planId } = params;
+
   try {
     const result = await db('get', {
       TableName: table,
-      Key: { id, companyCustomerId },
+      Key: { id: planId, companyCustomerId },
     });
 
     return result.Item;

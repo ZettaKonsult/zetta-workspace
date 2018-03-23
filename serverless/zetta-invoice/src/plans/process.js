@@ -14,7 +14,6 @@ export default async ({ db }) => {
     To make sure that they get as few mail as possible.
 
     TODO: DO SOME KIND OF PROCESS TO SEND INVOICE TO ALL PLANS.
-    TODO: We really want to log all plans attributes? Is not the ID enough? It clutters stdout a bit.
   */
 
   console.log(`Checking for plans to update...`);

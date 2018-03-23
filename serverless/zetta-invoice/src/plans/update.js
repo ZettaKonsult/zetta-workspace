@@ -1,33 +1,35 @@
 /* @flow */
+
+/**
+ * @date 2018-02
+ */
+
+import type { DatabaseMethod } from 'types/Database';
+import type { Plan } from 'types/Invoice';
 import { incrementToNextLowerBound } from 'date-primitive-utils';
-
 import { getDbTable } from '../util/database';
-
 import get from './get';
 
-type Params = {
+const PLANS_TABLE = getDbTable({ name: 'Plans' });
+
+export const updateRecipientIds = async (params: {
   db: DatabaseMethod,
   companyCustomerId: string,
-};
-
-const table = getDbTable({ name: 'Plans' });
-
-export const updateRecipientIds = async ({
-  db,
-  companyCustomerId,
-  id,
-  recipientId,
+  planId: string,
+  recipientId: string,
 }) => {
-  const plan = await get({ db, companyCustomerId, id });
+  const { db, companyCustomerId, planId, recipientId } = params;
+
+  const plan = await get({ db, companyCustomerId, planId });
   const index = plan.recipientIds.findIndex(id => recipientId === id);
   if (index !== -1) {
     return plan;
   } else {
     const result = await db('update', {
-      TableName: table,
+      TableName: PLANS_TABLE,
       Key: {
         companyCustomerId,
-        id,
+        id: planId,
       },
       ReturnValues: 'ALL_NEW',
       UpdateExpression: `set #recipientIds = list_append(if_not_exists(#recipientIds, :empty_list), :recipientId)`,
@@ -43,10 +45,15 @@ export const updateRecipientIds = async ({
   }
 };
 
-export const updateNextProcess = async ({ db, plans }) => {
+export const updateNextProcess = async (params: {
+  db: DatabaseMethod,
+  plans: Array<Plan>,
+}) => {
+  const { db, plans } = params;
+
   const updatePromise = plans.map(item => {
     return db('update', {
-      TableName: table,
+      TableName: PLANS_TABLE,
       Key: {
         companyCustomerId: item.companyCustomerId,
         id: item.id,
