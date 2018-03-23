@@ -31,16 +31,14 @@ export default async (params: {
   }
 };
 
-export const listAllPlansToProcess = async (params: {
-  db: DatabaseMethod,
-}): Array<Plan> => {
-  const result = await params.db('query', {
+export const listAllPlansToProcess = async (params: { db: DatabaseMethod, epoch }) => {
+  const result = await db('query', {
     TableName: table,
     KeyConditionExpression: 'companyCustomerId = :companyCustomerId',
     FilterExpression: 'epochNextProcess < :epochNextProcess',
     ExpressionAttributeValues: {
       ':companyCustomerId': 'companyCustomerId123',
-      ':epochNextProcess': Date.now(),
+      ':epochNextProcess': Number(epoch),
     },
   });
   return result.Items;

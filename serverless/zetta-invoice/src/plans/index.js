@@ -6,5 +6,6 @@
 
 import get from './get';
 import list from './list';
+import { updateRecipientIds } from './update';
 
-export default { get, list };
+export default { get, list, updateRecipientIds };

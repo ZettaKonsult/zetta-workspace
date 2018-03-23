@@ -41,7 +41,7 @@ export const updateRecipientIds = async (params: {
         ':empty_list': [],
       },
     });
-    return result;
+    return result.Attributes;
   }
 };
 
@@ -72,5 +72,5 @@ export const updateNextProcess = async (params: {
     });
   });
   const result = await Promise.all(updatePromise);
-  return result;
+  return result.map(resObject => resObject.Attributes);
 };
