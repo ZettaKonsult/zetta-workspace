@@ -20,9 +20,16 @@ export const updateRecipientIds = async (params: {
 }) => {
   const { db, companyCustomerId, planId, recipientId } = params;
 
+  console.log(`Updating recipient ids.`);
+
   const plan = await get({ db, companyCustomerId, planId });
+  if (plan == null) {
+    throw new Error(`No such plan (${planId})!`);
+  }
+
   const index = plan.recipientIds.findIndex(id => recipientId === id);
   if (index !== -1) {
+    console.log(`Could not find recipient id in plan.`);
     return plan;
   } else {
     const result = await db('update', {

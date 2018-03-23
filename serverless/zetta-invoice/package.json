@@ -21,18 +21,11 @@
     "deploy:debug": "sls deploy -v",
     "db:remove": "sls dynamodb remove",
     "deploy:prod": "sls deploy --stage prod",
-<<<<<<< HEAD
     "prestart": "yarn sls dynamodb install",
     "start": "yarn sls offline start",
     "dev:test": "yarn test",
     "test": "jest src --env=Node",
     "test:mail": "jest mail --env=Node",
-=======
-    "prestart": "sls dynamodb install",
-    "start": "sls offline start",
-    "test": "jest",
-    "dev:test": "yarn test",
->>>>>>> 4f9fb893f714b16e6b78882d5459f4f3ca941804
     "test:staged": "cross-env CI=true yarn test --findRelatedTests",
     "test:watch": "yarn test --watch"
   },

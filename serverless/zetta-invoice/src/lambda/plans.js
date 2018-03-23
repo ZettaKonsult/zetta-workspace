@@ -40,7 +40,7 @@ export const addRecipientToPlan = async (
       db,
       companyCustomerId,
       recipientId,
-      id: planId,
+      planId,
     });
     callback(null, success(result));
   } catch (error) {

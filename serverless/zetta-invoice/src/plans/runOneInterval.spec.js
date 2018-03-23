@@ -1,4 +1,5 @@
 import request from '../util/http';
+import testConfig from '../util/testConfig';
 
 /* TODO
 Fails if run 2 times in a row
@@ -11,9 +12,13 @@ Some ways to solve this.
 Some ways that probably won't work
 1) Allow jest to start serverless offline - should still be 2 processes
 */
+
+const host = testConfig.Host;
+
 describe('Simulate 1 TRF interval', () => {
   it('recipient can be added to plan', async () => {
     const result = await request({
+      host,
       path: 'plans/recipient',
       payload: {
         method: 'post',
@@ -32,6 +37,7 @@ describe('Simulate 1 TRF interval', () => {
     let epoch = Date.UTC(2018, 5, 1);
 
     const updatedPlans = await request({
+      host,
       path: `plans/test/${epoch}`,
       payload: {
         method: 'get',
@@ -46,6 +52,7 @@ describe('Simulate 1 TRF interval', () => {
     let epoch = Date.UTC(2018, 8, 1);
 
     const updatedPlans = await request({
+      host,
       path: `plans/test/${epoch}`,
       payload: {
         method: 'get',

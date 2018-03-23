@@ -5,7 +5,6 @@
  */
 
 import type { DatabaseMethod } from 'types/Database';
-import type { Plan } from 'types/Invoice';
 import { getDbTable } from '../util/database';
 
 const table = getDbTable({ name: 'Plans' });
@@ -31,7 +30,12 @@ export default async (params: {
   }
 };
 
-export const listAllPlansToProcess = async (params: { db: DatabaseMethod, epoch }) => {
+export const listAllPlansToProcess = async (params: {
+  db: DatabaseMethod,
+  epoch: any,
+}) => {
+  const { db, epoch } = params;
+
   const result = await db('query', {
     TableName: table,
     KeyConditionExpression: 'companyCustomerId = :companyCustomerId',
