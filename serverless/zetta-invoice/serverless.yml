@@ -118,20 +118,6 @@ functions:
          path: /invoice/status/set/{status}
          method: post
          cors: true
-  createPlan:
-    handler: src/lambda/plan.create
-    events:
-      - http:
-         path: /plan/create
-         method: post
-         cors: true
-  createPlanInvoice:
-    handler: src/lambda/plan.createInvoice
-    events:
-      - http:
-         path: /charge/plan
-         method: post
-         cors: true
   createRecipient:
     handler: src/lambda/recipient.create
     events:
