@@ -58,11 +58,12 @@ describe('Simulate 1 TRF interval', () => {
       },
     });
 
-    expect(result.recipientIds).toEqual(['recipientId']);
+    expect(result.recipientIds).toEqual([recipientId]);
   });
 
   it('Returns all proccssed plans', async () => {
     let epoch = Date.now();
+    let startOfNextInterval = 1530403200000;
 
     const updatedPlans = await request({
       host,
@@ -73,7 +74,7 @@ describe('Simulate 1 TRF interval', () => {
     });
 
     expect(updatedPlans).toHaveLength(1);
-    expect(updatedPlans[0].epochNextProcess).toBe(1530403200000);
+    expect(updatedPlans[0].epochNextProcess).toBe(startOfNextInterval);
   });
 
   it('no plans are updated during the same interval', async () => {
@@ -93,6 +94,7 @@ describe('Simulate 1 TRF interval', () => {
   it('plans are update for new interval', async () => {
     let now = Date.now();
     let sixMonths = 100000000000;
+    let startOfNextInterval = 1546300800000;
     let epoch = new Date(now + sixMonths).getTime();
 
     const updatedPlans = await request({
@@ -102,7 +104,8 @@ describe('Simulate 1 TRF interval', () => {
         method: 'get',
       },
     });
+
     expect(updatedPlans).toHaveLength(1);
-    expect(updatedPlans[0].epochNextProcess).toBe(1546300800000);
+    expect(updatedPlans[0].epochNextProcess).toBe(startOfNextInterval);
   });
 });

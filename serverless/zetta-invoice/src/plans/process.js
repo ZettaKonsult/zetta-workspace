@@ -6,14 +6,20 @@ export default async ({ db, epoch }) => {
 
   /*
     How often should the cron job run?
-    Is there someway we can make sure we don't miss a plan by say 6h
-    After all plans have been fetched the plan list should be transformed to be
+    The cron job should run at the end of month.
+    This should make all plans sync up eventually. The edge case is when a recipient is just added to the plan. This would make 2 invoices be sent rapidly. How to avoid this?
+
+    All plans should be reduced to this format
     {
       recipientId: [planId1, planId2, ....]
     }
     To make sure that they get as few mail as possible.
 
+    The format above needs a transform so it can be made a invoice
+
     TODO: DO SOME KIND OF PROCESS TO SEND INVOICE TO ALL PLANS.
+    1) Transform plans to invoice
+    2) use existing code to send invoice
   */
 
   console.log(`Checking for plans to update...`);
