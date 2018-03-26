@@ -7,7 +7,9 @@ plugins:
   - serverless-offline
 
 custom:
-  webpackIncludeModules: true
+    webpack:
+    webpackConfig: ./webpack.config.js
+    includeModules: true
   stage: ${opt:stage, self:provider.stage}
   Invoices: 'Invoices-${self:provider.stage}'
   InvoiceStatuses: 'InvoiceStatuses-${self:provider.stage}'
