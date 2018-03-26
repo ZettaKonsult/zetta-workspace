@@ -37,8 +37,6 @@ custom:
             sources: [./offline/seeds/invoiceStatuses.json]
           - table: ${self:custom.Recipients}
             sources: [./offline/seeds/recipients.json]
-          - table: ${self:custom.Plans}
-            sources: [./offline/seeds/plans.json]
 
 provider:
   name: aws
@@ -78,6 +76,7 @@ functions:
       - http:
           path: dibs/url
           method: post
+
   createInvoice:
     handler: src/lambda/invoice.create
     events:
@@ -103,14 +102,14 @@ functions:
     handler: src/lambda/invoice.getStatuses
     events:
       - http:
-          path: /invoice/status/get/{companyCustomerId}/{invoiceId}/
+          path: /invoice/status/{companyCustomerId}/{invoiceId}/
           method: get
           cors: true
   getInvoiceStatuses:
     handler: src/lambda/invoice.getStatuses
     events:
       - http:
-          path: /invoice/status/get/{invoiceId}
+          path: /invoice/status/{invoiceId}
           method: get
           cors: true
   setInvoiceStatus:
@@ -120,6 +119,7 @@ functions:
          path: /invoice/status/set/{status}
          method: post
          cors: true
+
   createRecipient:
     handler: src/lambda/recipient.create
     events:
@@ -134,12 +134,20 @@ functions:
           path: /recipient/{companyCustomerId}
           method: get
           cors: true
+
   getPlans:
     handler: src/lambda/plans.get
     events:
       - http:
           path: /plans/{companyCustomerId}
           method: get
+          cors: true
+  savePlan:
+    handler: src/lambda/plans.save
+    events:
+      - http:
+          path: /plans
+          method: post
           cors: true
   addRecipientToPlan:
     handler: src/lambda/plans.addRecipientToPlan
@@ -148,6 +156,14 @@ functions:
           path: /plans/recipient/
           method: post
           cors: true
+  removePlan:
+    handler: src/lambda/plans.remove
+    events:
+      - http:
+          path: /plans
+          method: delete
+          cors: true
+
   cronTest:
     handler: src/lambda/cron.main
     events:

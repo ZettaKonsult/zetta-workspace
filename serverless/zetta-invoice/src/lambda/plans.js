@@ -48,3 +48,35 @@ export const addRecipientToPlan = async (
     callback(null, failure(error.message));
   }
 };
+
+export const save = async (
+  event: AWSEvent,
+  context: AWSContext,
+  callback: AWSCallback
+) => {
+  const { companyCustomerId, plan } = parser(event).data;
+
+  try {
+    const result = await plans.save({ db, companyCustomerId, plan });
+    callback(null, success(result));
+  } catch (error) {
+    console.error(error);
+    callback(null, failure(error.message));
+  }
+};
+
+export const remove = async (
+  event: AWSEvent,
+  context: AWSContext,
+  callback: AWSCallback
+) => {
+  const { companyCustomerId, planId } = parser(event).data;
+
+  try {
+    const result = await plans.remove({ db, companyCustomerId, planId });
+    callback(null, success(result));
+  } catch (error) {
+    console.error(error);
+    callback(null, failure(error.message));
+  }
+};

@@ -21,7 +21,7 @@ export const main = async (
 
     if (process.env.IS_OFFLINE) {
       const { epoch } = parser(event).params;
-      result = await planNextPaymentProcess({ db, epoch });
+      result = await planNextPaymentProcess({ db, epoch: Number(epoch) });
     } else {
       result = await planNextPaymentProcess({ db, epoch: Date.now() });
     }

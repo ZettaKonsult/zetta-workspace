@@ -32,7 +32,7 @@ export default async (params: {
 
 export const listAllPlansToProcess = async (params: {
   db: DatabaseMethod,
-  epoch: any,
+  epoch: number,
 }) => {
   const { db, epoch } = params;
 
@@ -42,7 +42,7 @@ export const listAllPlansToProcess = async (params: {
     FilterExpression: 'epochNextProcess < :epochNextProcess',
     ExpressionAttributeValues: {
       ':companyCustomerId': 'companyCustomerId123',
-      ':epochNextProcess': Number(epoch),
+      ':epochNextProcess': epoch,
     },
   });
   return result.Items;

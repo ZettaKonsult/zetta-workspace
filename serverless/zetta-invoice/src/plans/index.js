@@ -6,6 +6,8 @@
 
 import get from './get';
 import list from './list';
+import save from './save';
+import remove from './remove';
 import { updateRecipientIds } from './update';
 
-export default { get, list, updateRecipientIds };
+export default { get, list, save, updateRecipientIds, remove };

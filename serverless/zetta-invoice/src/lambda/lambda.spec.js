@@ -106,7 +106,7 @@ describe('Lambdas.', () => {
           method: 'get',
         },
         host,
-        path: 'invoice/status/get/companyCustomerId/invoiceId1',
+        path: 'invoice/status/companyCustomerId/invoiceId1',
       });
       expect(result).toEqual(expected);
     });
