@@ -10,6 +10,7 @@ custom:
   webpack:
     webpackConfig: ./webpack.config.js
     includeModules: true
+    packager: 'yarn'
   stage: ${opt:stage, self:provider.stage}
   Invoices: 'Invoices-${self:provider.stage}'
   InvoiceStatuses: 'InvoiceStatuses-${self:provider.stage}'
