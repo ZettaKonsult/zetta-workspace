@@ -4,7 +4,7 @@
  * @date 2018-03-13
  */
 
-import type { AWSEvent, AWSContext } from 'types/AWS';
+import type { AWSEvent, AWSCallback, AWSContext } from 'types/AWS';
 
 import db from '../util/database';
 import parser from '../util/parser';

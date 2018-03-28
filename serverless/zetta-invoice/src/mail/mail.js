@@ -11,7 +11,7 @@ import emailDoc from './emailDoc';
 import prepareTemplate from './prepareTemplate';
 
 import CompanyCustomer from '../invoice/customer';
-import Invoice from '../invoice/invoice';
+import Invoice from '../invoice';
 
 let browser;
 

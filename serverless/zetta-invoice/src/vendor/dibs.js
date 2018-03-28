@@ -5,7 +5,7 @@
  */
 
 import type { DatabaseMethod } from 'types/Database';
-import Invoice from '../invoice/invoice';
+import Invoice from '../invoice';
 import AWS from 'aws-sdk';
 import queryString from 'query-string';
 AWS.config.region = 'eu-west-1';

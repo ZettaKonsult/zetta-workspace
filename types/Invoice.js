@@ -19,13 +19,6 @@ export type Plan = {
 
 export type PlanQuery = {};
 
-export type InvoiceData = {
-  id?: string,
-  companyCustomerId: string,
-  recipientIds: Array<string>,
-  price: number,
-};
-
 export type InvoiceSpecification = {
   companyCustomer: string | CompanyCustomer,
   recipient: Recipient,
@@ -43,9 +36,16 @@ export type InvoiceSpecification = {
 
 export type InvoiceRow = {
   price: number,
-  hours: number,
+  unit: number,
   tax: number,
   description: string,
+};
+
+export type InvoiceData = {
+  id?: string,
+  companyCustomerId: string,
+  recipientIds: Array<string>,
+  invoiceRows: Array<InvoiceRow>,
 };
 
 export type CalculatedInvoiceRow = InvoiceRow & {
@@ -55,11 +55,9 @@ export type CalculatedInvoiceRow = InvoiceRow & {
 export type Invoice = {
   +id: string,
   +createdAt: number,
-  +price: number,
-  unit: string,
+  companyCustomer: string | CompanyCustomer,
   invoiceRows: InvoiceRow[],
   recipients: Array<string> | Array<Recipient>,
-  companyCustomer: string | CompanyCustomer,
   itemStatus: InvoiceStatus,
   locked: boolean,
 };
