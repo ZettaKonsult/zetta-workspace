@@ -44,11 +44,6 @@ const prepareData = (data: {
     invoiceRows: invoice.invoiceRows,
   });
 
-  console.log(calculatedRows);
-  console.log(netTotal);
-  console.log(taxTotal);
-  console.log(sum);
-
   return {
     companyCustomer,
     recipient,
@@ -57,12 +52,11 @@ const prepareData = (data: {
       createdAt: id.toISOString().split('T')[0],
       timeToPay: timeToPay.toISOString().split('T')[0],
     },
-    unit: invoice.unit,
     invoiceRows: calculatedRows,
     discount: discount | 0,
     netTotal,
     taxTotal,
-    sum,
+    total: sum,
     receiver: recipient.company || recipient.firstName,
   };
 };
@@ -83,9 +77,9 @@ const calculatePrice = (params: {
   let sum = 0;
 
   invoiceRows.forEach(invoiceRow => {
-    const { price, hours, tax } = invoiceRow;
+    const { price, unit, tax } = invoiceRow;
     const calculatedRow = { ...invoiceRow };
-    const total = price * hours;
+    const total = price * unit;
 
     calculatedRow.total = total;
     taxTotal += tax * total;

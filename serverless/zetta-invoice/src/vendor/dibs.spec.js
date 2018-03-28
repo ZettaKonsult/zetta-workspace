@@ -1,13 +1,44 @@
-/* @flow */
-
 /**
  * @date 2018-03-05
  */
 
 import request from '../util/http';
 import testConfig from '../util/testConfig';
+import testData from '../util/testData';
 
+const INVOICES = testData.DibsInvoices;
 const host = testConfig.Host;
+
+beforeAll(async () => {
+  INVOICES.forEach(
+    async invoice =>
+      await request({
+        payload: {
+          method: 'post',
+          body: invoice,
+        },
+        host,
+        path: 'invoice',
+      })
+  );
+});
+
+afterAll(async () => {
+  INVOICES.forEach(
+    async invoice =>
+      await request({
+        host,
+        path: 'plans',
+        payload: {
+          method: 'delete',
+          body: {
+            invoiceId: invoice.id,
+            companyCustomer: invoice.companyCustomer,
+          },
+        },
+      })
+  );
+});
 
 describe('Lambdas.', () => {
   describe('CompanyCustomers.', () => {
