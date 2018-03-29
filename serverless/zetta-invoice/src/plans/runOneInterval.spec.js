@@ -1,3 +1,5 @@
+import { incrementToNextLowerBound } from 'date-primitive-utils';
+
 import request from '../util/http';
 import testConfig from '../util/testConfig';
 
@@ -45,25 +47,28 @@ describe('Simulate 1 TRF interval', () => {
   });
 
   it('recipient can be added to plan', async () => {
-    const result = await request({
+    plan = await request({
       host,
       path: 'plans/recipient',
       payload: {
         method: 'post',
         body: {
-          companyCustomerId: 'companyCustomerId123',
+          companyCustomerId,
           recipientId,
           planId: plan.id,
         },
       },
     });
 
-    expect(result.recipientIds).toEqual([recipientId]);
+    expect(plan.recipientIds).toEqual([recipientId]);
   });
 
   it('Returns all proccssed plans', async () => {
     let epoch = Date.now();
-    let startOfNextInterval = 1530403200000;
+    let startOfNextInterval = incrementToNextLowerBound(
+      epoch,
+      plan.intervalCount
+    );
 
     const updatedPlans = await request({
       host,
@@ -72,9 +77,10 @@ describe('Simulate 1 TRF interval', () => {
         method: 'get',
       },
     });
+    plan = updatedPlans[0];
 
     expect(updatedPlans).toHaveLength(1);
-    expect(updatedPlans[0].epochNextProcess).toBe(startOfNextInterval);
+    expect(plan.epochNextProcess).toBe(startOfNextInterval);
   });
 
   it('no plans are updated during the same interval', async () => {
@@ -92,10 +98,11 @@ describe('Simulate 1 TRF interval', () => {
   });
 
   it('plans are update for new interval', async () => {
-    let now = Date.now();
-    let sixMonths = 100000000000;
-    let startOfNextInterval = 1546300800000;
-    let epoch = new Date(now + sixMonths).getTime();
+    let epoch = plan.epochNextProcess + 1;
+    let startOfNextInterval = incrementToNextLowerBound(
+      epoch,
+      plan.intervalCount
+    );
 
     const updatedPlans = await request({
       host,
