@@ -3,17 +3,25 @@ service: ladokParser
 plugins:
   - serverless-webpack
   - serverless-dynamodb-local
+  - serverless-s3-local
   - serverless-offline
 
 custom:
-  webpackIncludeModules: true
+  webpack:
+    webpackConfig: ./webpack.config.js
+    includeModules: true
+    packager: 'yarn'
+
   stage: ${opt:stage, self:provider.stage}
   LadokParseResults: 'LadokParseResults-${self:provider.stage}'
   Recipients: 'Recipients-${self:provider.stage}'
+
   serverless-offline:
     port: 8080
     babelOptions:
       presets: ["env"]
+  s3:
+    port: 8040
   dynamodb:
     start:
       port: 8000
@@ -80,6 +88,12 @@ functions:
           path: ladok/parse
           method: post
           cors: true
+
+  testS3:
+    handler: src/lambda/stuff.testStuff
+    events:
+      - s3: local-bucket
+
 package:
   exclude:
     - node_modules/serverless-dynamodb-local/**
@@ -87,6 +101,10 @@ package:
 
 resources:
   Resources:
+    NewResource:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: local-bucket
     LadokParseResultsTable:
       Type: AWS::DynamoDB::Table
       Properties:

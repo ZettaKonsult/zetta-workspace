@@ -240,3 +240,6 @@ zk-open-modules
 
 # Vscode
 .vscode
+
+#serverless-s3-client
+buckets

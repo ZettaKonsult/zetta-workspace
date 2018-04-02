@@ -14,8 +14,8 @@
     "db:remove": "sls dynamodb remove",
     "deploy:debug": "sls deploy -v",
     "deploy:prod": "sls deploy --stage prod",
-    "prestart": "yarn sls dynamodb install",
-    "start": "yarn sls offline start",
+    "prestart": "sls dynamodb install",
+    "start": "sls offline start",
     "dev:test": "yarn test",
     "test": "jest --env=node",
     "test:staged": "cross-env CI=true yarn test --findRelatedTests",
@@ -47,9 +47,9 @@
     "serverless": "^1.26.0",
     "serverless-dynamodb-local": "^0.2.28",
     "serverless-offline": "3.17.0",
-    "serverless-webpack": "^4.2.0",
-    "webpack": "^2.2.0",
-    "webpack-dev-server": "^2.2.0",
+    "serverless-s3-local": "^0.3.2",
+    "serverless-webpack": "^5.1.1",
+    "webpack": "^4.4.1",
     "webpack-node-externals": "^1.6.0"
   },
   "jest": {
