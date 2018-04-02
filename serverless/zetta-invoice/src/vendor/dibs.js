@@ -95,20 +95,16 @@ export const url = async (params: {
   console.log(`Default values set.`);
 
   try {
-    console.log(
-      `Fetching invoice ${invoiceId}, customer ${companyCustomerId}.`
-    );
+    console.log(`Getting the specified invoice ${invoiceId}.`);
     const invoice = await Invoice.get({
       db,
       companyCustomerId,
       invoiceId,
     });
 
-    console.log(invoice);
     if (invoice == null || invoice.id == null) {
       throw new Error(`No such invoice ${invoiceId}!`);
     }
-    console.log(`Invoice fetched.`);
 
     form = {
       ...form,

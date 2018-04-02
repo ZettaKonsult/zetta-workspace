@@ -7,6 +7,21 @@ import testConfig from '../src/util/testConfig';
 
 const host = testConfig.Host;
 
+afterEach(async () => {
+  await request({
+    host,
+    path: `invoice/lock`,
+    payload: {
+      method: 'post',
+      body: {
+        companyCustomerId: 'companyCustomerId',
+        invoiceId: 'invoiceId1',
+        lock: false,
+      },
+    },
+  });
+});
+
 describe('Mail.', () => {
   it('Send.', async () => {
     const result = await request({
@@ -16,22 +31,11 @@ describe('Mail.', () => {
         method: 'post',
         body: {
           companyCustomerId: 'companyCustomerId',
-          invoiceId: 'invoiceId3',
+          invoiceId: 'invoiceId1',
         },
       },
     });
-    await request({
-      host,
-      path: 'invoice/mail',
-      payload: {
-        method: 'post',
-        body: {
-          companyCustomerId: 'companyCustomerId',
-          invoiceId: 'invoiceId3',
-        },
-      },
-    });
-    expect(result).toEqual({ reference: 5678901234 });
+    expect(result).toEqual({ reference: 3456789012 });
   });
   it('Already paid.', async () => {
     expect(
@@ -46,7 +50,9 @@ describe('Mail.', () => {
           },
         },
       })
-    ).toEqual('Could not send invoice mail: invoice is locked (invoiceId2)!');
+    ).toEqual(
+      'Could not send invoice mail: Can not pay with a locked invoice (invoiceId2)!'
+    );
   });
   it('Wrong customer.', async () => {
     expect(
@@ -91,8 +97,6 @@ describe('Mail.', () => {
           },
         },
       })
-    ).toEqual(
-      'Could not send invoice mail: No such customer (ErrorCustomer)!.'
-    );
+    ).toEqual('Could not send invoice mail: No such customer (ErrorCustomer)!');
   });
 });

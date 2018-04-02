@@ -6,7 +6,6 @@
 
 import RecipientManager from '../recipient';
 import puppeteer from 'puppeteer';
-import db from '../util/database';
 import emailDoc from './emailDoc';
 import prepareTemplate from './prepareTemplate';
 
@@ -16,12 +15,13 @@ import Invoice from '../invoice';
 let browser;
 
 export const sendInvoice = async (params: {
+  db: DatabaseMethod,
   companyCustomerId: string,
   invoiceId: string,
   discount: number,
   tax: number,
 }) => {
-  const { companyCustomerId, invoiceId, discount, tax } = params;
+  const { db, companyCustomerId, invoiceId, discount, tax } = params;
 
   let [companyCustomer, invoice] = await Promise.all([
     CompanyCustomer.get({ db, companyCustomerId }),
@@ -38,33 +38,55 @@ export const sendInvoice = async (params: {
     throw new Error(`Can not pay with a locked invoice (${invoiceId})!`);
   }
 
-  console.log(`Fetched invoice ${invoice.id}.`);
-  console.log(`Fetched customer ${companyCustomer.id}.`);
+  try {
+    await Invoice.lock({ db, companyCustomerId, invoiceId, lock: true });
+  } catch (error) {
+    throw error;
+  }
+
   const recipient = await RecipientManager.get({
     db,
     companyCustomerId,
     recipientId: invoice.recipient,
   });
 
-  if (recipient == null) {
-    throw new Error(`No such recipient (${invoice.recipient})!`);
-  }
-  console.log(`Fetched recipient ${recipient.id}.`);
+  let err;
+  try {
+    if (recipient == null) {
+      throw new Error(`No such recipient (${invoice.recipient})!`);
+    }
+    console.log(`Fetched recipient ${recipient.id}.`);
 
-  await send({ invoice, recipient, discount, tax });
-  return {
-    reference: invoice.createdAt,
-  };
+    await send({ invoice, recipient, discount, tax });
+    return {
+      reference: invoice.createdAt,
+    };
+  } catch (error) {
+    err = error;
+  }
+
+  try {
+    Invoice.lock({ db, companyCustomerId, invoiceId, lock: false });
+  } catch (error) {
+    throw new Error(
+      `Could not unlock invoice after failed send: ${error.message}.` +
+        `\nMail send failure: ${err.message}.`
+    );
+  }
+  throw err;
 };
 
 const getBrowserPage = async (): any => {
+  console.log(`Constructing browser page.`);
   browser = await puppeteer.launch();
   const page = await browser.newPage();
-  console.log(`Fetched browser page.`);
+  console.log(`Constructed browser page.`);
   return page;
 };
 
 export const send = async (params: any) => {
+  console.log(`Preparing template`);
+  console.log(params);
   try {
     let [renderedTemplate, page] = await Promise.all([
       prepareTemplate(params),
@@ -82,7 +104,9 @@ export const send = async (params: any) => {
   } catch (error) {
     throw error;
   } finally {
-    browser.close();
+    if (browser) {
+      browser.close();
+    }
   }
 };
 

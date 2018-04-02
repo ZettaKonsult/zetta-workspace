@@ -15,6 +15,7 @@ const INVOICES_TABLE = getDbTable({ name: 'Invoices' });
 
 export default async (params: {
   db: DatabaseMethod,
+  createdAt: number,
   invoiceId: string,
   companyCustomerId: string,
   invoiceRows: Array<InvoiceRow>,
@@ -23,6 +24,7 @@ export default async (params: {
   const {
     db,
     companyCustomerId,
+    createdAt,
     invoiceId,
     invoiceRows,
     recipientIds,
@@ -35,7 +37,7 @@ export default async (params: {
     recipientIds,
   });
 
-  const creation = Date.now();
+  const creation = createdAt || Date.now();
   const id = invoiceId || cuid();
 
   console.log(`Creating status ${id} at ${creation}.`);

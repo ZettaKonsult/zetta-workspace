@@ -29,6 +29,7 @@
   },
   "dependencies": {
     "aws-sdk": "^2.192.0",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-runtime": "^6.26.0",
     "cuid": "^2.1.0",
     "date-primitive-utils": "^1.1.1",

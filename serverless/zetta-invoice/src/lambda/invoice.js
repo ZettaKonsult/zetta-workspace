@@ -17,9 +17,13 @@ export const create = async (
   context: AWSContext,
   callback: AWSCallback
 ) => {
-  const { invoiceId, companyCustomerId, invoiceRows, recipientIds } = parser(
-    event
-  ).data;
+  const {
+    createdAt,
+    invoiceId,
+    companyCustomerId,
+    invoiceRows,
+    recipientIds,
+  } = parser(event).data;
 
   console.log(
     `Received request for creating an invoice for customer ${companyCustomerId}, recipients ${recipientIds}.`
@@ -28,6 +32,7 @@ export const create = async (
   try {
     const result = await Invoice.create({
       db,
+      createdAt,
       invoiceId,
       companyCustomerId,
       invoiceRows,
@@ -123,9 +128,11 @@ export const lock = async (
   context: AWSContext,
   callback: AWSCallback
 ) => {
-  const { companyCustomerId, invoiceId, lock } = parser(event).params;
+  const { companyCustomerId, invoiceId, lock } = parser(event).data;
   console.log(
-    `Setting lock for invoice ${invoiceId}, customer ${companyCustomerId}, to ${lock}.`
+    `Received request for ${
+      lock ? 'locking' : 'unlocking'
+    } invoice ${invoiceId}, customer ${companyCustomerId}.`
   );
 
   try {
@@ -135,7 +142,6 @@ export const lock = async (
       invoiceId,
       lock: lock === 'true',
     });
-    console.log(success(result));
     callback(null, success(result));
   } catch (error) {
     console.error(error);
@@ -148,7 +154,7 @@ export const remove = async (
   context: AWSContext,
   callback: AWSCallback
 ) => {
-  const { companyCustomerId, invoiceId } = parser(event).params;
+  const { companyCustomerId, invoiceId } = parser(event).data;
 
   console.log(
     `Received request to remove invoice ${invoiceId}, customer ${companyCustomerId}.`

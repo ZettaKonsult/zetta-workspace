@@ -6,7 +6,6 @@
 
 import type { DatabaseMethod } from 'types/Database';
 
-import lock from './lock';
 import Mail from '../mail/mail';
 
 export default async (params: {
@@ -27,34 +26,16 @@ export default async (params: {
   );
 
   try {
-    await lock({ db, companyCustomerId, invoiceId, lock: true });
-  } catch (error) {
-    throw error;
-  }
-
-  let err = false;
-  let result;
-  try {
-    result = await Mail.sendInvoice({
+    return await Mail.sendInvoice({
+      db,
       companyCustomerId,
       invoiceId,
       discount,
       tax,
     });
-    return result;
   } catch (error) {
-    err = error;
+    throw new Error(`Could not send invoice mail: ${error.message}`);
   }
-
-  try {
-    lock({ db, companyCustomerId, invoiceId, lock: false });
-  } catch (error) {
-    throw new Error(
-      `Could not unlock invoice after failed send: ${error.message}.`
-    );
-  }
-
-  throw new Error(`Could not send invoice mail: ${err.message}.`);
 };
 
 const zeroIfNull = (params: { numbers: Array<any> }): Array<number> =>

@@ -32,6 +32,10 @@ custom:
         sources:
           - table: ${self:custom.CompanyCustomers}
             sources: [./offline/seeds/companyCustomers.json]
+          - table: ${self:custom.Invoices}
+            sources: [./offline/seeds/invoices.json]
+          - table: ${self:custom.InvoiceStatuses}
+            sources: [./offline/seeds/invoiceStatuses.json]
           - table: ${self:custom.Recipients}
             sources: [./offline/seeds/recipients.json]
 
@@ -88,12 +92,12 @@ functions:
           path: /invoice/{companyCustomerId}
           method: get
           cors: true
-  removeInvoice:
-    handler: src/lambda/invoice.remove
+  lockInvoice:
+    handler: src/lambda/invoice.lock
     events:
       - http:
-          path: /invoice/{companyCustomerId}/{invoiceId}
-          method: delete
+          path: /invoice/lock/
+          method: post
           cors: true
   sendInvoice:
     handler: src/lambda/invoice.send
@@ -102,6 +106,14 @@ functions:
           path: /invoice/mail
           method: post
           cors: true
+  removeInvoice:
+    handler: src/lambda/invoice.remove
+    events:
+      - http:
+          path: /invoice
+          method: delete
+          cors: true
+
   getInvoiceStatus:
     handler: src/lambda/invoice.getStatuses
     events:
@@ -115,13 +127,6 @@ functions:
       - http:
           path: /invoice/status/{invoiceId}
           method: get
-          cors: true
-  removeInvoiceStatuses:
-    handler: src/lambda/invoice.removeStatuses
-    events:
-      - http:
-          path: /invoice/status/{companyCustomerId}/{invoiceId}
-          method: delete
           cors: true
   setInvoiceStatus:
     handler: src/lambda/invoice.setStatus
