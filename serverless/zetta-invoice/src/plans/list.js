@@ -39,7 +39,7 @@ export const listAllPlansToProcess = async (params: {
   const result = await db('query', {
     TableName: table,
     KeyConditionExpression: 'companyCustomerId = :companyCustomerId',
-    FilterExpression: 'epochNextProcess < :epochNextProcess',
+    FilterExpression: 'epochNextProcess <= :epochNextProcess',
     ExpressionAttributeValues: {
       ':companyCustomerId': 'companyCustomerId123',
       ':epochNextProcess': epoch,

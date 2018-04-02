@@ -4,34 +4,31 @@ import request from '../util/http';
 import testConfig from '../util/testConfig';
 
 const host = testConfig.Host;
+
 const companyCustomerId = 'companyCustomerId123';
 const recipientId = 'recipientId';
-let plan = {
-  name: 'TestPlan',
-  price: 0,
-  interval: 'month',
-  intervalCount: 6,
-  labels: ['union'],
-  group: ['studentlund'],
-};
+let plans = [
+  {
+    name: 'TestPlan',
+    price: 0,
+    interval: 'month',
+    intervalCount: 1,
+    labels: ['union'],
+    group: ['studentlund'],
+  },
+  {
+    name: 'TestPlan1',
+    price: 0,
+    interval: 'month',
+    intervalCount: 6,
+    labels: ['union'],
+    group: ['studentlund'],
+  },
+];
 
-afterAll(async () => {
-  await request({
-    host,
-    path: 'plans',
-    payload: {
-      method: 'delete',
-      body: {
-        planId: plan.id,
-        companyCustomerId,
-      },
-    },
-  });
-});
-
-describe('Simulate 1 TRF interval', () => {
-  it('new plan is created', async () => {
-    plan = await request({
+beforeAll(async () => {
+  let promise = plans.map(plan =>
+    request({
       host,
       path: 'plans',
       payload: {
@@ -41,12 +38,17 @@ describe('Simulate 1 TRF interval', () => {
           plan,
         },
       },
-    });
+    })
+  );
+  plans = await Promise.all(promise);
+});
 
-    expect(plan).toHaveProperty('id');
-  });
+describe('Simulate 1 TRF interval', () => {
+  let testPlans = [];
 
   it('recipient can be added to plan', async () => {
+    let plan = plans[0];
+
     plan = await request({
       host,
       path: 'plans/recipient',
@@ -64,23 +66,23 @@ describe('Simulate 1 TRF interval', () => {
   });
 
   it('Returns all proccssed plans', async () => {
+    let plan = plans[0];
     let epoch = Date.now();
     let startOfNextInterval = incrementToNextLowerBound(
       epoch,
       plan.intervalCount
     );
 
-    const updatedPlans = await request({
+    testPlans = await request({
       host,
       path: `plans/test/${epoch}`,
       payload: {
         method: 'get',
       },
     });
-    plan = updatedPlans[0];
 
-    expect(updatedPlans).toHaveLength(1);
-    expect(plan.epochNextProcess).toBe(startOfNextInterval);
+    expect(testPlans).toHaveLength(2);
+    expect(testPlans[0].epochNextProcess).toBe(startOfNextInterval);
   });
 
   it('no plans are updated during the same interval', async () => {
@@ -98,7 +100,8 @@ describe('Simulate 1 TRF interval', () => {
   });
 
   it('plans are update for new interval', async () => {
-    let epoch = plan.epochNextProcess + 1;
+    let plan = testPlans[0];
+    let epoch = plan.epochNextProcess;
     let startOfNextInterval = incrementToNextLowerBound(
       epoch,
       plan.intervalCount
@@ -115,4 +118,21 @@ describe('Simulate 1 TRF interval', () => {
     expect(updatedPlans).toHaveLength(1);
     expect(updatedPlans[0].epochNextProcess).toBe(startOfNextInterval);
   });
+});
+
+afterAll(async () => {
+  let promise = plans.map(({ id }) =>
+    request({
+      host,
+      path: 'plans',
+      payload: {
+        method: 'delete',
+        body: {
+          planId: id,
+          companyCustomerId,
+        },
+      },
+    })
+  );
+  await Promise.all(promise);
 });
