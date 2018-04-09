@@ -27,6 +27,7 @@ export type CompanyCustomer = {
   zipcode: string,
   createdAt: string,
   VAT: string,
+  defaultTax: number,
   bank: {
     giro: string,
     name: string,

@@ -2,8 +2,8 @@
  * @date 2018-03-05
  */
 
-import request from '../util/http';
-import testConfig from '../util/testConfig';
+import request from '../../util/http';
+import testConfig from '../../util/testConfig';
 
 const host = testConfig.Host;
 
@@ -43,7 +43,7 @@ describe('Lambdas.', () => {
           createdAt: 3456789012,
           id: 'invoiceId1',
           invoiceRows: [
-            { description: '1an', hours: 12, price: 123, tax: 0.01 },
+            { description: '1an', unit: 12, price: 123, tax: 0.01 },
           ],
           itemStatus: {
             createdAt: 3456789012,
@@ -63,11 +63,11 @@ describe('Lambdas.', () => {
           invoiceRows: [
             {
               description: '2an A',
-              hours: 23,
+              unit: 23,
               price: 234,
               tax: 0.02,
             },
-            { description: '2an B', hours: 23, price: 234, tax: 0.02 },
+            { description: '2an B', unit: 23, price: 234, tax: 0.02 },
           ],
           itemStatus: {
             createdAt: 4567890123,
@@ -85,9 +85,9 @@ describe('Lambdas.', () => {
           createdAt: 5678901234,
           id: 'invoiceId3',
           invoiceRows: [
-            { description: '3an A', hours: 34, price: 345, tax: 0.25 },
-            { description: '3an B', hours: 34, price: 345, tax: 0.25 },
-            { description: '3an C', hours: 34, price: 345, tax: 0.25 },
+            { description: '3an A', unit: 34, price: 345, tax: 0.25 },
+            { description: '3an B', unit: 34, price: 345, tax: 0.25 },
+            { description: '3an C', unit: 34, price: 345, tax: 0.25 },
           ],
           itemStatus: {
             createdAt: 5678901234,
@@ -132,9 +132,9 @@ describe('Lambdas.', () => {
             invoiceId: 'createdId',
             createdAt: 12345,
             invoiceRows: [
-              { description: '3an A', hours: 34, price: 345, tax: 0.25 },
-              { description: '3an B', hours: 34, price: 345, tax: 0.25 },
-              { description: '3an C', hours: 34, price: 345, tax: 0.25 },
+              { description: '3an A', unit: 34, price: 345, tax: 0.25 },
+              { description: '3an B', unit: 34, price: 345, tax: 0.25 },
+              { description: '3an C', unit: 34, price: 345, tax: 0.25 },
             ],
             recipientIds: ['recipientId1'],
           },
@@ -143,9 +143,9 @@ describe('Lambdas.', () => {
 
       expect(result.companyCustomer).toEqual('companyCustomerId');
       expect(result.invoiceRows).toEqual([
-        { description: '3an A', hours: 34, price: 345, tax: 0.25 },
-        { description: '3an B', hours: 34, price: 345, tax: 0.25 },
-        { description: '3an C', hours: 34, price: 345, tax: 0.25 },
+        { description: '3an A', unit: 34, price: 345, tax: 0.25 },
+        { description: '3an B', unit: 34, price: 345, tax: 0.25 },
+        { description: '3an C', unit: 34, price: 345, tax: 0.25 },
       ]);
       expect(result.id).toEqual('createdId');
       expect(result.createdAt).toEqual(12345);

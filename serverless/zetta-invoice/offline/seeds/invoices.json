@@ -8,7 +8,7 @@
       "unit": "Timmar",
       "invoiceRows": [{
         "price": 123,
-        "hours": 12,
+        "unit": 12,
         "tax": 0.01,
         "description": "1an"
       }],
@@ -29,12 +29,12 @@
       "unit": "Timmar",
       "invoiceRows": [{
         "price": 234,
-        "hours": 23,
+        "unit": 23,
         "tax": 0.02,
         "description": "2an A"
       },{
         "price": 234,
-        "hours": 23,
+        "unit": 23,
         "tax": 0.02,
         "description": "2an B"
       }],
@@ -55,17 +55,17 @@
       "unit": "Timmar",
       "invoiceRows": [{
         "price": 345,
-        "hours": 34,
+        "unit": 34,
         "tax": 0.25,
         "description": "3an A"
       },{
         "price": 345,
-        "hours": 34,
+        "unit": 34,
         "tax": 0.25,
         "description": "3an B"
       },{
         "price": 345,
-        "hours": 34,
+        "unit": 34,
         "tax": 0.25,
         "description": "3an C"
       }],
@@ -74,6 +74,27 @@
         "invoiceId": "invoiceId3",
         "createdAt": 5678901234,
         "itemStatus": "canceled"
+      },
+      "locked": false
+    },
+    {
+      "id": "invoiceId1A",
+      "companyCustomer": "companyCustomerIdA",
+      "price": "1234",
+      "recipient": "recipientIdA",
+      "createdAt": 3456789012,
+      "unit": "Timmar",
+      "invoiceRows": [{
+        "price": 123,
+        "unit": 12,
+        "tax": 0.01,
+        "description": "Aan"
+      }],
+      "itemStatus": {
+        "id": "itemStatusId1A",
+        "invoiceId": "invoiceId1A",
+        "createdAt": 3456789012,
+        "itemStatus": "pending"
       },
       "locked": false
     }

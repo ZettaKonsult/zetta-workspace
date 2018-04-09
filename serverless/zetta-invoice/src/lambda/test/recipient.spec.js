@@ -2,8 +2,8 @@
  * @date 2018-03-05
  */
 
-import request from '../util/http';
-import testConfig from '../util/testConfig';
+import request from '../../util/http';
+import testConfig from '../../util/testConfig';
 
 const host = testConfig.Host;
 

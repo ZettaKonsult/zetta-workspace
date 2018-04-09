@@ -4,6 +4,8 @@
  * @date 2018-03-12
  */
 
+import type { DatabaseMethod } from 'types/Database';
+import Customer from '../invoice/customer';
 import RecipientManager from '../recipient';
 import puppeteer from 'puppeteer';
 import emailDoc from './emailDoc';
@@ -18,10 +20,11 @@ export const sendInvoice = async (params: {
   db: DatabaseMethod,
   companyCustomerId: string,
   invoiceId: string,
-  discount: number,
-  tax: number,
+  discount?: number,
+  defaultTax?: number,
 }) => {
-  const { db, companyCustomerId, invoiceId, discount, tax } = params;
+  const { db, companyCustomerId, invoiceId, discount } = params;
+  let { defaultTax } = params;
 
   let [companyCustomer, invoice] = await Promise.all([
     CompanyCustomer.get({ db, companyCustomerId }),
@@ -50,27 +53,35 @@ export const sendInvoice = async (params: {
     recipientId: invoice.recipient,
   });
 
-  let err;
+  if (defaultTax == null) {
+    defaultTax = (await Customer.get({
+      db,
+      companyCustomerId,
+    })).defaultTax;
+  }
+
+  let err = { message: 'Unknown error.' };
   try {
     if (recipient == null) {
       throw new Error(`No such recipient (${invoice.recipient})!`);
     }
     console.log(`Fetched recipient ${recipient.id}.`);
 
-    await send({ invoice, recipient, discount, tax });
+    await send({ invoice, recipient, discount, defaultTax });
     return {
       reference: invoice.createdAt,
     };
   } catch (error) {
     err = error;
   }
+  const msg = err.message;
 
   try {
     Invoice.lock({ db, companyCustomerId, invoiceId, lock: false });
   } catch (error) {
     throw new Error(
       `Could not unlock invoice after failed send: ${error.message}.` +
-        `\nMail send failure: ${err.message}.`
+        `\nMail send failure: ${msg}.`
     );
   }
   throw err;
@@ -86,7 +97,7 @@ const getBrowserPage = async (): any => {
 
 export const send = async (params: any) => {
   console.log(`Preparing template`);
-  console.log(params);
+
   try {
     let [renderedTemplate, page] = await Promise.all([
       prepareTemplate(params),

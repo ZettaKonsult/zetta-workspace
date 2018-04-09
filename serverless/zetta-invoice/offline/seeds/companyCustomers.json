@@ -10,10 +10,29 @@
     "zipcode": "12345",
     "company": "Company AB",
     "email": "firstName@company.com",
+    "defaultTax": 0.25,
     "bank": {
       "giro": "123-4567",
       "name": "MoneyBank"
     },
     "createdAt": 1234567890
+  },
+  {
+    "id": "companyCustomerIdA",
+    "firstName": "FirstNameA",
+    "lastName": "LastNameA",
+    "city": "CityA",
+    "address": "Road 123AA",
+    "mobile": "+46761234567A",
+    "VAT": "XX123456789101A",
+    "zipcode": "12345A",
+    "company": "Company ABA",
+    "email": "firstNameA@company.com",
+    "defaultTax": 0.2,
+    "bank": {
+      "giro": "234-5678",
+      "name": "MoneyBankA"
+    },
+    "createdAt": 2345678901
   }
 ]

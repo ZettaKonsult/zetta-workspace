@@ -12,14 +12,14 @@ export default async (params: {
   db: DatabaseMethod,
   invoiceId: string,
   companyCustomerId: string,
-  discount?: number,
   tax?: number,
+  discount?: number,
 }): Promise<{ reference: string }> => {
   const { db, invoiceId, companyCustomerId } = params;
   let { discount, tax } = params;
 
-  [discount, tax] = zeroIfNull({ numbers: [discount, tax] });
-  console.log(`Found discount and tax: ${discount} and ${tax}.`);
+  [discount] = zeroIfNull({ numbers: [discount] });
+  console.log(`Found discount and tax: ${discount}.`);
 
   console.log(
     `Mailing process for invoice ${invoiceId}, customer ${companyCustomerId} started.`

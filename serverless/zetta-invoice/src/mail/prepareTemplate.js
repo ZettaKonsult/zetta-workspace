@@ -29,12 +29,13 @@ const readFileAsync = promisify(fs.readFile);
 const readTemplateFile = async () =>
   await readFileAsync('./src/template/template.html', 'utf8');
 
-const prepareData = (data: {
+export const prepareData = (data: {
   discount: number,
   recipient: Recipient,
   invoice: Invoice,
+  defaultTax: number,
 }): InvoiceSpecification => {
-  const { discount, recipient, invoice } = data;
+  const { discount, recipient, invoice, defaultTax } = data;
   const { companyCustomer } = invoice;
 
   const id = new Date(invoice.createdAt);
@@ -42,6 +43,7 @@ const prepareData = (data: {
 
   const { calculatedRows, netTotal, taxTotal, sum } = calculatePrice({
     invoiceRows: invoice.invoiceRows,
+    defaultTax,
   });
 
   return {
@@ -63,13 +65,14 @@ const prepareData = (data: {
 
 const calculatePrice = (params: {
   invoiceRows: Array<InvoiceRow>,
+  defaultTax: number,
 }): {
   calculatedRows: Array<CalculatedInvoiceRow>,
   netTotal: number,
   taxTotal: number,
   sum: number,
 } => {
-  const { invoiceRows } = params;
+  const { invoiceRows, defaultTax } = params;
 
   const calculatedRows = [];
 
@@ -77,7 +80,13 @@ const calculatePrice = (params: {
   let sum = 0;
 
   invoiceRows.forEach(invoiceRow => {
-    const { price, unit, tax } = invoiceRow;
+    const { price, unit } = invoiceRow;
+    let { tax } = invoiceRow;
+
+    if (tax == null) {
+      tax = defaultTax;
+    }
+
     const calculatedRow = { ...invoiceRow };
     const total = price * unit;
 

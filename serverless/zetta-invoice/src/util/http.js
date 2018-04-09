@@ -14,6 +14,7 @@ type Payload = {
   method: string,
 };
 
+const VERBOSE = false;
 const headers = {
   Accept: 'application/json, text/plain, */*',
   'Content-Type': 'application/json',
@@ -28,10 +29,13 @@ export default async (params: {
   const { host, payload } = params;
   const { body, method } = payload;
   const bodyString = JSON.stringify(body);
-
-  // console.log(`${method} REQUEST: ${params.path}: ${bodyString}.`);
   const args =
     body == null ? { headers, method } : { body: bodyString, headers, method };
+
+  if (VERBOSE) {
+    console.log(`${method} REQUEST: ${params.path}: ${bodyString}.`);
+  }
+
   return new Promise(resolve => {
     fetch(`${host}/${params.path}`, args)
       .then(response => response.json())

@@ -5,7 +5,7 @@
  */
 
 import type { DatabaseMethod } from 'types/Database';
-import type { InvoiceStatus } from 'types/InvoiceStatus';
+import type { InvoiceStatus } from 'types/Invoice';
 
 import { getDbTable } from '../util/database';
 import cuid from 'cuid';

@@ -14,8 +14,8 @@ afterEach(async () => {
     payload: {
       method: 'post',
       body: {
-        companyCustomerId: 'companyCustomerId',
-        invoiceId: 'invoiceId1',
+        companyCustomerId: 'companyCustomerIdA',
+        invoiceId: 'invoiceId1A',
         lock: false,
       },
     },
@@ -30,8 +30,8 @@ describe('Mail.', () => {
       payload: {
         method: 'post',
         body: {
-          companyCustomerId: 'companyCustomerId',
-          invoiceId: 'invoiceId1',
+          companyCustomerId: 'companyCustomerIdA',
+          invoiceId: 'invoiceId1A',
         },
       },
     });

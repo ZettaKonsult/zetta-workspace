@@ -22,5 +22,11 @@
     "invoiceId": "invoiceId3",
     "createdAt": 5678901234,
     "itemStatus": "canceled"
+  },
+  {
+    "id": "itemStatusId1A",
+    "invoiceId": "invoiceId1A",
+    "createdAt": 3456789012,
+    "itemStatus": "pending"
   }
 ]
