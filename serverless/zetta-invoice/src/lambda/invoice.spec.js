@@ -171,18 +171,34 @@ describe('Lambdas.', () => {
   });
 
   describe('InvoiceStatuses.', () => {
-    it('Get.', async () => {
+    it('Get one.', async () => {
+      const expected = {
+        id: 'itemStatusId1',
+        invoiceId: 'invoiceId1',
+        createdAt: 3456789012,
+        itemStatus: 'pending',
+      };
+      const result = await request({
+        payload: {
+          method: 'get',
+        },
+        host,
+        path: 'invoice/status/companyCustomerId/invoiceId1',
+      });
+      expect(result).toEqual(expected);
+    });
+    it('Get many.', async () => {
       const expected = [
         {
-          createdAt: 3456789012,
           id: 'itemStatusId1',
           invoiceId: 'invoiceId1',
+          createdAt: 3456789012,
           itemStatus: 'pending',
         },
         {
-          createdAt: 6789012345,
           id: 'itemStatusId2',
           invoiceId: 'invoiceId1',
+          createdAt: 6789012345,
           itemStatus: 'succeeded',
         },
       ];
@@ -191,7 +207,7 @@ describe('Lambdas.', () => {
           method: 'get',
         },
         host,
-        path: 'invoice/status/companyCustomerId/invoiceId1',
+        path: 'invoice/status/invoiceId1',
       });
       expect(result).toEqual(expected);
     });

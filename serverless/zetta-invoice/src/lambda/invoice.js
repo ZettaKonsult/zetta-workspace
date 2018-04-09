@@ -94,13 +94,13 @@ export const getStatus = async (
   callback: AWSCallback
 ) => {
   const { companyCustomerId, invoiceId } = parser(event).params;
-  console.log(`parser(event).params`);
+
   try {
-    const result = await Invoice.get({
+    const result = (await Invoice.get({
       db,
       companyCustomerId,
       invoiceId,
-    }).itemStatus;
+    })).itemStatus;
     callback(null, success(result));
   } catch (error) {
     console.error(error);
@@ -114,6 +114,7 @@ export const getStatuses = async (
   callback: AWSCallback
 ) => {
   const { invoiceId } = parser(event).params;
+
   try {
     const result = await Status.get({ db, invoiceId });
     callback(null, success(result));
