@@ -68,19 +68,19 @@ provider:
 functions:
   #This returns the result of all assignment results
   getNewAssignments:
-    handler: src/lambda/getAssignments.getNewAssignments
+    handler: src/lambda/assignments.getNewAssignments
     events:
       - http:
-          path: assignments/get
+          path: assignments/
           method: get
           cors: true
 
   #This is the commit of for all the parsed files
   saveNewAssignments:
-    handler: src/lambda/saveAssignments.saveNewAssignments
+    handler: src/lambda/assignments.saveNewAssignments
     events:
       - http:
-          path: assignments/save
+          path: assignments/
           method: put
           cors: true
 

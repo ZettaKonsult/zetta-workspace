@@ -33,7 +33,7 @@ describe('check pipeline for uploading and parsing', () => {
       );
       await Promise.all(promise);
 
-      const result = await request({ path: 'assignments/get' });
+      const result = await request({ path: 'assignments' });
 
       expect(result).toEqual({
         created: {
