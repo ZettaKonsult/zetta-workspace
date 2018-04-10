@@ -6,56 +6,47 @@
 
 import type { AWSCallback, AWSContext, AWSEvent } from 'types/AWS';
 import type { ParsedUser } from '../types';
-import AWS from 'aws-sdk';
 import cuid from 'cuid';
-import { parseString } from '../parser/ladokParser';
-import { getDbTable } from '../util/database';
 
-const table = getDbTable({ name: 'LadokParseResults' });
-const s3 = new AWS.S3();
-AWS.config.update({ region: 'eu-central-1' });
-const dynamoDb = new AWS.DynamoDB.DocumentClient();
+import parser from '../util/parser';
+import { getS3Object } from '../util/s3';
+import db, { getDbTable } from '../util/database';
+import { success, failure } from '../util/response';
+import { parseString } from '../parser/ladokParser';
+
+const TableName = getDbTable({ name: 'LadokParseResults' });
 
 export const parseUploadedFile = async (
   event: AWSEvent,
   context: AWSContext,
   callback: AWSCallback
 ) => {
-  const fileRepo = event.Records[0].s3;
-  const bucketName = fileRepo.bucket.name;
-  const fileName = fileRepo.object.key;
+  let fileName;
+  let bucketName;
 
-  console.log(`Fetching object; Bucket: ${bucketName}, File: ${fileName}`);
-
-  s3.getObject(
-    {
-      Bucket: bucketName,
-      Key: fileName,
-    },
-    async function(error, data) {
-      if (error) {
-        console.log(`Error while getting bucket object: ${error}`, error.stack);
-        callback(error);
-      } else {
-        try {
-          let people = await parseData(
-            data.Body.toString('utf-8'),
-            fileName,
-            callback
-          );
-          await updateDatabase(people, fileName, callback);
-        } catch (error) {
-          console.error(error);
-        }
-      }
-    }
-  );
+  if (process.env.IS_OFFLINE) {
+    fileName = parser(event).data.fileName;
+    bucketName = process.env.S3UploadFolder;
+  } else {
+    const fileRepo = event.Records[0].s3;
+    bucketName = fileRepo.bucket.name;
+    fileName = fileRepo.object.key;
+    console.log(`Fetching object; Bucket: ${bucketName}, File: ${fileName}`);
+  }
+  try {
+    const data = await getS3Object({ bucketName, fileName });
+    let people = await parseData(data.Body.toString('utf-8'), fileName);
+    const result = await updateDatabase(db, people, fileName);
+    callback(null, success(result));
+  } catch (error) {
+    console.error('Error happend', error);
+    callback(null, failure(error.message));
+  }
 };
 
 export const parseData = async (
   dataString: string,
-  fileName: string,
-  callback: AWSCallback
+  fileName: string
 ): Promise<Array<ParsedUser>> => {
   let people = [];
   try {
@@ -70,13 +61,12 @@ export const parseData = async (
 };
 
 const updateDatabase = async (
+  db,
   people: Array<ParsedUser>,
-  fileName: string,
-  callback: AWSCallback
+  fileName: string
 ) => {
   const params = {
-    TableName: table,
-
+    TableName,
     Item: {
       id: cuid(),
       file: fileName,
@@ -85,28 +75,10 @@ const updateDatabase = async (
     },
   };
 
-  dynamoDb.put(params, (error, data) => {
-    const headers = {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Credentials': true,
-    };
-
-    if (error) {
-      const response = {
-        statusCode: 500,
-        headers: headers,
-        body: JSON.stringify({ status: false }),
-      };
-      console.error(`Error updating table ${params.TableName}:\n${error}`);
-      callback(null, response);
-      return;
-    }
-
-    const response = {
-      statusCode: 200,
-      headers: headers,
-      body: JSON.stringify(params.Item),
-    };
-    callback(null, response);
-  });
+  try {
+    await db('put', params);
+    return params.Item;
+  } catch (error) {
+    throw error;
+  }
 };

@@ -9,13 +9,13 @@
     "url": "https://github.com/ZettaKonsult/zetta-workspace.git"
   },
   "scripts": {
-    "build": "yarn cross-env BABEL_ENV=lambda babel src -d dist",
-    "build:watch": "yarn build -w",
+    "build": "cross-env BABEL_ENV=lambda sls package",
     "db:remove": "sls dynamodb remove",
     "deploy:debug": "sls deploy -v",
     "deploy:prod": "sls deploy --stage prod",
     "prestart": "sls dynamodb install",
     "start": "sls offline start",
+    "start:debug": "cross-env SLS_DEBUG=* yarn start",
     "dev:test": "yarn test",
     "test": "jest --env=node",
     "test:staged": "cross-env CI=true yarn test --findRelatedTests",
@@ -37,24 +37,19 @@
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
-    "babel-loader": "^7.1.2",
+    "babel-loader": "7.1.2",
     "babel-plugin-source-map-support": "^1.0.0",
     "babel-plugin-transform-runtime": "^6.23.0",
     "babel-preset-env": "^1.6.1",
     "babel-preset-stage-3": "^6.24.1",
     "cross-env": "^5.1.4",
     "jest": "^22.2.2",
-    "serverless": "^1.26.0",
+    "serverless": "^1.26.1",
     "serverless-dynamodb-local": "^0.2.28",
-    "serverless-offline": "3.17.0",
+    "serverless-offline": "3.20.1",
     "serverless-s3-local": "^0.3.2",
     "serverless-webpack": "^5.1.1",
     "webpack": "^4.4.1",
     "webpack-node-externals": "^1.6.0"
-  },
-  "jest": {
-    "transform": {
-      "^.+\\.jsx?$": "babel-jest"
-    }
   }
 }

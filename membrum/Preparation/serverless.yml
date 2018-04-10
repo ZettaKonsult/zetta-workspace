@@ -13,13 +13,14 @@ custom:
     packager: 'yarn'
 
   stage: ${opt:stage, self:provider.stage}
-  LadokParseResults: 'LadokParseResults-${self:provider.stage}'
-  Recipients: 'Recipients-${self:provider.stage}'
+  LadokParseResults: 'LadokParseResults-${self:custom.stage}'
+  Recipients: 'Recipients-${self:custom.stage}'
+  S3UploadFolder: 'ladok-uploads-${self:custom.stage}'
 
   serverless-offline:
     port: 8080
     babelOptions:
-      presets: ["env"]
+      presets: ["env", "flow"]
   s3:
     port: 8040
   dynamodb:
@@ -38,7 +39,7 @@ custom:
 
 provider:
   name: aws
-  runtime: nodejs6.10
+  runtime: nodejs8.10
   stage: dev
   region: eu-central-1
   iamRoleStatements:
@@ -51,20 +52,21 @@ provider:
         - dynamodb:UpdateItem
       Resource:
         - { "Fn::GetAtt": ["LadokParseResultsTable", "Arn" ] }
-        - { "Fn::Join": [ "", [ "Fn::GetAtt": ["RecipientsTable", "Arn" ], "/index/ssn" ] ] }
-        - { "Fn::GetAtt": ["RecipientsTable", "Arn" ] }
+        - { "Fn::GetAtt": ["RecipientsTable", "Arn"] }
+
     - Effect: Allow
       Action:
         - s3:getObject
       Resource:
-        - arn:aws:s3:::ladok-files/*
+        - { "Fn::GetAtt": ["S3UploadBucket", "Arn"] }
+
   environment:
+    S3UploadFolder: ${self:custom.S3UploadFolder}
     LadokParseResults: ${self:custom.LadokParseResults}
     Recipients: ${self:custom.Recipients}
 
-dynamodb:Query on resource: arn:aws:dynamodb:eu-central-1:460056602695:table/Recipients-dev/index/ssn
-
 functions:
+  #This returns the result of all assignment results
   getNewAssignments:
     handler: src/lambda/getAssignments.getNewAssignments
     events:
@@ -73,6 +75,7 @@ functions:
           method: get
           cors: true
 
+  #This is the commit of for all the parsed files
   saveNewAssignments:
     handler: src/lambda/saveAssignments.saveNewAssignments
     events:
@@ -81,6 +84,7 @@ functions:
           method: put
           cors: true
 
+  #Should be invoked when a file is uploaded
   parseUploadedFile:
     handler: src/lambda/parse.parseUploadedFile
     events:
@@ -89,22 +93,19 @@ functions:
           method: post
           cors: true
 
-  testS3:
-    handler: src/lambda/stuff.testStuff
-    events:
-      - s3: local-bucket
-
 package:
   exclude:
     - node_modules/serverless-dynamodb-local/**
     - node_modules/serverless-offline/**
+    - node_modules/serverless-s3-local/**
+    - /*.spec.js
 
 resources:
   Resources:
-    NewResource:
+    S3UploadBucket:
       Type: AWS::S3::Bucket
       Properties:
-        BucketName: local-bucket
+        BucketName: ${self:custom.S3UploadFolder}
     LadokParseResultsTable:
       Type: AWS::DynamoDB::Table
       Properties:
