@@ -5,9 +5,11 @@
  */
 
 import type { AWSCallback, AWSContext, AWSEvent } from 'types/AWS';
-import { failure, success } from '../util/response';
 import AWS from 'aws-sdk';
-import { getAssignments } from './assign';
+
+import { failure, success } from '../util/response';
+
+import { getAssignments } from '../assigner';
 import * as User from '../user';
 
 AWS.config.update({ region: 'eu-central-1' });
