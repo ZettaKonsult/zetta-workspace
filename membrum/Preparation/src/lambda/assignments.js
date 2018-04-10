@@ -5,11 +5,25 @@
  */
 
 import type { AWSCallback, AWSContext, AWSEvent } from 'types/AWS';
+import { failure, success } from '../util/response';
 import AWS from 'aws-sdk';
-import * as User from '../user';
 import { getAssignments } from './assign';
+import * as User from '../user';
 
 AWS.config.update({ region: 'eu-central-1' });
+
+export const getNewAssignments = async (
+  event: AWSEvent,
+  context: AWSContext,
+  callback: AWSCallback
+) => {
+  try {
+    callback(null, success(await getAssignments(callback)));
+  } catch (error) {
+    console.error(error);
+    callback(null, failure(error.message));
+  }
+};
 
 export const saveNewAssignments = async (
   event: AWSEvent,
@@ -18,7 +32,6 @@ export const saveNewAssignments = async (
 ) => {
   try {
     const assignments = await getAssignments(callback);
-    // const users = Object.assign({}, assignments.created, assignments.modified);
 
     const result = await User.saveUnions(assignments);
     console.log(`Done saving new users.`);
