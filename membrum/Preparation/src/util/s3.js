@@ -1,15 +1,14 @@
-import AWS from 'aws-sdk';
-
-AWS.config.update({ region: 'eu-central-1' });
+import S3 from 'aws-sdk/clients/s3';
 
 export const getS3Instance = () => {
   if (process.env.IS_OFFLINE) {
-    return new AWS.S3({
+    return new S3({
       s3ForcePathStyle: true,
-      endpoint: new AWS.Endpoint('http://localhost:8040'),
+      region: 'eu-central-1',
+      endpoint: 'http://localhost:8040',
     });
   } else {
-    return new AWS.S3();
+    return new S3({ region: 'eu-central-1' });
   }
 };
 

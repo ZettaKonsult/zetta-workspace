@@ -16,7 +16,6 @@
     "prestart": "sls dynamodb install",
     "start": "sls offline start",
     "start:debug": "cross-env SLS_DEBUG=* yarn start",
-    "dev:test": "yarn test",
     "test": "jest --env=node",
     "test:staged": "cross-env CI=true yarn test --findRelatedTests",
     "test:watch": "yarn test --watch"
@@ -24,18 +23,14 @@
   "dependencies": {
     "array-equal": "^1.0.0",
     "aws-sdk": "^2.180.0",
-    "babel-cli": "^6.26.0",
-    "babel-preset-flow": "^6.23.0",
     "babel-runtime": "^6.26.0",
     "common-js-utils": "^1.5.1",
     "cuid": "^2.0.2",
-    "dynamodb-local": "^0.0.20",
-    "password-generator": "^2.2.0",
     "source-map-support": "^0.5.3",
-    "zk-csv-parser": "^2.1.5",
-    "zk-dynamodb-wrapper": "^1.0.5"
+    "zk-csv-parser": "^2.1.5"
   },
   "devDependencies": {
+    "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",
     "babel-loader": "7.1.2",
     "babel-plugin-source-map-support": "^1.0.0",
