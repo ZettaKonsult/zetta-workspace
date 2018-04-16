@@ -5,11 +5,9 @@
  */
 
 import type { UnionPartition, UserData } from '../types';
-import { config } from '../config';
-import dbLib from 'zk-dynamodb-wrapper';
-import passwordGenerator from 'password-generator';
 
-const db = dbLib(config.Region);
+import { config } from '../config';
+import db from '../util/database';
 
 const registerUsers = async (users: {
   [string]: UserData,

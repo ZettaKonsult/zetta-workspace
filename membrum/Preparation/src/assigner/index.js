@@ -3,5 +3,6 @@
 /**
  * @date 2018-01-16
  */
+import { getAssignments } from './assign';
 
-export * from './unionAssigner';
+export { getAssignments };

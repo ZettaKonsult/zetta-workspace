@@ -48,47 +48,41 @@ const aggregatePeople = (
 ): Array<LadokPerson> => {
   checkHeader(lines);
   const unionName = getUnion(fileName, lines);
-  lines = lines.slice(4, lines.length).filter(element => element.length > 3);
 
-  let people = [];
-  for (let line of lines) {
-    const info = [...line];
-    people.push(new LadokPerson(info[0], info[1], info[2], info[3], unionName));
-  }
-
-  return people;
+  return lines
+    .slice(4, lines.length)
+    .filter(element => element.length > 3)
+    .map(
+      line => new LadokPerson(line[0], line[1], line[2], line[3], unionName)
+    );
 };
 
 export const parseDirectory = async (
   filePath: string
 ): { [string]: LadokPerson } => {
-  let people = {};
-
   try {
-    for (let file of (await listFiles(filePath))['files']) {
-      addPeople(people, await parseFile(filePath + '/' + file));
-    }
+    const { files } = await listFiles(filePath);
+    let parsedFiles = files.map(file => parseFile(filePath + '/' + file));
+    parsedFiles = await Promise.all(parsedFiles);
+    return parsedFiles.reduce((total, file) => addPeople(total, file), {});
   } catch (error) {
     console.error(`Error parsing directory:\n${error}`);
   }
-
-  return people;
 };
 
 const addPeople = (
   people: { [string]: LadokPerson },
   newPeople: Array<LadokPerson>
-) => {
-  for (let person of newPeople) {
+) =>
+  newPeople.reduce((total, person) => {
     const ssn = person.ssn;
-
-    if (ssn in people) {
-      people[ssn].join(person);
+    if (ssn in total) {
+      total[ssn].join(person);
     } else {
-      people[ssn] = person;
+      total[ssn] = person;
     }
-  }
-};
+    return total;
+  }, people);
 
 const checkHeader = (lines: Array<Array<string>>) => {
   const expectedColumns = config.Ladok.File.ExpectedColumns;
