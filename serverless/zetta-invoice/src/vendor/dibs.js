@@ -8,6 +8,7 @@ import type { DatabaseMethod } from 'types/Database';
 import Invoice from '../invoice';
 import AWS from 'aws-sdk';
 import queryString from 'query-string';
+import Price from '../price';
 AWS.config.region = 'eu-west-1';
 
 let lambda = new AWS.Lambda();
@@ -106,10 +107,13 @@ export const url = async (params: {
       throw new Error(`No such invoice ${invoiceId}!`);
     }
 
+    const amount = Price.calculate(invoice).sum;
+    console.log(`Price for DIBS: ${amount}.`);
+
     form = {
       ...form,
       accepturl,
-      amount: invoice.price,
+      amount,
       callbackurl: CALLBACK_URL,
       cancelurl,
       ip: 'DUMMY-IP',

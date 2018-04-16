@@ -5,7 +5,7 @@
  */
 
 import type { AWSEvent, AWSContext, AWSCallback } from 'types/AWS';
-import Recipient from '../recipient/';
+import Recipient from '../recipient';
 
 import { success, failure } from '../util/response';
 import parser from '../util/parser';
@@ -32,10 +32,10 @@ export const get = async (
   context: AWSContext,
   callback: AWSCallback
 ) => {
-  const { companyCustomerId } = parser(event).params;
+  const { companyCustomerId, recipientId } = parser(event).params;
 
   try {
-    const result = await Recipient.list({ db, companyCustomerId });
+    const result = await Recipient.get({ db, companyCustomerId, recipientId });
     callback(null, success(result));
   } catch (error) {
     console.error(error);

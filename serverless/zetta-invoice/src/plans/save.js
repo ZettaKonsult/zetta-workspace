@@ -8,12 +8,17 @@ import cuid from 'cuid';
 
 import type { DatabaseMethod } from 'types/Database';
 import type { Plan } from 'types/Invoice';
-import { incrementToNextLowerBound } from 'date-primitive-utils';
 import { getDbTable } from '../util/database';
 
 const TableName = getDbTable({ name: 'Plans' });
 
-export default async ({ db, companyCustomerId, plan }) => {
+export default async (params: {
+  db: DatabaseMethod,
+  companyCustomerId: string,
+  plan: Plan,
+}) => {
+  const { db, companyCustomerId, plan } = params;
+
   const newPlan = {
     ...plan,
     id: cuid(),

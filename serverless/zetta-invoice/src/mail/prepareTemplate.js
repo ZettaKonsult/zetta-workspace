@@ -6,13 +6,13 @@
 
 import type { HTML } from 'types/General';
 import type {
-  CalculatedInvoiceRow,
-  Invoice,
-  InvoiceRow,
+  CompanyCustomer,
+  Recipient,
+  LockedInvoice,
   InvoiceSpecification,
 } from 'types/Invoice';
-import type { Recipient } from 'types/Recipient';
-import Mustache from 'mustache';
+import Price from '../price';
+import { to_html } from 'mustache';
 import { promisify } from 'util';
 import fs from 'fs';
 
@@ -22,7 +22,7 @@ export default async (data: any): HTML => {
     prepareData(data),
   ]);
   console.log(`Prepared template. Translating via Mustache.`);
-  return Mustache.to_html(template, preparedData);
+  return to_html(template, preparedData);
 };
 
 const readFileAsync = promisify(fs.readFile);
@@ -31,24 +31,23 @@ const readTemplateFile = async () =>
 
 export const prepareData = (data: {
   discount: number,
-  recipient: Recipient,
-  invoice: Invoice,
+  invoice: LockedInvoice,
   defaultTax: number,
-}): InvoiceSpecification => {
-  const { discount, recipient, invoice, defaultTax } = data;
-  const { companyCustomer } = invoice;
+  companyCustomer: CompanyCustomer,
+  recipient: Recipient,
+}): Array<InvoiceSpecification> => {
+  const { discount, invoice, defaultTax, companyCustomer, recipient } = data;
 
   const id = new Date(invoice.createdAt);
   const timeToPay = new Date(id.getUTCFullYear(), id.getUTCMonth() + 1);
 
-  const { calculatedRows, netTotal, taxTotal, sum } = calculatePrice({
+  const { calculatedRows, netTotal, taxTotal, sum } = Price.calculate({
     invoiceRows: invoice.invoiceRows,
     defaultTax,
   });
 
   return {
     companyCustomer,
-    recipient,
     invoice: {
       id: invoice.createdAt,
       createdAt: id.toISOString().split('T')[0],
@@ -59,45 +58,6 @@ export const prepareData = (data: {
     netTotal,
     taxTotal,
     total: sum,
-    receiver: recipient.company || recipient.firstName,
+    recipient,
   };
-};
-
-const calculatePrice = (params: {
-  invoiceRows: Array<InvoiceRow>,
-  defaultTax: number,
-}): {
-  calculatedRows: Array<CalculatedInvoiceRow>,
-  netTotal: number,
-  taxTotal: number,
-  sum: number,
-} => {
-  const { invoiceRows, defaultTax } = params;
-
-  const calculatedRows = [];
-
-  let taxTotal = 0;
-  let sum = 0;
-
-  invoiceRows.forEach(invoiceRow => {
-    const { price, unit } = invoiceRow;
-    let { tax } = invoiceRow;
-
-    if (tax == null) {
-      tax = defaultTax;
-    }
-
-    const calculatedRow = { ...invoiceRow };
-    const total = price * unit;
-
-    calculatedRow.total = total;
-    taxTotal += tax * total;
-    sum += total;
-
-    calculatedRows.push(calculatedRow);
-  });
-
-  const netTotal = sum - taxTotal;
-
-  return { calculatedRows, netTotal, taxTotal, sum };
 };

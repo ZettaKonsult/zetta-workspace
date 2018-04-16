@@ -12,7 +12,7 @@ afterAll(async () => {
     host,
     path: `invoice/lock`,
     payload: {
-      method: 'delete',
+      method: 'post',
       body: {
         companyCustomerId: 'companyCustomerId',
         invoiceId: 'invoiceId1',
@@ -27,7 +27,7 @@ describe('Lambdas.', () => {
     it('Get.', async () => {
       const expected =
         'https://payment.architrade.com/paymentweb/start.action?accepturl=' +
-        'acceptUrl&amount=123&callbackurl=https%3A%2F%2Feu-central-1.console' +
+        'acceptUrl&amount=1476&callbackurl=https%3A%2F%2Feu-central-1.console' +
         '.aws.amazon.com%2Flambda%2Fhome%3Fregion%3Deu-central-1%23%2F' +
         'functions%2Fpayment-prod-membrumDIBSConfirm%3Ftab%3Dgraph&cancelurl' +
         '=cancelUrl&currency=SEK&decorator=responsive&ip=DUMMY-IP&lang=sv&' +

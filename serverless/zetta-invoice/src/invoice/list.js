@@ -13,19 +13,28 @@ const INVOICES_TABLE = getDbTable({ name: 'Invoices' });
 export default async (params: {
   db: DatabaseMethod,
   companyCustomerId: string,
+  locked: boolean,
 }): Promise<{ [string]: any }> => {
-  const { db, companyCustomerId } = params;
+  const { db, companyCustomerId, locked } = params;
 
-  console.log(`Fetching invoices for customer ${companyCustomerId}.`);
+  console.log(
+    `Fetching ${
+      locked ? '' : 'un'
+    }locked invoices for customer: ${companyCustomerId}`
+  );
+
   try {
     return (await db('query', {
       TableName: INVOICES_TABLE,
-      KeyConditionExpression: '#companyCustomer = :companyCustomer',
+      KeyConditionExpression: '#companyCustomerId = :companyCustomerId',
+      FilterExpression: '#locked = :locked',
       ExpressionAttributeNames: {
-        '#companyCustomer': 'companyCustomer',
+        '#companyCustomerId': 'companyCustomerId',
+        '#locked': 'locked',
       },
       ExpressionAttributeValues: {
-        ':companyCustomer': companyCustomerId,
+        ':companyCustomerId': companyCustomerId,
+        ':locked': locked,
       },
     })).Items;
   } catch (error) {

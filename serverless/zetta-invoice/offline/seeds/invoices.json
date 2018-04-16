@@ -1,9 +1,11 @@
 [
     {
       "id": "invoiceId1",
-      "companyCustomer": "companyCustomerId",
+      "companyCustomerId": "companyCustomerId",
       "price": "123",
-      "recipient": "recipientId",
+      "recipients": [
+        "recipientId"
+      ],
       "createdAt": 3456789012,
       "unit": "Timmar",
       "invoiceRows": [{
@@ -22,9 +24,29 @@
     },
     {
       "id": "invoiceId2",
-      "companyCustomer": "companyCustomerId",
+      "companyCustomerId": "companyCustomerId",
+      "companyCustomer": {
+        "id": "companyCustomerId",
+        "firstName": "FirstName",
+        "lastName": "LastName",
+        "city": "City",
+        "address": "Road 123A",
+        "mobile": "+46761234567",
+        "VAT": "XX123456789101",
+        "zipcode": "12345",
+        "company": "Company AB",
+        "email": "firstName@company.com",
+        "defaultTax": 0.25,
+        "bank": {
+          "giro": "123-4567",
+          "name": "MoneyBank"
+        },
+        "createdAt": 1234567890
+      },
       "price": "456",
-      "recipient": "recipientId",
+      "recipients": [
+        "recipientId"
+      ],
       "createdAt": 4567890123,
       "unit": "Timmar",
       "invoiceRows": [{
@@ -48,9 +70,11 @@
     },
     {
       "id": "invoiceId3",
-      "companyCustomer": "companyCustomerId",
+      "companyCustomerId": "companyCustomerId",
       "price": "789",
-      "recipient": "recipientId",
+      "recipients": [
+        "recipientId"
+      ],
       "createdAt": 5678901234,
       "unit": "Timmar",
       "invoiceRows": [{
@@ -79,9 +103,34 @@
     },
     {
       "id": "invoiceId1A",
-      "companyCustomer": "companyCustomerIdA",
+      "companyCustomerId": "companyCustomerIdA",
       "price": "1234",
-      "recipient": "recipientIdA",
+      "recipients": [
+        "recipientIdA"
+      ],
+      "createdAt": 3456789012,
+      "unit": "Timmar",
+      "invoiceRows": [{
+        "price": 123,
+        "unit": 12,
+        "tax": 0.01,
+        "description": "Aan"
+      }],
+      "itemStatus": {
+        "id": "itemStatusId1A",
+        "invoiceId": "invoiceId1A",
+        "createdAt": 3456789012,
+        "itemStatus": "pending"
+      },
+      "locked": false
+    },
+    {
+      "id": "invoiceToUpdate1",
+      "companyCustomerId": "companyCustomerId",
+      "price": "1234",
+      "recipients": [
+        "recipientIdA"
+      ],
       "createdAt": 3456789012,
       "unit": "Timmar",
       "invoiceRows": [{

@@ -22,7 +22,7 @@ export default async (params: {
   try {
     await db('delete', {
       TableName: INVOICES_TABLE,
-      Key: { id: invoiceId, companyCustomer: companyCustomerId },
+      Key: { id: invoiceId, companyCustomerId },
     });
 
     console.log(`Successfully removed invoice ${invoiceId}.`);

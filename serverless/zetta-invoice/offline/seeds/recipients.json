@@ -24,5 +24,18 @@
     "zipcode": "123451",
     "email": "firstNameA@recipient.com",
     "createdAt": 23456789011
+  },
+  {
+    "id": "recipientIdB",
+    "companyCustomerId": "companyCustomerIdB",
+    "ssn": "12345678901",
+    "firstName": "RecipientFirstB",
+    "lastName": "RecipientLastB",
+    "city": "RecipientCityB",
+    "address": "Road 234A1",
+    "mobile": "+467623456781",
+    "zipcode": "123451",
+    "email": "firstNameB@recipient.com",
+    "createdAt": 23456789011
   }
 ]

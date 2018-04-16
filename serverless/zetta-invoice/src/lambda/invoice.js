@@ -26,8 +26,12 @@ export const create = async (
   } = parser(event).data;
 
   console.log(
-    `Received request for creating an invoice for customer ${companyCustomerId}, recipients ${recipientIds}.`
+    `Received request for creating an invoice for customer ${companyCustomerId}.`
   );
+  console.log(`Recipients:`);
+  console.log(recipientIds);
+  console.log(`Invoice rows:`);
+  console.log(invoiceRows);
 
   try {
     const result = await Invoice.create({
@@ -74,13 +78,19 @@ export const get = async (
   context: AWSContext,
   callback: AWSCallback
 ) => {
-  const { companyCustomerId } = parser(event).params;
+  const { companyCustomerId, locked } = parser(event).params;
+
   console.log(
-    `Received request for invoices for customer ${companyCustomerId}.`
+    `Received request for invoices for customer: ${companyCustomerId}`
   );
 
+  const isLocked = locked === 'true';
   try {
-    const result = await Invoice.list({ db, companyCustomerId });
+    const result = await Invoice.list({
+      db,
+      companyCustomerId,
+      locked: isLocked,
+    });
     callback(null, success(result));
   } catch (error) {
     console.error(error);
@@ -131,9 +141,7 @@ export const lock = async (
 ) => {
   const { companyCustomerId, invoiceId, lock } = parser(event).data;
   console.log(
-    `Received request for ${
-      lock ? 'locking' : 'unlocking'
-    } invoice ${invoiceId}, customer ${companyCustomerId}.`
+    `Received request for setting the lock for invoice ${invoiceId}, customer ${companyCustomerId}, to ${lock}.`
   );
 
   try {
@@ -205,6 +213,39 @@ export const send = async (
 
   try {
     const result = await Invoice.mail({ db, companyCustomerId, invoiceId });
+    callback(null, success(result));
+  } catch (error) {
+    console.error(error);
+    callback(null, failure(error.message));
+  }
+};
+
+export const update = async (
+  event: AWSEvent,
+  context: AWSContext,
+  callback: AWSCallback
+) => {
+  const { companyCustomerId, invoiceId, invoiceRows, recipients } = parser(
+    event
+  ).data;
+
+  console.log(
+    `Received invoice update request for ${invoiceId}, customer ${companyCustomerId}.`
+  );
+
+  console.log(`Recipients:`);
+  console.log(recipients);
+  console.log(`Invoice rows:`);
+  console.log(invoiceRows);
+
+  try {
+    const result = await Invoice.update({
+      db,
+      companyCustomerId,
+      invoiceId,
+      invoiceRows,
+      recipients,
+    });
     callback(null, success(result));
   } catch (error) {
     console.error(error);

@@ -5,7 +5,7 @@
  */
 
 import type { DatabaseMethod } from 'types/Database';
-import type { InvoiceStatus } from 'types/Invoice';
+import type { InvoiceStatus } from 'types/Event';
 
 import { getDbTable } from '../util/database';
 import cuid from 'cuid';
@@ -17,7 +17,7 @@ const create = async (params: {
   db: DatabaseMethod,
   invoiceId: string,
   createdAt: number,
-}): InvoiceStatus => {
+}): Promise<InvoiceStatus> => {
   const { db, invoiceId, createdAt } = params;
 
   const status = {

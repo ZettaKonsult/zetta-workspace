@@ -19,15 +19,13 @@ export default async (params: {
   const { db, invoiceId, companyCustomerId, lock } = params;
 
   console.log(
-    `${
-      lock ? 'Locking' : 'Unlocking'
-    } invoice ${invoiceId}, customer ${companyCustomerId}.`
+    `Setting lock for invoice ${invoiceId}, customer ${companyCustomerId} to ${lock}.`
   );
   try {
     await db('update', {
       TableName: INVOICES_TABLE,
       Key: {
-        companyCustomer: companyCustomerId,
+        companyCustomerId: companyCustomerId,
         id: invoiceId,
       },
       UpdateExpression: `Set locked=:locked`,

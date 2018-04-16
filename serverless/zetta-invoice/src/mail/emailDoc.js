@@ -21,17 +21,13 @@ const isError = (params: { message: string }) => {
   return false;
 };
 
-export const send = (contentBuffer: any) => {
-  console.log(`Constructing transporter for e-mail.`);
-  let transporter = nodemailer.createTransport({
-    SES: ses.get(),
-  });
-  console.log(`SES instance successfully created.`);
+let transporter;
 
-  const email = 'zmk.zk.dev@gmail.com';
+export const send = (params: { buffer: any, email: string }) => {
+  const { buffer, email } = params;
 
   try {
-    transporter.sendMail(
+    getTransporter().sendMail(
       {
         from: 'admin@membrum.se',
         to: email,
@@ -40,7 +36,7 @@ export const send = (contentBuffer: any) => {
         attachments: [
           {
             filename: 'invoice.pdf',
-            content: contentBuffer,
+            content: buffer,
             contentType: 'application/pdf',
           },
         ],
@@ -64,6 +60,17 @@ export const send = (contentBuffer: any) => {
     console.error(error);
     throw error;
   }
+};
+
+const getTransporter = () => {
+  if (!transporter) {
+    console.log(`Constructing transporter for e-mail.`);
+    transporter = nodemailer.createTransport({
+      SES: ses.get(),
+    });
+    console.log(`SES instance successfully created.`);
+  }
+  return transporter;
 };
 
 export default { send };

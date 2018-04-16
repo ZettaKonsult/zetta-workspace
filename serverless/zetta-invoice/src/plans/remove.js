@@ -13,16 +13,16 @@ export default async (params: {
   db: DatabaseMethod,
   planId: string,
   companyCustomerId: string,
-}): Promise<{ [string]: any }> => {
+}): Promise<{ companyCustomerId: string, planId: string }> => {
   const { db, companyCustomerId, planId } = params;
 
   try {
-    const result = await db('delete', {
+    await db('delete', {
       TableName,
       Key: { id: planId, companyCustomerId },
     });
 
-    return true;
+    return { companyCustomerId, planId };
   } catch (error) {
     console.error(error);
     throw error;

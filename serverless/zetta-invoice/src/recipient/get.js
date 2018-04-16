@@ -10,22 +10,17 @@ const get = async (params: {
   db: DatabaseMethod,
   companyCustomerId: string,
   recipientId: string,
-}): Promise<Recipient> => {
+}): Promise<Array<Recipient>> => {
   const { db, companyCustomerId, recipientId } = params;
 
   console.log(
-    `Fetching recipient ${recipientId}, customer ${companyCustomerId}.`
+    `Fetching recipient ${recipientId} with customer ${companyCustomerId}.`
   );
 
-  return (await db('query', {
+  return (await db('get', {
     TableName: RECIPIENTS_TABLE,
-    KeyConditionExpression:
-      'companyCustomerId = :companyCustomerId AND id = :id',
-    ExpressionAttributeValues: {
-      ':companyCustomerId': companyCustomerId,
-      ':id': recipientId,
-    },
-  })).Items[0];
+    Key: { id: recipientId, companyCustomerId },
+  })).Item;
 };
 
 const getAll = async (params: {
@@ -39,7 +34,7 @@ const getAll = async (params: {
     TableName: RECIPIENTS_TABLE,
     Key: { companyCustomerId },
   });
-  return result.Item;
+  return result.Items;
 };
 
 export default { get, getAll };

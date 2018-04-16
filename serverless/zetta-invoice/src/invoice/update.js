@@ -5,7 +5,8 @@
  */
 
 import type { DatabaseMethod } from 'types/Database';
-import type { Invoice } from 'types/Invoice';
+import type { InvoiceRow, UnlockedInvoice } from 'types/Invoice';
+import type { Recipient } from 'types/Recipient';
 
 import { getDbTable } from '../util/database';
 import get from './get';
@@ -14,34 +15,57 @@ const INVOICES_TABLE = getDbTable({ name: 'Invoices' });
 
 export default async (params: {
   db: DatabaseMethod,
-  invoice: Invoice,
+  invoiceId: string,
+  companyCustomerId: string,
+  invoiceRows: Array<InvoiceRow>,
+  recipients: Array<Recipient>,
 }): Promise<boolean> => {
-  const { db, invoice } = params;
-  const { id, invoiceRows, companyCustomer, recipients } = invoice;
-  const invoiceId = id;
-  const companyCustomerId =
-    typeof companyCustomer === 'string' ? companyCustomer : companyCustomer.id;
+  const { db, invoiceId, companyCustomerId, invoiceRows, recipients } = params;
+  if (
+    (invoiceRows == null || invoiceRows.length === 0) &&
+    (recipients == null || recipients.length === 0)
+  ) {
+    throw new Error(
+      `Neither new invoice rows nor new recipients were specified when` +
+        ` updating invoice ${invoiceId}, customer ${companyCustomerId}.`
+    );
+  }
 
-  if ((await get({ db, invoiceId, companyCustomerId })).locked) {
+  let oldInvoice = await get({ db, invoiceId, companyCustomerId });
+  console.log(`Fetched old invoice:`);
+  console.log(oldInvoice);
+
+  if (oldInvoice.locked) {
     throw new Error(`Can not update locked invoice ${invoiceId}!`);
   }
 
+  let newInvoice = { invoiceRows, recipients };
+  Object.keys(oldInvoice).forEach(key => {
+    if (newInvoice[key] == null) {
+      newInvoice[key] = oldInvoice[key];
+    }
+  });
+
   console.log(`Updating invoice ${invoiceId}, customer ${companyCustomerId}.`);
+  console.log(`New invoice:`);
+  console.log(newInvoice);
+
   try {
     await db('update', {
       TableName: INVOICES_TABLE,
       Key: {
-        companyCustomer: companyCustomerId,
-        id,
+        companyCustomerId,
+        id: invoiceId,
       },
       ConditionExpression: 'locked=:shouldNotBeLocked',
       UpdateExpression: `Set invoiceRows = :invoiceRows, recipients = :recipients`,
       ExpressionAttributeValues: {
         ':shouldNotBeLocked': false,
-        ':invoiceRows': invoiceRows,
-        ':recipients': recipients,
+        ':invoiceRows': newInvoice.invoiceRows,
+        ':recipients': newInvoice.recipients,
       },
     });
+
     return true;
   } catch (error) {
     throw error;

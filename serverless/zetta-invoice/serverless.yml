@@ -85,11 +85,18 @@ functions:
           path: /invoice
           method: post
           cors: true
+  updateInvoice:
+    handler: src/lambda/invoice.update
+    events:
+      - http:
+          path: /invoice
+          method: put
+          cors: true
   getInvoices:
     handler: src/lambda/invoice.get
     events:
       - http:
-          path: /invoice/{companyCustomerId}
+          path: /invoice/{companyCustomerId}/{locked}
           method: get
           cors: true
   lockInvoice:
@@ -143,11 +150,18 @@ functions:
           path: /recipient
           method: post
           cors: true
+  updateRecipient:
+    handler: src/lambda/recipient.update
+    events:
+      - http:
+          path: /recipient
+          method: put
+          cors: true
   getRecipients:
     handler: src/lambda/recipient.get
     events:
       - http:
-          path: /recipient/{companyCustomerId}
+          path: /recipient/{companyCustomerId}/{recipientId}
           method: get
           cors: true
 
@@ -218,6 +232,23 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
+    InvoicesTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:custom.Invoices}
+        KeySchema:
+          - AttributeName: companyCustomerId
+            KeyType: HASH
+          - AttributeName: id
+            KeyType: RANGE
+        AttributeDefinitions:
+          - AttributeName: companyCustomerId
+            AttributeType: S
+          - AttributeName: id
+            AttributeType: S
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
     InvoiceStatusesTable:
       Type: AWS::DynamoDB::Table
       Properties:
@@ -229,23 +260,6 @@ resources:
             KeyType: RANGE
         AttributeDefinitions:
           - AttributeName: invoiceId
-            AttributeType: S
-          - AttributeName: id
-            AttributeType: S
-        ProvisionedThroughput:
-          ReadCapacityUnits: 1
-          WriteCapacityUnits: 1
-    InvoicesTable:
-      Type: AWS::DynamoDB::Table
-      Properties:
-        TableName: ${self:custom.Invoices}
-        KeySchema:
-          - AttributeName: companyCustomer
-            KeyType: HASH
-          - AttributeName: id
-            KeyType: RANGE
-        AttributeDefinitions:
-          - AttributeName: companyCustomer
             AttributeType: S
           - AttributeName: id
             AttributeType: S

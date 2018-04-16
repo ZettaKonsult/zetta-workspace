@@ -51,7 +51,7 @@ describe('Mail.', () => {
         },
       })
     ).toEqual(
-      'Could not send invoice mail: Can not pay with a locked invoice (invoiceId2)!'
+      'Could not send invoice mail: Can not pay with a non-pending invoice (invoiceId2, status succeeded)!'
     );
   });
   it('Wrong customer.', async () => {

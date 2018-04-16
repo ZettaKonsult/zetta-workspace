@@ -4,6 +4,7 @@
  * @date 2018-03-05
  */
 
+import type { UnlockedInvoice, InvoiceRow } from 'types/Invoice';
 import type { DatabaseMethod } from 'types/Database';
 
 import { getDbTable } from '../util/database';
@@ -20,7 +21,7 @@ export default async (params: {
   companyCustomerId: string,
   invoiceRows: Array<InvoiceRow>,
   recipientIds: Array<string>,
-}): Promise<Invoice> => {
+}): Promise<UnlockedInvoice> => {
   const {
     db,
     companyCustomerId,
@@ -41,16 +42,23 @@ export default async (params: {
   const id = invoiceId || cuid();
 
   console.log(`Creating status ${id} at ${creation}.`);
-  const itemStatus = await Status.create({
-    db,
-    invoiceId: id,
-    createdAt: creation,
-  });
+
+  let itemStatus;
+  try {
+    itemStatus = await Status.create({
+      db,
+      invoiceId: id,
+      createdAt: creation,
+    });
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
 
   const invoice = {
     id,
     createdAt: creation,
-    companyCustomer: companyCustomerId,
+    companyCustomerId,
     invoiceRows,
     recipients: recipientIds,
     itemStatus,
@@ -67,6 +75,7 @@ export default async (params: {
     console.log(`Successfully created invoice.`);
     return invoice;
   } catch (error) {
+    console.error(error);
     throw error;
   }
 };
@@ -85,12 +94,12 @@ const validate = (params: {
   if (!companyCustomerId) {
     throw new Error('Company customer ID required!');
   }
-  if (invoiceRows.length <= 0) {
+  if (invoiceRows == null || invoiceRows.length <= 0) {
     throw new Error(
       'At least one invoice row is required for to create an invoice!'
     );
   }
-  if (recipientIds.length <= 0) {
+  if (recipientIds == null || recipientIds.length <= 0) {
     throw new Error(
       'At least one recipient ID is required for to create an invoice!'
     );
