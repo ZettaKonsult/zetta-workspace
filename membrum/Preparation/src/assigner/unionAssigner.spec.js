@@ -9,15 +9,24 @@ import {
   getUpdatedUnions,
   getUnions,
 } from './unionAssigner';
-import { LadokPerson } from '../person/ladokPerson';
-import { config } from '../config';
+import { LadokPerson } from '../parser/ladokPerson';
 
 const FACULTY = ['EHL', 'HT', 'JUR', 'KO', 'LTH', 'MED', 'NAT', 'SAM', 'USV'];
 const EMAIL = 'anEmail@domain.place.com';
 const NAME = 'NAME';
 const SSN = 'SSN';
 
-const UNION_MAP = config.TRF.UnionMapping;
+const UNION_MAP = {
+  EHL: ['Lunda Ekonomerna'],
+  HT: ['Humanistiska och Teologiska Studentkåren'],
+  JUR: ['Juridiska Föreningen'],
+  KO: ['Studentkåren vid Konstnärliga fakulteten i Malmö'],
+  LTH: ['Teknologkåren'],
+  MED: ['Corpus Medicus'],
+  NAT: ['Lunds Naturvetarkår'],
+  SAM: ['Samhällsvetarkåren'],
+  USV: ['LundaEkonomerna', 'Lunds Naturvetarkår', 'Samhällsvetarkåren'],
+};
 
 const newUserData = (ssn, name, credits) =>
   compileUserData({ person: newParsedUser(ssn, name, credits) });

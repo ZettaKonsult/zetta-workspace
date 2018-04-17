@@ -5,11 +5,22 @@
  */
 
 import db, { getDbTable } from '../util/database';
-import * as unionAssigner from '../assigner/unionAssigner';
-import { config } from '../config';
+
+import * as unionAssigner from './unionAssigner';
 
 const RESULTS_TABLE = getDbTable({ name: 'LadokParseResults' });
 const USERS_TABLE = getDbTable({ name: 'Recipients' });
+const UnionMapping = {
+  EHL: ['Lunda Ekonomerna'],
+  HT: ['Humanistiska och Teologiska Studentkåren'],
+  JUR: ['Juridiska Föreningen'],
+  KO: ['Studentkåren vid Konstnärliga fakulteten i Malmö'],
+  LTH: ['Teknologkåren'],
+  MED: ['Corpus Medicus'],
+  NAT: ['Lunds Naturvetarkår'],
+  SAM: ['Samhällsvetarkåren'],
+  USV: ['LundaEkonomerna', 'Lunds Naturvetarkår', 'Samhällsvetarkåren'],
+};
 
 export const getAssignments = async () => {
   try {
@@ -17,10 +28,7 @@ export const getAssignments = async () => {
     const parseResult = await getParseResults();
     const aggregated = unionAssigner.aggregateResults(parseResult);
     const faculties = unionAssigner.getFaculties(aggregated);
-    const newAssignments = unionAssigner.getUnions(
-      config.TRF.UnionMapping,
-      faculties
-    );
+    const newAssignments = unionAssigner.getUnions(UnionMapping, faculties);
     const users = await buildUserMap(aggregated);
 
     return unionAssigner.getUpdatedUnions({

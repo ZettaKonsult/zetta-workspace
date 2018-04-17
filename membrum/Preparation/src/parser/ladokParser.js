@@ -7,13 +7,19 @@
 import * as path from 'path';
 import { listFiles } from 'common-js-utils';
 import { parseCSVFile, parseCSVLines } from 'zk-csv-parser';
-import { config } from '../config';
-import { LadokPerson } from '../person/ladokPerson';
+import { LadokPerson } from './ladokPerson';
 
 // To do: find (or make) one that does not necessitate requires.
 const arrayEquals = require('array-equal');
 
-const IGNORE = config.Ladok.File.IgnoreLines;
+const IGNORE = 8;
+const expectedColumns = [
+  'Pnr',
+  'Namn',
+  'Epostadress',
+  'Registrerade po�ng',
+  '',
+];
 
 export class InvalidFile extends Error {}
 
@@ -85,7 +91,6 @@ const addPeople = (
   }, people);
 
 const checkHeader = (lines: Array<Array<string>>) => {
-  const expectedColumns = config.Ladok.File.ExpectedColumns;
   const offset = 3;
   const columns = lines[offset];
   if (!arrayEquals(columns, expectedColumns)) {

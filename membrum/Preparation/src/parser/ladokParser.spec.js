@@ -2,7 +2,7 @@
  * @date  2017-08-22
  */
 
-import { LadokPerson } from '../person/ladokPerson';
+import { LadokPerson } from './ladokPerson';
 import {
   getUnion,
   parseFile,

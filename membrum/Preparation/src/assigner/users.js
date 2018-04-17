@@ -6,8 +6,9 @@
 
 import type { UnionPartition, UserData } from '../types';
 
-import { config } from '../config';
 import db from '../util/database';
+
+const TableName = 'MembrumUsers';
 
 const registerUsers = async (users: {
   [string]: UserData,
@@ -50,7 +51,7 @@ const registerUser = async (user: UserData): Promise<string> => {
 
   try {
     await db.create({
-      TableName: config.Database.Users.Name,
+      TableName,
       Item: {
         ssn: ssn,
         credits: credits,
@@ -71,7 +72,7 @@ const updateUser = async (user: UserData): Promise<string> => {
 
   try {
     await db.update({
-      TableName: config.Database.Users.Name,
+      TableName,
       Key: { ssn: ssn },
       Values: {
         credits: credits,

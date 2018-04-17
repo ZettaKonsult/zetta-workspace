@@ -6,6 +6,7 @@
 
 import type { AWSCallback, AWSContext, AWSEvent } from 'types/AWS';
 import type { ParsedUser } from '../types';
+
 import cuid from 'cuid';
 
 import parseData from '../parser';

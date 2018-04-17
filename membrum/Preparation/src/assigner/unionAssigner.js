@@ -11,9 +11,9 @@ import type {
   UnionPartition,
 } from '../types';
 
-import { applyFormatting } from '../user/attributes';
-import { config } from '../config';
-const DEFAULT_NATION = config.TRF.Nations.Undefined;
+import { applyFormatting } from './attributes';
+
+const DEFAULT_NATION = 'Undefined Nation';
 
 export const getFaculties = (people: {
   [string]: UserData,

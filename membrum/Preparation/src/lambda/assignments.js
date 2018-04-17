@@ -5,14 +5,10 @@
  */
 
 import type { AWSCallback, AWSContext, AWSEvent } from 'types/AWS';
-import AWS from 'aws-sdk';
 
 import { failure, success } from '../util/response';
 
-import { getAssignments } from '../assigner';
-import * as User from '../user';
-
-AWS.config.update({ region: 'eu-central-1' });
+import { getAssignments, User } from '../assigner';
 
 export const getNewAssignments = async (
   event: AWSEvent,
