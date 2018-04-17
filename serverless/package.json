@@ -1,0 +1,33 @@
+{
+  "name": "zetta-serverless",
+  "version": "1.0.0",
+  "description": "Zetta's serverless modules.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ZettaKonsult/zetta-workspace.git"
+  },
+  "main": "src/index.js",
+  "author": "Zimon Kuhs <zmk.zk.dev@gmail.com>",
+  "contributors": [
+    {
+      "name": "Fredrik Palmquist",
+      "email": "fiddep@telia.com"
+    }
+  ],
+  "license": "MIT",
+  "scripts": {
+    "test": "jest serverless/__test__ --env=node",
+    "test:all": "jest --env=node"
+  },
+  "dependencies": {
+    "aws-sdk": "^2.192.0"
+  },
+  "devDependencies": {
+    "jest": "^22.2.2"
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.jsx?$": "babel-jest"
+    }
+  }
+}
