@@ -5,11 +5,10 @@
  */
 
 import type { AWSCallback, AWSContext, AWSEvent } from 'types/AWS';
-import type { ParsedUser } from '../types';
 
 import cuid from 'cuid';
 
-import parseData from '../parser';
+import parseData from '../../../../packages/ladok-parser';
 
 import parser from '../util/parser';
 import { getS3Object } from '../util/s3';
@@ -38,33 +37,21 @@ export const parseUploadedFile = async (
   try {
     const data = await getS3Object({ bucketName, fileName });
     const people = await parseData(data.Body.toString('utf-8'), fileName);
-    const result = await updateDatabase(db, people, fileName);
-    callback(null, success(result));
+
+    const params = {
+      TableName,
+      Item: {
+        id: cuid(),
+        file: fileName,
+        people: people,
+        createdAt: new Date().getTime(),
+      },
+    };
+    await db('put', params);
+
+    callback(null, success(params.Item));
   } catch (error) {
     console.error('Error happend', error);
     callback(null, failure(error.message));
-  }
-};
-
-const updateDatabase = async (
-  db,
-  people: Array<ParsedUser>,
-  fileName: string
-) => {
-  const params = {
-    TableName,
-    Item: {
-      id: cuid(),
-      file: fileName,
-      people: people,
-      createdAt: new Date().getTime(),
-    },
-  };
-
-  try {
-    await db('put', params);
-    return params.Item;
-  } catch (error) {
-    throw error;
   }
 };

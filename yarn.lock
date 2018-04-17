@@ -1148,6 +1148,18 @@ commander@^2.11.0, commander@^2.9.0:
   version "2.12.2"
   resolved "https://registry.yarnpkg.com/commander/-/commander-2.12.2.tgz#0f5946c427ed9ec0d91a46bb9def53e54650e555"
 
+common-js-utils@^1.5.1:
+  version "1.5.1"
+  resolved "https://registry.yarnpkg.com/common-js-utils/-/common-js-utils-1.5.1.tgz#f6d0c3b47c944f87c43c693441ad35244d6f9cfa"
+  dependencies:
+    object-size "^0.1.1"
+
+common-js-utils@^1.6.0:
+  version "1.6.0"
+  resolved "https://registry.yarnpkg.com/common-js-utils/-/common-js-utils-1.6.0.tgz#7039fda587f43e93de0881963fefccc171c80d6c"
+  dependencies:
+    object-size "^0.1.1"
+
 concat-map@0.0.1:
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/concat-map/-/concat-map-0.0.1.tgz#d8a96bd77fd68df7793a73036a3ba0d5405d477b"
@@ -1775,7 +1787,7 @@ for-in@^1.0.1:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/for-in/-/for-in-1.0.2.tgz#81068d295a8142ec0ac726c6e2200c30fb6d5e80"
 
-for-own@^0.1.4:
+for-own@^0.1.1, for-own@^0.1.4:
   version "0.1.5"
   resolved "https://registry.yarnpkg.com/for-own/-/for-own-0.1.5.tgz#5265c681a4f294dabbf17c9509b6763aa84510ce"
   dependencies:
@@ -3101,6 +3113,12 @@ object-keys@^1.0.8:
   version "1.0.11"
   resolved "https://registry.yarnpkg.com/object-keys/-/object-keys-1.0.11.tgz#c54601778ad560f1142ce0e01bcca8b56d13426d"
 
+object-size@^0.1.1:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/object-size/-/object-size-0.1.1.tgz#1c0776c3c692e92edc7c23c31e908ba8c857e5e1"
+  dependencies:
+    for-own "^0.1.1"
+
 object.getownpropertydescriptors@^2.0.3:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/object.getownpropertydescriptors/-/object.getownpropertydescriptors-2.0.3.tgz#8758c846f5b407adab0f236e0986f14b051caa16"
@@ -4271,6 +4289,13 @@ yargs@~3.10.0:
     cliui "^2.1.0"
     decamelize "^1.0.0"
     window-size "0.1.0"
+
+zk-csv-parser@^2.1.5:
+  version "2.1.5"
+  resolved "https://registry.yarnpkg.com/zk-csv-parser/-/zk-csv-parser-2.1.5.tgz#9bfed6c64f37387c236f92eea3f60b36b6250a70"
+  dependencies:
+    common-js-utils "^1.6.0"
+    object-size "^0.1.1"
 
 zk-dynamodb-wrapper@^1.0.5:
   version "1.0.5"
