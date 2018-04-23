@@ -10,44 +10,36 @@ import db from '../util/database';
 
 const TableName = 'MembrumUsers';
 
+export const saveUnions = async (users: UnionPartition) => {
+  try {
+    let registered = await registerUsers(users.created);
+    console.log(`Done registering new users.`);
+    let updated = await updateUsers(users.modified);
+    console.log(`Done updating users with modified unions.`);
+    return {
+      registered,
+      updated,
+    };
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
 const registerUsers = async (users: {
   [string]: UserData,
 }): Promise<Array<string>> => {
-  let result = [];
-  for (const ssn of Object.keys(users)) {
-    result.push(await registerUser(users[ssn]));
-  }
-  return result;
+  let promises = Object.values(users).map(user => registerUser(user));
+  return await Promise.all(promises);
 };
 
 const updateUsers = async (users: { [string]: UserData }) => {
-  let result = [];
-  for (const ssn of Object.keys(users)) {
-    result.push(await updateUser(users[ssn]));
-  }
-  return result;
+  let promises = Object.values(users).map(user => updateUser(user));
+  return await Promise.all(promises);
 };
 
 const registerUser = async (user: UserData): Promise<string> => {
   const { ssn, attributes, credits, nation, unionName } = user;
-
-  // try {
-  //   await Account.signUp({
-  //     userName: ssn,
-  //     names: {
-  //       project: config.Names.project,
-  //       customer: config.Names.customer,
-  //     },
-  //     attributes: attributes,
-  //     password: passwordGenerator(
-  //       config.Password.Length,
-  //       config.Password.Pattern
-  //     ),
-  //   });
-  // } catch (error) {
-  //   console.error(error);
-  //   throw error;
-  // }
 
   try {
     await db.create({
@@ -86,29 +78,4 @@ const updateUser = async (user: UserData): Promise<string> => {
   }
 
   return ssn;
-};
-
-export const saveUnions = async (users: UnionPartition) => {
-  let result = {
-    registered: [],
-    updated: [],
-  };
-
-  try {
-    result.registered = await registerUsers(users.created);
-    console.log(`Done registering new users.`);
-  } catch (error) {
-    console.error(error);
-    throw error;
-  }
-
-  try {
-    result.updated = await updateUsers(users.modified);
-    console.log(`Done updating users with modified unions.`);
-  } catch (error) {
-    console.error(error);
-    throw error;
-  }
-
-  return result;
 };

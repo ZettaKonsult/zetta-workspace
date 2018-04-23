@@ -15,6 +15,13 @@ import { applyFormatting } from './attributes';
 
 const DEFAULT_NATION = 'Undefined Nation';
 
+export default ({ people, unionMapping }) => {
+  let aggregated = aggregateResults(people);
+  let assignments = getUnions(unionMapping, getFaculties(aggregated));
+
+  return { aggregated, assignments };
+};
+
 export const getFaculties = (people: {
   [string]: UserData,
 }): { [string]: string } =>

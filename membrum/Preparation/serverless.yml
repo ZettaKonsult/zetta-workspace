@@ -86,7 +86,7 @@ functions:
 
   #Should be invoked when a file is uploaded
   parseUploadedFile:
-    handler: src/lambda/parse.parseUploadedFile
+    handler: src/lambda/assignments.parseUploadedFile
     events:
       - http:
           path: ladok/parse

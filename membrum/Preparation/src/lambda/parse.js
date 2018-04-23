@@ -15,8 +15,6 @@ import { getS3Object } from '../util/s3';
 import db, { getDbTable } from '../util/database';
 import { success, failure } from '../util/response';
 
-const TableName = getDbTable({ name: 'LadokParseResults' });
-
 export const parseUploadedFile = async (
   event: AWSEvent,
   context: AWSContext,
@@ -39,11 +37,11 @@ export const parseUploadedFile = async (
     const people = await parseData(data.Body.toString('utf-8'), fileName);
 
     const params = {
-      TableName,
+      TableName: getDbTable({ name: 'LadokParseResults' }),
       Item: {
         id: cuid(),
         file: fileName,
-        people: people,
+        people,
         createdAt: new Date().getTime(),
       },
     };

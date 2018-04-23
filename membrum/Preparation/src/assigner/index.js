@@ -3,7 +3,7 @@
 /**
  * @date 2018-01-16
  */
-import { getAssignments } from './assign';
-import User from './users';
+import getAssignments from './getAssignments';
+import { saveUnions } from './users';
 
-export { getAssignments, User };
+export { getAssignments, saveUnions };
