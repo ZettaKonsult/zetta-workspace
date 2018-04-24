@@ -4,20 +4,23 @@
  * @date  2017-11-07
  */
 
-import db, { getDbTable } from '../util/database';
+import { getDbTable } from '../util/database';
 import recipient from '../recipient';
-
+import { createPlansMapping } from '../plans';
 import unionMapper, * as unionAssigner from './unionAssigner';
 
-export default async () => {
+export default async ({ db, companyCustomerId }) => {
   try {
     console.log(`Fetching LADOK parse results.`);
-    const parseResult = await getParseResults();
+    const [parseResult, UnionMapping] = await Promise.all([
+      getParseResults(db),
+      createPlansMapping({ db, companyCustomerId }),
+    ]);
     const { aggregated, assignments } = unionMapper({
       unionMapping: UnionMapping,
       people: parseResult,
     });
-    const users = await buildUserMap(aggregated);
+    const users = await buildUserMap({ db, aggregated });
 
     return unionAssigner.getUpdatedUnions({
       assignments,
@@ -28,7 +31,7 @@ export default async () => {
   }
 };
 
-const buildUserMap = async aggregated => {
+const buildUserMap = async ({ db, aggregated }) => {
   const promises = Object.keys(aggregated).map(ssn =>
     recipient.getBySSN({ db, ssn })
   );
@@ -46,21 +49,21 @@ const buildUserMap = async aggregated => {
   }, {});
 };
 
-const getParseResults = async () => {
+const getParseResults = async db => {
   const result = await db('scan', {
     TableName: getDbTable({ name: 'LadokParseResults' }),
   });
   return result.Items;
 };
 
-const UnionMapping = {
-  EHL: ['Lunda Ekonomerna'],
-  HT: ['Humanistiska och Teologiska Studentkåren'],
-  JUR: ['Juridiska Föreningen'],
-  KO: ['Studentkåren vid Konstnärliga fakulteten i Malmö'],
-  LTH: ['Teknologkåren'],
-  MED: ['Corpus Medicus'],
-  NAT: ['Lunds Naturvetarkår'],
-  SAM: ['Samhällsvetarkåren'],
-  USV: ['LundaEkonomerna', 'Lunds Naturvetarkår', 'Samhällsvetarkåren'],
-};
+// const UnionMapping = {
+//   EHL: ['Lunda Ekonomerna'],
+//   HT: ['Humanistiska och Teologiska Studentkåren'],
+//   JUR: ['Juridiska Föreningen'],
+//   KO: ['Studentkåren vid Konstnärliga fakulteten i Malmö'],
+//   LTH: ['Teknologkåren'],
+//   MED: ['Corpus Medicus'],
+//   NAT: ['Lunds Naturvetarkår'],
+//   SAM: ['Samhällsvetarkåren'],
+//   USV: ['LundaEkonomerna', 'Lunds Naturvetarkår', 'Samhällsvetarkåren'],
+// };

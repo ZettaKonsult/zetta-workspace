@@ -25,6 +25,7 @@ custom:
 
   serverless-offline:
     port: 8080
+    dontPrintOutput: true
     babelOptions:
       presets: ["env"]
   s3:
@@ -233,7 +234,7 @@ functions:
     handler: src/lambda/assignments.getNewAssignments
     events:
       - http:
-          path: assignments/
+          path: assignments/{companyCustomerId}
           method: get
           cors: true
 

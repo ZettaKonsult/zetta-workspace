@@ -9,7 +9,7 @@ import { getDbTable } from '../util/database';
 
 const table = getDbTable({ name: 'Plans' });
 
-export default async (params: {
+export const list = async (params: {
   db: DatabaseMethod,
   companyCustomerId: string,
 }): Promise<{ [string]: any }> => {
@@ -46,6 +46,20 @@ export const listAllPlansToProcess = async (params: {
     },
   });
   return result.Items;
+};
+
+export const createPlansMapping = async ({ db, companyCustomerId }) => {
+  const allPlans = await list({ db, companyCustomerId });
+  const result = allPlans.reduce((total, plan) => {
+    return {
+      ...total,
+      ...plan.labels.reduce((allLabels, label) => {
+        let old = total[label] === undefined ? [] : total[label];
+        return { ...allLabels, [label]: [...old, plan.id] };
+      }, {}),
+    };
+  }, {});
+  return result;
 };
 
 export const getPlansToPay = async (params: { db: DatabaseMethod }) => {

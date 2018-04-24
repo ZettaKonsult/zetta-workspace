@@ -5,9 +5,17 @@
  */
 
 import get from './get';
-import list from './list';
+import { list, createPlansMapping } from './list';
 import save from './save';
 import remove from './remove';
 import { updateRecipientIds } from './update';
 
-export default { get, list, save, updateRecipientIds, remove };
+export default {
+  get,
+  list,
+  save,
+  updateRecipientIds,
+  remove,
+};
+
+export { createPlansMapping };

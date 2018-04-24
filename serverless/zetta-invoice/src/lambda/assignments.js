@@ -18,7 +18,8 @@ export const getNewAssignments = async (
   callback: AWSCallback
 ) => {
   try {
-    callback(null, success(await getAssignments(callback)));
+    const { companyCustomerId } = parser(event).params;
+    callback(null, success(await getAssignments({ db, companyCustomerId })));
   } catch (error) {
     console.error(error);
     callback(null, failure(error.message));
@@ -31,7 +32,7 @@ export const saveNewAssignments = async (
   callback: AWSCallback
 ) => {
   try {
-    const assignments = await getAssignments(callback);
+    const assignments = await getAssignments();
 
     const result = await saveUnions(assignments);
     console.log(`Done saving new users.`);
@@ -56,7 +57,6 @@ export const parseUploadedFile = async (
 ) => {
   let fileName;
   let bucketName;
-  console.log(parser, getS3Object);
 
   if (process.env.IS_OFFLINE) {
     fileName = parser(event).data.fileName;
