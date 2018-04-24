@@ -8,11 +8,7 @@ import type { AWSCallback, AWSContext, AWSEvent } from 'types/AWS';
 
 import cuid from 'cuid';
 
-import parser from '../util/parser';
-import { getS3Object } from '../util/s3';
-import db, { getDbTable } from '../util/database';
-import { failure, success } from '../util/response';
-
+import { parser, getS3Object, db, getDbTable, failure, success } from '../util';
 import parseData from '../../../../packages/ladok-parser';
 import { getAssignments, saveUnions } from '../assigner';
 
@@ -60,6 +56,7 @@ export const parseUploadedFile = async (
 ) => {
   let fileName;
   let bucketName;
+  console.log(parser, getS3Object);
 
   if (process.env.IS_OFFLINE) {
     fileName = parser(event).data.fileName;

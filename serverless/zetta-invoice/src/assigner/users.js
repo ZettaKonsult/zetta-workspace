@@ -42,7 +42,7 @@ const registerUser = async (user: UserData): Promise<string> => {
   const { ssn, attributes, credits, nation, unionName } = user;
 
   try {
-    await db.create({
+    await db('create', {
       TableName,
       Item: {
         ssn: ssn,

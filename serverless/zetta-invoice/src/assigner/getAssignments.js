@@ -5,6 +5,7 @@
  */
 
 import db, { getDbTable } from '../util/database';
+import recipient from '../recipient';
 
 import unionMapper, * as unionAssigner from './unionAssigner';
 
@@ -28,7 +29,9 @@ export default async () => {
 };
 
 const buildUserMap = async aggregated => {
-  const promises = Object.keys(aggregated).map(ssn => getUser({ ssn }));
+  const promises = Object.keys(aggregated).map(ssn =>
+    recipient.getBySSN({ db, ssn })
+  );
   const users = await Promise.all(promises);
 
   return users.reduce((total, user, index) => {
@@ -48,21 +51,6 @@ const getParseResults = async () => {
     TableName: getDbTable({ name: 'LadokParseResults' }),
   });
   return result.Items;
-};
-
-const getUser = async ({ ssn }: { ssn: string }): Promise<Object> => {
-  const result = await db('query', {
-    TableName: getDbTable({ name: 'Recipients' }),
-    IndexName: 'ssn',
-    KeyConditionExpression: '#ssn = :ssn',
-    ExpressionAttributeNames: {
-      '#ssn': 'ssn',
-    },
-    ExpressionAttributeValues: {
-      ':ssn': ssn,
-    },
-  });
-  return result.Items[0];
 };
 
 const UnionMapping = {

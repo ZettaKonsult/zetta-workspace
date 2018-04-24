@@ -37,4 +37,19 @@ const getAll = async (params: {
   return result.Items;
 };
 
-export default { get, getAll };
+const getBySSN = async ({ db, ssn }: { ssn: string }): Promise<Object> => {
+  const result = await db('query', {
+    TableName: RECIPIENTS_TABLE,
+    IndexName: 'ssn',
+    KeyConditionExpression: '#ssn = :ssn',
+    ExpressionAttributeNames: {
+      '#ssn': 'ssn',
+    },
+    ExpressionAttributeValues: {
+      ':ssn': ssn,
+    },
+  });
+  return result.Items[0];
+};
+
+export { get, getAll, getBySSN };

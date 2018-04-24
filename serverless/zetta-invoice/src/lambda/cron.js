@@ -6,9 +6,7 @@
 
 import type { AWSEvent, AWSCallback, AWSContext } from 'types/AWS';
 
-import db from '../util/database';
-import parser from '../util/parser';
-import { failure, success } from '../util/response';
+import { parser, db, failure, success } from '../util';
 import planNextPaymentProcess from '../plans/process';
 
 export const main = async (

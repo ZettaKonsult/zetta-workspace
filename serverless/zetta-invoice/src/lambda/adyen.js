@@ -6,9 +6,7 @@
 
 import type { AWSEvent, AWSContext, AWSCallback } from 'types/AWS';
 
-import { success, failure } from '../util/response';
-import parser from '../util/parser';
-import db from '../util/database';
+import { failure, success } from '../util';
 
 import adyen from '../vendor/adyen';
 

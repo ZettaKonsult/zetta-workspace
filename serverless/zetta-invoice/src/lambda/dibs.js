@@ -5,12 +5,10 @@
  */
 
 import type { AWSEvent, AWSContext, AWSCallback } from 'types/AWS';
-import Dibs from '../vendor/dibs';
-
-import { success, failure } from '../util/response';
-import parser from '../util/parser';
-import db from '../util/database';
 import queryString from 'query-string';
+
+import { parser, db, failure, success } from '../util';
+import Dibs from '../vendor/dibs';
 
 export const confirm = async (
   event: AWSEvent,
