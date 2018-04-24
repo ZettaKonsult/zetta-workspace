@@ -1,0 +1,14 @@
+UB01;2016-08-12;092151;HANS;Registreringsvillkor;
+Antal personer: 3118
+S�kvillkor:
+From termin: 20161
+Tom termin: 20161
+Kurs: *
+Kurstyp: ALLA
+Lokal serie: OMR
+Lokal klass: M
+Registreringspo�ng-intervall: 1.0 - 99.0
+
+Pnr;Namn;Epostadress;Registrerade po�ng;
+9105040035;FREDRIK PALMQUIST;zmk.zk.dev@gmail.com; 117,5;
+9006211537;ZIMON KUHS;zmk.zk.dev@gmail.com; 322,5;

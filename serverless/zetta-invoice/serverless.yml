@@ -4,6 +4,7 @@ plugins:
   - serverless-webpack
   - serverless-dynamodb-local
   - serverless-offline-scheduler
+  - serverless-s3-local
   - serverless-offline
 
 custom:
@@ -11,16 +12,23 @@ custom:
     webpackConfig: ./webpack.config.js
     includeModules: true
     packager: 'yarn'
+
   stage: ${opt:stage, self:provider.stage}
+
   Invoices: 'Invoices-${self:provider.stage}'
   InvoiceStatuses: 'InvoiceStatuses-${self:provider.stage}'
   Recipients: 'Recipients-${self:provider.stage}'
   CompanyCustomers: 'CompanyCustomers-${self:provider.stage}'
   Plans: 'Plans-${self:provider.stage}'
+  LadokParseResults: 'LadokParseResults-${self:custom.stage}'
+  S3UploadFolder: 'ladok-uploads-${self:custom.stage}'
+
   serverless-offline:
     port: 8080
     babelOptions:
       presets: ["env"]
+  s3:
+    port: 8040
   dynamodb:
     start:
       port: 8000
@@ -47,6 +55,7 @@ provider:
   iamRoleStatements:
     - Effect: Allow
       Action:
+        - dynamodb:Scan
         - dynamodb:GetItem
         - dynamodb:PutItem
         - dynamodb:Query
@@ -57,12 +66,21 @@ provider:
         - { "Fn::GetAtt": ["InvoiceStatusesDynamoDBTable", "Arn" ] }
         - { "Fn::GetAtt": ["PlansDynamoDBTable", "Arn" ] }
         - { "Fn::GetAtt": ["RecipientsDynamoDBTable", "Arn" ] }
+        - { "Fn::GetAtt": ["LadokParseResultsTable", "Arn" ] }
+    - Effect: Allow
+      Action:
+        - s3:getObject
+      Resource:
+        - { "Fn::GetAtt": ["S3UploadBucket", "Arn"] }
+
   environment:
     CompanyCustomersTable: ${self:custom.CompanyCustomers}
     InvoicesTable: ${self:custom.Invoices}
     InvoiceStatusesTable: ${self:custom.Invoices}
     PlansTable: ${self:custom.Plans}
     RecipientsTable: ${self:custom.Recipients}
+    S3UploadFolder: ${self:custom.S3UploadFolder}
+    LadokParseResults: ${self:custom.LadokParseResults}
 
 functions:
   dibsConfirm:
@@ -210,12 +228,40 @@ functions:
           method: get
           cors: true
 
+  #This returns the result of all assignment results
+  getNewAssignments:
+    handler: src/lambda/assignments.getNewAssignments
+    events:
+      - http:
+          path: assignments/
+          method: get
+          cors: true
+
+  #This is the commit of for all the parsed files
+  saveNewAssignments:
+    handler: src/lambda/assignments.saveNewAssignments
+    events:
+      - http:
+          path: assignments/
+          method: put
+          cors: true
+
+  #Should be invoked when a file is uploaded
+  parseUploadedFile:
+    handler: src/lambda/assignments.parseUploadedFile
+    events:
+      - http:
+          path: ladok/parse
+          method: post
+          cors: true
+
 
 package:
   exclude:
     - node_modules/serverless-dynamodb-local/**
     - node_modules/serverless-offline/**
     - node_modules/serverless-offline-scheduler/**
+    - node_modules/serverless-s3-local/**
 
 resources:
   Resources:
@@ -232,6 +278,7 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
+
     InvoicesTable:
       Type: AWS::DynamoDB::Table
       Properties:
@@ -249,6 +296,7 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
+
     InvoiceStatusesTable:
       Type: AWS::DynamoDB::Table
       Properties:
@@ -266,6 +314,7 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
+
     PlansTable:
       Type: AWS::DynamoDB::Table
       Properties:
@@ -283,6 +332,7 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
+
     RecipientsTable:
       Type: AWS::DynamoDB::Table
       Properties:
@@ -295,6 +345,37 @@ resources:
         AttributeDefinitions:
           - AttributeName: companyCustomerId
             AttributeType: S
+          - AttributeName: id
+            AttributeType: S
+          - AttributeName: ssn
+            AttributeType: S
+        GlobalSecondaryIndexes:
+          - IndexName: ssn
+            KeySchema:
+            - AttributeName: ssn
+              KeyType: HASH
+            Projection:
+              ProjectionType: ALL
+            ProvisionedThroughput:
+              ReadCapacityUnits: 1
+              WriteCapacityUnits: 1
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+
+    S3UploadBucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: ${self:custom.S3UploadFolder}
+
+    LadokParseResultsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:custom.LadokParseResults}
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        AttributeDefinitions:
           - AttributeName: id
             AttributeType: S
         ProvisionedThroughput:
