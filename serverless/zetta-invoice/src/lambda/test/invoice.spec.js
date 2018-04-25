@@ -1,40 +1,141 @@
 /**
  * @date 2018-03-05
  */
-
+import cuid from 'cuid';
 import request from '../../util/http';
 import testConfig from '../../util/testConfig';
 
 const host = testConfig.Host;
 
-afterEach(async () => {
-  await request({
-    host,
-    path: `invoice/lock`,
-    payload: {
-      method: 'post',
-      body: {
-        companyCustomerId: 'companyCustomerId',
-        invoiceId: 'invoiceId3',
-        lock: false,
+let companyCustomerId1 = cuid();
+let companyCustomerId2 = cuid();
+let invoices = [
+  {
+    companyCustomerId: companyCustomerId1,
+    invoiceRows: [
+      { description: '3an A', unit: 34, price: 345, tax: 0.25 },
+      { description: '3an B', unit: 34, price: 345, tax: 0.25 },
+      { description: '3an C', unit: 34, price: 345, tax: 0.25 },
+    ],
+    recipientIds: ['recipientId1'],
+  },
+  {
+    companyCustomerId: companyCustomerId2,
+    invoiceRows: [
+      { description: '3an A', unit: 34, price: 345, tax: 0.25 },
+      { description: '3an B', unit: 34, price: 345, tax: 0.25 },
+      { description: '3an C', unit: 34, price: 345, tax: 0.25 },
+    ],
+    recipientIds: ['recipientId1'],
+  },
+];
+
+beforeAll(async () => {
+  let invoicesPromise = invoices.map(invoice =>
+    request({
+      host,
+      path: `invoice`,
+      payload: {
+        method: 'post',
+        body: invoice,
       },
-    },
+    })
+  );
+  invoices = await Promise.all(invoicesPromise);
+});
+
+afterAll(async () => {
+  let invoicesPromise = invoices.map(invoice =>
+    request({
+      host,
+      path: 'invoice',
+      payload: {
+        method: 'delete',
+        body: {
+          companyCustomerId: invoice.companyCustomerId,
+          invoiceId: invoice.id,
+        },
+      },
+    })
+  );
+  await Promise.all(invoicesPromise);
+});
+
+describe('Invoices', () => {
+  it('invoices have correct attributes after creation', () => {
+    let invoice = invoices[0];
+
+    expect(invoice).toHaveProperty('id');
   });
 
-  await request({
-    host,
-    path: 'invoice',
-    payload: {
-      method: 'delete',
-      body: {
-        companyCustomerId: 'companyCustomerId',
-        invoiceId: 'createdId',
+  it('get unlocked invoices', async () => {
+    const result = await request({
+      payload: {
+        method: 'get',
       },
-    },
+      host,
+      path: `invoice/${companyCustomerId1}/false`,
+    });
+
+    expect(result).toEqual([invoices[0]]);
+  });
+
+  //TODO this endpoint does not inject companyCustomer on locking yet
+  it.skip('lock invoice', async () => {
+    const result = await request({
+      payload: {
+        method: 'post',
+        body: {
+          companyCustomerId: companyCustomerId2,
+          invoiceId: invoices[1].id,
+          lock: 'true',
+        },
+      },
+      host,
+      path: `invoice/lock`,
+    });
+
+    const lockedInvoices = await request({
+      payload: {
+        method: 'get',
+      },
+      host,
+      path: `invoice/${companyCustomerId2}/true`,
+    });
+
+    expect(result).toEqual({ [invoices[1].id]: { locked: true } });
+    expect(lockedInvoices[0]).toHaveProperty('companyCustomer');
   });
 });
 
-describe('Invoices.', () => {
+describe.skip('Invoices.', () => {
+  afterEach(async () => {
+    await request({
+      host,
+      path: `invoice/lock`,
+      payload: {
+        method: 'post',
+        body: {
+          companyCustomerId: 'companyCustomerId',
+          invoiceId: 'invoiceId3',
+          lock: false,
+        },
+      },
+    });
+
+    await request({
+      host,
+      path: 'invoice',
+      payload: {
+        method: 'delete',
+        body: {
+          companyCustomerId: 'companyCustomerId',
+          invoiceId: 'createdId',
+        },
+      },
+    });
+  });
+
   it('Get unlocked.', async () => {
     const expected = [
       {
