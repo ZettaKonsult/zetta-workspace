@@ -10,7 +10,9 @@ import cuid from 'cuid';
 
 import { parser, getS3Object, db, getDbTable, failure, success } from '../util';
 import parseData from '../../../../packages/ladok-parser';
-import { getAssignments, saveUnions } from '../assigner';
+import { getAssignments } from '../assigner';
+import Recipient from '../recipient';
+import Plan from '../plans';
 
 export const getNewAssignments = async (
   event: AWSEvent,
@@ -32,19 +34,30 @@ export const saveNewAssignments = async (
   callback: AWSCallback
 ) => {
   try {
-    const assignments = await getAssignments();
-
-    const result = await saveUnions(assignments);
+    const { companyCustomerId } = parser(event).data;
+    const { created, updated } = await getAssignments({
+      db,
+      companyCustomerId,
+    });
+    let promises = Object.values(created).map(user => {
+      const recipient = { ssn: user.ssn, ...user.attributes };
+      return Recipient.save({ db, companyCustomerId, recipient });
+    });
+    let recipients = await Promise.all(promises);
     console.log(`Done saving new users.`);
 
-    // TODO: Use Plans instead.
-    // await Membership.saveSubscriptions({
-    //   users: result.registered
-    //     .concat(result.updated)
-    //     .reduce((object, ssn) => ({ ...object, [ssn]: users[ssn] }), {}),
-    // });
+    const plansPromise = recipients.map(recipient => {
+      const { unionName } = created[recipient.ssn];
+      return Plan.updateRecipientIds({
+        db,
+        companyCustomerId,
+        recipientId: recipient.id,
+        planId: unionName,
+      });
+    });
+    let updatedPlans = await Promise.all(plansPromise);
     console.log(`Done assigning subscriptions.`);
-    callback(null, result);
+    callback(null, success(updatedPlans));
   } catch (error) {
     callback(error);
   }

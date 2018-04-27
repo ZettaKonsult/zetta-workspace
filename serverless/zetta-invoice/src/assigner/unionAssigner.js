@@ -108,12 +108,13 @@ export const compileUserData = (params: {
     attributes: {
       birthdate: person.ssn,
       email: person.email,
-      family_name: family_name,
-      given_name: given_name,
+      lastName: family_name,
+      firstName: given_name,
     },
   };
 };
 
+//TODO needs to compare reccuringPaymnets
 export const getUpdatedUnions = (params: {
   assignments: { [string]: any },
   users: { [string]: UserData },

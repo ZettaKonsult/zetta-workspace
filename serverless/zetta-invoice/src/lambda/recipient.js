@@ -40,3 +40,23 @@ export const get = async (
     callback(null, failure(error.message));
   }
 };
+
+export const remove = async (
+  event: AWSEvent,
+  context: AWSContext,
+  callback: AWSCallback
+) => {
+  const { companyCustomerId, recipientId } = parser(event).data;
+
+  try {
+    const result = await Recipient.remove({
+      db,
+      companyCustomerId,
+      recipientId,
+    });
+    callback(null, success(result));
+  } catch (error) {
+    console.error(error);
+    callback(null, failure(error.message));
+  }
+};

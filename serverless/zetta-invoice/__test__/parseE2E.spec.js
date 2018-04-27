@@ -1,18 +1,18 @@
-import { promisify } from 'util';
-import fs from 'fs';
 import { incrementToNextLowerBound } from 'date-primitive-utils';
 
+import { asyncReadDir, uploadFile } from './testHelpers';
 import testConfig from '../src/util/testConfig';
-import { request, putS3Object } from '../src/util';
+import { request } from '../src/util';
 
 const companyCustomerId = 'companyCustomerId123';
 const recipientId = 'recipientId';
 
+let recipients = [];
 let fileNames = [];
+process.env.IS_OFFLINE = true;
 
 beforeAll(async () => {
   try {
-    process.env.IS_OFFLINE = true;
     const result = await asyncReadDir('./mocks/ladok');
     let filePromises = result.map(fileName => uploadFile(fileName));
     let plansPromises = plans.map(plan =>
@@ -28,7 +28,7 @@ beforeAll(async () => {
         },
       })
     );
-    await Promise.all(filePromises);
+    fileNames = await Promise.all(filePromises);
     plans = await Promise.all(plansPromises);
   } catch (error) {
     console.error(error);
@@ -36,7 +36,7 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-  let promise = plans.map(({ id }) =>
+  let planPromise = plans.map(({ id }) =>
     request({
       host: testConfig.Host,
       path: 'plans',
@@ -49,82 +49,166 @@ afterAll(async () => {
       },
     })
   );
-  await Promise.all(promise);
+  let recipientPromise = recipients.map(id =>
+    request({
+      host: testConfig.Host,
+      path: 'recipient',
+      payload: {
+        method: 'delete',
+        body: {
+          recipientId: id,
+          companyCustomerId,
+        },
+      },
+    })
+  );
+  await Promise.all([...planPromise, ...recipientPromise]);
 });
 
-describe('check pipeline for uploading and parsing', () => {
+describe.only('check pipeline for uploading and parsing', () => {
   it('parses all uploaded files', async () => {
-    try {
-      const promise = fileNames.map(fileName =>
-        request({
-          host: testConfig.Host,
-          path: 'ladok/parse',
-          payload: { method: 'post', body: { fileName } },
-        })
-      );
-      await Promise.all(promise);
-
-      const result = await request({
+    const promise = fileNames.map(fileName =>
+      request({
         host: testConfig.Host,
-        path: `assignments/${companyCustomerId}`,
-        payload: { method: 'get', body: {} },
-      });
+        path: 'ladok/parse',
+        payload: { method: 'post', body: { fileName } },
+      })
+    );
+    await Promise.all(promise);
 
-      expect(result).toEqual({
-        created: {
-          '9006211537': {
-            attributes: {
-              birthdate: '9006211537',
-              email: 'zmk.zk.dev@gmail.com',
-              family_name: 'Kuhs',
-              given_name: 'Zimon',
-            },
-            credits: {
-              EHL: 21.5,
-              HT: 2.5,
-              JUR: 12.5,
-              KO: 0.5,
-              MED: 322.5,
-              NAT: 2,
-              SAM: 2,
-              USV: 221.5,
-            },
-            nation: 'Undefined Nation',
-            ssn: '9006211537',
-            unionName: plans.find(plan =>
-              plan.labels.find(label => label === 'MED')
-            ).id,
+    const result = await request({
+      host: testConfig.Host,
+      path: `assignments/${companyCustomerId}`,
+      payload: { method: 'get', body: {} },
+    });
+
+    expect(result).toEqual({
+      created: {
+        '9006211537': {
+          attributes: {
+            birthdate: '9006211537',
+            email: 'zmk.zk.dev@gmail.com',
+            lastName: 'Kuhs',
+            firstName: 'Zimon',
           },
-          '9105040035': {
-            attributes: {
-              birthdate: '9105040035',
-              email: 'zmk.zk.dev@gmail.com',
-              family_name: 'Palmquist',
-              given_name: 'Fredrik',
-            },
-            credits: {
-              EHL: 35.5,
-              HT: 30.5,
-              JUR: 27.5,
-              KO: 137.5,
-              MED: 117.5,
-              NAT: 7.5,
-              SAM: 3,
-              USV: 317.5,
-            },
-            nation: 'Undefined Nation',
-            ssn: '9105040035',
-            unionName: plans.find(plan =>
-              plan.labels.find(label => label === 'USV')
-            ).id,
+          credits: {
+            EHL: 21.5,
+            HT: 2.5,
+            JUR: 12.5,
+            KO: 0.5,
+            MED: 322.5,
+            NAT: 2,
+            SAM: 2,
+            USV: 221.5,
           },
+          nation: 'Undefined Nation',
+          ssn: '9006211537',
+          unionName: plans.find(plan =>
+            plan.labels.find(label => label === 'MED')
+          ).id,
         },
-        modified: {},
-        same: {},
-      });
-    } catch (error) {
-      console.error(error);
-    }
+        '9105040035': {
+          attributes: {
+            birthdate: '9105040035',
+            email: 'zmk.zk.dev@gmail.com',
+            lastName: 'Palmquist',
+            firstName: 'Fredrik',
+          },
+          credits: {
+            EHL: 35.5,
+            HT: 30.5,
+            JUR: 27.5,
+            KO: 137.5,
+            MED: 117.5,
+            NAT: 7.5,
+            SAM: 3,
+            USV: 317.5,
+          },
+          nation: 'Undefined Nation',
+          ssn: '9105040035',
+          unionName: plans.find(plan =>
+            plan.labels.find(label => label === 'USV')
+          ).id,
+        },
+      },
+      modified: {},
+      same: {},
+    });
+  });
+
+  it('check save pipeline', async () => {
+    const result = await request({
+      host: testConfig.Host,
+      path: `assignments`,
+      payload: { method: 'put', body: { companyCustomerId } },
+    });
+    recipients = result.reduce(
+      (total, plan) => [...total, ...plan.recipientIds],
+      []
+    );
+
+    expect(recipients).toHaveLength(2);
+  });
+
+  it('The assigned members should be returned as unchanged', async () => {
+    const result = await request({
+      host: testConfig.Host,
+      path: `assignments/${companyCustomerId}`,
+      payload: { method: 'get', body: {} },
+    });
+
+    expect(result).toEqual({
+      created: {
+        '9006211537': {
+          attributes: {
+            birthdate: '9006211537',
+            email: 'zmk.zk.dev@gmail.com',
+            lastName: 'Kuhs',
+            firstName: 'Zimon',
+          },
+          credits: {
+            EHL: 21.5,
+            HT: 2.5,
+            JUR: 12.5,
+            KO: 0.5,
+            MED: 322.5,
+            NAT: 2,
+            SAM: 2,
+            USV: 221.5,
+          },
+          nation: 'Undefined Nation',
+          ssn: '9006211537',
+          unionName: plans.find(plan =>
+            plan.labels.find(label => label === 'MED')
+          ).id,
+        },
+        '9105040035': {
+          attributes: {
+            birthdate: '9105040035',
+            email: 'zmk.zk.dev@gmail.com',
+            lastName: 'Palmquist',
+            firstName: 'Fredrik',
+          },
+          credits: {
+            EHL: 35.5,
+            HT: 30.5,
+            JUR: 27.5,
+            KO: 137.5,
+            MED: 117.5,
+            NAT: 7.5,
+            SAM: 3,
+            USV: 317.5,
+          },
+          nation: 'Undefined Nation',
+          ssn: '9105040035',
+          unionName: plans.find(plan =>
+            plan.labels.find(label => label === 'USV')
+          ).id,
+        },
+      },
+      modified: {},
+      same: {},
+    });
   });
 });
 
@@ -204,20 +288,6 @@ describe('Simulate 1 TRF interval', () => {
     expect(updatedPlans[0].epochNextProcess).toBe(startOfNextInterval);
   });
 });
-
-const asyncReadDir = promisify(fs.readdir);
-const asyncReadFile = promisify(fs.readFile);
-const uploadFile = async (fileName, bucketName = 'ladok-uploads-dev') => {
-  const file = await asyncReadFile(`./mocks/ladok/${fileName}`);
-
-  await putS3Object({
-    bucketName,
-    fileName,
-    file,
-  });
-
-  fileNames.push(fileName);
-};
 
 let plans = [
   {

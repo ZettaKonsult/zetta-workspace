@@ -176,12 +176,19 @@ functions:
           path: /recipient
           method: put
           cors: true
-  getRecipients:
+  getRecipient:
     handler: src/lambda/recipient.get
     events:
       - http:
           path: /recipient/{companyCustomerId}/{recipientId}
           method: get
+          cors: true
+  deleteRecipent:
+    handler: src/lambda/recipient.remove
+    events:
+      - http:
+          path: /recipient
+          method: delete
           cors: true
 
   getPlans:
@@ -255,6 +262,9 @@ functions:
           path: ladok/parse
           method: post
           cors: true
+      # - s3:
+      #     bucket: ladok-uploads-dev
+      #     event: s3:ObjectCreated:*
 
 
 package:
