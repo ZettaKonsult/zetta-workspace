@@ -40,19 +40,23 @@ export const saveNewAssignments = async (
       companyCustomerId,
     });
     let promises = Object.values(created).map(user => {
-      const recipient = { ssn: user.ssn, ...user.attributes };
+      const recipient = {
+        ssn: user.ssn,
+        ...user.attributes,
+        reccuringPayments: user.reccuringPayments,
+      };
       return Recipient.save({ db, companyCustomerId, recipient });
     });
     let recipients = await Promise.all(promises);
     console.log(`Done saving new users.`);
-
+    console.log(recipients);
     const plansPromise = recipients.map(recipient => {
-      const { unionName } = created[recipient.ssn];
+      const { reccuringPayments } = created[recipient.ssn];
       return Plan.updateRecipientIds({
         db,
         companyCustomerId,
         recipientId: recipient.id,
-        planId: unionName,
+        planId: reccuringPayments[0],
       });
     });
     let updatedPlans = await Promise.all(plansPromise);

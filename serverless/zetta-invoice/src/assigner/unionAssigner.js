@@ -13,8 +13,6 @@ import type {
 
 import { applyFormatting } from './attributes';
 
-const DEFAULT_NATION = 'Undefined Nation';
-
 export default ({ people, unionMapping }) => {
   let aggregated = aggregateResults(people);
   let assignments = getUnions(unionMapping, getFaculties(aggregated));
@@ -33,7 +31,7 @@ export const getFaculties = (people: {
     {}
   );
 
-const getAssignment = ({ credits }: { credits: Object }): string => {
+const getAssignment = ({ credits }): string => {
   const result = Object.entries(credits).reduce(
     ({ maxKey, maxValue }, [union, unionCredits]) => {
       // Allows either string xx,xx (Swedish format) or number
@@ -44,7 +42,12 @@ const getAssignment = ({ credits }: { credits: Object }): string => {
           : unionCredits
       );
 
-      if (points > maxValue || (points === maxValue && Math.random() >= 0.5)) {
+      if (points > maxValue) {
+        return {
+          maxKey: union,
+          maxValue: points,
+        };
+      } else if (points === maxValue && Math.random() >= 0.5) {
         return {
           maxKey: union,
           maxValue: points,
@@ -114,7 +117,8 @@ export const compileUserData = (params: {
   };
 };
 
-//TODO needs to compare reccuringPaymnets
+//TODO should check if default plans need to be applied
+// check which plans needs to be switched out for others union1 -> union2
 export const getUpdatedUnions = (params: {
   assignments: { [string]: any },
   users: { [string]: UserData },
@@ -124,28 +128,27 @@ export const getUpdatedUnions = (params: {
   return Object.keys(assignments).reduce(
     (total, ssn) => {
       const user = users[ssn];
-      const oldUnion = user.unionName;
+      const plans = user.reccuringPayments || [];
       let newUnion = assignments[ssn];
 
       if (newUnion === undefined) {
-        newUnion = [oldUnion];
-      } else if (newUnion.length === 1) {
+        newUnion = plans;
+      } else {
         newUnion = newUnion[0];
       }
 
-      if (oldUnion === undefined) {
+      if (plans.length === 0) {
         total.created[ssn] = {
           ...user,
-          nation: DEFAULT_NATION,
-          unionName: newUnion,
+          reccuringPayments: [newUnion],
         };
-      } else if (oldUnion !== newUnion) {
+      } else if (plans.findIndex(id => id === newUnion) === -1) {
         total.modified[ssn] = {
           ...user,
-          unionName: { old: oldUnion, next: newUnion },
+          reccuringPayments: [newUnion],
         };
       } else {
-        total.same[ssn] = { ...user, unionName: oldUnion };
+        total.same[ssn] = { ...user };
       }
       return total;
     },

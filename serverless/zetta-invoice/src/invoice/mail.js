@@ -19,7 +19,7 @@ export default async (params: {
   let { discount, tax } = params;
 
   [discount] = zeroIfNull({ numbers: [discount] });
-  console.log(`Found discount and tax: ${discount}.`);
+  console.log(`Found discount: ${discount}.`);
 
   console.log(
     `Mailing process for invoice ${invoiceId}, customer ${companyCustomerId} started.`

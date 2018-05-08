@@ -39,8 +39,7 @@ describe('Union assigner.', () => {
                 family_name: '',
               },
               credits: {},
-              nation: 'Undefined Nation',
-              unionName: 'A',
+              reccuringPayments: ['A'],
             },
           },
         })
@@ -57,12 +56,12 @@ describe('Union assigner.', () => {
               given_name: 'b',
               family_name: '',
             },
-            nation: 'Undefined Nation',
-            unionName: 'A',
+            reccuringPayments: ['A'],
           },
         },
       });
     });
+
     it('One modified.', () => {
       expect(
         getUpdatedUnions({
@@ -79,8 +78,7 @@ describe('Union assigner.', () => {
                 family_name: '',
               },
               credits: {},
-              nation: 'Undefined Nation',
-              unionName: 'B',
+              reccuringPayments: ['B'],
             },
           },
         })
@@ -96,13 +94,13 @@ describe('Union assigner.', () => {
               family_name: '',
             },
             ssn: '1',
-            nation: 'Undefined Nation',
-            unionName: { next: 'A', old: 'B' },
+            reccuringPayments: ['A'],
           },
         },
         same: {},
       });
     });
+
     it('One new.', () => {
       expect(
         getUpdatedUnions({
@@ -133,35 +131,35 @@ describe('Union assigner.', () => {
               family_name: '',
             },
             ssn: '1',
-            nation: 'Undefined Nation',
-            unionName: 'Aa',
+            reccuringPayments: ['Aa'],
           },
         },
         modified: {},
         same: {},
       });
     });
+
     it('One decide.', () => {
-      expect(
-        getUpdatedUnions({
-          assignments: {
-            '1': ['Aa', 'Bb'],
+      const assignments = { '1': ['Aa', 'Bb'] };
+      const users = {
+        '1': {
+          ssn: '1',
+          attributes: {
+            birthdate: '1',
+            email: 'a',
+            given_name: 'b',
+            family_name: '',
           },
-          users: {
-            '1': {
-              ssn: '1',
-              attributes: {
-                birthdate: '1',
-                email: 'a',
-                given_name: 'b',
-                family_name: '',
-              },
-              nation: 'Undefined Nation',
-              credits: {},
-            },
-          },
-        })
-      ).toEqual({
+          credits: {},
+        },
+      };
+
+      const result = getUpdatedUnions({
+        assignments,
+        users,
+      });
+
+      expect(result).toEqual({
         created: {
           '1': {
             credits: {},
@@ -172,14 +170,14 @@ describe('Union assigner.', () => {
               family_name: '',
             },
             ssn: '1',
-            nation: 'Undefined Nation',
-            unionName: ['Aa', 'Bb'],
+            reccuringPayments: ['Aa'],
           },
         },
         modified: {},
         same: {},
       });
     });
+
     it('One new, one modified.', () => {
       expect(
         getUpdatedUnions({
@@ -208,8 +206,7 @@ describe('Union assigner.', () => {
                 family_name: '',
               },
               credits: {},
-              nation: 'Undefined Nation',
-              unionName: 'Bb',
+              reccuringPayments: ['Bb'],
             },
             '3': {
               ssn: '3',
@@ -220,8 +217,7 @@ describe('Union assigner.', () => {
                 family_name: '',
               },
               credits: {},
-              nation: 'Undefined Nation',
-              unionName: 'Aa',
+              reccuringPayments: ['Aa'],
             },
           },
         })
@@ -236,8 +232,7 @@ describe('Union assigner.', () => {
               family_name: '',
             },
             ssn: '1',
-            nation: 'Undefined Nation',
-            unionName: 'Aa',
+            reccuringPayments: ['Aa'],
           },
         },
         modified: {
@@ -250,8 +245,7 @@ describe('Union assigner.', () => {
               family_name: '',
             },
             ssn: '3',
-            nation: 'Undefined Nation',
-            unionName: { next: 'Cc', old: 'Aa' },
+            reccuringPayments: ['Cc'],
           },
         },
         same: {
@@ -264,14 +258,13 @@ describe('Union assigner.', () => {
               family_name: '',
             },
             ssn: '2',
-            nation: 'Undefined Nation',
-            unionName: 'Bb',
+            reccuringPayments: ['Bb'],
           },
         },
       });
     });
-    it('All new.', () => {});
   });
+
   describe('Union assignment.', () => {
     it('From faculty.', () => {
       expect(getUnions(UNION_MAP, { [SSN]: 'MED' })).toEqual({

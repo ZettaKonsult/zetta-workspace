@@ -37,11 +37,10 @@ export const prepareData = (data: {
   recipient: Recipient,
 }): Array<InvoiceSpecification> => {
   const { discount, invoice, defaultTax, companyCustomer, recipient } = data;
-
   const id = new Date(invoice.createdAt);
   const timeToPay = new Date(id.getUTCFullYear(), id.getUTCMonth() + 1);
 
-  const { calculatedRows, netTotal, taxTotal, sum } = Price.calculate({
+  const { netTotal, taxTotal, total, invoiceRows } = Price.calculate({
     invoiceRows: invoice.invoiceRows,
     defaultTax,
   });
@@ -53,11 +52,11 @@ export const prepareData = (data: {
       createdAt: id.toISOString().split('T')[0],
       timeToPay: timeToPay.toISOString().split('T')[0],
     },
-    invoiceRows: calculatedRows,
+    invoiceRows,
     discount: discount | 0,
     netTotal,
     taxTotal,
-    total: sum,
+    total: total,
     recipient,
   };
 };

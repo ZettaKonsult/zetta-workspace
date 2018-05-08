@@ -107,7 +107,7 @@ export const url = async (params: {
       throw new Error(`No such invoice ${invoiceId}!`);
     }
 
-    const amount = Price.calculate(invoice).sum;
+    const amount = Price.calculate(invoice).total;
     console.log(`Price for DIBS: ${amount}.`);
 
     form = {

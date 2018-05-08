@@ -9,7 +9,7 @@
     "address": "Road 234A",
     "mobile": "+46762345678",
     "zipcode": "12345",
-    "email": "firstName@recipient.com",
+    "email": "fiddep@telia.com",
     "createdAt": 2345678901
   },
   {
@@ -22,7 +22,7 @@
     "address": "Road 234A1",
     "mobile": "+467623456781",
     "zipcode": "123451",
-    "email": "firstNameA@recipient.com",
+    "email": "fiddep@telia.com",
     "createdAt": 23456789011
   },
   {
@@ -35,7 +35,7 @@
     "address": "Road 234A1",
     "mobile": "+467623456781",
     "zipcode": "123451",
-    "email": "firstNameB@recipient.com",
+    "email": "fiddep@telia.com",
     "createdAt": 23456789011
   }
 ]

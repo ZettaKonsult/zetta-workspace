@@ -23,7 +23,7 @@ afterEach(async () => {
 });
 
 describe('Mail.', () => {
-  it('Send.', async () => {
+  it.only('Send.', async () => {
     const result = await request({
       host,
       path: 'invoice/mail',
@@ -37,6 +37,7 @@ describe('Mail.', () => {
     });
     expect(result).toEqual({ reference: 3456789012 });
   });
+
   it('Already paid.', async () => {
     expect(
       await request({
@@ -54,6 +55,7 @@ describe('Mail.', () => {
       'Could not send invoice mail: Can not pay with a non-pending invoice (invoiceId2, status succeeded)!'
     );
   });
+
   it('Wrong customer.', async () => {
     expect(
       await request({
@@ -69,6 +71,7 @@ describe('Mail.', () => {
       })
     ).toEqual('Could not send invoice mail: No such customer (ErrorCustomer)!');
   });
+
   it('Wrong invoice.', async () => {
     expect(
       await request({
@@ -84,6 +87,7 @@ describe('Mail.', () => {
       })
     ).toEqual('Could not send invoice mail: No such invoice (ErrorInvoice)!');
   });
+
   it('Both wrong.', async () => {
     expect(
       await request({

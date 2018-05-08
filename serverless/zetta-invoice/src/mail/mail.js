@@ -14,8 +14,6 @@ import emailDoc from './emailDoc';
 import prepareTemplate from './prepareTemplate';
 import Invoice from '../invoice';
 
-const TEST_MAIL = 'zmk.zk.dev@gmail.com';
-
 let browser;
 
 export const sendInvoice = async (params: {
@@ -123,7 +121,7 @@ export const send = async (params: {
 
   try {
     await recipients.forEach(async recipient => {
-      const email = recipient.email;
+      const { email } = recipient;
       console.log(`Sending email to ${email}.`);
 
       const page = await getBrowserPage();
@@ -138,7 +136,7 @@ export const send = async (params: {
       console.log(`Set page content.`);
       const buffer = await page.pdf({ format: 'A4' });
       console.log(`Translated content to PDF buffer.`);
-      await emailDoc.send({ buffer, email: TEST_MAIL });
+      await emailDoc.send({ buffer, email });
     });
   } catch (error) {
     console.log(error);

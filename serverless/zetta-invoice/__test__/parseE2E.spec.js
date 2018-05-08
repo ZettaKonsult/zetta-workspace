@@ -65,7 +65,7 @@ afterAll(async () => {
   await Promise.all([...planPromise, ...recipientPromise]);
 });
 
-describe.only('check pipeline for uploading and parsing', () => {
+describe('check pipeline for uploading and parsing', () => {
   it('parses all uploaded files', async () => {
     const promise = fileNames.map(fileName =>
       request({
@@ -101,11 +101,10 @@ describe.only('check pipeline for uploading and parsing', () => {
             SAM: 2,
             USV: 221.5,
           },
-          nation: 'Undefined Nation',
           ssn: '9006211537',
-          unionName: plans.find(plan =>
-            plan.labels.find(label => label === 'MED')
-          ).id,
+          reccuringPayments: [
+            plans.find(plan => plan.labels.find(label => label === 'MED')).id,
+          ],
         },
         '9105040035': {
           attributes: {
@@ -124,11 +123,10 @@ describe.only('check pipeline for uploading and parsing', () => {
             SAM: 3,
             USV: 317.5,
           },
-          nation: 'Undefined Nation',
           ssn: '9105040035',
-          unionName: plans.find(plan =>
-            plan.labels.find(label => label === 'USV')
-          ).id,
+          reccuringPayments: [
+            plans.find(plan => plan.labels.find(label => label === 'USV')).id,
+          ],
         },
       },
       modified: {},
@@ -136,12 +134,13 @@ describe.only('check pipeline for uploading and parsing', () => {
     });
   });
 
-  it('check save pipeline', async () => {
+  it('save assigns recipients to plans', async () => {
     const result = await request({
       host: testConfig.Host,
       path: `assignments`,
       payload: { method: 'put', body: { companyCustomerId } },
     });
+
     recipients = result.reduce(
       (total, plan) => [...total, ...plan.recipientIds],
       []
@@ -158,56 +157,32 @@ describe.only('check pipeline for uploading and parsing', () => {
     });
 
     expect(result).toEqual({
-      created: {
+      created: {},
+      modified: {},
+      same: {
         '9006211537': {
-          attributes: {
-            birthdate: '9006211537',
-            email: 'zmk.zk.dev@gmail.com',
-            lastName: 'Kuhs',
-            firstName: 'Zimon',
-          },
-          credits: {
-            EHL: 21.5,
-            HT: 2.5,
-            JUR: 12.5,
-            KO: 0.5,
-            MED: 322.5,
-            NAT: 2,
-            SAM: 2,
-            USV: 221.5,
-          },
-          nation: 'Undefined Nation',
+          companyCustomerId: 'companyCustomerId123',
+          email: 'zmk.zk.dev@gmail.com',
+          firstName: 'Zimon',
+          id: recipients[1],
+          lastName: 'Kuhs',
+          reccuringPayments: [
+            plans.find(plan => plan.labels.find(label => label === 'MED')).id,
+          ],
           ssn: '9006211537',
-          unionName: plans.find(plan =>
-            plan.labels.find(label => label === 'MED')
-          ).id,
         },
         '9105040035': {
-          attributes: {
-            birthdate: '9105040035',
-            email: 'zmk.zk.dev@gmail.com',
-            lastName: 'Palmquist',
-            firstName: 'Fredrik',
-          },
-          credits: {
-            EHL: 35.5,
-            HT: 30.5,
-            JUR: 27.5,
-            KO: 137.5,
-            MED: 117.5,
-            NAT: 7.5,
-            SAM: 3,
-            USV: 317.5,
-          },
-          nation: 'Undefined Nation',
+          companyCustomerId: 'companyCustomerId123',
+          email: 'zmk.zk.dev@gmail.com',
+          firstName: 'Fredrik',
+          id: recipients[0],
+          lastName: 'Palmquist',
+          reccuringPayments: [
+            plans.find(plan => plan.labels.find(label => label === 'USV')).id,
+          ],
           ssn: '9105040035',
-          unionName: plans.find(plan =>
-            plan.labels.find(label => label === 'USV')
-          ).id,
         },
       },
-      modified: {},
-      same: {},
     });
   });
 });

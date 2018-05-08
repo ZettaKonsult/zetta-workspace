@@ -21,6 +21,6 @@ export const format = (params: {
     ssn: data.ssn,
     mobile: data.mobile,
     company: data.company,
-    reccuringPayments: [],
+    reccuringPayments: data.reccuringPayments || [],
   };
 };
