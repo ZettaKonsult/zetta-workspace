@@ -264,13 +264,13 @@ functions:
       #     bucket: ladok-uploads-dev
       #     event: s3:ObjectCreated:*
 
-  # createCompanyCustomer:
-  #   handler: src/lambda/companycustomer.create
-  #   events:
-  #     - http:
-  #         path: /companycustomer
-  #         method: post
-  #         cors: true
+  createCompanyCustomer:
+    handler: src/lambda/companyCustomer.create
+    events:
+      - http:
+          path: /companycustomer
+          method: post
+          cors: true
   # updateCompanyCustomer:
   #   handler: src/lambda/companycustomer.update
   #   events:
@@ -278,20 +278,20 @@ functions:
   #         path: /companycustomer
   #         method: put
   #         cors: true
-  # getCompanyCustomer:
-  #   handler: src/lambda/companycustomer.get
-  #   events:
-  #     - http:
-  #         path: /companycustomer/{companyCustomerId}/{recipientId}
-  #         method: get
-  #         cors: true
-  # deleteCompanyCustomer:
-  #   handler: src/lambda/companycustomer.remove
-  #   events:
-  #     - http:
-  #         path: /companycustomer
-  #         method: delete
-  #         cors: true
+  getCompanyCustomer:
+    handler: src/lambda/companyCustomer.get
+    events:
+      - http:
+          path: /companycustomer/{companyCustomerId}/
+          method: get
+          cors: true
+  deleteCompanyCustomer:
+    handler: src/lambda/companyCustomer.remove
+    events:
+      - http:
+          path: /companycustomer
+          method: delete
+          cors: true
 
 
 package:
