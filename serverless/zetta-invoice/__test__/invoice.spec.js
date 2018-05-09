@@ -5,9 +5,8 @@ import cuid from 'cuid';
 import { request, testConfig } from '../src/util/';
 
 const host = testConfig.Host;
-
-let companyCustomerId1 = cuid();
-let companyCustomerId2 = cuid();
+const companyCustomerId1 = cuid();
+const companyCustomerId2 = cuid();
 let invoices = [
   {
     companyCustomerId: companyCustomerId1,

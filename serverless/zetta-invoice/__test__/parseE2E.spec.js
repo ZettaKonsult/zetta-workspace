@@ -1,11 +1,10 @@
+import cuid from 'cuid';
 import { incrementToNextLowerBound } from 'date-primitive-utils';
 
 import { asyncReadDir, uploadFile } from './testHelpers';
 import { request, testConfig } from '../src/util/';
 
-const companyCustomerId = 'companyCustomerId123';
-const recipientId = 'recipientId';
-
+const companyCustomerId = cuid();
 let recipients = [];
 let fileNames = [];
 process.env.IS_OFFLINE = true;
@@ -160,7 +159,7 @@ describe('check pipeline for uploading and parsing', () => {
       modified: {},
       same: {
         '9006211537': {
-          companyCustomerId: 'companyCustomerId123',
+          companyCustomerId,
           email: 'zmk.zk.dev@gmail.com',
           firstName: 'Zimon',
           id: recipients[1],
@@ -171,7 +170,7 @@ describe('check pipeline for uploading and parsing', () => {
           ssn: '9006211537',
         },
         '9105040035': {
-          companyCustomerId: 'companyCustomerId123',
+          companyCustomerId,
           email: 'zmk.zk.dev@gmail.com',
           firstName: 'Fredrik',
           id: recipients[0],
@@ -187,6 +186,7 @@ describe('check pipeline for uploading and parsing', () => {
 });
 
 describe('Simulate 1 TRF interval', () => {
+  const recipientId = cuid();
   let testPlans = [];
 
   it('recipient can be added to plan', async () => {

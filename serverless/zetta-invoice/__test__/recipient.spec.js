@@ -13,15 +13,18 @@ describe('Recipients.', () => {
 
   it('Create.', async () => {
     const data = {
-      address: 'Road 234A',
-      city: 'RecipientCity',
-      createdAt: 2345678901,
-      email: 'firstName@recipient.com',
-      firstName: 'RecipientFirst',
-      lastName: 'RecipientLast',
-      mobile: '+46762345678',
-      ssn: '1234567890',
-      zipcode: '12345',
+      companyCustomerId,
+      recipient: {
+        address: 'Road 234A',
+        city: 'RecipientCity',
+        createdAt: 2345678901,
+        email: 'firstName@recipient.com',
+        firstName: 'RecipientFirst',
+        lastName: 'RecipientLast',
+        mobile: '+46762345678',
+        ssn: '1234567890',
+        zipcode: '12345',
+      },
     };
 
     recipient = await request({
@@ -29,10 +32,7 @@ describe('Recipients.', () => {
       path: 'recipient',
       payload: {
         method: 'post',
-        body: {
-          recipient: data,
-          companyCustomerId,
-        },
+        body: data,
       },
     });
 

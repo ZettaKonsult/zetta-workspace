@@ -36,12 +36,10 @@ export const listAllPlansToProcess = async (params: {
 }) => {
   const { db, epoch } = params;
 
-  const result = await db('query', {
+  const result = await db('scan', {
     TableName: table,
-    KeyConditionExpression: 'companyCustomerId = :companyCustomerId',
     FilterExpression: 'epochNextProcess <= :epochNextProcess',
     ExpressionAttributeValues: {
-      ':companyCustomerId': 'companyCustomerId123',
       ':epochNextProcess': epoch,
     },
   });
