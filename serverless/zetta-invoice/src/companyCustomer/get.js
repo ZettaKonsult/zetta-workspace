@@ -11,11 +11,15 @@ const get = async (params: {
   companyCustomerId: string,
 }): Promise<Array<CompanyCustomer>> => {
   const { db, companyCustomerId } = params;
-
-  return (await db('get', {
+  console.log(`Fetching customer ${companyCustomerId}.`);
+  const result = await db('get', {
     TableName,
     Key: { id: companyCustomerId },
-  })).Item;
+  });
+  if (result.Item === undefined) {
+    throw new Error(`No such customer (${companyCustomerId})!`);
+  }
+  return result.Item;
 };
 
 export { get };

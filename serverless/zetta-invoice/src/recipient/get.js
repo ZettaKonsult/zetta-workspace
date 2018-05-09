@@ -26,15 +26,26 @@ const get = async (params: {
 const getAll = async (params: {
   db: DatabaseMethod,
   companyCustomerId: string,
-}): Promise<Recipient> => {
-  const { db, companyCustomerId } = params;
+  recipientIds: Array<string>,
+}): Promise<{ recipients: Array<Recipient>, missing: Array<string> }> => {
+  const { db, recipientIds, companyCustomerId } = params;
 
-  console.log(`Fetching recipients for customer ${companyCustomerId}.`);
-  const result = await db('get', {
-    TableName: RECIPIENTS_TABLE,
-    Key: { companyCustomerId },
-  });
-  return result.Items;
+  return recipientIds.reduce(
+    async ({ missing, recipients }, recipientId) => {
+      const recipient = await get({
+        db,
+        companyCustomerId,
+        recipientId,
+      });
+
+      recipient == null
+        ? missing.push(recipientId)
+        : recipients.push(recipient);
+
+      return { missing, recipients };
+    },
+    { missing: [], recipients: [] }
+  );
 };
 
 const getBySSN = async ({ db, ssn }: { ssn: string }): Promise<Object> => {

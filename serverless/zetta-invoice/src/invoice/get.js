@@ -9,7 +9,7 @@ import type { Invoice } from 'types/Invoice';
 
 import { getDbTable } from '../util/database';
 
-const INVOICES_TABLE = getDbTable({ name: 'Invoices' });
+const TableName = getDbTable({ name: 'Invoices' });
 
 export default async (params: {
   db: DatabaseMethod,
@@ -20,13 +20,16 @@ export default async (params: {
 
   console.log(`Fetching invoice ${invoiceId}, customer ${companyCustomerId}.`);
 
-  return (await db('query', {
-    TableName: INVOICES_TABLE,
-    KeyConditionExpression:
-      'companyCustomerId = :companyCustomerId AND id = :id',
-    ExpressionAttributeValues: {
-      ':companyCustomerId': companyCustomerId,
-      ':id': invoiceId,
+  const result = await db('get', {
+    TableName,
+    Key: {
+      companyCustomerId: companyCustomerId,
+      id: invoiceId,
     },
-  })).Items[0];
+  });
+  if (result.Item == null) {
+    throw new Error(`No such invoice (${invoiceId})!`);
+  }
+
+  return result.Item;
 };

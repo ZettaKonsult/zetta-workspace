@@ -5,5 +5,5 @@
  */
 
 import { sendInvoice } from './mail';
-import { send } from './emailDoc';
-export default { send, sendInvoice };
+
+export { sendInvoice };

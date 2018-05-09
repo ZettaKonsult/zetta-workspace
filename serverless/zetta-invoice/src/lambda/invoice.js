@@ -7,7 +7,6 @@
 import type { AWSEvent, AWSContext } from 'types/AWS';
 import Invoice from '../invoice';
 import Status from '../invoice/status';
-
 import { parser, db, failure, success } from '../util';
 
 export const create = async (event: AWSEvent, context: AWSContext) => {
@@ -178,7 +177,7 @@ export const send = async (event: AWSEvent, context: AWSContext) => {
     return success(result);
   } catch (error) {
     console.error(error);
-    return failure(error.message);
+    return failure(`Could not send invoice mail: ${error.message}`);
   }
 };
 

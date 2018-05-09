@@ -53,6 +53,7 @@ export const send = (params: { buffer: any, email: string }) => {
           }
         } else {
           console.log(`Email sent.`);
+          return true;
         }
       }
     );
