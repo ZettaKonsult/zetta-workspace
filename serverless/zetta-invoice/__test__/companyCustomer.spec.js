@@ -57,7 +57,6 @@ describe('companyCustomer E2E', () => {
     const data = {
       companyCustomerId: companyCustomer.id,
     };
-    console.log(data);
     const result = await request({
       host,
       path: `companycustomer/`,
