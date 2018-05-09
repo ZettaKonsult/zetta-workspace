@@ -4,7 +4,7 @@
  * @date  2018-01-15
  */
 
-import type { AWSCallback, AWSContext, AWSEvent } from 'types/AWS';
+import type { AWSContext, AWSEvent } from 'types/AWS';
 
 import cuid from 'cuid';
 
@@ -16,22 +16,23 @@ import Plan from '../plans';
 
 export const getNewAssignments = async (
   event: AWSEvent,
-  context: AWSContext,
-  callback: AWSCallback
+  context: AWSContext
 ) => {
   try {
     const { companyCustomerId } = parser(event).params;
-    callback(null, success(await getAssignments({ db, companyCustomerId })));
+
+    const result = await getAssignments({ db, companyCustomerId });
+
+    return success(result);
   } catch (error) {
     console.error(error);
-    callback(null, failure(error.message));
+    return failure(error.message);
   }
 };
 
 export const saveNewAssignments = async (
   event: AWSEvent,
-  context: AWSContext,
-  callback: AWSCallback
+  context: AWSContext
 ) => {
   try {
     const { companyCustomerId } = parser(event).data;
@@ -59,18 +60,17 @@ export const saveNewAssignments = async (
         planId: reccuringPayments[0],
       });
     });
-    let updatedPlans = await Promise.all(plansPromise);
+    const result = await Promise.all(plansPromise);
     console.log(`Done assigning subscriptions.`);
-    callback(null, success(updatedPlans));
+    return success(result);
   } catch (error) {
-    callback(error);
+    return failure(error.message);
   }
 };
 
 export const parseUploadedFile = async (
   event: AWSEvent,
-  context: AWSContext,
-  callback: AWSCallback
+  context: AWSContext
 ) => {
   let fileName;
   let bucketName;
@@ -99,9 +99,9 @@ export const parseUploadedFile = async (
     };
     await db('put', params);
 
-    callback(null, success(params.Item));
+    return success(params.Item);
   } catch (error) {
     console.error('Error happend', error);
-    callback(null, failure(error.message));
+    return failure(error.message);
   }
 };

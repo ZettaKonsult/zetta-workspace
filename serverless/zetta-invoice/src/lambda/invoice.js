@@ -4,17 +4,13 @@
  * @date 2018-02
  */
 
-import type { AWSEvent, AWSContext, AWSCallback } from 'types/AWS';
+import type { AWSEvent, AWSContext } from 'types/AWS';
 import Invoice from '../invoice';
 import Status from '../invoice/status';
 
 import { parser, db, failure, success } from '../util';
 
-export const create = async (
-  event: AWSEvent,
-  context: AWSContext,
-  callback: AWSCallback
-) => {
+export const create = async (event: AWSEvent, context: AWSContext) => {
   const {
     createdAt,
     invoiceId,
@@ -41,18 +37,14 @@ export const create = async (
       recipientIds,
     });
 
-    callback(null, success(result));
+    return success(result);
   } catch (error) {
     console.error(error);
-    callback(null, failure(error.message));
+    return failure(error.message);
   }
 };
 
-export const confirm = async (
-  event: AWSEvent,
-  context: AWSContext,
-  callback: AWSCallback
-) => {
+export const confirm = async (event: AWSEvent, context: AWSContext) => {
   const { companyCustomerId, invoiceId } = parser(event).params;
 
   try {
@@ -64,18 +56,14 @@ export const confirm = async (
       newStatus: 'succeeded',
     });
     result.get = await Status.get({ db, companyCustomerId, invoiceId });
-    callback(null, success(result));
+    return success(result);
   } catch (error) {
     console.error(error);
-    callback(null, failure(error.message));
+    return failure(error.message);
   }
 };
 
-export const get = async (
-  event: AWSEvent,
-  context: AWSContext,
-  callback: AWSCallback
-) => {
+export const get = async (event: AWSEvent, context: AWSContext) => {
   const { companyCustomerId, locked } = parser(event).params;
 
   console.log(
@@ -89,18 +77,14 @@ export const get = async (
       companyCustomerId,
       locked: isLocked,
     });
-    callback(null, success(result));
+    return success(result);
   } catch (error) {
     console.error(error);
-    callback(failure(error.message));
+    return failure(error.message);
   }
 };
 
-export const getStatus = async (
-  event: AWSEvent,
-  context: AWSContext,
-  callback: AWSCallback
-) => {
+export const getStatus = async (event: AWSEvent, context: AWSContext) => {
   const { companyCustomerId, invoiceId } = parser(event).params;
 
   try {
@@ -109,34 +93,26 @@ export const getStatus = async (
       companyCustomerId,
       invoiceId,
     })).itemStatus;
-    callback(null, success(result));
+    return success(result);
   } catch (error) {
     console.error(error);
-    callback(null, failure(error.message));
+    return failure(error.message);
   }
 };
 
-export const getStatuses = async (
-  event: AWSEvent,
-  context: AWSContext,
-  callback: AWSCallback
-) => {
+export const getStatuses = async (event: AWSEvent, context: AWSContext) => {
   const { invoiceId } = parser(event).params;
 
   try {
     const result = await Status.get({ db, invoiceId });
-    callback(null, success(result));
+    return success(result);
   } catch (error) {
     console.error(error);
-    callback(null, failure(error.message));
+    return failure(error.message);
   }
 };
 
-export const lock = async (
-  event: AWSEvent,
-  context: AWSContext,
-  callback: AWSCallback
-) => {
+export const lock = async (event: AWSEvent, context: AWSContext) => {
   const { companyCustomerId, invoiceId, lock } = parser(event).data;
   console.log(
     `Received request for setting the lock for invoice ${invoiceId}, customer ${companyCustomerId}, to ${lock}.`
@@ -149,18 +125,14 @@ export const lock = async (
       invoiceId,
       lock: lock === 'true',
     });
-    callback(null, success(result));
+    return success(result);
   } catch (error) {
     console.error(error);
-    callback(failure(error.message));
+    return failure(error.message);
   }
 };
 
-export const remove = async (
-  event: AWSEvent,
-  context: AWSContext,
-  callback: AWSCallback
-) => {
+export const remove = async (event: AWSEvent, context: AWSContext) => {
   const { companyCustomerId, invoiceId } = parser(event).data;
 
   console.log(
@@ -169,18 +141,14 @@ export const remove = async (
 
   try {
     const result = await Invoice.remove({ db, companyCustomerId, invoiceId });
-    callback(null, success(result));
+    return success(result);
   } catch (error) {
     console.error(error);
-    callback(null, failure(error.message));
+    return failure(error.message);
   }
 };
 
-export const removeStatuses = async (
-  event: AWSEvent,
-  context: AWSContext,
-  callback: AWSCallback
-) => {
+export const removeStatuses = async (event: AWSEvent, context: AWSContext) => {
   const { companyCustomerId, invoiceId } = parser(event).params;
 
   console.log(`Received request to remove invoice statuses for ${invoiceId}.`);
@@ -191,18 +159,14 @@ export const removeStatuses = async (
     statuses.forEach(async status =>
       result.push(await Status.remove({ db, invoiceId, statusId: status.id }))
     );
-    callback(null, success(result));
+    return success(result);
   } catch (error) {
     console.error(error);
-    callback(null, failure(error.message));
+    return failure(error.message);
   }
 };
 
-export const send = async (
-  event: AWSEvent,
-  context: AWSContext,
-  callback: AWSCallback
-) => {
+export const send = async (event: AWSEvent, context: AWSContext) => {
   const { companyCustomerId, invoiceId } = parser(event).data;
 
   console.log(
@@ -211,18 +175,14 @@ export const send = async (
 
   try {
     const result = await Invoice.mail({ db, companyCustomerId, invoiceId });
-    callback(null, success(result));
+    return success(result);
   } catch (error) {
     console.error(error);
-    callback(null, failure(error.message));
+    return failure(error.message);
   }
 };
 
-export const update = async (
-  event: AWSEvent,
-  context: AWSContext,
-  callback: AWSCallback
-) => {
+export const update = async (event: AWSEvent, context: AWSContext) => {
   const { companyCustomerId, invoiceId, invoiceRows, recipients } = parser(
     event
   ).data;
@@ -244,9 +204,9 @@ export const update = async (
       invoiceRows,
       recipients,
     });
-    callback(null, success(result));
+    return success(result);
   } catch (error) {
     console.error(error);
-    callback(null, failure(error.message));
+    return failure(error.message);
   }
 };
