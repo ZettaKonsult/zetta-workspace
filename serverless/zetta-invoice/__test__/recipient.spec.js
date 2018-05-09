@@ -2,13 +2,13 @@
  * @date 2018-03-05
  */
 
-import request from '../../util/http';
-import testConfig from '../../util/testConfig';
+import cuid from 'cuid';
+import { request, testConfig } from '../src/util/';
 
 const host = testConfig.Host;
 
 describe('Recipients.', () => {
-  const companyCustomerId = 'companyCustomerId';
+  const companyCustomerId = cuid();
   let recipient;
 
   it('Create.', async () => {

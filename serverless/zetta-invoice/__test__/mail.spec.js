@@ -2,8 +2,7 @@
  * @date 2018-03-12
  */
 
-import request from '../src/util/http';
-import testConfig from '../src/util/testConfig';
+import { request, testConfig } from '../src/util/';
 
 const host = testConfig.Host;
 
@@ -23,7 +22,7 @@ afterEach(async () => {
 });
 
 describe('Mail.', () => {
-  it.only('Send.', async () => {
+  it('Send.', async () => {
     const result = await request({
       host,
       path: 'invoice/mail',

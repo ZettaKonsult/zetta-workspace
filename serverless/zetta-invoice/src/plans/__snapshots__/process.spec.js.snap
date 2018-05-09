@@ -1,0 +1,67 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`converts array to map converts a mapping between customer, recipient and plans 1`] = `
+Object {
+  "r1": Object {
+    "c1": Array [
+      "p1",
+      "p2",
+    ],
+  },
+  "r2": Object {
+    "c1": Array [
+      "p3",
+    ],
+    "c2": Array [
+      "p4",
+    ],
+  },
+}
+`;
+
+exports[`converts array to map converts map to invoice 1`] = `
+Array [
+  Object {
+    "companyCustomerId": "c1",
+    "invoiceRows": Array [
+      Object {
+        "description": "pTest1",
+        "price": 0,
+        "tax": 0.25,
+        "unit": 1,
+      },
+      Object {
+        "description": "pTest2",
+        "price": 0,
+        "tax": 0.25,
+        "unit": 1,
+      },
+    ],
+    "recipientId": "r1",
+  },
+  Object {
+    "companyCustomerId": "c1",
+    "invoiceRows": Array [
+      Object {
+        "description": "pTest3",
+        "price": 0,
+        "tax": 0.25,
+        "unit": 1,
+      },
+    ],
+    "recipientId": "r2",
+  },
+  Object {
+    "companyCustomerId": "c2",
+    "invoiceRows": Array [
+      Object {
+        "description": "pTest4",
+        "price": 0,
+        "tax": 0.25,
+        "unit": 1,
+      },
+    ],
+    "recipientId": "r2",
+  },
+]
+`;

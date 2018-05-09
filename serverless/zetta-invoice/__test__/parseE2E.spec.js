@@ -1,8 +1,7 @@
 import { incrementToNextLowerBound } from 'date-primitive-utils';
 
 import { asyncReadDir, uploadFile } from './testHelpers';
-import testConfig from '../src/util/testConfig';
-import { request } from '../src/util';
+import { request, testConfig } from '../src/util/';
 
 const companyCustomerId = 'companyCustomerId123';
 const recipientId = 'recipientId';
