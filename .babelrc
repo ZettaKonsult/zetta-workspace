@@ -7,7 +7,7 @@
       "ignore": ["**/*.spec.js"]
     },
     "lambda": {
-      "presets": [["env", { "targets": { "node": "6.10.3" } }]]
+      "presets": [["env", { "targets": { "node": "8.10" } }]]
     },
     "test": {
       "presets": [["env", { "targets": { "node": "current" } }]]

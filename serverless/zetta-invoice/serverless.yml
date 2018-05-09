@@ -26,8 +26,6 @@ custom:
   serverless-offline:
     port: 8080
     dontPrintOutput: true
-    babelOptions:
-      presets: ["env"]
   s3:
     port: 8040
   dynamodb:
@@ -50,7 +48,7 @@ custom:
 
 provider:
   name: aws
-  runtime: nodejs6.10
+  runtime: nodejs8.10
   stage: dev
   region: eu-central-1
   iamRoleStatements:
@@ -265,6 +263,35 @@ functions:
       # - s3:
       #     bucket: ladok-uploads-dev
       #     event: s3:ObjectCreated:*
+
+  # createCompanyCustomer:
+  #   handler: src/lambda/companycustomer.create
+  #   events:
+  #     - http:
+  #         path: /companycustomer
+  #         method: post
+  #         cors: true
+  # updateCompanyCustomer:
+  #   handler: src/lambda/companycustomer.update
+  #   events:
+  #     - http:
+  #         path: /companycustomer
+  #         method: put
+  #         cors: true
+  # getCompanyCustomer:
+  #   handler: src/lambda/companycustomer.get
+  #   events:
+  #     - http:
+  #         path: /companycustomer/{companyCustomerId}/{recipientId}
+  #         method: get
+  #         cors: true
+  # deleteCompanyCustomer:
+  #   handler: src/lambda/companycustomer.remove
+  #   events:
+  #     - http:
+  #         path: /companycustomer
+  #         method: delete
+  #         cors: true
 
 
 package:
