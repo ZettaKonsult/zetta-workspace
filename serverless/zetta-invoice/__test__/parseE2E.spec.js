@@ -242,7 +242,6 @@ describe('Simulate 1 TRF interval', () => {
     expect(updatedPlans).toHaveLength(0);
   });
 
-  //TODO test is flaky when within one month of a interval turnover
   it('plans are update for new interval', async () => {
     let plan = testPlans[0];
     let epoch = plan.epochNextProcess;
