@@ -63,7 +63,17 @@ describe('Invoices', () => {
   it('invoices have correct attributes after creation', () => {
     let invoice = invoices[0];
 
-    expect(invoice).toHaveProperty('id');
+    expect(invoice).toMatchSnapshot({
+      id: expect.any(String),
+      companyCustomerId: expect.any(String),
+      createdAt: expect.any(Number),
+      itemStatus: {
+        createdAt: expect.any(Number),
+        id: expect.any(String),
+        invoiceId: expect.any(String),
+        itemStatus: 'pending',
+      },
+    });
   });
 
   it('get unlocked invoices', async () => {

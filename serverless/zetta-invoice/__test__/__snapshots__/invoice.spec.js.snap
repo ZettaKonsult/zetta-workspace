@@ -1,0 +1,39 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Invoices invoices have correct attributes after creation 1`] = `
+Object {
+  "companyCustomerId": Any<String>,
+  "createdAt": Any<Number>,
+  "id": Any<String>,
+  "invoiceRows": Array [
+    Object {
+      "description": "3an A",
+      "price": 345,
+      "tax": 0.25,
+      "unit": 34,
+    },
+    Object {
+      "description": "3an B",
+      "price": 345,
+      "tax": 0.25,
+      "unit": 34,
+    },
+    Object {
+      "description": "3an C",
+      "price": 345,
+      "tax": 0.25,
+      "unit": 34,
+    },
+  ],
+  "itemStatus": Object {
+    "createdAt": Any<Number>,
+    "id": Any<String>,
+    "invoiceId": Any<String>,
+    "itemStatus": "pending",
+  },
+  "locked": false,
+  "recipients": Array [
+    "recipientId1",
+  ],
+}
+`;
