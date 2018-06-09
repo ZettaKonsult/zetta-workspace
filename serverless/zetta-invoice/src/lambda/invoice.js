@@ -38,7 +38,7 @@ export const create = async (event: AWSEvent, context: AWSContext) => {
 
     return success(result);
   } catch (error) {
-    console.error(error);
+    // console.error(error);
     return failure(error.message);
   }
 };
@@ -57,7 +57,7 @@ export const confirm = async (event: AWSEvent, context: AWSContext) => {
     result.get = await Status.get({ db, companyCustomerId, invoiceId });
     return success(result);
   } catch (error) {
-    console.error(error);
+    // console.error(error);
     return failure(error.message);
   }
 };
@@ -78,7 +78,7 @@ export const get = async (event: AWSEvent, context: AWSContext) => {
     });
     return success(result);
   } catch (error) {
-    console.error(error);
+    // console.error(error);
     return failure(error.message);
   }
 };
@@ -94,7 +94,7 @@ export const getStatus = async (event: AWSEvent, context: AWSContext) => {
     })).itemStatus;
     return success(result);
   } catch (error) {
-    console.error(error);
+    // console.error(error);
     return failure(error.message);
   }
 };
@@ -106,7 +106,7 @@ export const getStatuses = async (event: AWSEvent, context: AWSContext) => {
     const result = await Status.get({ db, invoiceId });
     return success(result);
   } catch (error) {
-    console.error(error);
+    // console.error(error);
     return failure(error.message);
   }
 };
@@ -126,7 +126,7 @@ export const lock = async (event: AWSEvent, context: AWSContext) => {
     });
     return success(result);
   } catch (error) {
-    console.error(error);
+    // console.error(error);
     return failure(error.message);
   }
 };
@@ -142,7 +142,7 @@ export const remove = async (event: AWSEvent, context: AWSContext) => {
     const result = await Invoice.remove({ db, companyCustomerId, invoiceId });
     return success(result);
   } catch (error) {
-    console.error(error);
+    // console.error(error);
     return failure(error.message);
   }
 };
@@ -160,7 +160,7 @@ export const removeStatuses = async (event: AWSEvent, context: AWSContext) => {
     );
     return success(result);
   } catch (error) {
-    console.error(error);
+    // console.error(error);
     return failure(error.message);
   }
 };
@@ -205,7 +205,7 @@ export const update = async (event: AWSEvent, context: AWSContext) => {
     });
     return success(result);
   } catch (error) {
-    console.error(error);
+    // console.error(error);
     return failure(error.message);
   }
 };

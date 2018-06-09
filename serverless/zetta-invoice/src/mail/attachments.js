@@ -2,34 +2,25 @@
 
 import puppeteer from 'puppeteer';
 
-let browser;
-let page;
+let browser = undefined;
 
 const getBrowserPage = async (): any => {
-  console.log(`Constructing browser page.`);
-  if (!browser) {
-    browser = await puppeteer.launch();
-  }
-  if (!page) {
-    page = await browser.newPage();
-  }
-  console.log(`Constructed browser page.`);
+  browser = await puppeteer.launch();
+  const page = await browser.newPage();
   return page;
 };
 
-const generatePDF = async ({ tempalte }) => {
+const generatePDF = async ({ template }) => {
   const page = await getBrowserPage();
-  await page.setContent(tempalte);
-  console.log(`Set page content.`);
+  await page.setContent(template);
   const buffer = await page.pdf({ format: 'A4' });
+  await page.pdf({ path: 'test.pdf', format: 'A4' });
   return buffer;
 };
 
 const teardown = async () => {
-  console.log('teardown');
   await browser.close();
   browser = undefined;
-  page = undefined;
 };
 
 export default { generatePDF, teardown };

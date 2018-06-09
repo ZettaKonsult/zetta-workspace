@@ -93,12 +93,10 @@ const send = async (params: {
   recipients: Array<Recipient>,
 }) => {
   const { companyCustomer, recipients } = params;
-  console.log(`Sending mail to recipients: ${recipients.toString()}.`);
 
   const sendingPromise = recipients.map(async recipient => {
     const { email } = recipient;
     console.log(`Sending email to ${email}.`);
-
     const renderedTemplate = await prepareTemplate({
       ...params,
       companyCustomer,
