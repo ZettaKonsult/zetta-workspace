@@ -242,6 +242,7 @@ describe('Simulate 1 TRF interval', () => {
     expect(updatedPlans).toHaveLength(0);
   });
 
+  //TODO test is flaky when within one month of a interval turnover
   it('plans are update for new interval', async () => {
     let plan = testPlans[0];
     let epoch = plan.epochNextProcess;
@@ -249,6 +250,7 @@ describe('Simulate 1 TRF interval', () => {
       epoch,
       plan.intervalCount
     );
+    const expectedLength = findPlansThatWillProcess(startOfNextInterval);
 
     const updatedPlans = await request({
       host: testConfig.Host,
@@ -258,10 +260,13 @@ describe('Simulate 1 TRF interval', () => {
       },
     });
 
-    expect(updatedPlans).toHaveLength(1);
+    expect(updatedPlans).toHaveLength(expectedLength);
     expect(updatedPlans[0].epochNextProcess).toBe(startOfNextInterval);
   });
 });
+
+const findPlansThatWillProcess = epoch =>
+  plans.filter(plan => plan.epochNextProcess < epoch).length;
 
 let plans = [
   {
