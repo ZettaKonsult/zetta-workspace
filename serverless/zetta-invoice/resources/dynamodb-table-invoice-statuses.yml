@@ -1,0 +1,18 @@
+Resources:
+  InvoiceStatusesTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: ${self:custom.InvoiceStatuses}
+      KeySchema:
+        - AttributeName: invoiceId
+          KeyType: HASH
+        - AttributeName: id
+          KeyType: RANGE
+      AttributeDefinitions:
+        - AttributeName: invoiceId
+          AttributeType: S
+        - AttributeName: id
+          AttributeType: S
+      ProvisionedThroughput:
+        ReadCapacityUnits: 1
+        WriteCapacityUnits: 1

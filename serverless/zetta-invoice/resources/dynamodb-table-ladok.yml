@@ -1,0 +1,14 @@
+Resources:
+  LadokParseResultsTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: ${self:custom.LadokParseResults}
+      KeySchema:
+        - AttributeName: id
+          KeyType: HASH
+      AttributeDefinitions:
+        - AttributeName: id
+          AttributeType: S
+      ProvisionedThroughput:
+        ReadCapacityUnits: 1
+        WriteCapacityUnits: 1

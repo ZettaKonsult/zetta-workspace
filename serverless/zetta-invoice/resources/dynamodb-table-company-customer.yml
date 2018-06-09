@@ -1,0 +1,14 @@
+Resources:
+  CompanyCustomersTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: ${self:custom.CompanyCustomers}
+      KeySchema:
+        - AttributeName: id
+          KeyType: HASH
+      AttributeDefinitions:
+        - AttributeName: id
+          AttributeType: S
+      ProvisionedThroughput:
+        ReadCapacityUnits: 1
+        WriteCapacityUnits: 1

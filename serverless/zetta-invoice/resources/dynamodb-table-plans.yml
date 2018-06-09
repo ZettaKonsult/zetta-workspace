@@ -1,0 +1,18 @@
+Resources:
+  PlansTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: ${self:custom.Plans}
+      KeySchema:
+        - AttributeName: companyCustomerId
+          KeyType: HASH
+        - AttributeName: id
+          KeyType: RANGE
+      AttributeDefinitions:
+        - AttributeName: companyCustomerId
+          AttributeType: S
+        - AttributeName: id
+          AttributeType: S
+      ProvisionedThroughput:
+        ReadCapacityUnits: 1
+        WriteCapacityUnits: 1

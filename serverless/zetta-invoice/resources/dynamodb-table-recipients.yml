@@ -1,0 +1,30 @@
+Resources:
+  RecipientsTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: ${self:custom.Recipients}
+      KeySchema:
+        - AttributeName: companyCustomerId
+          KeyType: HASH
+        - AttributeName: id
+          KeyType: RANGE
+      AttributeDefinitions:
+        - AttributeName: companyCustomerId
+          AttributeType: S
+        - AttributeName: id
+          AttributeType: S
+        - AttributeName: ssn
+          AttributeType: S
+      GlobalSecondaryIndexes:
+        - IndexName: ssn
+          KeySchema:
+          - AttributeName: ssn
+            KeyType: HASH
+          Projection:
+            ProjectionType: ALL
+          ProvisionedThroughput:
+            ReadCapacityUnits: 1
+            WriteCapacityUnits: 1
+      ProvisionedThroughput:
+        ReadCapacityUnits: 1
+        WriteCapacityUnits: 1
