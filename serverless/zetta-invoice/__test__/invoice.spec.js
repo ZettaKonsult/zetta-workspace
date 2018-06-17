@@ -69,16 +69,4 @@ describe('Invoices', () => {
       createdAt: expect.any(Number),
     });
   });
-
-  it('get unlocked invoices', async () => {
-    const result = await request({
-      payload: {
-        method: 'get',
-      },
-      host,
-      path: `invoice/${companyCustomerId1}/false`,
-    });
-
-    expect(result).toEqual([invoices[0]]);
-  });
 });

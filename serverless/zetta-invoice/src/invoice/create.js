@@ -8,7 +8,6 @@ import type { UnlockedInvoice, InvoiceRow } from 'types/Invoice';
 import type { DatabaseMethod } from 'types/Database';
 
 import { getDbTable } from '../util/database';
-import Status from './status';
 
 import cuid from 'cuid';
 

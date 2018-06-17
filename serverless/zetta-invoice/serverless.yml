@@ -82,19 +82,6 @@ provider:
     LadokParseResults: ${self:custom.LadokParseResults}
 
 functions:
-  dibsConfirm:
-    handler: src/lambda/dibs.confirm
-    events:
-      - http:
-          path: dibs/confirm
-          method: post
-  dibsUrl:
-    handler: src/lambda/dibs.url
-    events:
-      - http:
-          path: dibs/url
-          method: post
-
   createInvoice:
     handler: src/lambda/invoice.create
     events:
@@ -137,28 +124,6 @@ functions:
           path: /invoice
           method: delete
           cors: true
-
-  getInvoiceStatus:
-    handler: src/lambda/invoice.getStatus
-    events:
-      - http:
-          path: /invoice/status/{companyCustomerId}/{invoiceId}
-          method: get
-          cors: true
-  getInvoiceStatuses:
-    handler: src/lambda/invoice.getStatuses
-    events:
-      - http:
-          path: /invoice/status/{invoiceId}
-          method: get
-          cors: true
-  setInvoiceStatus:
-    handler: src/lambda/invoice.setStatus
-    events:
-      - http:
-         path: /invoice/status
-         method: post
-         cors: true
 
   createRecipient:
     handler: src/lambda/recipient.create
@@ -226,13 +191,6 @@ functions:
           method: get
           cors: true
       - schedule: rate(1 hour)
-  adyenCheckout:
-    handler: src/lambda/adyen.get
-    events:
-      - http:
-          path: /adyen
-          method: get
-          cors: true
 
   #This returns the result of all assignment results
   getNewAssignments:
@@ -271,13 +229,6 @@ functions:
           path: /companycustomer
           method: post
           cors: true
-  # updateCompanyCustomer:
-  #   handler: src/lambda/companycustomer.update
-  #   events:
-  #     - http:
-  #         path: /companycustomer
-  #         method: put
-  #         cors: true
   getCompanyCustomer:
     handler: src/lambda/companyCustomer.get
     events:
