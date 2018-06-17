@@ -102,10 +102,6 @@ export const remove = async (event: AWSEvent, context: AWSContext) => {
 export const send = async (event: AWSEvent, context: AWSContext) => {
   const { companyCustomerId, invoiceId } = parser(event).data;
 
-  console.log(
-    `Received invoice mail request for ${invoiceId}, customer ${companyCustomerId}.`
-  );
-
   try {
     const result = await Invoice.mail({ db, companyCustomerId, invoiceId });
     return success(result);

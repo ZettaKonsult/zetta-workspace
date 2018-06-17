@@ -22,7 +22,7 @@ afterAll(async () => {
 });
 
 describe('Mail.', () => {
-  it.skip('Send.', async () => {
+  it('Send.', async () => {
     const result = await request({
       host,
       path: 'invoice/mail',

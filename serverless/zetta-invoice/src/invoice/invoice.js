@@ -99,11 +99,17 @@ const invoice = ({
       return this;
     },
 
-    send: function() {
-      invoice = {
-        ...invoice,
-        status: [...invoice.status, { createdAt: Date.now(), action: 'SEND' }],
-      };
+    send: async function(sender) {
+      try {
+        await sender(this);
+        invoice = {
+          ...invoice,
+          status: [
+            ...invoice.status,
+            { createdAt: Date.now(), action: 'SEND' },
+          ],
+        };
+      } catch (err) {}
       return this;
     },
 

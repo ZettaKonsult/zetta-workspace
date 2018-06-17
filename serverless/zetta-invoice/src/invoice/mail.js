@@ -27,18 +27,19 @@ export default async (params: {
     RecipientManager.getAll({
       db,
       companyCustomerId,
-      recipientIds: invoiceData.recipient,
+      recipientIds: invoiceData.recipients,
     }),
   ]);
 
-  const invoice = createInvoice({
+  return await createInvoice({
     invoice: invoiceData,
     defaultTax: companyCustomer.defaultTax,
-  });
-  return await sendInvoice({
-    recipients,
-    companyCustomer,
-    invoice,
-    discount: 0,
+  }).send(async invoice => {
+    await sendInvoice({
+      recipients,
+      companyCustomer,
+      invoice,
+      discount: 0,
+    });
   });
 };
