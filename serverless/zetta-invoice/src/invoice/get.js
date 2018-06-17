@@ -18,8 +18,6 @@ export default async (params: {
 }): Promise<Invoice> => {
   const { db, companyCustomerId, invoiceId } = params;
 
-  console.log(`Fetching invoice ${invoiceId}, customer ${companyCustomerId}.`);
-
   const result = await db('get', {
     TableName,
     Key: {

@@ -7,35 +7,19 @@
 import type { AWSEvent, AWSContext } from 'types/AWS';
 import Invoice from '../invoice';
 import Status from '../invoice/status';
+import createInvoice from '../invoice/create';
 import { parser, db, failure, success } from '../util';
 
 export const create = async (event: AWSEvent, context: AWSContext) => {
-  const {
-    createdAt,
-    invoiceId,
-    companyCustomerId,
-    invoiceRows,
-    recipientIds,
-  } = parser(event).data;
-
-  console.log(
-    `Received request for creating an invoice for customer ${companyCustomerId}.`
-  );
-  console.log(`Recipients:`);
-  console.log(recipientIds);
-  console.log(`Invoice rows:`);
-  console.log(invoiceRows);
+  const { companyCustomerId, invoiceRows, recipientIds } = parser(event).data;
 
   try {
-    const result = await Invoice.create({
-      db,
-      createdAt,
-      invoiceId,
+    const invoice = Invoice.create({
       companyCustomerId,
       invoiceRows,
       recipientIds,
     });
-
+    const result = await createInvoice({ db, invoice: invoice.toJson() });
     return success(result);
   } catch (error) {
     // console.error(error);
@@ -186,23 +170,17 @@ export const update = async (event: AWSEvent, context: AWSContext) => {
     event
   ).data;
 
-  console.log(
-    `Received invoice update request for ${invoiceId}, customer ${companyCustomerId}.`
-  );
-
-  console.log(`Recipients:`);
-  console.log(recipients);
-  console.log(`Invoice rows:`);
-  console.log(invoiceRows);
-
   try {
-    const result = await Invoice.update({
-      db,
+    const invoice = (await Invoice.get({
       companyCustomerId,
       invoiceId,
+      db,
+    })).create({
       invoiceRows,
       recipients,
     });
+
+    const result = await createInvoice({ db, invoice: invoice.toJson() });
     return success(result);
   } catch (error) {
     // console.error(error);

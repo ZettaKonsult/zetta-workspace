@@ -46,4 +46,55 @@ describe('invoicerows', () => {
 
     expect(result).toEqual([{ id: 1 }, { id: 2 }]);
   });
+
+  it('locked invoice can not be updated', () => {
+    const invoice = createInvoice();
+
+    const result = invoice
+      .lockInvoice()
+      .addInvoiceRow({ id: 1 })
+      .getInvoiceRows();
+
+    expect(result).toEqual([]);
+  });
+
+  it("invoices don't share instance", () => {
+    const invoice = createInvoice();
+    const invoice1 = createInvoice();
+
+    const result = invoice.addInvoiceRow({ id: 1 }).getInvoiceRows();
+    const result1 = invoice1.addInvoiceRow({ id: 2 }).getInvoiceRows();
+
+    expect(result).toEqual([{ id: 1 }]);
+    expect(result1).toEqual([{ id: 2 }]);
+  });
+
+  it('toJson() returns an pure object', () => {
+    const invoice = createInvoice();
+
+    const result = invoice
+      .addInvoiceRow({ id: 1 })
+      .lockInvoice()
+      .toJson();
+
+    expect(result).toMatchSnapshot({
+      createdAt: expect.any(Number),
+      status: [{ createdAt: expect.any(Number) }],
+    });
+  });
+
+  it('creating invoice with old data does a shallow merge', () => {
+    const oldInvoice = { id: 'oldId', invoiceRows: [{ id: 'row1' }] };
+
+    const invoice = createInvoice({ invoice: oldInvoice })
+      .create({
+        invoiceRows: [{ id: 'row2' }],
+      })
+      .toJson();
+
+    expect(invoice).toEqual({
+      id: 'oldId',
+      invoiceRows: [{ id: 'row2' }],
+    });
+  });
 });

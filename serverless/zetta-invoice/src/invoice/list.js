@@ -17,12 +17,6 @@ export default async (params: {
 }): Promise<{ [string]: any }> => {
   const { db, companyCustomerId, locked } = params;
 
-  console.log(
-    `Fetching ${
-      locked ? '' : 'un'
-    }locked invoices for customer: ${companyCustomerId}`
-  );
-
   try {
     return (await db('query', {
       TableName: INVOICES_TABLE,

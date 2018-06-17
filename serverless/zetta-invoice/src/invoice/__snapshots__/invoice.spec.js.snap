@@ -1,6 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-
 exports[`invoice sum calculator correctly summarizes multiple rows 1`] = `
 Object {
   "invoiceRows": Array [
@@ -55,5 +54,24 @@ Object {
   "netTotal": 1100,
   "taxTotal": 275,
   "total": 1375,
+}
+`;
+
+exports[`invoicerows toJson() returns an pure object 1`] = `
+Object {
+  "companyCustomerId": undefined,
+  "createdAt": Any<Number>,
+  "invoiceRows": Array [
+    Object {
+      "id": 1,
+    },
+  ],
+  "locked": true,
+  "recipients": Array [],
+  "status": Array [
+    Object {
+      "createdAt": Any<Number>,
+    },
+  ],
 }
 `;

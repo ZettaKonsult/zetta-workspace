@@ -2,10 +2,29 @@
 
 const defaultInvoice = {
   invoiceRows: [],
+  locked: false,
+  createdAt: Date.now(),
+  status: [],
+  recipients: [],
+  companyCustomerId: undefined,
 };
 
-const invoice = ({ defaultTax = 0, invoice = defaultInvoice } = {}) => {
+const invoice = ({
+  defaultTax = 0,
+  invoice = defaultInvoice,
+  presistance,
+} = {}) => {
   return {
+    create: function(invoiceData) {
+      invoice = {
+        ...invoice,
+        ...invoiceData,
+        recipients: invoiceData.recipientIds,
+      };
+
+      return this;
+    },
+
     getRecipients: () => {
       return invoice.recipients;
     },
@@ -40,13 +59,34 @@ const invoice = ({ defaultTax = 0, invoice = defaultInvoice } = {}) => {
       );
     },
 
+    getInvoiceRows: function() {
+      return invoice.invoiceRows;
+    },
+
     addInvoiceRow: function(row) {
-      invoice.invoiceRows.push(row);
+      if (!invoice.locked) {
+        invoice = {
+          ...invoice,
+          invoiceRows: [...invoice.invoiceRows, { ...row }],
+        };
+      }
       return this;
     },
 
-    getInvoiceRows: function() {
-      return invoice.invoiceRows;
+    lockInvoice: function() {
+      invoice = {
+        ...invoice,
+        locked: true,
+        status: [
+          ...invoice.status,
+          { createdAt: Date.now(), action: 'LOCKED' },
+        ],
+      };
+      return this;
+    },
+
+    toJson: function() {
+      return { ...invoice };
     },
   };
 };

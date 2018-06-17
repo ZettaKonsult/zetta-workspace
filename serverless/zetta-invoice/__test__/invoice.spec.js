@@ -67,12 +67,6 @@ describe('Invoices', () => {
       id: expect.any(String),
       companyCustomerId: expect.any(String),
       createdAt: expect.any(Number),
-      itemStatus: {
-        createdAt: expect.any(Number),
-        id: expect.any(String),
-        invoiceId: expect.any(String),
-        itemStatus: 'pending',
-      },
     });
   });
 
@@ -86,75 +80,5 @@ describe('Invoices', () => {
     });
 
     expect(result).toEqual([invoices[0]]);
-  });
-
-  //TODO this endpoint does not inject companyCustomer on locking yet
-  it.skip('lock invoice', async () => {
-    const result = await request({
-      payload: {
-        method: 'post',
-        body: {
-          companyCustomerId: companyCustomerId2,
-          invoiceId: invoices[1].id,
-          lock: 'true',
-        },
-      },
-      host,
-      path: `invoice/lock`,
-    });
-
-    const lockedInvoices = await request({
-      payload: {
-        method: 'get',
-      },
-      host,
-      path: `invoice/${companyCustomerId2}/true`,
-    });
-
-    expect(result).toEqual({ [invoices[1].id]: { locked: true } });
-    expect(lockedInvoices[0]).toHaveProperty('companyCustomer');
-  });
-});
-
-describe('Statuses.', () => {
-  it('Get one.', async () => {
-    const expected = {
-      id: 'itemStatusId1',
-      invoiceId: 'invoiceId1',
-      createdAt: 3456789012,
-      itemStatus: 'pending',
-    };
-    const result = await request({
-      payload: {
-        method: 'get',
-      },
-      host,
-      path: 'invoice/status/companyCustomerId/invoiceId1',
-    });
-    expect(result).toEqual(expected);
-  });
-  it('Get many.', async () => {
-    const expected = [
-      {
-        id: 'itemStatusId1',
-        invoiceId: 'invoiceId1',
-        createdAt: 3456789012,
-        itemStatus: 'pending',
-      },
-      {
-        id: 'itemStatusId2',
-        invoiceId: 'invoiceId1',
-        createdAt: 6789012345,
-        itemStatus: 'succeeded',
-      },
-    ];
-    const result = await request({
-      payload: {
-        method: 'get',
-      },
-      host,
-      path: 'invoice/status/invoiceId1',
-    });
-    expect(result).toEqual(expected);
   });
 });

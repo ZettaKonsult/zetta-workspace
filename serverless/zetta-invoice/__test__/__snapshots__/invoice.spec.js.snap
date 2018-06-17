@@ -25,15 +25,13 @@ Object {
       "unit": 34,
     },
   ],
-  "itemStatus": Object {
-    "createdAt": Any<Number>,
-    "id": Any<String>,
-    "invoiceId": Any<String>,
-    "itemStatus": "pending",
-  },
   "locked": false,
+  "recipientIds": Array [
+    "recipientId1",
+  ],
   "recipients": Array [
     "recipientId1",
   ],
+  "status": Array [],
 }
 `;
