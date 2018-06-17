@@ -1,5 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+
 exports[`invoice sum calculator correctly summarizes multiple rows 1`] = `
 Object {
   "invoiceRows": Array [

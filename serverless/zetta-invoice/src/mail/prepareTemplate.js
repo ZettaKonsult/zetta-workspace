@@ -11,7 +11,6 @@ import type {
   LockedInvoice,
   InvoiceSpecification,
 } from 'types/Invoice';
-import Price from '../price';
 import { to_html } from 'mustache';
 import { promisify } from 'util';
 import fs from 'fs';
@@ -21,7 +20,6 @@ export default async (data: any): HTML => {
     readTemplateFile(),
     prepareData(data),
   ]);
-  console.log(`Prepared template. Translating via Mustache.`);
   return to_html(template, preparedData);
 };
 
@@ -32,25 +30,19 @@ const readTemplateFile = async () =>
 export const prepareData = (data: {
   discount: number,
   invoice: LockedInvoice,
-  defaultTax: number,
   companyCustomer: CompanyCustomer,
   recipient: Recipient,
 }): Array<InvoiceSpecification> => {
-  const { discount, invoice, defaultTax, companyCustomer, recipient } = data;
-  const id = new Date(invoice.createdAt);
-  const timeToPay = new Date(id.getUTCFullYear(), id.getUTCMonth() + 1);
-
-  const { netTotal, taxTotal, total, invoiceRows } = Price.calculate({
-    invoiceRows: invoice.invoiceRows,
-    defaultTax,
-  });
+  const { discount, invoice, companyCustomer, recipient } = data;
+  const { netTotal, taxTotal, total, invoiceRows } = invoice.getInvoiceTotal();
+  const { createdAt, timeToPay } = invoice.getFormatedDateValues();
 
   return {
     companyCustomer,
     invoice: {
-      id: invoice.createdAt,
-      createdAt: id.toISOString().split('T')[0],
-      timeToPay: timeToPay.toISOString().split('T')[0],
+      id: createdAt,
+      createdAt,
+      timeToPay,
     },
     invoiceRows,
     discount: discount | 0,
