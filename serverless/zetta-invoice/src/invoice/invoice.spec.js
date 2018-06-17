@@ -97,4 +97,24 @@ describe('invoicerows', () => {
       invoiceRows: [{ id: 'row2' }],
     });
   });
+
+  it('recipients are added to invoice', () => {
+    let invoice = createInvoice({ invoice: { recipients: [{ id: 'rec1' }] } });
+
+    invoice = invoice.addRecipient({ id: 'rec2' });
+
+    expect(invoice.toJson()).toEqual({
+      recipients: [{ id: 'rec1' }, { id: 'rec2' }],
+    });
+  });
+
+  it('send is added to status', () => {
+    let invoice = createInvoice();
+
+    invoice = invoice.send();
+
+    expect(invoice.toJson().status).toMatchSnapshot([
+      { createdAt: expect.any(Number) },
+    ]);
+  });
 });

@@ -59,15 +59,29 @@ const invoice = ({
       );
     },
 
+    isInvoiceLocked: function() {
+      return invoice.locked;
+    },
+
     getInvoiceRows: function() {
       return invoice.invoiceRows;
     },
 
     addInvoiceRow: function(row) {
-      if (!invoice.locked) {
+      if (!this.isInvoiceLocked()) {
         invoice = {
           ...invoice,
           invoiceRows: [...invoice.invoiceRows, { ...row }],
+        };
+      }
+      return this;
+    },
+
+    addRecipient: function(recipient) {
+      if (!this.isInvoiceLocked()) {
+        invoice = {
+          ...invoice,
+          recipients: [...invoice.recipients, recipient],
         };
       }
       return this;
@@ -81,6 +95,14 @@ const invoice = ({
           ...invoice.status,
           { createdAt: Date.now(), action: 'LOCKED' },
         ],
+      };
+      return this;
+    },
+
+    send: function() {
+      invoice = {
+        ...invoice,
+        status: [...invoice.status, { createdAt: Date.now(), action: 'SEND' }],
       };
       return this;
     },

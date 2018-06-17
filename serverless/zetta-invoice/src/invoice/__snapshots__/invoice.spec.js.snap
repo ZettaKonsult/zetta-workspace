@@ -57,6 +57,14 @@ Object {
 }
 `;
 
+exports[`invoicerows send is added to status 1`] = `
+Array [
+  Object {
+    "createdAt": Any<Number>,
+  },
+]
+`;
+
 exports[`invoicerows toJson() returns an pure object 1`] = `
 Object {
   "companyCustomerId": undefined,
