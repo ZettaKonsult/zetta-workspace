@@ -89,26 +89,12 @@ functions:
           path: /invoice
           method: post
           cors: true
-  updateInvoice:
-    handler: src/lambda/invoice.update
-    events:
-      - http:
-          path: /invoice
-          method: put
-          cors: true
   getInvoices:
     handler: src/lambda/invoice.get
     events:
       - http:
           path: /invoice/{companyCustomerId}/{locked}
           method: get
-          cors: true
-  lockInvoice:
-    handler: src/lambda/invoice.lock
-    events:
-      - http:
-          path: /invoice/lock/
-          method: post
           cors: true
   sendInvoice:
     handler: src/lambda/invoice.send

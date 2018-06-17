@@ -111,7 +111,7 @@ describe('invoicerows', () => {
   it('send is added to status', () => {
     let invoice = createInvoice();
 
-    invoice = invoice.send();
+    invoice = invoice.send(() => {});
 
     expect(invoice.toJson().status).toMatchSnapshot([
       { createdAt: expect.any(Number) },

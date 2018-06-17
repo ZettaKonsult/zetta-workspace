@@ -59,7 +59,7 @@ afterAll(async () => {
   await Promise.all(invoicesPromise);
 });
 
-describe.skip('Invoices', () => {
+describe('Invoices', () => {
   it('invoices have correct attributes after creation', () => {
     let invoice = invoices[0];
 

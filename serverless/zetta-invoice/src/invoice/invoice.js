@@ -99,9 +99,9 @@ const invoice = ({
       return this;
     },
 
-    send: async function(sender) {
+    send: function(sender) {
       try {
-        await sender(this);
+        sender(this);
         invoice = {
           ...invoice,
           status: [

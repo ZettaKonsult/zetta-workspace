@@ -18,15 +18,7 @@ export default async ({ db, epoch }) => {
     TRY CATCH IT TO MAKE SURE THAT WE DON*T RUN updateNextProcess if it don't happen
   */
 
-  console.log(`Checking for plans to update...`);
   const result = await updateNextProcess({ db, plans });
-
-  if (result.length !== 0) {
-    console.log(`Processed the following plans`);
-    console.log(result);
-  } else {
-    console.log(`No plans were processed.`);
-  }
   return result;
 };
 
