@@ -26,5 +26,5 @@ Resources:
             ReadCapacityUnits: 1
             WriteCapacityUnits: 1
       ProvisionedThroughput:
-        ReadCapacityUnits: 1
-        WriteCapacityUnits: 1
+        ReadCapacityUnits: ${self:custom.tableThroughput}
+        WriteCapacityUnits: ${self:custom.tableThroughput}

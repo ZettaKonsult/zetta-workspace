@@ -1,8 +1,8 @@
 Resources:
-  PlansTable:
+  InvoiceGroupTable:
     Type: AWS::DynamoDB::Table
     Properties:
-      TableName: ${self:custom.Plans}
+      TableName: ${self:custom.InvoiceGroup}
       KeySchema:
         - AttributeName: companyCustomerId
           KeyType: HASH
