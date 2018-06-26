@@ -11,22 +11,22 @@ import Customer from '../companyCustomer/';
 import RecipientManager from '../recipient';
 
 import { sendInvoice } from '../mail/mail';
-import createInvoice from '../invoice/create';
 import { parser, db, failure, success } from '../util';
+import { getDbTable } from '../util/database';
+
+const TableName = getDbTable({ name: 'Invoices' });
+const database = Invoice.invoiceDatabase(db)(TableName);
 
 export const create = async (event: AWSEvent, context: AWSContext) => {
   const { companyCustomerId, invoiceRows, recipientIds } = parser(event).data;
-
   try {
     const invoice = Invoice.create({
-      companyCustomerId,
       invoiceRows,
       recipientIds,
     });
-    const result = await createInvoice({ db, invoice: invoice.toJson() });
+    const result = await database(companyCustomerId).save(invoice.toJson());
     return success(result);
   } catch (error) {
-    // console.error(error);
     return failure(error.message);
   }
 };
@@ -34,20 +34,11 @@ export const create = async (event: AWSEvent, context: AWSContext) => {
 export const get = async (event: AWSEvent, context: AWSContext) => {
   const { companyCustomerId, locked } = parser(event).params;
 
-  console.log(
-    `Received request for invoices for customer: ${companyCustomerId}`
-  );
-
   const isLocked = locked === 'true';
   try {
-    const result = await Invoice.list({
-      db,
-      companyCustomerId,
-      locked: isLocked,
-    });
+    const result = await database(companyCustomerId).list(isLocked);
     return success(result);
   } catch (error) {
-    // console.error(error);
     return failure(error.message);
   }
 };
@@ -56,10 +47,9 @@ export const remove = async (event: AWSEvent, context: AWSContext) => {
   const { companyCustomerId, invoiceId } = parser(event).data;
 
   try {
-    const result = await Invoice.remove({ db, companyCustomerId, invoiceId });
+    const result = await database(companyCustomerId).remove(invoiceId);
     return success(result);
   } catch (error) {
-    // console.error(error);
     return failure(error.message);
   }
 };
@@ -68,11 +58,7 @@ export const send = async (event: AWSEvent, context: AWSContext) => {
   const { companyCustomerId, invoiceId } = parser(event).data;
 
   try {
-    const invoiceData = await Invoice.get({
-      companyCustomerId,
-      invoiceId,
-      db,
-    });
+    const invoiceData = await database(companyCustomerId).get(invoiceId);
     const [companyCustomer, { recipients }] = await Promise.all([
       Customer.get({ db, companyCustomerId }),
       RecipientManager.getAll({
@@ -81,7 +67,10 @@ export const send = async (event: AWSEvent, context: AWSContext) => {
         recipientIds: invoiceData.recipients,
       }),
     ]);
-    let invoice = Invoice.create({ ...invoiceData }).send(
+    const sequentialId = await database(
+      'companyCustomer1'
+    ).generateInvoiceLockId('invoiceGroup1');
+    let invoice = Invoice.create({ ...invoiceData, sequentialId }).send(
       async invoice =>
         await sendInvoice({
           recipients,
@@ -90,7 +79,8 @@ export const send = async (event: AWSEvent, context: AWSContext) => {
           discount: 0,
         })
     );
-    const result = await createInvoice({ db, invoice: invoice.toJson() });
+    console.log(invoice.toJson());
+    const result = await database(companyCustomerId).save(invoice.toJson());
     return success(result);
   } catch (error) {
     return failure(`Could not send invoice mail: ${error.message}`);

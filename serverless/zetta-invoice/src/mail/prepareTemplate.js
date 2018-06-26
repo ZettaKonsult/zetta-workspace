@@ -35,12 +35,12 @@ export const prepareData = (data: {
 }): Array<InvoiceSpecification> => {
   const { discount, invoice, companyCustomer, recipient } = data;
   const { netTotal, taxTotal, total, invoiceRows } = invoice.getInvoiceTotal();
-  const { createdAt, timeToPay } = invoice.getFormatedDateValues();
+  const { createdAt, timeToPay, id } = invoice.getFormatedDateValues();
 
   return {
     companyCustomer,
     invoice: {
-      id: createdAt,
+      id,
       createdAt,
       timeToPay,
     },

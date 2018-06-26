@@ -67,7 +67,6 @@ Array [
 
 exports[`invoicerows toJson() returns an pure object 1`] = `
 Object {
-  "companyCustomerId": undefined,
   "createdAt": Any<Number>,
   "invoiceRows": Array [
     Object {

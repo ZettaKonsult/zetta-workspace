@@ -6,7 +6,6 @@ const defaultInvoice = {
   createdAt: Date.now(),
   status: [],
   recipients: [],
-  companyCustomerId: undefined,
 };
 
 const invoice = ({
@@ -21,7 +20,6 @@ const invoice = ({
         ...invoiceData,
         recipients: invoiceData.recipientIds,
       };
-
       return this;
     },
 
@@ -32,7 +30,7 @@ const invoice = ({
     getFormatedDateValues: function() {
       let createdAt = new Date(invoice.createdAt);
       return {
-        id: invoice.createdAt,
+        id: invoice.sequentialId,
         createdAt: createdAt.toISOString().split('T')[0],
         timeToPay: new Date(
           createdAt.getUTCFullYear(),

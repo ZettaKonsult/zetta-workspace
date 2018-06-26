@@ -25,6 +25,7 @@ custom:
 
   Invoices: 'Invoices-${self:provider.stage}'
   InvoiceStatuses: 'InvoiceStatuses-${self:provider.stage}'
+  InvoiceGroups: 'InvoiceGroups-${self:provider.stage}'
   Recipients: 'Recipients-${self:provider.stage}'
   CompanyCustomers: 'CompanyCustomers-${self:provider.stage}'
   Plans: 'Plans-${self:provider.stage}'
@@ -53,6 +54,8 @@ custom:
             sources: [./offline/seeds/invoiceStatuses.json]
           - table: ${self:custom.Recipients}
             sources: [./offline/seeds/recipients.json]
+          - table: ${self:custom.InvoiceGroups}
+            sources: [./offline/seeds/invoiceGroup.json]
 
 provider:
   name: aws
@@ -88,6 +91,7 @@ provider:
     RecipientsTable: ${self:custom.Recipients}
     S3UploadFolder: ${self:custom.S3UploadFolder}
     LadokParseResults: ${self:custom.LadokParseResults}
+    InvoiceGroupsTable: ${self:custom.InvoiceGroups}
 
 functions:
   createInvoice:
@@ -251,6 +255,7 @@ resources:
   - ${file(resources/dynamodb-table-plans.yml)}
   - ${file(resources/dynamodb-table-company-customer.yml)}
   - ${file(resources/dynamodb-table-invoices.yml)}
+  - ${file(resources/dynamodb-table-invoice-groups.yml)}
   - ${file(resources/dynamodb-table-invoice-statuses.yml)}
   - ${file(resources/dynamodb-table-recipients.yml)}
   - ${file(resources/dynamodb-table-ladok.yml)}
