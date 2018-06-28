@@ -194,8 +194,10 @@
       <p>Summa netto</p>
       <p>{{netTotal}}</p>
 
-      <p>Moms (25%)</p>
-      <p>{{taxTotal}}</p>
+      {{#taxTouple}}
+      <p>Moms ({{tax}})</p>
+      <p>{{value}}</p>
+      {{/taxTouple}}
     </div>
 
     <div class="invoiceSummary emphasize">

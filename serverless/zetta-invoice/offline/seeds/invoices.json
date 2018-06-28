@@ -1,150 +1,165 @@
 [
-    {
-      "id": "invoiceId1",
-      "companyCustomerId": "companyCustomerId",
-      "price": "123",
-      "recipients": [
-        "recipientId"
-      ],
-      "createdAt": 3456789012,
-      "unit": "Timmar",
-      "invoiceRows": [{
+  {
+    "id": "invoiceId1",
+    "companyCustomerId": "companyCustomerId",
+    "price": "123",
+    "recipients": ["recipientId"],
+    "createdAt": 3456789012,
+    "unit": "Timmar",
+    "invoiceRows": [
+      {
         "price": 123,
         "unit": 12,
         "tax": 0.01,
         "description": "1an"
-      }],
-      "itemStatus": {
-        "id": "itemStatusId1",
-        "invoiceId": "invoiceId1",
-        "createdAt": 3456789012,
-        "itemStatus": "pending"
-      },
-      "locked": false
+      }
+    ],
+    "itemStatus": {
+      "id": "itemStatusId1",
+      "invoiceId": "invoiceId1",
+      "createdAt": 3456789012,
+      "itemStatus": "pending"
     },
-    {
-      "id": "invoiceId2",
-      "companyCustomerId": "companyCustomerId",
-      "companyCustomer": {
-        "id": "companyCustomerId",
-        "firstName": "FirstName",
-        "lastName": "LastName",
-        "city": "City",
-        "address": "Road 123A",
-        "mobile": "+46761234567",
-        "VAT": "XX123456789101",
-        "zipcode": "12345",
-        "company": "Company AB",
-        "email": "firstName@company.com",
-        "defaultTax": 0.25,
-        "bank": {
-          "giro": "123-4567",
-          "name": "MoneyBank"
-        },
-        "createdAt": 1234567890
+    "locked": false
+  },
+  {
+    "id": "invoiceId2",
+    "companyCustomerId": "companyCustomerId",
+    "companyCustomer": {
+      "id": "companyCustomerId",
+      "firstName": "FirstName",
+      "lastName": "LastName",
+      "city": "City",
+      "address": "Road 123A",
+      "mobile": "+46761234567",
+      "VAT": "XX123456789101",
+      "zipcode": "12345",
+      "company": "Company AB",
+      "email": "firstName@company.com",
+      "defaultTax": 0.25,
+      "bank": {
+        "giro": "123-4567",
+        "name": "MoneyBank"
       },
-      "price": "456",
-      "recipients": [
-        "recipientId"
-      ],
-      "createdAt": 4567890123,
-      "unit": "Timmar",
-      "invoiceRows": [{
+      "createdAt": 1234567890
+    },
+    "price": "456",
+    "recipients": ["recipientId"],
+    "createdAt": 4567890123,
+    "unit": "Timmar",
+    "invoiceRows": [
+      {
         "price": 234,
         "unit": 23,
         "tax": 0.02,
         "description": "2an A"
-      },{
+      },
+      {
         "price": 234,
         "unit": 23,
         "tax": 0.02,
         "description": "2an B"
-      }],
-      "itemStatus": {
-        "id": "itemStatusId2",
-        "invoiceId": "invoiceId2",
-        "createdAt": 4567890123,
-        "itemStatus": "succeeded"
-      },
-      "locked": true
+      }
+    ],
+    "itemStatus": {
+      "id": "itemStatusId2",
+      "invoiceId": "invoiceId2",
+      "createdAt": 4567890123,
+      "itemStatus": "succeeded"
     },
-    {
-      "id": "invoiceId3",
-      "companyCustomerId": "companyCustomerId",
-      "price": "789",
-      "recipients": [
-        "recipientId"
-      ],
-      "createdAt": 5678901234,
-      "unit": "Timmar",
-      "invoiceRows": [{
+    "locked": true
+  },
+  {
+    "id": "invoiceId3",
+    "companyCustomerId": "companyCustomerId",
+    "price": "789",
+    "recipients": ["recipientId"],
+    "createdAt": 5678901234,
+    "unit": "Timmar",
+    "invoiceRows": [
+      {
         "price": 345,
         "unit": 34,
         "tax": 0.25,
         "description": "3an A"
-      },{
+      },
+      {
         "price": 345,
         "unit": 34,
         "tax": 0.25,
         "description": "3an B"
-      },{
+      },
+      {
         "price": 345,
         "unit": 34,
         "tax": 0.25,
         "description": "3an C"
-      }],
-      "itemStatus": {
-        "id": "itemStatusId3",
-        "invoiceId": "invoiceId3",
-        "createdAt": 5678901234,
-        "itemStatus": "canceled"
-      },
-      "locked": false
+      }
+    ],
+    "itemStatus": {
+      "id": "itemStatusId3",
+      "invoiceId": "invoiceId3",
+      "createdAt": 5678901234,
+      "itemStatus": "canceled"
     },
-    {
-      "id": "invoiceId1A",
-      "companyCustomerId": "companyCustomerIdA",
-      "price": "1234",
-      "recipients": [
-        "recipientIdA"
-      ],
+    "locked": false
+  },
+  {
+    "id": "invoiceId1A",
+    "companyCustomerId": "companyCustomerIdA",
+    "price": "1234",
+    "recipients": ["recipientIdA"],
+    "createdAt": 3456789012,
+    "unit": "Timmar",
+    "invoiceRows": [
+      {
+        "price": 1000,
+        "unit": 1,
+        "tax": 0.1,
+        "description": "Gjorde hemsida"
+      },
+      {
+        "price": 550,
+        "unit": 1,
+        "tax": 0.25,
+        "description": "Gjorde api"
+      },
+      {
+        "price": 550,
+        "unit": 1,
+        "tax": 0.25,
+        "description": "Deployade till server"
+      }
+    ],
+    "itemStatus": {
+      "id": "itemStatusId1A",
+      "invoiceId": "invoiceId1A",
       "createdAt": 3456789012,
-      "unit": "Timmar",
-      "invoiceRows": [{
+      "itemStatus": "pending"
+    },
+    "locked": false
+  },
+  {
+    "id": "invoiceToUpdate1",
+    "companyCustomerId": "companyCustomerId",
+    "price": "1234",
+    "recipients": ["recipientIdA"],
+    "createdAt": 3456789012,
+    "unit": "Timmar",
+    "invoiceRows": [
+      {
         "price": 123,
         "unit": 12,
         "tax": 0.01,
         "description": "Aan"
-      }],
-      "itemStatus": {
-        "id": "itemStatusId1A",
-        "invoiceId": "invoiceId1A",
-        "createdAt": 3456789012,
-        "itemStatus": "pending"
-      },
-      "locked": false
-    },
-    {
-      "id": "invoiceToUpdate1",
-      "companyCustomerId": "companyCustomerId",
-      "price": "1234",
-      "recipients": [
-        "recipientIdA"
-      ],
+      }
+    ],
+    "itemStatus": {
+      "id": "itemStatusId1A",
+      "invoiceId": "invoiceId1A",
       "createdAt": 3456789012,
-      "unit": "Timmar",
-      "invoiceRows": [{
-        "price": 123,
-        "unit": 12,
-        "tax": 0.01,
-        "description": "Aan"
-      }],
-      "itemStatus": {
-        "id": "itemStatusId1A",
-        "invoiceId": "invoiceId1A",
-        "createdAt": 3456789012,
-        "itemStatus": "pending"
-      },
-      "locked": false
-    }
-  ]
+      "itemStatus": "pending"
+    },
+    "locked": false
+  }
+]

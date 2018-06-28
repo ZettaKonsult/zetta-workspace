@@ -34,8 +34,19 @@ export const prepareData = (data: {
   recipient: Recipient,
 }): Array<InvoiceSpecification> => {
   const { discount, invoice, companyCustomer, recipient } = data;
-  const { netTotal, taxTotal, total, invoiceRows } = invoice.getInvoiceTotal();
+  const {
+    netTotal,
+    taxTotal,
+    total,
+    seperateTaxMap,
+    invoiceRows,
+  } = invoice.getInvoiceTotal();
   const { createdAt, timeToPay, id } = invoice.getFormatedDateValues();
+
+  const taxTouple = Object.keys(seperateTaxMap).map(key => ({
+    tax: convertTaxToPercentage(key),
+    value: seperateTaxMap[key],
+  }));
 
   return {
     companyCustomer,
@@ -50,5 +61,18 @@ export const prepareData = (data: {
     taxTotal,
     total: total,
     recipient,
+    taxTouple,
   };
 };
+
+export const convertTaxToPercentage = tax => {
+  let taxCopy = tax.slice();
+  taxCopy = taxCopy.split('.')[1];
+  taxCopy = appendTrailingZero(taxCopy);
+  taxCopy = removeLeadingZeros(taxCopy);
+
+  return taxCopy + '%';
+};
+const removeLeadingZeros = string => string.replace(/^0+/, '');
+const appendTrailingZero = string =>
+  string.length === 1 ? string + '0' : string;

@@ -1,6 +1,6 @@
 import createInvoice from './invoice';
 
-describe('invoice sum calculator', () => {
+describe('getInvoiceTotal()', () => {
   it('returns the correct amounts for complete row', () => {
     const defaultTax = 0.1;
     const invoiceRows = [{ unit: 2, price: 550, describe: 'asd', tax: 0.25 }];
@@ -26,6 +26,19 @@ describe('invoice sum calculator', () => {
     const invoiceRows = [
       { unit: 1, price: 550, describe: 'asd', tax: 0.25 },
       { unit: 1, price: 550, describe: 'asd', tax: 0.25 },
+    ];
+    const testInvoice = createInvoice({ invoice: { invoiceRows }, defaultTax });
+
+    const result = testInvoice.getInvoiceTotal();
+
+    expect(result).toMatchSnapshot();
+  });
+
+  it('sums up each different tax seperate', () => {
+    const defaultTax = 0.1;
+    const invoiceRows = [
+      { unit: 1, price: 550, describe: 'asd', tax: 0.25 },
+      { unit: 1, price: 550, describe: 'asd' },
     ];
     const testInvoice = createInvoice({ invoice: { invoiceRows }, defaultTax });
 

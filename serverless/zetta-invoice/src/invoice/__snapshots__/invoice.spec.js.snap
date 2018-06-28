@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`invoice sum calculator correctly summarizes multiple rows 1`] = `
+exports[`getInvoiceTotal() correctly summarizes multiple rows 1`] = `
 Object {
   "invoiceRows": Array [
     Object {
@@ -19,12 +19,15 @@ Object {
     },
   ],
   "netTotal": 1100,
+  "seperateTaxMap": Object {
+    "0.25": 275,
+  },
   "taxTotal": 275,
   "total": 1375,
 }
 `;
 
-exports[`invoice sum calculator returns the correct amounts for complete row 1`] = `
+exports[`getInvoiceTotal() returns the correct amounts for complete row 1`] = `
 Object {
   "invoiceRows": Array [
     Object {
@@ -36,22 +39,57 @@ Object {
     },
   ],
   "netTotal": 1100,
+  "seperateTaxMap": Object {
+    "0.25": 275,
+  },
   "taxTotal": 275,
   "total": 1375,
 }
 `;
 
-exports[`invoice sum calculator uses default tax if no tax is given for row 1`] = `
+exports[`getInvoiceTotal() sums up each different tax seperate 1`] = `
 Object {
   "invoiceRows": Array [
     Object {
       "describe": "asd",
       "price": 550,
+      "tax": 0.25,
+      "total": 550,
+      "unit": 1,
+    },
+    Object {
+      "describe": "asd",
+      "price": 550,
+      "tax": 0.1,
+      "total": 550,
+      "unit": 1,
+    },
+  ],
+  "netTotal": 1100,
+  "seperateTaxMap": Object {
+    "0.1": 55,
+    "0.25": 137.5,
+  },
+  "taxTotal": 192.5,
+  "total": 1292.5,
+}
+`;
+
+exports[`getInvoiceTotal() uses default tax if no tax is given for row 1`] = `
+Object {
+  "invoiceRows": Array [
+    Object {
+      "describe": "asd",
+      "price": 550,
+      "tax": 0.25,
       "total": 1100,
       "unit": 2,
     },
   ],
   "netTotal": 1100,
+  "seperateTaxMap": Object {
+    "0.25": 275,
+  },
   "taxTotal": 275,
   "total": 1375,
 }

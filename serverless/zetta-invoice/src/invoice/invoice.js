@@ -43,17 +43,27 @@ const invoice = ({
 
     getInvoiceTotal: function() {
       return invoice.invoiceRows.reduce(
-        ({ taxTotal, netTotal, invoiceRows }, invoiceRow) => {
+        ({ taxTotal, netTotal, invoiceRows, seperateTaxMap }, invoiceRow) => {
           const tax = invoiceRow.tax ? invoiceRow.tax : defaultTax;
           const sum = invoiceRow.price * invoiceRow.unit;
           return {
+            seperateTaxMap: {
+              ...seperateTaxMap,
+              [tax]: (seperateTaxMap[tax] || 0) + tax * sum,
+            },
             netTotal: netTotal + sum,
             taxTotal: taxTotal + tax * sum,
-            invoiceRows: [...invoiceRows, { ...invoiceRow, total: sum }],
+            invoiceRows: [...invoiceRows, { ...invoiceRow, tax, total: sum }],
             total: netTotal + sum + taxTotal + tax * sum,
           };
         },
-        { netTotal: 0, taxTotal: 0, invoiceRows: [], total: 0 }
+        {
+          netTotal: 0,
+          taxTotal: 0,
+          invoiceRows: [],
+          total: 0,
+          seperateTaxMap: {},
+        }
       );
     },
 
