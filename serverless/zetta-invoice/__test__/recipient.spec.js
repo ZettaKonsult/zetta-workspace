@@ -66,6 +66,6 @@ describe('Recipients.', () => {
       },
     });
 
-    expect(result).toEqual(data);
+    expect(result).toEqual(true);
   });
 });

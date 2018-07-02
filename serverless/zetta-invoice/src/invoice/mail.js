@@ -24,11 +24,7 @@ export default async (params: {
 
   const [companyCustomer, { recipients }] = await Promise.all([
     Customer.get({ db, companyCustomerId }),
-    RecipientManager.getAll({
-      db,
-      companyCustomerId,
-      recipientIds: invoiceData.recipients,
-    }),
+    RecipientManager(companyCustomerId).getAll(invoiceData.recipients),
   ]);
 
   return await createInvoice({

@@ -46,7 +46,7 @@ export const saveNewAssignments = async (
         ...user.attributes,
         reccuringPayments: user.reccuringPayments,
       };
-      return Recipient.save({ db, companyCustomerId, recipient });
+      return Recipient(companyCustomerId).save(recipient);
     });
     let recipients = await Promise.all(promises);
     console.log(`Done saving new users.`);

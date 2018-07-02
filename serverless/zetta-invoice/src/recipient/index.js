@@ -1,8 +1,11 @@
 /* @flow */
 
-import save from './save';
-import list from './list';
-import remove from './remove';
-import { get, getAll, getBySSN } from './get';
+import { getBySSN } from './get';
+import { db, getDbTable } from '../util';
+import recipientDatabase from './recipientDatabase';
 
-export default { save, list, get, getAll, getBySSN, remove };
+const TableName = getDbTable({ name: 'Recipients' });
+const database = recipientDatabase(db)(TableName);
+
+export default companyCustomerId => database(companyCustomerId);
+export { getBySSN };

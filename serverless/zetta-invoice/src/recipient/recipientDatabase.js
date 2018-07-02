@@ -15,18 +15,32 @@ export default database => TableName => companyCustomerId => {
       return result.Item;
     },
 
-    list: async locked => {
+    getAll: async ids => {
+      const Keys = ids.map(id => ({
+        id,
+        companyCustomerId,
+      }));
+      const params = {
+        RequestItems: {
+          [TableName]: {
+            Keys,
+          },
+        },
+      };
+      const result = await database('batchGet', params);
+
+      return result.Responses[TableName];
+    },
+
+    list: async () => {
       return (await database('query', {
         TableName,
         KeyConditionExpression: '#companyCustomerId = :companyCustomerId',
-        FilterExpression: '#locked = :locked',
         ExpressionAttributeNames: {
           '#companyCustomerId': 'companyCustomerId',
-          '#locked': 'locked',
         },
         ExpressionAttributeValues: {
           ':companyCustomerId': companyCustomerId,
-          ':locked': locked,
         },
       })).Items;
     },
@@ -39,10 +53,10 @@ export default database => TableName => companyCustomerId => {
       return true;
     },
 
-    save: async function(Item) {
-      const result = Item.id
-        ? await this.update(Item)
-        : await this.create(Item);
+    save: async function(item) {
+      const result = item.id
+        ? await this.update(item)
+        : await this.create(item);
       return result;
     },
 
@@ -54,33 +68,17 @@ export default database => TableName => companyCustomerId => {
       });
     },
 
-    create: async invoice => {
+    create: async item => {
       const Item = {
         id: cuid(),
         companyCustomerId,
-        ...invoice,
+        ...item,
       };
       await database('put', {
         TableName,
         Item,
       });
       return Item;
-    },
-
-    generateInvoiceLockId: async id => {
-      const result = await database('update', {
-        TableName: 'InvoiceGroups-dev',
-        ExpressionAttributeValues: {
-          ':incr': 1,
-        },
-        Key: {
-          companyCustomerId,
-          id,
-        },
-        ReturnValues: 'UPDATED_NEW',
-        UpdateExpression: 'SET currentId = currentId + :incr',
-      });
-      return result.Attributes.currentId;
     },
   };
 };

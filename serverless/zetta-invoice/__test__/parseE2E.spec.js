@@ -161,6 +161,7 @@ describe('check pipeline for uploading and parsing', () => {
         '9006211537': {
           companyCustomerId,
           email: 'zmk.zk.dev@gmail.com',
+          birthdate: '9006211537',
           firstName: 'Zimon',
           id: recipients[1],
           lastName: 'Kuhs',
@@ -172,6 +173,7 @@ describe('check pipeline for uploading and parsing', () => {
         '9105040035': {
           companyCustomerId,
           email: 'zmk.zk.dev@gmail.com',
+          birthdate: '9105040035',
           firstName: 'Fredrik',
           id: recipients[0],
           lastName: 'Palmquist',

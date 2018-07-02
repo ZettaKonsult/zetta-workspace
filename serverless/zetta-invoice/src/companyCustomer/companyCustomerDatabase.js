@@ -27,7 +27,7 @@ export default database => TableName => {
   };
 
   const update = async Item => {
-    await database('put', {
+    return await database('put', {
       TableName,
       Item,
       ReturnValues: 'UPDATED_NEW',

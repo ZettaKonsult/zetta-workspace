@@ -57,13 +57,9 @@ export const send = async (event: AWSEvent, context: AWSContext) => {
 
   try {
     const invoiceData = await database(companyCustomerId).get(invoiceId);
-    const [companyCustomer, { recipients }, sequentialId] = await Promise.all([
+    const [companyCustomer, recipients, sequentialId] = await Promise.all([
       customer.get(companyCustomerId),
-      RecipientManager.getAll({
-        db,
-        companyCustomerId,
-        recipientIds: invoiceData.recipients,
-      }),
+      RecipientManager(companyCustomerId).getAll(invoiceData.recipients),
       database('companyCustomer1').generateInvoiceLockId('invoiceGroup1'),
     ]);
     let invoice = Invoice.create({ ...invoiceData, sequentialId }).send(

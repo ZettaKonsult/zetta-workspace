@@ -5,7 +5,7 @@
  */
 
 import { getDbTable } from '../util/database';
-import recipient from '../recipient';
+import { getBySSN } from '../recipient';
 import { createPlansMapping } from '../plans';
 import unionMapper, * as unionAssigner from './unionAssigner';
 
@@ -32,9 +32,7 @@ export default async ({ db, companyCustomerId }) => {
 };
 
 const buildUserMap = async ({ db, aggregated }) => {
-  const promises = Object.keys(aggregated).map(ssn =>
-    recipient.getBySSN({ db, ssn })
-  );
+  const promises = Object.keys(aggregated).map(ssn => getBySSN({ db, ssn }));
   const users = await Promise.all(promises);
 
   return users.reduce((total, user, index) => {
