@@ -12,10 +12,8 @@ import RecipientManager from '../recipient';
 
 import { sendInvoice } from '../mail/mail';
 import { parser, db, failure, success } from '../util';
-import { getDbTable } from '../util/database';
 
-const TableName = getDbTable({ name: 'Invoices' });
-const database = Invoice.invoiceDatabase(db)(TableName);
+const database = Invoice.invoiceDatabase;
 
 export const create = async (event: AWSEvent, context: AWSContext) => {
   const { companyCustomerId, invoiceRows, recipientIds } = parser(event).data;
@@ -33,8 +31,8 @@ export const create = async (event: AWSEvent, context: AWSContext) => {
 
 export const get = async (event: AWSEvent, context: AWSContext) => {
   const { companyCustomerId, locked } = parser(event).params;
-
   const isLocked = locked === 'true';
+
   try {
     const result = await database(companyCustomerId).list(isLocked);
     return success(result);
@@ -59,17 +57,15 @@ export const send = async (event: AWSEvent, context: AWSContext) => {
 
   try {
     const invoiceData = await database(companyCustomerId).get(invoiceId);
-    const [companyCustomer, { recipients }] = await Promise.all([
+    const [companyCustomer, { recipients }, sequentialId] = await Promise.all([
       customer.get(companyCustomerId),
       RecipientManager.getAll({
         db,
         companyCustomerId,
         recipientIds: invoiceData.recipients,
       }),
+      database('companyCustomer1').generateInvoiceLockId('invoiceGroup1'),
     ]);
-    const sequentialId = await database(
-      'companyCustomer1'
-    ).generateInvoiceLockId('invoiceGroup1');
     let invoice = Invoice.create({ ...invoiceData, sequentialId }).send(
       async invoice =>
         await sendInvoice({
