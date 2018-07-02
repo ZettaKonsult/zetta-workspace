@@ -10,6 +10,7 @@
     "mobile": "+46762345678",
     "zipcode": "12345",
     "email": "fiddep@telia.com",
+    "company": "Zetta Konsult",
     "createdAt": 2345678901
   },
   {
@@ -23,6 +24,7 @@
     "mobile": "+467623456781",
     "zipcode": "123451",
     "email": "fiddep@telia.com",
+    "company": "Zetta Konsult",
     "createdAt": 23456789011
   },
   {
@@ -36,6 +38,7 @@
     "mobile": "+467623456781",
     "zipcode": "123451",
     "email": "fiddep@telia.com",
+    "company": "Zetta Konsult",
     "createdAt": 23456789011
   }
 ]
