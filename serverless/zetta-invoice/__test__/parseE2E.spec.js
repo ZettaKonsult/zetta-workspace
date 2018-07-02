@@ -249,7 +249,9 @@ describe('Simulate 1 TRF interval', () => {
       epoch,
       plan.intervalCount
     );
-    const expectedLength = findPlansThatWillProcess(startOfNextInterval);
+    const expectedLength = findPlansThatWillProcess(startOfNextInterval)(
+      testPlans
+    );
 
     const updatedPlans = await request({
       host: testConfig.Host,
@@ -264,8 +266,8 @@ describe('Simulate 1 TRF interval', () => {
   });
 });
 
-const findPlansThatWillProcess = epoch =>
-  plans.filter(plan => plan.epochNextProcess < epoch).length;
+const findPlansThatWillProcess = epoch => plans =>
+  plans.filter(plan => plan.epochNextProcess <= epoch).length;
 
 let plans = [
   {
