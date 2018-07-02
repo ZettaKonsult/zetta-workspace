@@ -7,7 +7,7 @@
 import type { AWSEvent, AWSContext } from 'types/AWS';
 
 import Invoice from '../invoice';
-import Customer from '../companyCustomer/';
+import customer from '../companyCustomer/';
 import RecipientManager from '../recipient';
 
 import { sendInvoice } from '../mail/mail';
@@ -60,7 +60,7 @@ export const send = async (event: AWSEvent, context: AWSContext) => {
   try {
     const invoiceData = await database(companyCustomerId).get(invoiceId);
     const [companyCustomer, { recipients }] = await Promise.all([
-      Customer.get({ db, companyCustomerId }),
+      customer.get(companyCustomerId),
       RecipientManager.getAll({
         db,
         companyCustomerId,
@@ -79,7 +79,7 @@ export const send = async (event: AWSEvent, context: AWSContext) => {
           discount: 0,
         })
     );
-    console.log(invoice.toJson());
+
     const result = await database(companyCustomerId).save(invoice.toJson());
     return success(result);
   } catch (error) {

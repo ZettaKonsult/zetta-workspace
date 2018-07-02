@@ -66,6 +66,6 @@ describe('companyCustomer E2E', () => {
       },
     });
 
-    expect(result).toEqual(data);
+    expect(result).toEqual(true);
   });
 });

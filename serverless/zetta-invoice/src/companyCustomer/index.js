@@ -1,7 +1,8 @@
 /* @flow */
 
-import save from './save';
-import remove from './remove';
-import { get } from './get';
+import companyCustomerDatabase from './companyCustomerDatabase';
+import { db, getDbTable } from '../util';
 
-export default { save, get, remove };
+const companyCustomerTable = getDbTable({ name: 'CompanyCustomers' });
+
+export default companyCustomerDatabase(db)(companyCustomerTable);
