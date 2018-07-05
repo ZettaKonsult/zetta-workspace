@@ -64,7 +64,7 @@ export default database => TableName => companyCustomerId => {
           ':locked': Item.locked,
           ':itemStatus': Item.itemStatus,
         },
-        ReturnValues: 'UPDATED_NEW',
+        ReturnValues: 'ALL_NEW',
       });
     },
 

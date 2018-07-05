@@ -36,6 +36,40 @@ Object {
 }
 `;
 
+exports[`Invoices invoice can be sent to recipient 1`] = `
+Object {
+  "companyCustomerId": Any<String>,
+  "createdAt": Any<Number>,
+  "id": Any<String>,
+  "invoiceRows": Array [
+    Object {
+      "description": "3an A",
+      "price": 345,
+      "tax": 0.25,
+      "unit": 34,
+    },
+    Object {
+      "description": "3an B",
+      "price": 345,
+      "tax": 0.25,
+      "unit": 34,
+    },
+    Object {
+      "description": "3an C",
+      "price": 345,
+      "tax": 0.25,
+      "unit": 34,
+    },
+  ],
+  "itemStatus": Any<Array>,
+  "locked": true,
+  "recipientIds": Array [
+    Any<String>,
+  ],
+  "sequentialId": 1,
+}
+`;
+
 exports[`Invoices invoices have correct attributes after creation 1`] = `
 Object {
   "companyCustomerId": Any<String>,
@@ -61,13 +95,10 @@ Object {
       "unit": 34,
     },
   ],
+  "itemStatus": Array [],
   "locked": false,
   "recipientIds": Array [
-    "cjj8uxu5s005hw4cvs3xidsm7",
+    Any<String>,
   ],
-  "recipients": Array [
-    "cjj8uxu5s005hw4cvs3xidsm7",
-  ],
-  "status": Array [],
 }
 `;

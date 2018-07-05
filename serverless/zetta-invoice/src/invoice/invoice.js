@@ -5,7 +5,7 @@ const defaultInvoice = {
   locked: false,
   createdAt: Date.now(),
   itemStatus: [],
-  recipients: [],
+  recipientIds: [],
 };
 
 const invoice = ({
@@ -18,13 +18,13 @@ const invoice = ({
       invoice = {
         ...invoice,
         ...invoiceData,
-        recipients: invoiceData.recipientIds,
+        recipientIds: invoiceData.recipientIds,
       };
       return this;
     },
 
     getRecipients: () => {
-      return invoice.recipients;
+      return invoice.recipientIds;
     },
 
     getFormatedDateValues: function() {
@@ -89,19 +89,24 @@ const invoice = ({
       if (!this.isInvoiceLocked()) {
         invoice = {
           ...invoice,
-          recipients: [...invoice.recipients, recipient],
+          recipientIds: [...invoice.recipientIds, recipient],
         };
       }
       return this;
     },
 
-    lockInvoice: function() {
+    lockInvoice: function(sequentialId) {
       invoice = {
         ...invoice,
+        sequentialId,
         locked: true,
         itemStatus: [
           ...invoice.itemStatus,
-          { createdAt: Date.now(), action: 'LOCKED' },
+          {
+            createdAt: Date.now(),
+            action: 'LOCKED',
+            payload: { sequentialId },
+          },
         ],
       };
       return this;

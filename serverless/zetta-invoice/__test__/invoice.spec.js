@@ -97,11 +97,12 @@ describe('Invoices', () => {
       id: expect.any(String),
       companyCustomerId: expect.any(String),
       createdAt: expect.any(Number),
+      recipientIds: [expect.any(String)],
     });
   });
 
   it('invoice can be sent to recipient', async () => {
-    const result = await request({
+    invoice = await request({
       host,
       path: 'invoice/mail',
       payload: {
@@ -113,6 +114,12 @@ describe('Invoices', () => {
       },
     });
 
-    expect(result).not.toMatch(/Could not send invoice mail:/);
+    expect({ ...invoice }).toMatchSnapshot({
+      id: expect.any(String),
+      companyCustomerId: expect.any(String),
+      createdAt: expect.any(Number),
+      itemStatus: expect.any(Array),
+      recipientIds: [expect.any(String)],
+    });
   });
 });
