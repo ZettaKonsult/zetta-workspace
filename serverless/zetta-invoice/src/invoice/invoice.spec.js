@@ -87,12 +87,12 @@ describe('invoicerows', () => {
 
     const result = invoice
       .addInvoiceRow({ id: 1 })
-      .lockInvoice()
+      .lockInvoice(1)
       .toJson();
 
     expect(result).toMatchSnapshot({
       createdAt: expect.any(Number),
-      status: [{ createdAt: expect.any(Number) }],
+      itemStatus: [{ createdAt: expect.any(Number) }],
     });
   });
 
@@ -112,12 +112,12 @@ describe('invoicerows', () => {
   });
 
   it('recipients are added to invoice', () => {
-    let invoice = createInvoice({ invoice: { recipients: [{ id: 'rec1' }] } });
+    let invoice = createInvoice({ invoice: { recipientIds: ['rec1'] } });
 
-    invoice = invoice.addRecipient({ id: 'rec2' });
+    invoice = invoice.addRecipient('rec2');
 
     expect(invoice.toJson()).toEqual({
-      recipients: [{ id: 'rec1' }, { id: 'rec2' }],
+      recipientIds: ['rec1', 'rec2'],
     });
   });
 
@@ -126,7 +126,7 @@ describe('invoicerows', () => {
 
     invoice = invoice.send(() => {});
 
-    expect(invoice.toJson().status).toMatchSnapshot([
+    expect(invoice.toJson().itemStatus).toMatchSnapshot([
       { createdAt: expect.any(Number) },
     ]);
   });

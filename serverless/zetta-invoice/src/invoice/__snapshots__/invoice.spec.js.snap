@@ -111,12 +111,13 @@ Object {
       "id": 1,
     },
   ],
-  "locked": true,
-  "recipients": Array [],
-  "status": Array [
+  "itemStatus": Array [
     Object {
       "createdAt": Any<Number>,
     },
   ],
+  "locked": true,
+  "recipientIds": Array [],
+  "sequentialId": 1,
 }
 `;
