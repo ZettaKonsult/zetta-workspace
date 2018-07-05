@@ -1,5 +1,41 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`Invoices create a recipient 1`] = `
+Object {
+  "address": "Road 234A",
+  "city": "RecipientCity",
+  "companyCustomerId": Any<String>,
+  "createdAt": 2345678901,
+  "email": "fiddep@telia.com",
+  "firstName": "RecipientFirst",
+  "id": Any<String>,
+  "lastName": "RecipientLast",
+  "mobile": "+46762345678",
+  "ssn": "1234567890",
+  "zipcode": "12345",
+}
+`;
+
+exports[`Invoices create companyCustomer 1`] = `
+Object {
+  "VAT": "91050400356",
+  "address": "testRoad 33",
+  "bank": Object {
+    "giro": "123-4567",
+    "name": "MoneyBank",
+  },
+  "city": "testCity",
+  "company": "zetta konsult",
+  "email": "test@test.test",
+  "firstName": "Test",
+  "id": Any<String>,
+  "lastName": "TestPersson",
+  "mobile": "+46762345678",
+  "ssn": "1234567890",
+  "zipcode": "12345",
+}
+`;
+
 exports[`Invoices invoices have correct attributes after creation 1`] = `
 Object {
   "companyCustomerId": Any<String>,
@@ -27,10 +63,10 @@ Object {
   ],
   "locked": false,
   "recipientIds": Array [
-    "recipientId1",
+    "cjj8uxu5s005hw4cvs3xidsm7",
   ],
   "recipients": Array [
-    "recipientId1",
+    "cjj8uxu5s005hw4cvs3xidsm7",
   ],
   "status": Array [],
 }

@@ -4,7 +4,7 @@ const defaultInvoice = {
   invoiceRows: [],
   locked: false,
   createdAt: Date.now(),
-  status: [],
+  itemStatus: [],
   recipients: [],
 };
 
@@ -99,8 +99,8 @@ const invoice = ({
       invoice = {
         ...invoice,
         locked: true,
-        status: [
-          ...invoice.status,
+        itemStatus: [
+          ...invoice.itemStatus,
           { createdAt: Date.now(), action: 'LOCKED' },
         ],
       };
@@ -112,8 +112,8 @@ const invoice = ({
         sender(this);
         invoice = {
           ...invoice,
-          status: [
-            ...invoice.status,
+          itemStatus: [
+            ...invoice.itemStatus,
             { createdAt: Date.now(), action: 'SEND' },
           ],
         };

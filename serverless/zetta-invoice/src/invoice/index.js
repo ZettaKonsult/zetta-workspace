@@ -5,14 +5,19 @@
  */
 import invoice from './invoice';
 import invoiceDatabase from './invoiceDynamodb';
+import invoiceGroupDatabase from './invoiceGroupDatabase';
 
 import { db } from '../util';
 import { getDbTable } from '../util/database';
 
-const TableName = getDbTable({ name: 'Invoices' });
-const database = invoiceDatabase(db)(TableName);
+const TableNameInvoice = getDbTable({ name: 'Invoices' });
+const databaseInvoice = invoiceDatabase(db)(TableNameInvoice);
+
+const TableNameInvoiceGroup = getDbTable({ name: 'InvoiceGroups' });
+const databaseInvoiceGroup = invoiceGroupDatabase(db)(TableNameInvoiceGroup);
 
 export default {
   create: data => invoice().create(data),
-  invoiceDatabase: database,
+  invoiceDatabase: databaseInvoice,
+  databaseInvoiceGroup,
 };

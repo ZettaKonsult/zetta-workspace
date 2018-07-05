@@ -1,8 +1,7 @@
 [
   {
-    "id": "invoiceGroup1",
     "companyCustomerId": "companyCustomer1",
-    "name": "default",
+    "id": "default",
     "currentId": 100
   }
 ]

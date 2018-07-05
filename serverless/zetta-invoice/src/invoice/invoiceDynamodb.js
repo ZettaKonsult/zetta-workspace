@@ -47,9 +47,23 @@ export default database => TableName => companyCustomerId => {
     },
 
     update: async Item => {
-      return await database('put', {
+      return await database('update', {
         TableName,
-        Item,
+        Key: {
+          id: Item.id,
+          companyCustomerId,
+        },
+        UpdateExpression: `SET
+        invoiceRows = :invoiceRows,
+        sequentialId = :sequentialId,
+        itemStatus = :itemStatus,
+        locked = :locked`,
+        ExpressionAttributeValues: {
+          ':invoiceRows': Item.invoiceRows,
+          ':sequentialId': Item.sequentialId,
+          ':locked': Item.locked,
+          ':itemStatus': Item.itemStatus,
+        },
         ReturnValues: 'UPDATED_NEW',
       });
     },

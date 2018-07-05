@@ -1,6 +1,9 @@
 /* @flow */
 
 import cuid from 'cuid';
+import Invoice from '../invoice';
+
+const { databaseInvoiceGroup } = Invoice;
 
 export default database => TableName => {
   const get = async id => {
@@ -34,15 +37,20 @@ export default database => TableName => {
     });
   };
 
-  const create = async companyCustomer => {
+  const create = async companyCustomerData => {
     const Item = {
       id: cuid(),
-      ...companyCustomer,
+      ...companyCustomerData,
     };
-    await database('put', {
-      TableName,
-      Item,
-    });
+
+    const [invoiceGroup, companyCustomer] = await Promise.all([
+      databaseInvoiceGroup(Item.id).create(),
+      database('put', {
+        TableName,
+        Item,
+      }),
+    ]);
+
     return Item;
   };
 

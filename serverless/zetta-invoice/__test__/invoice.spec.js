@@ -1,72 +1,118 @@
 /**
  * @date 2018-03-05
  */
-import cuid from 'cuid';
 import { request, testConfig } from '../src/util/';
 
 const host = testConfig.Host;
-const companyCustomerId1 = cuid();
-const companyCustomerId2 = cuid();
-let invoices = [
-  {
-    companyCustomerId: companyCustomerId1,
-    invoiceRows: [
-      { description: '3an A', unit: 34, price: 345, tax: 0.25 },
-      { description: '3an B', unit: 34, price: 345, tax: 0.25 },
-      { description: '3an C', unit: 34, price: 345, tax: 0.25 },
-    ],
-    recipientIds: ['recipientId1'],
-  },
-  {
-    companyCustomerId: companyCustomerId2,
-    invoiceRows: [
-      { description: '3an A', unit: 34, price: 345, tax: 0.25 },
-      { description: '3an B', unit: 34, price: 345, tax: 0.25 },
-      { description: '3an C', unit: 34, price: 345, tax: 0.25 },
-    ],
-    recipientIds: ['recipientId1'],
-  },
-];
 
-beforeAll(async () => {
-  let invoicesPromise = invoices.map(invoice =>
-    request({
+describe('Invoices', () => {
+  let companyCustomer = {};
+  let invoice = {};
+  let recipient = {};
+
+  it('create companyCustomer', async () => {
+    companyCustomer = {
+      address: 'testRoad 33',
+      city: 'testCity',
+      email: 'test@test.test',
+      firstName: 'Test',
+      lastName: 'TestPersson',
+      mobile: '+46762345678',
+      ssn: '1234567890',
+      zipcode: '12345',
+      company: 'zetta konsult',
+      VAT: '91050400356',
+      bank: {
+        giro: '123-4567',
+        name: 'MoneyBank',
+      },
+    };
+
+    companyCustomer = await request({
+      host,
+      path: 'companycustomer',
+      payload: {
+        method: 'post',
+        body: { companyCustomer },
+      },
+    });
+
+    expect({ ...companyCustomer }).toMatchSnapshot({
+      id: expect.any(String),
+    });
+  });
+
+  it('create a recipient', async () => {
+    const data = {
+      companyCustomerId: companyCustomer.id,
+      recipient: {
+        address: 'Road 234A',
+        city: 'RecipientCity',
+        createdAt: 2345678901,
+        email: 'fiddep@telia.com',
+        firstName: 'RecipientFirst',
+        lastName: 'RecipientLast',
+        mobile: '+46762345678',
+        ssn: '1234567890',
+        zipcode: '12345',
+      },
+    };
+
+    recipient = await request({
+      host,
+      path: 'recipient',
+      payload: {
+        method: 'post',
+        body: data,
+      },
+    });
+
+    expect({ ...recipient }).toMatchSnapshot({
+      id: expect.any(String),
+      companyCustomerId: expect.any(String),
+    });
+  });
+
+  it('invoices have correct attributes after creation', async () => {
+    invoice = {
+      companyCustomerId: companyCustomer.id,
+      invoiceRows: [
+        { description: '3an A', unit: 34, price: 345, tax: 0.25 },
+        { description: '3an B', unit: 34, price: 345, tax: 0.25 },
+        { description: '3an C', unit: 34, price: 345, tax: 0.25 },
+      ],
+      recipientIds: [recipient.id],
+    };
+
+    invoice = await request({
       host,
       path: `invoice`,
       payload: {
         method: 'post',
         body: invoice,
       },
-    })
-  );
-  invoices = await Promise.all(invoicesPromise);
-});
+    });
 
-afterAll(async () => {
-  let invoicesPromise = invoices.map(invoice =>
-    request({
-      host,
-      path: 'invoice',
-      payload: {
-        method: 'delete',
-        body: {
-          companyCustomerId: invoice.companyCustomerId,
-          invoiceId: invoice.id,
-        },
-      },
-    })
-  );
-  await Promise.all(invoicesPromise);
-});
-
-describe('Invoices', () => {
-  it('invoices have correct attributes after creation', () => {
-    let invoice = invoices[0];
-
-    expect(invoice).toMatchSnapshot({
+    expect({ ...invoice }).toMatchSnapshot({
       id: expect.any(String),
       companyCustomerId: expect.any(String),
       createdAt: expect.any(Number),
     });
+  });
+
+  it('invoice can be sent to recipient', async () => {
+    const result = await request({
+      host,
+      path: 'invoice/mail',
+      payload: {
+        method: 'post',
+        body: {
+          companyCustomerId: companyCustomer.id,
+          invoiceId: invoice.id,
+        },
+      },
+    });
+
+    expect(result).not.toMatch(/Could not send invoice mail:/);
   });
 });
