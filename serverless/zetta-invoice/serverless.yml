@@ -130,6 +130,13 @@ functions:
           path: /recipient
           method: post
           cors: true
+  listRecipients:
+    handler: src/lambda/recipient.list
+    events:
+      - http:
+          path: /recipient/{companyCustomerId}
+          method: get
+          cors: true
   updateRecipient:
     handler: src/lambda/recipient.update
     events:

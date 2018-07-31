@@ -21,6 +21,18 @@ export const create = async (event: AWSEvent, context: AWSContext) => {
   }
 };
 
+export const list = async (event: AWSEvent, context: AWSContext) => {
+  const { companyCustomerId } = parser(event).params;
+
+  try {
+    const result = await Recipient(companyCustomerId).list();
+    return success(result);
+  } catch (error) {
+    console.error(error);
+    return failure(error.message);
+  }
+};
+
 export const get = async (event: AWSEvent, context: AWSContext) => {
   const { companyCustomerId, recipientId } = parser(event).params;
 
