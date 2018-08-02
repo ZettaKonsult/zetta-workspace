@@ -5,13 +5,7 @@ import { SubmissionError } from 'redux-form';
 import PlaceForm from './Form/PlaceForm';
 import RecipientList from './RecipientList';
 
-import {
-  createRecipient,
-  listRecipients,
-  updateRecipient,
-  getRecipient,
-  deleteRecipent,
-} from '../services';
+import { createRecipient, listRecipients } from '../services';
 
 class Place extends Component {
   constructor() {
@@ -20,17 +14,7 @@ class Place extends Component {
       isLoading: false,
       error: undefined,
       recipients: [],
-      recipient: {
-        address: 'Road 234A',
-        city: 'RecipientCity',
-        createdAt: 2345678901,
-        email: 'firstName@recipient.com',
-        firstName: 'RecipientFirst',
-        lastName: 'RecipientLast',
-        mobile: '+46762345678',
-        ssn: '1234567890',
-        zipcode: '12345',
-      },
+      recipient: {},
     };
   }
   async componentDidMount() {
@@ -39,16 +23,21 @@ class Place extends Component {
     this.setState(state => ({ recipients: [...state.recipients, ...results] }));
   }
 
-  createRecipient = async () => {
+  createRecipient = async recipient => {
     this.setState(state => ({ ...state, isLoading: true }));
 
     try {
       const result = await createRecipient({
-        recipient: this.state.recipient,
+        recipient: recipient,
         companyCustomerId: '123456',
       });
-      console.log(result);
-      this.setState(state => ({ recipients: [...state.recipients, result] }));
+
+      this.setState(state => ({
+        recipients: [
+          ...state.recipients.filter(r => r.id !== result.id),
+          result,
+        ],
+      }));
     } catch (error) {
       throw new SubmissionError({ _error: error.message });
     } finally {
