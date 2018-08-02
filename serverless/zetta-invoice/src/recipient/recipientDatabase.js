@@ -61,11 +61,35 @@ export default database => TableName => companyCustomerId => {
     },
 
     update: async Item => {
-      return await database('put', {
+      const result = await database('update', {
         TableName,
-        Item,
-        ReturnValues: 'UPDATED_NEW',
+        Key: {
+          id: Item.id,
+          companyCustomerId,
+        },
+        UpdateExpression: `SET
+          address = :address,
+          city = :city,
+          email = :email,
+          firstName = :firstName,
+          lastName = :lastName,
+          mobile = :mobile,
+          ssn = :ssn,
+          zipcode = :zipcode`,
+        ExpressionAttributeValues: {
+          ':address': Item.address || '',
+          ':city': Item.city || '',
+          ':email': Item.email || '',
+          ':firstName': Item.firstName || '',
+          ':lastName': Item.lastName || '',
+          ':mobile': Item.mobile || '',
+          ':ssn': Item.ssn || '',
+          ':zipcode': Item.zipcode || '',
+        },
+        ReturnValues: 'ALL_NEW',
       });
+
+      return result.Attributes;
     },
 
     create: async item => {

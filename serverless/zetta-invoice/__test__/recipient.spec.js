@@ -51,6 +51,21 @@ describe('Recipients.', () => {
     expect(result).toEqual(recipient);
   });
 
+  it('update', async () => {
+    let updateRecipient = { ...recipient, firstName: 'newName' };
+
+    const result = await request({
+      host,
+      path: 'recipient',
+      payload: {
+        method: 'post',
+        body: { companyCustomerId, recipient: updateRecipient },
+      },
+    });
+
+    expect(result).toEqual(updateRecipient);
+  });
+
   it('delete', async () => {
     const data = {
       recipientId: recipient.id,
