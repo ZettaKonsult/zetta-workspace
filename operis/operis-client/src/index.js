@@ -9,5 +9,10 @@ import 'semantic-ui-css/semantic.min.css';
 
 const store = configureStore();
 
-ReactDOM.render(<Root store={store} />, document.getElementById('root'));
+ReactDOM.render(
+  <React.StrictMode>
+    <Root store={store} />
+  </React.StrictMode>,
+  document.getElementById('root')
+);
 registerServiceWorker();
