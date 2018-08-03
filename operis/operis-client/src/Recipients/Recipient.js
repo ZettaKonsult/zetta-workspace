@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { Route } from 'react-router-dom';
 import { SubmissionError } from 'redux-form';
 
@@ -6,6 +7,7 @@ import PlaceForm from './Form/PlaceForm';
 import RecipientList from './RecipientList';
 
 import { createRecipient, listRecipients } from '../services';
+import { fetchRecipients } from './recipientReducer';
 
 class Place extends Component {
   constructor() {
@@ -13,14 +15,12 @@ class Place extends Component {
     this.state = {
       isLoading: false,
       error: undefined,
-      recipients: [],
       recipient: {},
     };
   }
+
   async componentDidMount() {
-    const results = await listRecipients({ companyCustomerId: '123456' });
-    console.log(results);
-    this.setState(state => ({ recipients: [...state.recipients, ...results] }));
+    this.props.fetchRecipients({ companyCustomerId: '123456' });
   }
 
   createRecipient = async recipient => {
@@ -46,10 +46,10 @@ class Place extends Component {
   };
 
   render() {
-    const { error, isLoading, recipients } = this.state;
-    const { match, history } = this.props;
+    const { error, isLoading } = this.state;
+    const { match, history, recipients } = this.props;
 
-    if (error) {
+    if (error || recipients.length === 0) {
       return <div>{error}</div>;
     }
     return (
@@ -84,4 +84,6 @@ class Place extends Component {
   }
 }
 
-export default Place;
+export default connect(state => ({ recipients: state.recipients.recipients }), {
+  fetchRecipients,
+})(Place);

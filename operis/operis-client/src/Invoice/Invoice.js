@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { Route } from 'react-router-dom';
 
-import ReportForm from './Form/ReportForm';
-import ReportList from './ReportList';
-import { updateInvoiceState, fetchInvoiceAPI, saveInvoiceAPI } from './invoice';
+import InvoiceForm from './Form/InvoiceForm';
+import InvoiceList from './InvoiceList';
 
-export default class Report extends Component {
+import { getInvoices, createInvoice, removeInvoice } from '../services';
+
+class Invoice extends Component {
   constructor() {
     super();
     this.state = {
@@ -13,18 +15,22 @@ export default class Report extends Component {
       isFetching: false,
     };
   }
+
   async componentDidMount() {
     this.setState({ isFetching: true });
-    const invoices = await fetchInvoiceAPI(this.props.companyCustomerId);
+
+    const invoices = await getInvoices(this.props.companyCustomerId);
+
     this.setState({ invoices, isFetching: false });
   }
+
   async postInvoice(invoice) {
     try {
-      const result = await saveInvoiceAPI(
-        invoice,
-        this.props.companyCustomerId
-      );
-      this.setState(updateInvoiceState(result));
+      const result = await createInvoice(invoice, this.props.companyCustomerId);
+      console.log(result);
+      this.setState(state => ({
+        invoices: [...state.invoices.filter(r => r.id !== result.id), result],
+      }));
     } catch (error) {
       console.error(error);
     }
@@ -32,6 +38,7 @@ export default class Report extends Component {
 
   render() {
     const { match } = this.props;
+
     if (this.state.isFetching) {
       return <p>Loading...</p>;
     } else {
@@ -40,14 +47,14 @@ export default class Report extends Component {
           <Route
             path={`${match.path}/:id`}
             render={props => (
-              <ReportForm
+              <InvoiceForm
                 recipients={this.props.recipients}
                 id={props.match.params.id}
                 isFetching={this.state.isFetching}
                 invoices={this.state.invoices}
                 onSubmit={async values => {
                   await this.postInvoice(values);
-                  props.history.push('/report');
+                  props.history.push('/invoice');
                 }}
               />
             )}
@@ -55,10 +62,16 @@ export default class Report extends Component {
           <Route
             exact
             path={`${match.path}`}
-            render={() => <ReportList invoices={this.state.invoices} />}
+            render={route => (
+              <InvoiceList invoices={this.state.invoices} match={route.match} />
+            )}
           />
         </div>
       );
     }
   }
 }
+
+export default connect(state => ({ recipients: state.recipients.recipients }))(
+  Invoice
+);

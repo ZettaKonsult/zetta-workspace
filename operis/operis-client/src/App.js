@@ -5,7 +5,6 @@ import { Divider } from 'semantic-ui-react';
 
 import Routes from './Routes';
 import PageNav from './Components/Nav/PageNav';
-import { updateObjectArrayState } from './util/stateUtils';
 
 class App extends Component {
   constructor() {
@@ -16,6 +15,8 @@ class App extends Component {
     };
   }
 
+  signOut = () => {};
+
   render() {
     return (
       <div>
@@ -23,7 +24,6 @@ class App extends Component {
         <Divider />
         <div style={{ margin: '0 1em' }}>
           <Routes
-            recipients={this.state.recipients}
             updateRecipients={this.updateRecipients}
             companyCustomerId={this.state.companyCustomerId}
           />

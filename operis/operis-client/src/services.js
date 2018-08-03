@@ -23,3 +23,19 @@ export const deleteRecipent = async () =>
   fetch(`http://localhost:8080/recipient`, { method: 'delete' }).then(res =>
     res.json()
   );
+
+export const getInvoices = async companyCustomerId =>
+  fetch(`http://localhost:8080/invoice/${companyCustomerId}/true`).then(res =>
+    res.json()
+  );
+
+export const createInvoice = async (invoice, companyCustomerId) =>
+  fetch(`http://localhost:8080/invoice`, {
+    method: 'post',
+    body: JSON.stringify({ invoice, companyCustomerId }),
+  }).then(res => res.json());
+
+export const removeInvoice = async () =>
+  fetch(`http://localhost:8080/recipient`, { method: 'delete' }).then(res =>
+    res.json()
+  );

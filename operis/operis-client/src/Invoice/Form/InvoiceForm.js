@@ -4,7 +4,7 @@ import { reduxForm, Field, FieldArray } from 'redux-form';
 import { Form, Button, Divider } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 
-import validate from './ReportFormValidation';
+import validate from './InvoiceFormValidation';
 import { TextArea } from '../../Components/Form/TextArea';
 import { Input } from '../../Components/Form/Input';
 import { Dropdown } from '../../Components/Form/Dropdown';
