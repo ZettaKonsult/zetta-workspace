@@ -25,14 +25,14 @@ export const deleteRecipent = async () =>
   );
 
 export const getInvoices = async companyCustomerId =>
-  fetch(`http://localhost:8080/invoice/${companyCustomerId}/true`).then(res =>
+  fetch(`http://localhost:8080/invoice/${companyCustomerId}/false`).then(res =>
     res.json()
   );
 
-export const createInvoice = async (invoice, companyCustomerId) =>
+export const createInvoice = async invoice =>
   fetch(`http://localhost:8080/invoice`, {
     method: 'post',
-    body: JSON.stringify({ invoice, companyCustomerId }),
+    body: JSON.stringify(invoice),
   }).then(res => res.json());
 
 export const removeInvoice = async () =>

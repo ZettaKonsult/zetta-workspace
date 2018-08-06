@@ -20,14 +20,18 @@ class Invoice extends Component {
     this.setState({ isFetching: true });
 
     const invoices = await getInvoices(this.props.companyCustomerId);
-
+    console.log(invoices);
     this.setState({ invoices, isFetching: false });
   }
 
   async postInvoice(invoice) {
     try {
-      const result = await createInvoice(invoice, this.props.companyCustomerId);
-      console.log(result);
+      const result = await createInvoice({
+        ...invoice,
+        recipientIds: [invoice.recipientIds],
+        companyCustomerId: this.props.companyCustomerId,
+      });
+
       this.setState(state => ({
         invoices: [...state.invoices.filter(r => r.id !== result.id), result],
       }));

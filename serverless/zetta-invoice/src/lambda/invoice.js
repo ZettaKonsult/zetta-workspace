@@ -22,6 +22,7 @@ export const create = async (event: AWSEvent, context: AWSContext) => {
       invoiceRows,
       recipientIds,
     });
+    console.log(invoice.toJson());
     const result = await invoiceDatabase(companyCustomerId).save(
       invoice.toJson()
     );

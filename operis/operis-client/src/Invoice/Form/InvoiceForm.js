@@ -28,11 +28,11 @@ let renderInvoiceRow = ({
     {fields.map((invoiceRow, index) => (
       <li style={{ display: 'flex' }} key={index}>
         <Field
-          name={`${invoiceRow}.hours`}
+          name={`${invoiceRow}.unit`}
           disabled={props.disabled}
           component={Input}
           type="number"
-          placeholder="Hours"
+          placeholder="unit"
         />
         <Field
           name={`${invoiceRow}.price`}
@@ -75,7 +75,7 @@ let ReportForm = props => (
       placeholder="Date"
     />
     <Field
-      name="recipientId"
+      name="recipientIds"
       disabled={props.disabled}
       component={Dropdown}
       placeholder="Recipient"
@@ -103,10 +103,15 @@ ReportForm = reduxForm({ form: 'reportForm', validate })(ReportForm);
 const mapStateToProps = (state, props) => {
   const invoice = props.invoices.find(invoice => invoice.id === props.id);
   if (invoice) {
+    const recipient = props.recipients.find(
+      recipient => recipient.id === invoice.recipientIds[0]
+    );
+    console.log(props.recipients);
     return {
       disabled: invoice.locked,
       initialValues: {
         ...invoice,
+        recipientIds: recipient.id,
         createdAt: new Date(invoice.createdAt).toISOString().split('T')[0],
       },
     };
