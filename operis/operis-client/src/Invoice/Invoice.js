@@ -31,7 +31,7 @@ class Invoice extends Component {
             <InvoiceForm
               recipients={this.props.recipients}
               id={props.match.params.id}
-              isFetching={this.state.isFetching}
+              isFetching={false}
               invoices={invoices}
               onSubmit={async values => {
                 await this.postInvoice(values);

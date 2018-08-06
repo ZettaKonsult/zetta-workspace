@@ -45,7 +45,7 @@ export default database => TableName => companyCustomerId => {
         : await this.create(Item);
       return result;
     },
-
+    //TODO remove sequentialId create new function for locking invoice
     update: async Item => {
       return await database('update', {
         TableName,
@@ -60,7 +60,7 @@ export default database => TableName => companyCustomerId => {
         locked = :locked`,
         ExpressionAttributeValues: {
           ':invoiceRows': Item.invoiceRows,
-          ':sequentialId': Item.sequentialId,
+          ':sequentialId': Item.sequentialId || '-1',
           ':locked': Item.locked,
           ':itemStatus': Item.itemStatus,
         },

@@ -16,15 +16,13 @@ import { parser, failure, success } from '../util';
 const { databaseInvoiceGroup, invoiceDatabase } = Invoice;
 
 export const create = async (event: AWSEvent, context: AWSContext) => {
-  const { companyCustomerId, invoiceRows, recipientIds } = parser(event).data;
+  const { companyCustomerId, ...invoice } = parser(event).data;
   try {
-    const invoice = Invoice.create({
-      invoiceRows,
-      recipientIds,
-    });
-    console.log(invoice.toJson());
+    console.log(invoice);
+    const newInvoice = Invoice.create(invoice);
+
     const result = await invoiceDatabase(companyCustomerId).save(
-      invoice.toJson()
+      newInvoice.toJson()
     );
     return success(result);
   } catch (error) {
