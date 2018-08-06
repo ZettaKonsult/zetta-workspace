@@ -6,63 +6,34 @@ import { SubmissionError } from 'redux-form';
 import RecipientForm from './Form/RecipientForm';
 import RecipientList from './RecipientList';
 
-import { createRecipient, listRecipients } from '../services';
-import { fetchRecipients } from './recipientReducer';
+import { fetchRecipients, createRecipient } from './recipientReducer';
 
 class Place extends Component {
-  constructor() {
-    super();
-    this.state = {
-      isLoading: false,
-      error: undefined,
-      recipient: {},
-    };
-  }
-
-  async componentDidMount() {
-    this.props.fetchRecipients({ companyCustomerId: '123456' });
+  componentDidMount() {
+    this.props.fetchRecipients();
   }
 
   createRecipient = async recipient => {
-    this.setState(state => ({ ...state, isLoading: true }));
-
     try {
-      const result = await createRecipient({
-        recipient: recipient,
-        companyCustomerId: '123456',
-      });
-
-      this.setState(state => ({
-        recipients: [
-          ...state.recipients.filter(r => r.id !== result.id),
-          result,
-        ],
-      }));
+      this.props.createRecipient(recipient);
+      this.props.history.push('/recipient');
     } catch (error) {
       throw new SubmissionError({ _error: error.message });
-    } finally {
-      this.setState(state => ({ ...state, isLoading: false }));
     }
   };
 
   render() {
-    const { error, isLoading } = this.state;
     const { match, history, recipients } = this.props;
 
-    if (error || recipients.length === 0) {
-      return <div>{error}</div>;
-    }
     return (
       <div>
         <Route
           path={`${match.path}/:id`}
           render={props => (
             <RecipientForm
-              onSubmit={async values => {
-                await this.createRecipient(values);
-                history.push('/recipient');
+              onSubmit={values => {
+                this.createRecipient(values);
               }}
-              isLoading={isLoading}
               id={props.match.params.id}
               recipients={recipients}
             />
@@ -84,6 +55,22 @@ class Place extends Component {
   }
 }
 
-export default connect(state => ({ recipients: state.recipients.recipients }), {
-  fetchRecipients,
-})(Place);
+const mapStateToProps = state => ({ recipients: state.recipients.recipients });
+
+const mapDispatchToProps = (dispatch, props) => ({
+  fetchRecipients: () =>
+    dispatch(
+      fetchRecipients({
+        companyCustomerId: props.companyCustomerId,
+      })
+    ),
+  createRecipient: recipient =>
+    dispatch(
+      createRecipient({
+        recipient,
+        companyCustomerId: props.companyCustomerId,
+      })
+    ),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Place);
