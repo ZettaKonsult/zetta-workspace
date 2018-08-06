@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { reduxForm, Field } from 'redux-form';
 import { Link } from 'react-router-dom';
 
-import validate from './PlaceFormValidation';
+import validate from './RecipientFormValidation';
 import { Input } from '../../Components/Form/Input';
 import { Form, Button, Divider } from 'semantic-ui-react';
 

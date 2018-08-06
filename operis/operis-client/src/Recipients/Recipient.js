@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Route } from 'react-router-dom';
 import { SubmissionError } from 'redux-form';
 
-import PlaceForm from './Form/PlaceForm';
+import RecipientForm from './Form/RecipientForm';
 import RecipientList from './RecipientList';
 
 import { createRecipient, listRecipients } from '../services';
@@ -57,7 +57,7 @@ class Place extends Component {
         <Route
           path={`${match.path}/:id`}
           render={props => (
-            <PlaceForm
+            <RecipientForm
               onSubmit={async values => {
                 await this.createRecipient(values);
                 history.push('/recipient');
