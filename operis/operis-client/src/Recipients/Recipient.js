@@ -6,13 +6,9 @@ import { SubmissionError } from 'redux-form';
 import RecipientForm from './Form/RecipientForm';
 import RecipientList from './RecipientList';
 
-import { fetchRecipients, createRecipient } from './recipientReducer';
+import { createRecipient } from './recipientReducer';
 
 class Place extends Component {
-  componentDidMount() {
-    this.props.fetchRecipients();
-  }
-
   createRecipient = async recipient => {
     try {
       this.props.createRecipient(recipient);
@@ -58,12 +54,6 @@ class Place extends Component {
 const mapStateToProps = state => ({ recipients: state.recipients.recipients });
 
 const mapDispatchToProps = (dispatch, props) => ({
-  fetchRecipients: () =>
-    dispatch(
-      fetchRecipients({
-        companyCustomerId: props.companyCustomerId,
-      })
-    ),
   createRecipient: recipient =>
     dispatch(
       createRecipient({

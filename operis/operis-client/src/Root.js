@@ -1,6 +1,6 @@
 import React from 'react';
 import { Provider } from 'react-redux';
-import { BrowserRouter as Router } from 'react-router-dom';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 import Amplify from 'aws-amplify';
 import { withAuthenticator } from 'aws-amplify-react';
 
@@ -23,7 +23,7 @@ Amplify.configure({
 const Root = ({ store }) => (
   <Provider store={store}>
     <Router>
-      <App />
+      <Route component={App} />
     </Router>
   </Provider>
 );
