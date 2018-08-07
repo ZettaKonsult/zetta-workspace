@@ -106,7 +106,7 @@ const mapStateToProps = (state, props) => {
     const recipient = props.recipients.find(
       recipient => recipient.id === invoice.recipientIds[0]
     );
-    console.log(props.recipients);
+
     return {
       disabled: invoice.locked,
       initialValues: {

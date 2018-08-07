@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import { fetchRecipients } from './Recipients/recipientReducer';
-import { getInvoices } from './Invoice/invoiceReducer';
+import { fetchInvoices } from './Invoice/invoiceReducer';
 
 import { Divider } from 'semantic-ui-react';
 
@@ -14,7 +14,7 @@ const companyCustomerId = '123123';
 class App extends Component {
   componentDidMount() {
     this.props.fetchRecipients();
-    this.props.getInvoices();
+    this.props.fetchInvoices();
   }
 
   signOut = () => {};
@@ -25,10 +25,7 @@ class App extends Component {
         <PageNav onSignOut={this.signOut} />
         <Divider />
         <div style={{ margin: '0 1em' }}>
-          <Routes
-            updateRecipients={this.updateRecipients}
-            companyCustomerId={companyCustomerId}
-          />
+          <Routes companyCustomerId={companyCustomerId} />
         </div>
       </div>
     );
@@ -44,7 +41,7 @@ const mapDispatchToProps = (dispatch, props) => ({
         companyCustomerId: companyCustomerId,
       })
     ),
-  getInvoices: () => dispatch(getInvoices(companyCustomerId)),
+  fetchInvoices: () => dispatch(fetchInvoices(companyCustomerId)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

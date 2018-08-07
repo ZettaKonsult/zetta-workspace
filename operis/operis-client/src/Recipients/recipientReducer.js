@@ -17,7 +17,6 @@ export const fetchRecipients = obj => async dispath => {
     type: RECIPIENT_FETCH_PENDING,
   });
 
-  console.log('hej');
   const recipients = await api.listRecipients(obj);
 
   dispath({

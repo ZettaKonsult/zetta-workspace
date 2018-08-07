@@ -5,19 +5,11 @@ import { Route } from 'react-router-dom';
 import InvoiceForm from './Form/InvoiceForm';
 import InvoiceList from './InvoiceList';
 
-import { createInvoice, removeInvoice } from '../services';
+import { createInvoice, getInvoices } from './invoiceReducer';
 
 class Invoice extends Component {
-  async postInvoice(invoice) {
-    try {
-      await createInvoice({
-        ...invoice,
-        recipientIds: [invoice.recipientIds],
-        companyCustomerId: this.props.companyCustomerId,
-      });
-    } catch (error) {
-      console.error(error);
-    }
+  postInvoice(invoice) {
+    this.props.createInvoice(invoice);
   }
 
   render() {
@@ -52,7 +44,20 @@ class Invoice extends Component {
   }
 }
 
-export default connect(state => ({
+const mapStateToProps = state => ({
   recipients: state.recipients.recipients,
-  invoices: state.invoice.invoices,
-}))(Invoice);
+  invoices: getInvoices(state),
+});
+
+const mapDispatchToProps = (dispatch, props) => ({
+  createInvoice: invoice =>
+    dispatch(
+      createInvoice({
+        ...invoice,
+        recipientIds: [invoice.recipientIds],
+        companyCustomerId: props.companyCustomerId,
+      })
+    ),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Invoice);
