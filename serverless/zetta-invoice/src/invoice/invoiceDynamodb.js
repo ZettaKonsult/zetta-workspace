@@ -47,7 +47,7 @@ export default database => TableName => companyCustomerId => {
     },
     //TODO remove sequentialId create new function for locking invoice
     update: async Item => {
-      return await database('update', {
+      const result = await database('update', {
         TableName,
         Key: {
           id: Item.id,
@@ -66,6 +66,8 @@ export default database => TableName => companyCustomerId => {
         },
         ReturnValues: 'ALL_NEW',
       });
+
+      return result.Attributes;
     },
 
     create: async invoice => {
