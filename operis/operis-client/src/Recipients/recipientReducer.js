@@ -1,4 +1,6 @@
 import * as api from '../services';
+import normalizeResponse from '../util/normalizeResponse';
+import { combineReducers } from 'redux';
 
 const initalState = {
   recipients: [],
@@ -17,11 +19,11 @@ export const fetchRecipients = obj => async dispath => {
     type: RECIPIENT_FETCH_PENDING,
   });
 
-  const recipients = await api.listRecipients(obj);
+  const result = await api.listRecipients(obj);
 
   dispath({
     type: RECIPIENT_FETCH_SUCCESS,
-    payload: { recipients },
+    payload: { ...normalizeResponse(result) },
   });
 };
 
@@ -34,29 +36,49 @@ export const createRecipient = recipient => async dispatch => {
   dispatch({
     type: RECIPIENT_CREATE_SUCCESS,
     payload: {
-      recipient: result,
+      ...normalizeResponse(result),
     },
   });
 };
 
-const reducer = (state = initalState, action) => {
+const byIds = (state = {}, action) => {
   switch (action.type) {
     case RECIPIENT_FETCH_SUCCESS:
-      return {
-        ...state,
-        recipients: [...state.recipients, ...action.payload.recipients],
-      };
     case RECIPIENT_CREATE_SUCCESS:
-      const recipient = action.payload.recipient;
-      return {
-        recipients: [
-          ...state.recipients.filter(r => r.id !== recipient.id),
-          recipient,
-        ],
-      };
+      return { ...state, ...action.payload.entities };
     default:
       return state;
   }
 };
 
+const allIds = (state = [], action) => {
+  switch (action.type) {
+    case RECIPIENT_FETCH_SUCCESS:
+      return [...state, ...action.payload.result];
+    case RECIPIENT_CREATE_SUCCESS:
+      return [
+        ...state,
+        ...action.payload.result.filter(id => !state.includes(id)),
+      ];
+    default:
+      return state;
+  }
+};
+
+const reducer = combineReducers({
+  byIds,
+  allIds,
+});
+
 export default reducer;
+
+const getState = state => state.recipient;
+
+export const getRecipientIds = state => getState(state).allIds;
+
+export const getIRecipient = (state, id) => getState(state).byIds[id];
+
+export const getRecipients = (state, id) => {
+  const ids = getRecipientIds(state);
+  return ids.map(id => getIRecipient(state, id));
+};

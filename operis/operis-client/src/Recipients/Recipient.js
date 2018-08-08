@@ -6,7 +6,7 @@ import { SubmissionError } from 'redux-form';
 import RecipientForm from './Form/RecipientForm';
 import RecipientList from './RecipientList';
 
-import { createRecipient } from './recipientReducer';
+import { createRecipient, getRecipients } from './recipientReducer';
 
 class Place extends Component {
   createRecipient = async recipient => {
@@ -51,7 +51,7 @@ class Place extends Component {
   }
 }
 
-const mapStateToProps = state => ({ recipients: state.recipients.recipients });
+const mapStateToProps = state => ({ recipients: getRecipients(state) });
 
 const mapDispatchToProps = (dispatch, props) => ({
   createRecipient: recipient =>

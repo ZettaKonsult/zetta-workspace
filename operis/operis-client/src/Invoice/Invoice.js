@@ -5,6 +5,7 @@ import { Route } from 'react-router-dom';
 import InvoiceForm from './Form/InvoiceForm';
 import InvoiceList from './InvoiceList';
 
+import { getRecipients } from '../Recipients/recipientReducer';
 import { createInvoice, getInvoices } from './invoiceReducer';
 
 class Invoice extends Component {
@@ -45,7 +46,7 @@ class Invoice extends Component {
 }
 
 const mapStateToProps = state => ({
-  recipients: state.recipients.recipients,
+  recipients: getRecipients(state),
   invoices: getInvoices(state),
 });
 
