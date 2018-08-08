@@ -2,10 +2,6 @@ import * as api from '../services';
 import normalizeResponse from '../util/normalizeResponse';
 import { combineReducers } from 'redux';
 
-const initalState = {
-  recipients: [],
-};
-
 const RECIPIENT_FETCH_PENDING = 'RECIPIENT_FETCH_PENDING';
 const RECIPIENT_FETCH_SUCCESS = 'RECIPIENT_FETCH_SUCCESS';
 const RECIPIENT_FETCH_FAILURE = 'RECIPIENT_FETCH_FAILURE';
@@ -76,9 +72,9 @@ const getState = state => state.recipient;
 
 export const getRecipientIds = state => getState(state).allIds;
 
-export const getIRecipient = (state, id) => getState(state).byIds[id];
+export const getRecipient = (state, id) => getState(state).byIds[id];
 
 export const getRecipients = (state, id) => {
   const ids = getRecipientIds(state);
-  return ids.map(id => getIRecipient(state, id));
+  return ids.map(id => getRecipient(state, id));
 };

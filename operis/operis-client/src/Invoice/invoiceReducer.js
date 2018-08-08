@@ -1,5 +1,7 @@
 import * as api from '../services';
 import normalizeResponse from '../util/normalizeResponse';
+import intToDecimal from '../util/intToDecimal';
+import decimalToInt from '../util/decimalToInt';
 import { combineReducers } from 'redux';
 
 const INVOICE_FETCH_PENDING = 'INVOICE_FETCH_PENDING';
@@ -10,6 +12,15 @@ const INVOICE_CREATE_PENDING = 'INVOICE_CREATE_PENDING';
 const INVOICE_CREATE_SUCCESS = 'INVOICE_CREATE_SUCCESS';
 const INVOICE_CREATE_FAILURE = 'INVOICE_CREATE_FAILURE';
 
+const appNormalizeInvoice = invoice =>
+  invoice.map(invoice => ({
+    ...invoice,
+    invoiceRows: invoice.invoiceRows.map(row => ({
+      ...row,
+      tax: decimalToInt(row.tax),
+    })),
+  }));
+
 export const fetchInvoices = obj => async dispath => {
   dispath({
     type: INVOICE_FETCH_PENDING,
@@ -17,9 +28,10 @@ export const fetchInvoices = obj => async dispath => {
 
   const result = await api.getInvoices(obj);
 
+  const appNormalized = appNormalizeInvoice(result);
   dispath({
     type: INVOICE_FETCH_SUCCESS,
-    payload: { ...normalizeResponse(result) },
+    payload: { ...normalizeResponse(appNormalized) },
   });
 };
 
@@ -28,11 +40,20 @@ export const createInvoice = invoice => async dispatch => {
     type: INVOICE_CREATE_PENDING,
   });
 
-  const result = await api.createInvoice(invoice);
+  const apiNormalized = {
+    ...invoice,
+    invoiceRows: Object.values(invoice.invoiceRows).map(row => ({
+      ...row,
+      tax: intToDecimal(row.tax),
+    })),
+  };
+  const result = await api.createInvoice(apiNormalized);
+
+  const appNormalized = appNormalizeInvoice([result]);
 
   dispatch({
     type: INVOICE_CREATE_SUCCESS,
-    payload: { ...normalizeResponse([result]) },
+    payload: { ...normalizeResponse(appNormalized) },
   });
 };
 
