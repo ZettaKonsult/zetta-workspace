@@ -71,17 +71,17 @@ provider:
         - dynamodb:Query
         - dynamodb:UpdateItem
       Resource:
-        - { "Fn::GetAtt": ["CompanyCustomersDynamoDBTable", "Arn" ] }
-        - { "Fn::GetAtt": ["InvoicesDynamoDBTable", "Arn" ] }
-        - { "Fn::GetAtt": ["InvoiceStatusesDynamoDBTable", "Arn" ] }
-        - { "Fn::GetAtt": ["PlansDynamoDBTable", "Arn" ] }
-        - { "Fn::GetAtt": ["RecipientsDynamoDBTable", "Arn" ] }
-        - { "Fn::GetAtt": ["LadokParseResultsTable", "Arn" ] }
+        - { 'Fn::GetAtt': ['CompanyCustomersDynamoDBTable', 'Arn'] }
+        - { 'Fn::GetAtt': ['InvoicesDynamoDBTable', 'Arn'] }
+        - { 'Fn::GetAtt': ['InvoiceStatusesDynamoDBTable', 'Arn'] }
+        - { 'Fn::GetAtt': ['PlansDynamoDBTable', 'Arn'] }
+        - { 'Fn::GetAtt': ['RecipientsDynamoDBTable', 'Arn'] }
+        - { 'Fn::GetAtt': ['LadokParseResultsTable', 'Arn'] }
     - Effect: Allow
       Action:
         - s3:getObject
       Resource:
-        - { "Fn::GetAtt": ["S3UploadBucket", "Arn"] }
+        - { 'Fn::GetAtt': ['S3UploadBucket', 'Arn'] }
 
   environment:
     CompanyCustomersTable: ${self:custom.CompanyCustomers}
@@ -105,7 +105,7 @@ functions:
     handler: src/lambda/invoice.get
     events:
       - http:
-          path: /invoice/{companyCustomerId}/{locked}
+          path: /invoice/{companyCustomerId}
           method: get
           cors: true
   sendInvoice:
@@ -248,7 +248,6 @@ functions:
           path: /companycustomer
           method: delete
           cors: true
-
 
 package:
   exclude:

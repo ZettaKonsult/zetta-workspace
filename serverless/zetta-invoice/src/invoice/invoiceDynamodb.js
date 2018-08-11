@@ -15,18 +15,15 @@ export default database => TableName => companyCustomerId => {
       return result.Item;
     },
 
-    list: async locked => {
+    list: async () => {
       return (await database('query', {
         TableName,
         KeyConditionExpression: '#companyCustomerId = :companyCustomerId',
-        FilterExpression: '#locked = :locked',
         ExpressionAttributeNames: {
           '#companyCustomerId': 'companyCustomerId',
-          '#locked': 'locked',
         },
         ExpressionAttributeValues: {
           ':companyCustomerId': companyCustomerId,
-          ':locked': locked,
         },
       })).Items;
     },

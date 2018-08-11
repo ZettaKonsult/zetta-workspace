@@ -32,10 +32,9 @@ export const create = async (event: AWSEvent, context: AWSContext) => {
 
 export const get = async (event: AWSEvent, context: AWSContext) => {
   const { companyCustomerId, locked } = parser(event).params;
-  const isLocked = locked === 'true';
 
   try {
-    const result = await invoiceDatabase(companyCustomerId).list(isLocked);
+    const result = await invoiceDatabase(companyCustomerId).list();
     return success(result);
   } catch (error) {
     return failure(error.message);

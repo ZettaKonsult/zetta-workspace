@@ -13,7 +13,7 @@ export default database => TableName => {
         id,
       },
     });
-    return result.Item;
+    return result.Item ? result.Item : {};
   };
 
   const remove = async id => {
