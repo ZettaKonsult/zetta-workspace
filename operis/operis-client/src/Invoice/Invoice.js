@@ -6,7 +6,8 @@ import InvoiceForm from './Form/InvoiceForm';
 import InvoiceList from './InvoiceList';
 
 import { getRecipients } from '../Recipients/recipientReducer';
-import { createInvoice, getInvoices } from './invoiceReducer';
+import { createInvoice, sendInvoice } from './invoiceActions';
+import { getInvoices } from './invoiceReducer';
 
 class Invoice extends Component {
   postInvoice(invoice) {
@@ -14,7 +15,7 @@ class Invoice extends Component {
   }
 
   render() {
-    const { match, invoices } = this.props;
+    const { match, invoices, sendInvoice } = this.props;
 
     return (
       <div>
@@ -37,7 +38,11 @@ class Invoice extends Component {
           exact
           path={`${match.path}`}
           render={route => (
-            <InvoiceList invoices={invoices} match={route.match} />
+            <InvoiceList
+              invoices={invoices}
+              match={route.match}
+              handleSend={sendInvoice}
+            />
           )}
         />
       </div>
@@ -55,10 +60,10 @@ const mapDispatchToProps = (dispatch, props) => ({
     dispatch(
       createInvoice({
         ...invoice,
-        recipientIds: [invoice.recipientIds],
-        companyCustomerId: props.companyCustomerId,
       })
     ),
+
+  sendInvoice: invoice => dispatch(sendInvoice(invoice)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Invoice);

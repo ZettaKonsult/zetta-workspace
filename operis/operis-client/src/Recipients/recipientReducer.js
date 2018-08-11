@@ -1,6 +1,7 @@
 import * as api from '../services';
 import normalizeResponse from '../util/normalizeResponse';
 import { combineReducers } from 'redux';
+import { getCustomerId } from '../CompanyCustomer/companyCustomerReducer';
 
 const RECIPIENT_FETCH_PENDING = 'RECIPIENT_FETCH_PENDING';
 const RECIPIENT_FETCH_SUCCESS = 'RECIPIENT_FETCH_SUCCESS';
@@ -10,12 +11,12 @@ const RECIPIENT_CREATE_PENDING = 'RECIPIENT_CREATE_PENDING';
 const RECIPIENT_CREATE_SUCCESS = 'RECIPIENT_CREATE_SUCCESS';
 const RECIPIENT_CREATE_FAILURE = 'RECIPIENT_CREATE_FAILURE';
 
-export const fetchRecipients = obj => async dispath => {
+export const fetchRecipients = id => async dispath => {
   dispath({
     type: RECIPIENT_FETCH_PENDING,
   });
 
-  const result = await api.listRecipients(obj);
+  const result = await api.listRecipients(id);
 
   dispath({
     type: RECIPIENT_FETCH_SUCCESS,
@@ -23,16 +24,20 @@ export const fetchRecipients = obj => async dispath => {
   });
 };
 
-export const createRecipient = recipient => async dispatch => {
+export const createRecipient = recipient => async (dispatch, getState) => {
+  const companyCustomerId = getCustomerId(getState());
+  const payload = { ...recipient, companyCustomerId };
+
   dispatch({
     type: RECIPIENT_CREATE_PENDING,
+    payload,
   });
-  const result = await api.createRecipient(recipient);
+  const result = await api.createRecipient(payload);
 
   dispatch({
     type: RECIPIENT_CREATE_SUCCESS,
     payload: {
-      ...normalizeResponse(result),
+      ...normalizeResponse([result]),
     },
   });
 };

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Route } from 'react-router-dom';
+import { Route, withRouter } from 'react-router-dom';
 import { SubmissionError } from 'redux-form';
 
 import RecipientForm from './Form/RecipientForm';
@@ -27,9 +27,7 @@ class Place extends Component {
           path={`${match.path}/:id`}
           render={props => (
             <RecipientForm
-              onSubmit={values => {
-                this.createRecipient(values);
-              }}
+              onSubmit={this.createRecipient}
               id={props.match.params.id}
               recipients={recipients}
             />
@@ -63,4 +61,4 @@ const mapDispatchToProps = (dispatch, props) => ({
     ),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Place);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Place));

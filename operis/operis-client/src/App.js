@@ -2,19 +2,21 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import { fetchRecipients } from './Recipients/recipientReducer';
-import { fetchInvoices } from './Invoice/invoiceReducer';
+import { fetchInvoices } from './Invoice/invoiceActions';
+import { getCompanyCustomer } from './CompanyCustomer/companyCustomerReducer';
 
 import { Divider } from 'semantic-ui-react';
 
 import Routes from './Routes';
 import PageNav from './Components/Nav/PageNav';
 
-const companyCustomerId = '123123';
+const companyCustomerId = 'cjkplk2120000lccvxv3d68fl';
 
 class App extends Component {
   componentDidMount() {
-    this.props.fetchRecipients();
-    this.props.fetchInvoices();
+    this.props.getCompanyCustomer(companyCustomerId);
+    this.props.fetchRecipients(companyCustomerId);
+    this.props.fetchInvoices(companyCustomerId);
   }
 
   signOut = () => {};
@@ -25,7 +27,7 @@ class App extends Component {
         <PageNav onSignOut={this.signOut} />
         <Divider />
         <div style={{ margin: '0 1em' }}>
-          <Routes companyCustomerId={companyCustomerId} />
+          <Routes />
         </div>
       </div>
     );
@@ -35,13 +37,9 @@ class App extends Component {
 const mapStateToProps = (state, props) => ({ state, props });
 
 const mapDispatchToProps = (dispatch, props) => ({
-  fetchRecipients: () =>
-    dispatch(
-      fetchRecipients({
-        companyCustomerId: companyCustomerId,
-      })
-    ),
-  fetchInvoices: () => dispatch(fetchInvoices(companyCustomerId)),
+  fetchRecipients: id => dispatch(fetchRecipients(id)),
+  fetchInvoices: id => dispatch(fetchInvoices(id)),
+  getCompanyCustomer: id => dispatch(getCompanyCustomer(id)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

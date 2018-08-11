@@ -1,41 +1,51 @@
+const rootUrl = 'http://localhost:8080';
+
+//RECIPIENT ENDPOINTS
 export const createRecipient = async recipient =>
-  fetch(`http://localhost:8080/recipient`, {
+  fetch(`${rootUrl}/recipient`, {
     method: 'post',
     body: JSON.stringify(recipient),
   }).then(res => res.json());
 
-export const listRecipients = async ({ companyCustomerId }) =>
-  fetch(`http://localhost:8080/recipient/${companyCustomerId}`).then(res =>
-    res.json()
-  );
+export const listRecipients = async companyCustomerId =>
+  fetch(`${rootUrl}/recipient/${companyCustomerId}`).then(res => res.json());
 
 export const updateRecipient = async () =>
-  fetch(`http://localhost:8080/recipient`, { method: 'put' }).then(res =>
-    res.json()
-  );
+  fetch(`${rootUrl}/recipient`, { method: 'put' }).then(res => res.json());
 
 export const getRecipient = async ({ companyCustomerId, recipientId }) =>
-  fetch(
-    `http://localhost:8080/recipient/${companyCustomerId}/${recipientId}`
-  ).then(res => res.json());
+  fetch(`${rootUrl}/recipient/${companyCustomerId}/${recipientId}`).then(res =>
+    res.json()
+  );
 
 export const deleteRecipent = async () =>
-  fetch(`http://localhost:8080/recipient`, { method: 'delete' }).then(res =>
-    res.json()
-  );
+  fetch(`${rootUrl}/recipient`, { method: 'delete' }).then(res => res.json());
 
+//INVOICE ENDPOINTS
 export const getInvoices = async companyCustomerId =>
-  fetch(`http://localhost:8080/invoice/${companyCustomerId}/false`).then(res =>
-    res.json()
-  );
+  fetch(`${rootUrl}/invoice/${companyCustomerId}`).then(res => res.json());
 
 export const createInvoice = async invoice =>
-  fetch(`http://localhost:8080/invoice`, {
+  fetch(`${rootUrl}/invoice`, {
     method: 'post',
     body: JSON.stringify(invoice),
   }).then(res => res.json());
 
 export const removeInvoice = async () =>
-  fetch(`http://localhost:8080/recipient`, { method: 'delete' }).then(res =>
-    res.json()
-  );
+  fetch(`${rootUrl}/recipient`, { method: 'delete' }).then(res => res.json());
+
+export const sendInvoice = async payload =>
+  fetch(`${rootUrl}/invoice/mail`, {
+    method: 'post',
+    body: JSON.stringify(payload),
+  });
+
+//COMPANYCUSTOMER ENDPOINT
+export const createCompanyCustomer = async payload =>
+  fetch(`${rootUrl}/companycustomer`, {
+    method: 'post',
+    body: JSON.stringify({ companyCustomer: payload }),
+  }).then(res => res.json());
+
+export const getCompanyCustomer = async id =>
+  fetch(`${rootUrl}/companycustomer/${id}`).then(res => res.json());
