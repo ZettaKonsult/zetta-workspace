@@ -10,7 +10,8 @@ import Recipient from '../recipient';
 import { parser, failure, success } from '../util';
 
 export const create = async (event: AWSEvent, context: AWSContext) => {
-  const { companyCustomerId, recipient } = parser(event).data;
+  const companyCustomerId = event.requestContext.identity.cognitoIdentityId;
+  const { recipient } = parser(event).data;
 
   try {
     const result = await Recipient(companyCustomerId).save(recipient);
@@ -22,7 +23,7 @@ export const create = async (event: AWSEvent, context: AWSContext) => {
 };
 
 export const list = async (event: AWSEvent, context: AWSContext) => {
-  const { companyCustomerId } = parser(event).params;
+  const companyCustomerId = event.requestContext.identity.cognitoIdentityId;
 
   try {
     const result = await Recipient(companyCustomerId).list();
@@ -34,7 +35,8 @@ export const list = async (event: AWSEvent, context: AWSContext) => {
 };
 
 export const get = async (event: AWSEvent, context: AWSContext) => {
-  const { companyCustomerId, recipientId } = parser(event).params;
+  const companyCustomerId = event.requestContext.identity.cognitoIdentityId;
+  const { recipientId } = parser(event).params;
 
   try {
     const result = await Recipient(companyCustomerId).get(recipientId);
@@ -46,7 +48,8 @@ export const get = async (event: AWSEvent, context: AWSContext) => {
 };
 
 export const remove = async (event: AWSEvent, context: AWSContext) => {
-  const { companyCustomerId, recipientId } = parser(event).data;
+  const companyCustomerId = event.requestContext.identity.cognitoIdentityId;
+  const { recipientId } = parser(event).data;
 
   try {
     const result = await Recipient(companyCustomerId).remove(recipientId);

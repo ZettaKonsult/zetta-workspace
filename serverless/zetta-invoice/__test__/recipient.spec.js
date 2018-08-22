@@ -2,18 +2,15 @@
  * @date 2018-03-05
  */
 
-import cuid from 'cuid';
 import { request, testConfig } from '../src/util/';
 
 const host = testConfig.Host;
 
 describe('Recipients.', () => {
-  const companyCustomerId = cuid();
   let recipient;
 
   it('Create.', async () => {
     const data = {
-      companyCustomerId,
       recipient: {
         address: 'Road 234A',
         city: 'RecipientCity',
@@ -42,7 +39,7 @@ describe('Recipients.', () => {
   it('get', async () => {
     const result = await request({
       host,
-      path: `recipient/${companyCustomerId}/${recipient.id}`,
+      path: `recipient/${recipient.id}`,
       payload: {
         method: 'get',
       },
@@ -59,7 +56,7 @@ describe('Recipients.', () => {
       path: 'recipient',
       payload: {
         method: 'post',
-        body: { companyCustomerId, recipient: updateRecipient },
+        body: { recipient: updateRecipient },
       },
     });
 
@@ -69,7 +66,6 @@ describe('Recipients.', () => {
   it('delete', async () => {
     const data = {
       recipientId: recipient.id,
-      companyCustomerId,
     };
 
     const result = await request({

@@ -94,6 +94,42 @@ provider:
     InvoiceGroupsTable: ${self:custom.InvoiceGroups}
 
 functions:
+  createRecipient:
+    handler: src/lambda/recipient.create
+    events:
+      - http:
+          path: /recipient
+          method: post
+          cors: true
+  listRecipients:
+    handler: src/lambda/recipient.list
+    events:
+      - http:
+          path: /recipient
+          method: get
+          cors: true
+  updateRecipient:
+    handler: src/lambda/recipient.update
+    events:
+      - http:
+          path: /recipient
+          method: put
+          cors: true
+  getRecipient:
+    handler: src/lambda/recipient.get
+    events:
+      - http:
+          path: /recipient/{recipientId}
+          method: get
+          cors: true
+  deleteRecipent:
+    handler: src/lambda/recipient.remove
+    events:
+      - http:
+          path: /recipient
+          method: delete
+          cors: true
+
   createInvoice:
     handler: src/lambda/invoice.create
     events:
@@ -120,42 +156,6 @@ functions:
     events:
       - http:
           path: /invoice
-          method: delete
-          cors: true
-
-  createRecipient:
-    handler: src/lambda/recipient.create
-    events:
-      - http:
-          path: /recipient
-          method: post
-          cors: true
-  listRecipients:
-    handler: src/lambda/recipient.list
-    events:
-      - http:
-          path: /recipient/{companyCustomerId}
-          method: get
-          cors: true
-  updateRecipient:
-    handler: src/lambda/recipient.update
-    events:
-      - http:
-          path: /recipient
-          method: put
-          cors: true
-  getRecipient:
-    handler: src/lambda/recipient.get
-    events:
-      - http:
-          path: /recipient/{companyCustomerId}/{recipientId}
-          method: get
-          cors: true
-  deleteRecipent:
-    handler: src/lambda/recipient.remove
-    events:
-      - http:
-          path: /recipient
           method: delete
           cors: true
 
