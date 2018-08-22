@@ -1,45 +1,40 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
-
-import { fetchRecipients } from './Recipients/recipientReducer';
-import { fetchInvoices } from './Invoice/invoiceActions';
-import { getCompanyCustomer } from './CompanyCustomer/companyCustomerReducer';
-
+import { Route, Switch } from 'react-router-dom';
 import { Divider } from 'semantic-ui-react';
 
-import Routes from './Routes';
+import ErrorBoundary from './Components/error';
+import AuthHandler from './authHandler';
+import Recipient from './Recipients/Recipient';
+import Login from './Container/Login';
+import Invoice from './Invoice/Invoice';
+import CompanyCustomer from './CompanyCustomer/CompanyCustomer';
+import Home from './Container/Home/Home';
+import PageNotFound from './Container/PageNotFound/PageNotFound';
 import PageNav from './Components/Nav/PageNav';
 
-const companyCustomerId = 'cjkplk2120000lccvxv3d68fl';
-
 class App extends Component {
-  componentDidMount() {
-    this.props.getCompanyCustomer(companyCustomerId);
-    this.props.fetchRecipients(companyCustomerId);
-    this.props.fetchInvoices(companyCustomerId);
-  }
-
-  signOut = () => {};
+  componentDidMount() {}
 
   render() {
+    const { currentUser } = this.props;
+
     return (
-      <div>
-        <PageNav onSignOut={this.signOut} />
+      <ErrorBoundary>
+        <Route component={AuthHandler} props={{ currentUser }} />
+        <Route component={PageNav} />
         <Divider />
-        <div style={{ margin: '0 1em' }}>
-          <Routes />
-        </div>
-      </div>
+
+        <Switch>
+          <Route path="/" exact component={Home} />
+          <Route path="/login" component={Login} />
+          <Route path="/recipient" component={Recipient} />
+          <Route path="/invoice" component={Invoice} />
+          <Route path="/register" component={CompanyCustomer} />
+          <Route component={PageNotFound} />
+        </Switch>
+      </ErrorBoundary>
     );
   }
 }
 
-const mapStateToProps = (state, props) => ({ state, props });
-
-const mapDispatchToProps = (dispatch, props) => ({
-  fetchRecipients: id => dispatch(fetchRecipients(id)),
-  fetchInvoices: id => dispatch(fetchInvoices(id)),
-  getCompanyCustomer: id => dispatch(getCompanyCustomer(id)),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default App;

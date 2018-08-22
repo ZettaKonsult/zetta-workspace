@@ -1,7 +1,7 @@
 import React from 'react';
 import { Icon } from 'semantic-ui-react';
 
-const RecipientCard = ({ id, recipient, onClick }) => (
+const RecipientCard = ({ id, recipient, onClick, onRemoveClick }) => (
   <div
     style={{
       padding: '0.5em',
@@ -12,12 +12,11 @@ const RecipientCard = ({ id, recipient, onClick }) => (
       justifyContent: 'space-between',
       borderRadius: '5px',
     }}
-    onClick={onClick}
   >
-    <strong style={{ fontSize: '1.2em' }}>
+    <strong style={{ fontSize: '1.2em' }} onClick={onClick}>
       {recipient.firstName} {recipient.lastName}
     </strong>
-    <Icon onClick={() => console.log('TODO')} link name="close" />
+    <Icon onClick={onRemoveClick} link name="close" />
   </div>
 );
 

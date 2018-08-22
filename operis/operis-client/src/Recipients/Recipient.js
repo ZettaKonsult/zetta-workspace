@@ -6,6 +6,8 @@ import { SubmissionError } from 'redux-form';
 import RecipientForm from './Form/RecipientForm';
 import RecipientList from './RecipientList';
 
+import * as api from '../services';
+
 import { createRecipient, getRecipients } from './recipientReducer';
 
 class Place extends Component {
@@ -41,6 +43,7 @@ class Place extends Component {
               recipients={recipients}
               onClick={id => history.push(`/recipient/${id}`)}
               newRecipient={() => history.push('/recipient/0')}
+              onRemoveClick={id => api.deleteRecipent(id)}
             />
           )}
         />

@@ -3,7 +3,12 @@ import { Button } from 'semantic-ui-react';
 
 import RecipientCard from './RecipientCard';
 
-const RecipientList = ({ recipients, onClick, newRecipient }) => (
+const RecipientList = ({
+  recipients,
+  onClick,
+  newRecipient,
+  onRemoveClick,
+}) => (
   <div>
     <Button fluid primary onClick={newRecipient} content="New Recipient" />
     {recipients.map(recipient => (
@@ -11,6 +16,7 @@ const RecipientList = ({ recipients, onClick, newRecipient }) => (
         key={recipient.id}
         recipient={recipient}
         onClick={() => onClick(recipient.id)}
+        onRemoveClick={() => onRemoveClick(recipient.id)}
       />
     ))}
   </div>

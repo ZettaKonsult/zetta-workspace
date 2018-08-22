@@ -1,51 +1,45 @@
-const rootUrl = 'http://localhost:8080';
+import { API } from 'aws-amplify';
 
 //RECIPIENT ENDPOINTS
 export const createRecipient = async recipient =>
-  fetch(`${rootUrl}/recipient`, {
-    method: 'post',
+  API.post('recipients', `/recipient`, {
     body: JSON.stringify(recipient),
-  }).then(res => res.json());
+  });
 
 export const listRecipients = async companyCustomerId =>
-  fetch(`${rootUrl}/recipient/${companyCustomerId}`).then(res => res.json());
+  API.get('recipients', `/recipient`);
 
-export const updateRecipient = async () =>
-  fetch(`${rootUrl}/recipient`, { method: 'put' }).then(res => res.json());
+export const updateRecipient = async () => API.put(`/recipient`);
 
 export const getRecipient = async ({ companyCustomerId, recipientId }) =>
-  fetch(`${rootUrl}/recipient/${companyCustomerId}/${recipientId}`).then(res =>
-    res.json()
-  );
+  API.get(`/recipient/${companyCustomerId}/${recipientId}`);
 
-export const deleteRecipent = async () =>
-  fetch(`${rootUrl}/recipient`, { method: 'delete' }).then(res => res.json());
+export const deleteRecipent = async id =>
+  API.del('recipients', `/recipient`, {
+    body: JSON.stringify({ recipientId: id }),
+  });
 
 //INVOICE ENDPOINTS
 export const getInvoices = async companyCustomerId =>
-  fetch(`${rootUrl}/invoice/${companyCustomerId}`).then(res => res.json());
+  API.get(`/invoice/${companyCustomerId}`);
 
 export const createInvoice = async invoice =>
-  fetch(`${rootUrl}/invoice`, {
-    method: 'post',
+  API.post(`/invoice`, {
     body: JSON.stringify(invoice),
-  }).then(res => res.json());
+  });
 
 export const removeInvoice = async () =>
-  fetch(`${rootUrl}/recipient`, { method: 'delete' }).then(res => res.json());
+  API.get(`/recipient`, { method: 'delete' });
 
 export const sendInvoice = async payload =>
-  fetch(`${rootUrl}/invoice/mail`, {
-    method: 'post',
+  API.post(`/invoice/mail`, {
     body: JSON.stringify(payload),
   });
 
 //COMPANYCUSTOMER ENDPOINT
 export const createCompanyCustomer = async payload =>
-  fetch(`${rootUrl}/companycustomer`, {
-    method: 'post',
+  API.post(`companycustomer`, '/companycustomer', {
     body: JSON.stringify({ companyCustomer: payload }),
-  }).then(res => res.json());
+  });
 
-export const getCompanyCustomer = async id =>
-  fetch(`${rootUrl}/companycustomer/${id}`).then(res => res.json());
+export const getCompanyCustomer = async id => API(`/companycustomer/${id}`);
