@@ -16,9 +16,9 @@ import { parser, failure, success } from '../util';
 const { databaseInvoiceGroup, invoiceDatabase } = Invoice;
 
 export const create = async (event: AWSEvent, context: AWSContext) => {
-  const { companyCustomerId, ...invoice } = parser(event).data;
+  const companyCustomerId = event.requestContext.identity.cognitoIdentityId;
+  const { ...invoice } = parser(event).data;
   try {
-    console.log(invoice);
     const newInvoice = Invoice.create(invoice);
 
     const result = await invoiceDatabase(companyCustomerId).save(
@@ -31,7 +31,7 @@ export const create = async (event: AWSEvent, context: AWSContext) => {
 };
 
 export const get = async (event: AWSEvent, context: AWSContext) => {
-  const { companyCustomerId, locked } = parser(event).params;
+  const companyCustomerId = event.requestContext.identity.cognitoIdentityId;
 
   try {
     const result = await invoiceDatabase(companyCustomerId).list();
@@ -42,7 +42,8 @@ export const get = async (event: AWSEvent, context: AWSContext) => {
 };
 
 export const remove = async (event: AWSEvent, context: AWSContext) => {
-  const { companyCustomerId, invoiceId } = parser(event).data;
+  const companyCustomerId = event.requestContext.identity.cognitoIdentityId;
+  const { invoiceId } = parser(event).data;
 
   try {
     const result = await invoiceDatabase(companyCustomerId).remove(invoiceId);
@@ -53,7 +54,8 @@ export const remove = async (event: AWSEvent, context: AWSContext) => {
 };
 
 export const send = async (event: AWSEvent, context: AWSContext) => {
-  const { companyCustomerId, invoiceId } = parser(event).data;
+  const companyCustomerId = event.requestContext.identity.cognitoIdentityId;
+  const { invoiceId } = parser(event).data;
 
   try {
     const invoiceData = await invoiceDatabase(companyCustomerId).get(invoiceId);

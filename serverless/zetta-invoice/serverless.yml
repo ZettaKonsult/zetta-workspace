@@ -141,7 +141,7 @@ functions:
     handler: src/lambda/invoice.get
     events:
       - http:
-          path: /invoice/{companyCustomerId}
+          path: /invoice
           method: get
           cors: true
   sendInvoice:

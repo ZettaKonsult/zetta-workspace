@@ -4,7 +4,7 @@ exports[`Invoices create a recipient 1`] = `
 Object {
   "address": "Road 234A",
   "city": "RecipientCity",
-  "companyCustomerId": Any<String>,
+  "companyCustomerId": "offlineContext_cognitoIdentityId",
   "createdAt": 2345678901,
   "email": "fiddep@telia.com",
   "firstName": "RecipientFirst",
@@ -16,63 +16,9 @@ Object {
 }
 `;
 
-exports[`Invoices create companyCustomer 1`] = `
-Object {
-  "VAT": "91050400356",
-  "address": "testRoad 33",
-  "bank": Object {
-    "giro": "123-4567",
-    "name": "MoneyBank",
-  },
-  "city": "testCity",
-  "company": "zetta konsult",
-  "email": "test@test.test",
-  "firstName": "Test",
-  "id": Any<String>,
-  "lastName": "TestPersson",
-  "mobile": "+46762345678",
-  "ssn": "1234567890",
-  "zipcode": "12345",
-}
-`;
-
-exports[`Invoices invoice can be sent to recipient 1`] = `
-Object {
-  "companyCustomerId": Any<String>,
-  "createdAt": Any<Number>,
-  "id": Any<String>,
-  "invoiceRows": Array [
-    Object {
-      "description": "3an A",
-      "price": 345,
-      "tax": 0.25,
-      "unit": 34,
-    },
-    Object {
-      "description": "3an B",
-      "price": 345,
-      "tax": 0.25,
-      "unit": 34,
-    },
-    Object {
-      "description": "3an C",
-      "price": 345,
-      "tax": 0.25,
-      "unit": 34,
-    },
-  ],
-  "itemStatus": Any<Array>,
-  "locked": true,
-  "recipientIds": Array [
-    Any<String>,
-  ],
-  "sequentialId": 1,
-}
-`;
-
 exports[`Invoices invoices have correct attributes after creation 1`] = `
 Object {
-  "companyCustomerId": Any<String>,
+  "companyCustomerId": "offlineContext_cognitoIdentityId",
   "createdAt": Any<Number>,
   "id": Any<String>,
   "invoiceRows": Array [
