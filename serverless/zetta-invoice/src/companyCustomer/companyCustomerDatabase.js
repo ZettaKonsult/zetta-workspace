@@ -30,11 +30,36 @@ export default database => TableName => {
   };
 
   const update = async Item => {
-    return await database('put', {
+    const result = await database('update', {
       TableName,
-      Item,
-      ReturnValues: 'UPDATED_NEW',
+      Key: {
+        id: Item.id,
+      },
+      UpdateExpression: `SET
+      address = :address,
+      city = :city,
+      email = :email,
+      firstName = :firstName,
+      lastName = :lastName,
+      mobile = :mobile,
+      zipcode = :zipcode,
+      company = :company,
+      VAT = :VAT
+      `,
+      ExpressionAttributeValues: {
+        ':address': Item.address,
+        ':city': Item.city,
+        ':email': Item.email,
+        ':firstName': Item.firstName,
+        ':lastName': Item.lastName,
+        ':mobile': Item.mobile,
+        ':zipcode': Item.zipcode,
+        ':company': Item.company,
+        ':VAT': Item.VAT,
+      },
+      ReturnValues: 'ALL_NEW',
     });
+    return result.Attributes;
   };
 
   const create = async companyCustomerData => {

@@ -1,0 +1,31 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`companyCustomer E2E create 1`] = `
+Object {
+  "VAT": "91050400356",
+  "address": "Road 234A",
+  "city": "RecipientCity",
+  "company": "zetta konsult",
+  "email": "firstName@recipient.com",
+  "firstName": "RecipientFirst",
+  "id": "offlineContext_cognitoIdentityId",
+  "lastName": "RecipientLast",
+  "mobile": "+46762345678",
+  "zipcode": "12345",
+}
+`;
+
+exports[`companyCustomer E2E update 1`] = `
+Object {
+  "VAT": "91050400356",
+  "address": "Road 234A",
+  "city": "RecipientCity",
+  "company": "zetta konsult",
+  "email": "firstName@recipient.com",
+  "firstName": "RecipientFirst",
+  "id": "offlineContext_cognitoIdentityId",
+  "lastName": "RecipientLast",
+  "mobile": "+46762345678",
+  "zipcode": "54321",
+}
+`;

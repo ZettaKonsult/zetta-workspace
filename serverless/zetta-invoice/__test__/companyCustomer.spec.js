@@ -38,7 +38,7 @@ describe('companyCustomer E2E', () => {
       },
     });
 
-    expect(companyCustomer).toHaveProperty('id');
+    expect(companyCustomer).toMatchSnapshot();
   });
 
   it('get', async () => {
@@ -51,6 +51,19 @@ describe('companyCustomer E2E', () => {
     });
 
     expect(result).toEqual(companyCustomer);
+  });
+
+  it('update', async () => {
+    const result = await request({
+      host,
+      path: 'companycustomer',
+      payload: {
+        method: 'post',
+        body: { companyCustomer: { ...companyCustomer, zipcode: '54321' } },
+      },
+    });
+
+    expect(result).toMatchSnapshot();
   });
 
   it('delete', async () => {
