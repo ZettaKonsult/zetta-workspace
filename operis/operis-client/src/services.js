@@ -6,10 +6,7 @@ export const createRecipient = async recipient =>
     body: JSON.stringify(recipient),
   });
 
-export const listRecipients = async companyCustomerId =>
-  API.get('recipients', `/recipient`);
-
-export const updateRecipient = async () => API.put(`/recipient`);
+export const listRecipients = async () => API.get('recipients', `/recipient`);
 
 export const getRecipient = async ({ companyCustomerId, recipientId }) =>
   API.get(`/recipient/${companyCustomerId}/${recipientId}`);
@@ -20,11 +17,10 @@ export const deleteRecipent = async id =>
   });
 
 //INVOICE ENDPOINTS
-export const getInvoices = async companyCustomerId =>
-  API.get(`/invoice/${companyCustomerId}`);
+export const getInvoices = async () => API.get(`invoices`, `/invoice`);
 
 export const createInvoice = async invoice =>
-  API.post(`/invoice`, {
+  API.post(`invoices`, '/invoice', {
     body: JSON.stringify(invoice),
   });
 

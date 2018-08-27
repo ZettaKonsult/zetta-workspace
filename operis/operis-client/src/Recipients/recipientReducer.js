@@ -11,12 +11,12 @@ const RECIPIENT_CREATE_PENDING = 'RECIPIENT_CREATE_PENDING';
 const RECIPIENT_CREATE_SUCCESS = 'RECIPIENT_CREATE_SUCCESS';
 const RECIPIENT_CREATE_FAILURE = 'RECIPIENT_CREATE_FAILURE';
 
-export const fetchRecipients = id => async dispath => {
+export const fetchRecipients = () => async dispath => {
   dispath({
     type: RECIPIENT_FETCH_PENDING,
   });
 
-  const result = await api.listRecipients(id);
+  const result = await api.listRecipients();
 
   dispath({
     type: RECIPIENT_FETCH_SUCCESS,

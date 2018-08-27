@@ -13,7 +13,8 @@ class AuthHandler extends React.Component {
     try {
       if (await Auth.currentSession()) {
         this.props.signIn();
-        this.props.fetchRecipients('123');
+        this.props.fetchRecipients();
+        this.props.fetchInvoices();
       }
     } catch (e) {
       if (e !== 'No current user') {

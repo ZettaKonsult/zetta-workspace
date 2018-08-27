@@ -74,7 +74,6 @@ export default database => TableName => companyCustomerId => {
           firstName = :firstName,
           lastName = :lastName,
           mobile = :mobile,
-          ssn = :ssn,
           zipcode = :zipcode`,
         ExpressionAttributeValues: {
           ':address': Item.address || '',
@@ -83,7 +82,6 @@ export default database => TableName => companyCustomerId => {
           ':firstName': Item.firstName || '',
           ':lastName': Item.lastName || '',
           ':mobile': Item.mobile || '',
-          ':ssn': Item.ssn || '',
           ':zipcode': Item.zipcode || '',
         },
         ReturnValues: 'ALL_NEW',
