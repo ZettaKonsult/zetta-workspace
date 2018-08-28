@@ -1,6 +1,5 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Auth } from 'aws-amplify';
 
 import { signIn } from '../../state/appReducer';
 
@@ -19,9 +18,7 @@ class Login extends React.PureComponent {
   handleSubmit = async event => {
     event.preventDefault();
     try {
-      await Auth.signIn(this.state.email, this.state.password);
-      this.props.signIn();
-      alert('Logged in');
+      this.props.signIn(this.state.email, this.state.password);
     } catch (e) {
       alert(e.message);
     }

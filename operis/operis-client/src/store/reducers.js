@@ -5,10 +5,20 @@ import invoice from '../Invoice/invoiceReducer';
 import profile from '../Profile/companyCustomerReducer';
 import app from '../state/appReducer';
 
-export default combineReducers({
+const appReducer = combineReducers({
   form: formReducer,
   recipient,
   invoice,
   profile,
   app,
 });
+
+const rootReducer = (state, action) => {
+  if (action.type === 'SIGNOUT_SUCCESS') {
+    state = undefined;
+  }
+
+  return appReducer(state, action);
+};
+
+export default rootReducer;

@@ -45,7 +45,7 @@ const store = configureStore();
 ReactDOM.render(
   <Provider store={store}>
     <Router>
-      <Routes currentUser={'cjkplk2120000lccvxv3d68fl'} />
+      <Routes />
     </Router>
   </Provider>,
   document.getElementById('root')

@@ -42,7 +42,6 @@ CompanyCustomerForm = reduxForm({ form: 'companyCustomerForm' })(
 );
 const mapStateToProps = (state, props) => {
   const profile = getProfile(state);
-  console.log(profile);
   if (profile) {
     return {
       initialValues: profile,

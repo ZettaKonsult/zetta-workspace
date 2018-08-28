@@ -1,7 +1,6 @@
 // @flow
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { Auth } from 'aws-amplify';
 
 import { signIn } from './state/appReducer';
 import { fetchRecipients } from './Recipients/recipientReducer';
@@ -9,21 +8,23 @@ import { getCompanyCustomer } from './Profile/companyCustomerReducer';
 import { fetchInvoices } from './Invoice/invoiceActions';
 
 class AuthHandler extends React.Component {
-  async componentDidMount() {
-    try {
-      if (await Auth.currentSession()) {
-        this.props.signIn();
-        this.props.fetchRecipients();
-        this.props.fetchInvoices();
-        this.props.getCompanyCustomer();
-      }
-    } catch (e) {
-      if (e !== 'No current user') {
-        alert(e);
-      }
-    }
+  componentDidMount() {
+    this.props.signIn();
+  }
 
-    this.setState({ isAuthenticating: false });
+  componentDidUpdate(prevProps, prevState) {
+    if (
+      this.props.isAuthenticated &&
+      this.props.isAuthenticated !== prevProps.isAuthenticated
+    ) {
+      this.loadUserData();
+    }
+  }
+
+  loadUserData() {
+    this.props.fetchRecipients();
+    this.props.fetchInvoices();
+    this.props.getCompanyCustomer();
   }
 
   render() {
@@ -32,7 +33,7 @@ class AuthHandler extends React.Component {
 }
 
 const map = (state, props) => {
-  return {};
+  return { isAuthenticated: state.app.isAuthenticated };
 };
 
 const mapDispatchToProps = {

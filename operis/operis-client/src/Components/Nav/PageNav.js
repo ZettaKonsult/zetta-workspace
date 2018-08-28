@@ -1,16 +1,19 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { Link, Route } from 'react-router-dom';
 
 import { Menu } from 'semantic-ui-react';
 
-const PageNav = ({ match, onSignOut }) => (
+const PageNav = ({ match, isAuthenticated }) => (
   <Menu widths="4" inverted fluid size="large">
     <NavLink to="/recipient">Recipient</NavLink>
     <NavLink to="/invoice">Invoice</NavLink>
     <NavLink to="/profile">Register</NavLink>
-    <Menu.Item as="button" onClick={onSignOut}>
-      Logout
-    </Menu.Item>
+    {isAuthenticated ? (
+      <NavLink to="/logout">logout</NavLink>
+    ) : (
+      <NavLink to="/login">login</NavLink>
+    )}
   </Menu>
 );
 
@@ -26,4 +29,6 @@ const NavLink = ({ to, activeOnlyWhenExact, children }) => (
   />
 );
 
-export default PageNav;
+export default connect(state => ({
+  isAuthenticated: state.app.isAuthenticated,
+}))(PageNav);
