@@ -1,7 +1,6 @@
 import * as api from '../services';
 import normalizeResponse from '../util/normalizeResponse';
 import { combineReducers } from 'redux';
-import { getCustomerId } from '../CompanyCustomer/companyCustomerReducer';
 
 const RECIPIENT_FETCH_PENDING = 'RECIPIENT_FETCH_PENDING';
 const RECIPIENT_FETCH_SUCCESS = 'RECIPIENT_FETCH_SUCCESS';
@@ -25,8 +24,7 @@ export const fetchRecipients = () => async dispath => {
 };
 
 export const createRecipient = recipient => async (dispatch, getState) => {
-  const companyCustomerId = getCustomerId(getState());
-  const payload = { ...recipient, companyCustomerId };
+  const payload = { ...recipient };
 
   dispatch({
     type: RECIPIENT_CREATE_PENDING,

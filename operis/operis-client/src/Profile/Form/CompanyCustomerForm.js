@@ -1,8 +1,10 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { reduxForm, Field } from 'redux-form';
 import { Link } from 'react-router-dom';
 
 import { Input } from '../../Components/Form/Input';
+import { getProfile } from '../companyCustomerReducer';
 import { Form, Button, Divider } from 'semantic-ui-react';
 
 let CompanyCustomerForm = ({ isLoading, error, ...props }) => (
@@ -38,5 +40,17 @@ let CompanyCustomerForm = ({ isLoading, error, ...props }) => (
 CompanyCustomerForm = reduxForm({ form: 'companyCustomerForm' })(
   CompanyCustomerForm
 );
+const mapStateToProps = (state, props) => {
+  const profile = getProfile(state);
+  console.log(profile);
+  if (profile) {
+    return {
+      initialValues: profile,
+      isLoading: props.isLoading,
+    };
+  } else {
+    return {};
+  }
+};
 
-export default CompanyCustomerForm;
+export default connect(mapStateToProps)(CompanyCustomerForm);

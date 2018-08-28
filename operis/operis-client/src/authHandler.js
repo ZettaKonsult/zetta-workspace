@@ -5,7 +5,7 @@ import { Auth } from 'aws-amplify';
 
 import { signIn } from './state/appReducer';
 import { fetchRecipients } from './Recipients/recipientReducer';
-import { getCompanyCustomer } from './CompanyCustomer/companyCustomerReducer';
+import { getCompanyCustomer } from './Profile/companyCustomerReducer';
 import { fetchInvoices } from './Invoice/invoiceActions';
 
 class AuthHandler extends React.Component {
@@ -15,6 +15,7 @@ class AuthHandler extends React.Component {
         this.props.signIn();
         this.props.fetchRecipients();
         this.props.fetchInvoices();
+        this.props.getCompanyCustomer();
       }
     } catch (e) {
       if (e !== 'No current user') {

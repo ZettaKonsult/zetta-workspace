@@ -38,4 +38,5 @@ export const createCompanyCustomer = async payload =>
     body: JSON.stringify({ companyCustomer: payload }),
   });
 
-export const getCompanyCustomer = async id => API(`/companycustomer/${id}`);
+export const getCompanyCustomer = async () =>
+  API.get('companycustomer', `/companycustomer`);

@@ -238,7 +238,7 @@ functions:
     handler: src/lambda/companyCustomer.get
     events:
       - http:
-          path: /companycustomer/{companyCustomerId}/
+          path: /companycustomer
           method: get
           cors: true
   deleteCompanyCustomer:

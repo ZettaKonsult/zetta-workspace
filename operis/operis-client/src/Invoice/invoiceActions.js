@@ -2,7 +2,6 @@ import * as api from '../services';
 import normalizeResponse from '../util/normalizeResponse';
 import intToDecimal from '../util/intToDecimal';
 import decimalToInt from '../util/decimalToInt';
-import { getCustomerId } from '../CompanyCustomer/companyCustomerReducer';
 
 export const INVOICE_FETCH_PENDING = 'INVOICE_FETCH_PENDING';
 export const INVOICE_FETCH_SUCCESS = 'INVOICE_FETCH_SUCCESS';
@@ -27,8 +26,6 @@ export const fetchInvoices = id => async dispath => {
 };
 
 export const createInvoice = invoice => async (dispatch, getState) => {
-  const companyCustomerId = getCustomerId(getState());
-
   const apiNormalized = {
     ...invoice,
     recipientIds: [invoice.recipientIds],
@@ -39,7 +36,6 @@ export const createInvoice = invoice => async (dispatch, getState) => {
   };
   const payload = {
     ...apiNormalized,
-    companyCustomerId,
   };
   dispatch({
     type: INVOICE_CREATE_PENDING,
@@ -57,10 +53,8 @@ export const createInvoice = invoice => async (dispatch, getState) => {
 };
 
 export const sendInvoice = invoice => async (dispatch, getState) => {
-  const companyCustomerId = getCustomerId(getState());
   api.sendInvoice({
     invoiceId: invoice.id,
-    companyCustomerId: companyCustomerId,
   });
 };
 

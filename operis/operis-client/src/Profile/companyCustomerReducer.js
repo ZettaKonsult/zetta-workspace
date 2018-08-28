@@ -8,27 +8,12 @@ const COMPANYCUSTOMER_CREATE_PENDING = 'COMPANYCUSTOMER_CREATE_PENDING';
 const COMPANYCUSTOMER_CREATE_SUCCESS = 'COMPANYCUSTOMER_CREATE_SUCCESS';
 const COMPANYCUSTOMER_CREATE_FAILURE = 'COMPANYCUSTOMER_CREATE_FAILURE';
 
-export const createCompanyCustomer = recipient => async dispatch => {
+export const createCompanyCustomer = profile => async dispatch => {
   dispatch({
     type: COMPANYCUSTOMER_CREATE_PENDING,
   });
 
-  const result = await api.createCompanyCustomer({
-    address: 'Road 234A',
-    city: 'RecipientCity',
-    email: 'firstName@recipient.com',
-    firstName: 'RecipientFirst',
-    lastName: 'RecipientLast',
-    mobile: '+46762345678',
-    ssn: '1234567890',
-    zipcode: '12345',
-    company: 'zetta konsult',
-    VAT: '91050400356',
-    bank: {
-      giro: '123-4567',
-      name: 'MoneyBank',
-    },
-  });
+  const result = await api.createCompanyCustomer(profile);
 
   dispatch({
     type: COMPANYCUSTOMER_CREATE_SUCCESS,
@@ -38,12 +23,12 @@ export const createCompanyCustomer = recipient => async dispatch => {
   });
 };
 
-export const getCompanyCustomer = id => async dispatch => {
+export const getCompanyCustomer = () => async dispatch => {
   dispatch({
     type: COMPANYCUSTOMER_FETCH_PENDING,
   });
 
-  const result = await api.getCompanyCustomer(id);
+  const result = await api.getCompanyCustomer();
 
   dispatch({
     type: COMPANYCUSTOMER_FETCH_SUCCESS,
@@ -65,6 +50,8 @@ const reducer = (state = {}, action) => {
 
 export default reducer;
 
-const getState = state => state.customer;
+const getState = state => state.profile;
 
 export const getCustomerId = state => getState(state).id || '';
+
+export const getProfile = state => getState(state);

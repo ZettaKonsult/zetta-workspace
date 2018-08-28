@@ -4,14 +4,12 @@ import { Provider } from 'react-redux';
 import { BrowserRouter as Router } from 'react-router-dom';
 import Amplify from 'aws-amplify';
 
+import 'semantic-ui-css/semantic.min.css';
+
 import registerServiceWorker from './registerServiceWorker';
 import configureStore from './store/configureStore';
 import Routes from './App';
 import config from './config';
-
-import { createCompanyCustomer } from './CompanyCustomer/companyCustomerReducer';
-
-import 'semantic-ui-css/semantic.min.css';
 
 Amplify.configure({
   Auth: {
@@ -43,8 +41,6 @@ Amplify.configure({
 });
 
 const store = configureStore();
-
-store.dispatch(createCompanyCustomer());
 
 ReactDOM.render(
   <Provider store={store}>

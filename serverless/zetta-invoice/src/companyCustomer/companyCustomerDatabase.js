@@ -44,7 +44,7 @@ export default database => TableName => {
       mobile = :mobile,
       zipcode = :zipcode,
       company = :company,
-      VAT = :VAT
+      vat = :vat
       `,
       ExpressionAttributeValues: {
         ':address': Item.address,
@@ -55,7 +55,7 @@ export default database => TableName => {
         ':mobile': Item.mobile,
         ':zipcode': Item.zipcode,
         ':company': Item.company,
-        ':VAT': Item.VAT,
+        ':vat': Item.vat,
       },
       ReturnValues: 'ALL_NEW',
     });

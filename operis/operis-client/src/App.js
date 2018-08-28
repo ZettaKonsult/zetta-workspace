@@ -7,7 +7,7 @@ import AuthHandler from './authHandler';
 import Recipient from './Recipients/Recipient';
 import Login from './Container/Login';
 import Invoice from './Invoice/Invoice';
-import CompanyCustomer from './CompanyCustomer/CompanyCustomer';
+import Profile from './Profile/Profile';
 import Home from './Container/Home/Home';
 import PageNotFound from './Container/PageNotFound/PageNotFound';
 import PageNav from './Components/Nav/PageNav';
@@ -29,7 +29,7 @@ class App extends Component {
           <Route path="/login" component={Login} />
           <Route path="/recipient" component={Recipient} />
           <Route path="/invoice" component={Invoice} />
-          <Route path="/register" component={CompanyCustomer} />
+          <Route path="/profile" component={Profile} />
           <Route component={PageNotFound} />
         </Switch>
       </ErrorBoundary>

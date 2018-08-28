@@ -7,7 +7,7 @@ const PageNav = ({ match, onSignOut }) => (
   <Menu widths="4" inverted fluid size="large">
     <NavLink to="/recipient">Recipient</NavLink>
     <NavLink to="/invoice">Invoice</NavLink>
-    <NavLink to="/register">Register</NavLink>
+    <NavLink to="/profile">Register</NavLink>
     <Menu.Item as="button" onClick={onSignOut}>
       Logout
     </Menu.Item>
