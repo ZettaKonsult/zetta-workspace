@@ -6,9 +6,11 @@ import { SubmissionError } from 'redux-form';
 import RecipientForm from './Form/RecipientForm';
 import RecipientList from './RecipientList';
 
-import * as api from '../services';
-
-import { createRecipient, getRecipients } from './recipientReducer';
+import {
+  createRecipient,
+  getRecipients,
+  deleteRecipient,
+} from './recipientReducer';
 
 class Place extends Component {
   createRecipient = async recipient => {
@@ -43,7 +45,7 @@ class Place extends Component {
               recipients={recipients}
               onClick={id => history.push(`/recipient/${id}`)}
               newRecipient={() => history.push('/recipient/0')}
-              onRemoveClick={id => api.deleteRecipent(id)}
+              onRemoveClick={id => this.props.deleteRecipient(id)}
             />
           )}
         />
@@ -62,6 +64,7 @@ const mapDispatchToProps = (dispatch, props) => ({
         companyCustomerId: props.companyCustomerId,
       })
     ),
+  deleteRecipient: id => dispatch(deleteRecipient(id)),
 });
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Place));

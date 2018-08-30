@@ -10,6 +10,10 @@ const RECIPIENT_CREATE_PENDING = 'RECIPIENT_CREATE_PENDING';
 const RECIPIENT_CREATE_SUCCESS = 'RECIPIENT_CREATE_SUCCESS';
 const RECIPIENT_CREATE_FAILURE = 'RECIPIENT_CREATE_FAILURE';
 
+const RECIPIENT_DELETE_PENDING = 'RECIPIENT_DELETE_PENDING';
+const RECIPIENT_DELETE_SUCCESS = 'RECIPIENT_DELETE_SUCCESS';
+const RECIPIENT_DELETE_FAILURE = 'RECIPIENT_DELETE_FAILURE';
+
 export const fetchRecipients = () => async dispath => {
   dispath({
     type: RECIPIENT_FETCH_PENDING,
@@ -40,11 +44,29 @@ export const createRecipient = recipient => async (dispatch, getState) => {
   });
 };
 
+export const deleteRecipient = id => async dispatch => {
+  dispatch({ type: RECIPIENT_DELETE_PENDING });
+  try {
+    const result = await api.deleteRecipent(id);
+    dispatch({ type: RECIPIENT_DELETE_SUCCESS, payload: { id } });
+  } catch (err) {
+    dispatch({ type: RECIPIENT_DELETE_FAILURE });
+  }
+};
+
 const byIds = (state = {}, action) => {
   switch (action.type) {
     case RECIPIENT_FETCH_SUCCESS:
     case RECIPIENT_CREATE_SUCCESS:
       return { ...state, ...action.payload.entities };
+    case RECIPIENT_DELETE_SUCCESS:
+      return {
+        ...Object.keys(state).reduce((acc, key) => {
+          return key === action.payload.id
+            ? state
+            : { ...state, [key]: state[key] };
+        }),
+      };
     default:
       return state;
   }
@@ -59,6 +81,8 @@ const allIds = (state = [], action) => {
         ...state,
         ...action.payload.result.filter(id => !state.includes(id)),
       ];
+    case RECIPIENT_DELETE_SUCCESS:
+      return state.filter(id => action.payload.id !== id);
     default:
       return state;
   }
