@@ -24,12 +24,14 @@ export const createInvoice = async invoice =>
     body: JSON.stringify(invoice),
   });
 
-export const removeInvoice = async () =>
-  API.get(`/recipient`, { method: 'delete' });
+export const removeInvoice = async id =>
+  API.del(`invoices`, '/invoice', {
+    body: JSON.stringify({ invoiceId: id }),
+  });
 
-export const sendInvoice = async payload =>
-  API.post(`/invoice/mail`, {
-    body: JSON.stringify(payload),
+export const sendInvoice = async invoiceId =>
+  API.post(`invoices`, '/invoice/mail', {
+    body: JSON.stringify(invoiceId),
   });
 
 //COMPANYCUSTOMER ENDPOINT
