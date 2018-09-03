@@ -44,7 +44,7 @@ export default database => TableName => companyCustomerId => {
       return Item;
     },
 
-    generateInvoiceLockId: async (id = defaultGroup.name) => {
+    generateInvoiceLockId: async id => {
       const result = await database('update', {
         TableName,
         ExpressionAttributeValues: {

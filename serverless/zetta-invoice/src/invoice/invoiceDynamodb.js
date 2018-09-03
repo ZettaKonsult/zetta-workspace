@@ -79,21 +79,5 @@ export default database => TableName => companyCustomerId => {
       });
       return Item;
     },
-
-    generateInvoiceLockId: async id => {
-      const result = await database('update', {
-        TableName: 'InvoiceGroups-dev',
-        ExpressionAttributeValues: {
-          ':incr': 1,
-        },
-        Key: {
-          companyCustomerId,
-          id,
-        },
-        ReturnValues: 'UPDATED_NEW',
-        UpdateExpression: 'SET currentId = currentId + :incr',
-      });
-      return result.Attributes.currentId;
-    },
   };
 };

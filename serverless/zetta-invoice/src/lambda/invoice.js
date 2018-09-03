@@ -88,6 +88,28 @@ export const send = async (event: AWSEvent, context: AWSContext) => {
   }
 };
 
+export const lock = async (event: AWSEvent, context: AWSContext) => {
+  const companyCustomerId = event.requestContext.identity.cognitoIdentityId;
+  const { invoiceId, invoiceGroupId } = parser(event).data;
+
+  try {
+    const [invoiceData, sequentialId] = await Promise.all([
+      invoiceDatabase(companyCustomerId).get(invoiceId),
+      databaseInvoiceGroup(companyCustomerId).generateInvoiceLockId(
+        invoiceGroupId
+      ),
+    ]);
+    let invoice = Invoice.create({ ...invoiceData }).lockInvoice(sequentialId);
+    const result = await invoiceDatabase(companyCustomerId).save(
+      invoice.toJson()
+    );
+    return success(result);
+  } catch (err) {
+    console.error(err);
+    return failure(`Things went bad in invoice.lock`);
+  }
+};
+
 export const createGroup = async (event: AWSEvent, context: AWSContext) => {
   const companyCustomerId = event.requestContext.identity.cognitoIdentityId;
   const { name, value } = parser(event).data;
@@ -97,13 +119,13 @@ export const createGroup = async (event: AWSEvent, context: AWSContext) => {
       name,
       value,
     });
-    console.log(result);
     return success(result);
   } catch (err) {
     console.error(err);
     return failure(`Could not create invoice group ${name}`);
   }
 };
+
 export const removeGroup = async (event: AWSEvent, context: AWSContext) => {
   const companyCustomerId = event.requestContext.identity.cognitoIdentityId;
   const { id } = parser(event).data;

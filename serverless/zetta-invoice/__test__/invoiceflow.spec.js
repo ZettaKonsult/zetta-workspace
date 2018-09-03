@@ -8,6 +8,7 @@ const host = testConfig.Host;
 describe('Invoices', () => {
   let invoice = {};
   let recipient = {};
+  let invoiceGroup = {};
 
   it('create a recipient', async () => {
     const data = {
@@ -38,6 +39,26 @@ describe('Invoices', () => {
     });
   });
 
+  it('create a group', async () => {
+    const data = {
+      name: 'testGroup',
+      value: 100,
+    };
+
+    invoiceGroup = await request({
+      host,
+      path: 'invoice/group',
+      payload: {
+        method: 'post',
+        body: data,
+      },
+    });
+
+    expect({ ...invoiceGroup }).toMatchSnapshot({
+      id: expect.any(String),
+    });
+  });
+
   it('invoices have correct attributes after creation', async () => {
     invoice = {
       invoiceRows: [
@@ -62,5 +83,40 @@ describe('Invoices', () => {
       createdAt: expect.any(Number),
       recipientIds: [expect.any(String)],
     });
+  });
+
+  it('invoice can be locked on a specific group', async () => {
+    const data = { invoiceId: invoice.id, invoiceGroupId: invoiceGroup.id };
+
+    const result = await request({
+      host,
+      path: `invoice/lock`,
+      payload: {
+        method: 'put',
+        body: data,
+      },
+    });
+
+    expect(result).toMatchSnapshot({
+      id: expect.any(String),
+      createdAt: expect.any(Number),
+      recipientIds: [expect.any(String)],
+      itemStatus: [expect.any(Object)],
+    });
+  });
+
+  it('delete group', async () => {
+    const data = { id: invoiceGroup.id };
+
+    const result = await request({
+      host,
+      path: 'invoice/group',
+      payload: {
+        method: 'delete',
+        body: data,
+      },
+    });
+
+    expect(result).toBeTruthy();
   });
 });

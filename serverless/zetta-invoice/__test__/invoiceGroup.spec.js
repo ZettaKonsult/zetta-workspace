@@ -10,20 +10,17 @@ describe('InvoiceGroup', () => {
 
   it('create a group', async () => {
     const data = {
-      recipient: {
         name: 'testGroup',
         value: 100,
       },
-    };
-
-    invoiceGroup = await request({
-      host,
-      path: 'invoice/group',
-      payload: {
-        method: 'post',
-        body: data,
-      },
-    });
+      invoiceGroup = await request({
+        host,
+        path: 'invoice/group',
+        payload: {
+          method: 'post',
+          body: data,
+        },
+      });
 
     expect({ ...invoiceGroup }).toMatchSnapshot({
       id: expect.any(String),

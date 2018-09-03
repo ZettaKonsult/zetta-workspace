@@ -1,5 +1,14 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`Invoices create a group 1`] = `
+Object {
+  "companyCustomerId": "offlineContext_cognitoIdentityId",
+  "currentId": 100,
+  "id": Any<String>,
+  "name": "testGroup",
+}
+`;
+
 exports[`Invoices create a recipient 1`] = `
 Object {
   "address": "Road 234A",
@@ -13,6 +22,42 @@ Object {
   "mobile": "+46762345678",
   "ssn": "1234567890",
   "zipcode": "12345",
+}
+`;
+
+exports[`Invoices invoice can be locked on a specific group 1`] = `
+Object {
+  "companyCustomerId": "offlineContext_cognitoIdentityId",
+  "createdAt": Any<Number>,
+  "id": Any<String>,
+  "invoiceRows": Array [
+    Object {
+      "description": "3an A",
+      "price": 345,
+      "tax": 0.25,
+      "unit": 34,
+    },
+    Object {
+      "description": "3an B",
+      "price": 345,
+      "tax": 0.25,
+      "unit": 34,
+    },
+    Object {
+      "description": "3an C",
+      "price": 345,
+      "tax": 0.25,
+      "unit": 34,
+    },
+  ],
+  "itemStatus": Array [
+    Any<Object>,
+  ],
+  "locked": true,
+  "recipientIds": Array [
+    Any<String>,
+  ],
+  "sequentialId": 101,
 }
 `;
 

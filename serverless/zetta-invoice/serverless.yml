@@ -158,6 +158,13 @@ functions:
           path: /invoice
           method: delete
           cors: true
+  lockInvoice:
+    handler: src/lambda/invoice.lock
+    events:
+      - http:
+          path: /invoice/lock
+          method: put
+          cors: true
   createGroup:
     handler: src/lambda/invoice.createGroup
     events:
