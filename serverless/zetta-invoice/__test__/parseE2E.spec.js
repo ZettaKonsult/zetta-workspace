@@ -63,7 +63,7 @@ afterAll(async () => {
   await Promise.all([...planPromise, ...recipientPromise]);
 });
 
-describe('check pipeline for uploading and parsing', () => {
+describe.skip('check pipeline for uploading and parsing', () => {
   it('parses all uploaded files', async () => {
     const promise = fileNames.map(fileName =>
       request({

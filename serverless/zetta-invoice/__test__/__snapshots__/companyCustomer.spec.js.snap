@@ -2,7 +2,6 @@
 
 exports[`companyCustomer E2E create 1`] = `
 Object {
-  "VAT": "91050400356",
   "address": "Road 234A",
   "city": "RecipientCity",
   "company": "zetta konsult",
@@ -11,13 +10,13 @@ Object {
   "id": "offlineContext_cognitoIdentityId",
   "lastName": "RecipientLast",
   "mobile": "+46762345678",
+  "vat": "91050400356",
   "zipcode": "12345",
 }
 `;
 
 exports[`companyCustomer E2E update 1`] = `
 Object {
-  "VAT": "91050400356",
   "address": "Road 234A",
   "city": "RecipientCity",
   "company": "zetta konsult",
@@ -26,6 +25,7 @@ Object {
   "id": "offlineContext_cognitoIdentityId",
   "lastName": "RecipientLast",
   "mobile": "+46762345678",
+  "vat": "91050400356",
   "zipcode": "54321",
 }
 `;

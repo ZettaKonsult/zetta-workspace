@@ -21,7 +21,7 @@ describe('companyCustomer E2E', () => {
         ssn: '1234567890',
         zipcode: '12345',
         company: 'zetta konsult',
-        VAT: '91050400356',
+        vat: '91050400356',
         bank: {
           giro: '123-4567',
           name: 'MoneyBank',
@@ -44,7 +44,7 @@ describe('companyCustomer E2E', () => {
   it('get', async () => {
     const result = await request({
       host,
-      path: `companycustomer/${companyCustomer.id}`,
+      path: `companycustomer`,
       payload: {
         method: 'get',
       },
@@ -72,7 +72,7 @@ describe('companyCustomer E2E', () => {
     };
     const result = await request({
       host,
-      path: `companycustomer/`,
+      path: `companycustomer`,
       payload: {
         method: 'delete',
         body: data,
