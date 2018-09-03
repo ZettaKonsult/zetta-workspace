@@ -87,3 +87,31 @@ export const send = async (event: AWSEvent, context: AWSContext) => {
     return failure(`Could not send invoice mail: ${error.message}`);
   }
 };
+
+export const createGroup = async (event: AWSEvent, context: AWSContext) => {
+  const companyCustomerId = event.requestContext.identity.cognitoIdentityId;
+  const { name, value } = parser(event).data;
+
+  try {
+    const result = await databaseInvoiceGroup(companyCustomerId).create({
+      name,
+      value,
+    });
+    console.log(result);
+    return success(result);
+  } catch (err) {
+    console.error(err);
+    return failure(`Could not create invoice group ${name}`);
+  }
+};
+export const removeGroup = async (event: AWSEvent, context: AWSContext) => {
+  const companyCustomerId = event.requestContext.identity.cognitoIdentityId;
+  const { id } = parser(event).data;
+  try {
+    const result = await databaseInvoiceGroup(companyCustomerId).remove(id);
+    return success(result);
+  } catch (err) {
+    console.error(err);
+    return failure(`Could not remove invoice group ${id}`);
+  }
+};

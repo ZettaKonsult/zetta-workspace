@@ -1,0 +1,10 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`InvoiceGroup create a group 1`] = `
+Object {
+  "companyCustomerId": "offlineContext_cognitoIdentityId",
+  "currentId": 0,
+  "id": Any<String>,
+  "name": "default",
+}
+`;

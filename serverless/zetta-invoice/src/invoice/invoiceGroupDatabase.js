@@ -33,7 +33,8 @@ export default database => TableName => companyCustomerId => {
     create: async (group = {}) => {
       const Item = {
         companyCustomerId,
-        id: group.name || defaultGroup.name,
+        id: cuid(),
+        name: group.name || defaultGroup.name,
         currentId: group.value || defaultGroup.value,
       };
       await database('put', {

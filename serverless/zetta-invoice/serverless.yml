@@ -158,6 +158,20 @@ functions:
           path: /invoice
           method: delete
           cors: true
+  createGroup:
+    handler: src/lambda/invoice.createGroup
+    events:
+      - http:
+          path: /invoice/group
+          method: post
+          cors: true
+  removeGroup:
+    handler: src/lambda/invoice.removeGroup
+    events:
+      - http:
+          path: /invoice/group
+          method: delete
+          cors: true
 
   getPlans:
     handler: src/lambda/plans.get
