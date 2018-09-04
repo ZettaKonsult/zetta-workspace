@@ -23,17 +23,17 @@ Amplify.configure({
     endpoints: [
       {
         name: 'companycustomer',
-        endpoint: config.apiGateway.URL,
+        endpoint: `${config.apiGateway.URL}/companycustomer`,
         region: config.apiGateway.REGION,
       },
       {
         name: 'recipients',
-        endpoint: config.apiGateway.URL,
+        endpoint: `${config.apiGateway.URL}/recipient`,
         region: config.apiGateway.REGION,
       },
       {
         name: 'invoices',
-        endpoint: config.apiGateway.URL,
+        endpoint: `${config.apiGateway.URL}/invoice`,
         region: config.apiGateway.REGION,
       },
     ],
