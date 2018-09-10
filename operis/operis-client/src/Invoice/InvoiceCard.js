@@ -1,6 +1,6 @@
 import React from 'react';
 
-const ReportCard = ({ date, hours, extra, worker, workplace }) => (
+const ReportCard = ({ date, hours, extra, recipient }) => (
   <div
     style={{
       padding: '0.5em',
@@ -26,8 +26,7 @@ const ReportCard = ({ date, hours, extra, worker, workplace }) => (
           flexDirection: 'column',
         }}
       >
-        <h3 style={{ margin: 0 }}>{worker}</h3>
-        <em>{workplace}</em>
+        <h3 style={{ margin: 0 }}>{recipient}</h3>
       </div>
 
       <div style={{ display: 'flex', flexDirection: 'column' }}>

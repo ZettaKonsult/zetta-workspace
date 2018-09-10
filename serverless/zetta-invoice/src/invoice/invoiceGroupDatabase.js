@@ -36,7 +36,7 @@ export default database => TableName => companyCustomerId => {
         companyCustomerId,
         id: cuid(),
         name: group.name || defaultGroup.name,
-        currentId: group.value || defaultGroup.value,
+        currentId: Number(group.value) || defaultGroup.value,
       };
       await database('put', {
         TableName,

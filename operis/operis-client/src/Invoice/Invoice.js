@@ -6,7 +6,7 @@ import InvoiceForm from './Form/InvoiceForm';
 import InvoiceList from './InvoiceList';
 
 import { getRecipients } from '../Recipients/recipientReducer';
-import { createInvoice, sendInvoice } from './invoiceActions';
+import { createInvoice, sendInvoice, lockInvoice } from './invoiceActions';
 import { getInvoices } from './invoiceReducer';
 
 class Invoice extends Component {
@@ -15,7 +15,8 @@ class Invoice extends Component {
   }
 
   render() {
-    const { match, invoices, sendInvoice } = this.props;
+    const props = this.props;
+    const { match, invoices, recipients } = this.props;
 
     return (
       <div>
@@ -23,7 +24,7 @@ class Invoice extends Component {
           path={`${match.path}/:id`}
           render={props => (
             <InvoiceForm
-              recipients={this.props.recipients}
+              recipients={recipients}
               id={props.match.params.id}
               isFetching={false}
               invoices={invoices}
@@ -39,9 +40,12 @@ class Invoice extends Component {
           path={`${match.path}`}
           render={route => (
             <InvoiceList
-              invoices={invoices}
+              invoices={props.invoices}
+              recipients={props.recipients}
               match={route.match}
-              handleSend={sendInvoice}
+              handleSend={props.sendInvoice}
+              groups={props.groups}
+              lockInvoice={props.lockInvoice}
             />
           )}
         />
@@ -53,6 +57,7 @@ class Invoice extends Component {
 const mapStateToProps = state => ({
   recipients: getRecipients(state),
   invoices: getInvoices(state),
+  groups: state.invoiceGroup.allIds.map(id => state.invoiceGroup.byIds[id]),
 });
 
 const mapDispatchToProps = (dispatch, props) => ({
@@ -64,6 +69,8 @@ const mapDispatchToProps = (dispatch, props) => ({
     ),
 
   sendInvoice: invoice => dispatch(sendInvoice(invoice)),
+  lockInvoice: invoiceId => invoiceGroupId =>
+    dispatch(lockInvoice(invoiceId, invoiceGroupId)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Invoice);

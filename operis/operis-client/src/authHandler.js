@@ -6,6 +6,7 @@ import { signIn } from './state/appReducer';
 import { fetchRecipients } from './Recipients/recipientReducer';
 import { getCompanyCustomer } from './Profile/companyCustomerReducer';
 import { fetchInvoices } from './Invoice/invoiceActions';
+import { fetchGroups } from './Invoice/invoiceGroupActions';
 
 class AuthHandler extends React.Component {
   componentDidMount() {
@@ -25,6 +26,7 @@ class AuthHandler extends React.Component {
     this.props.fetchRecipients();
     this.props.fetchInvoices();
     this.props.getCompanyCustomer();
+    this.props.fetchGroups();
   }
 
   render() {
@@ -40,6 +42,7 @@ const mapDispatchToProps = {
   fetchRecipients,
   getCompanyCustomer,
   fetchInvoices,
+  fetchGroups,
   signIn,
 };
 

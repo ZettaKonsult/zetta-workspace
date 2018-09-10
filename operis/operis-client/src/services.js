@@ -33,7 +33,12 @@ export const sendInvoice = async invoiceId =>
   API.post(`invoices`, '/mail', {
     body: JSON.stringify(invoiceId),
   });
+export const lockInvoice = async (invoiceId, invoiceGroupId) =>
+  API.put(`invoices`, '/lock', {
+    body: JSON.stringify({ invoiceId, invoiceGroupId }),
+  });
 
+//INVOICEGROUP ENDPOINTS
 export const createGroup = async payload =>
   API.post(`invoices`, '/group', {
     body: JSON.stringify(payload),
@@ -42,6 +47,7 @@ export const removeGroup = async payload =>
   API.del(`invoices`, '/group', {
     body: JSON.stringify(payload),
   });
+export const listGroups = async () => API.get(`invoices`, '/group');
 
 //COMPANYCUSTOMER ENDPOINT
 export const createCompanyCustomer = async payload =>

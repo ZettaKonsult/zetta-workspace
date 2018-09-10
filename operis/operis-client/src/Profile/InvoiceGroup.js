@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { createInvoiceGroup } from '../Invoice/invoiceGroupActions';
+import { createGroup } from '../Invoice/invoiceGroupActions';
 
 class InvoiceGroup extends React.PureComponent {
   state = {
@@ -20,16 +20,16 @@ class InvoiceGroup extends React.PureComponent {
           <input name="value" onChange={this.onChange} />
           <button
             onClick={() =>
-              this.props.createInvoiceGroup(this.state.name, this.state.value)
+              this.props.createGroup(this.state.name, this.state.value)
             }
           >
             Create Group
           </button>
         </div>
-        {this.props.invoiceGroups.map((group, i) => (
+        {this.props.groups.map((group, i) => (
           <div key={i}>
-            <p>{group.name}</p>
-            <p>{group.id}</p>
+            <p>name: {group.name}</p>
+            <p>last id: {group.currentId}</p>
           </div>
         ))}
       </div>
@@ -37,10 +37,13 @@ class InvoiceGroup extends React.PureComponent {
   }
 }
 
-const mapStateToProps = state => ({
-  invoiceGroups: [{ name: 'test', id: 1000 }],
-});
+const mapStateToProps = state => {
+  const allIds = state.invoiceGroup.allIds;
+  const byIds = state.invoiceGroup.byIds;
 
-const mapDispatchToProps = { createInvoiceGroup };
+  return { groups: allIds.map(id => byIds[id]) };
+};
+
+const mapDispatchToProps = { createGroup };
 
 export default connect(mapStateToProps, mapDispatchToProps)(InvoiceGroup);

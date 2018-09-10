@@ -58,6 +58,18 @@ export const sendInvoice = invoice => async (dispatch, getState) => {
   });
 };
 
+export const lockInvoice = (invoiceId, invoiceGroupId) => async dispatch => {
+  dispatch({
+    type: 'INVOICE_LOCK_REQUEST',
+    payload: { invoiceId, invoiceGroupId },
+  });
+  const result = await api.lockInvoice(invoiceId, invoiceGroupId);
+  dispatch({
+    type: 'INVOICE_LOCK_SUCESS',
+    payload: result,
+  });
+};
+
 const appNormalizeInvoice = invoice =>
   invoice.map(invoice => ({
     ...invoice,
