@@ -8,7 +8,7 @@ import Recipient from './Recipients/Recipient';
 import Login from './Container/Login';
 import Logout from './Container/Logout';
 import Invoice from './Invoice/Invoice';
-import Profile from './Profile/Profile';
+import Profile from './Profile';
 import Home from './Container/Home/Home';
 import PageNotFound from './Container/PageNotFound/PageNotFound';
 import PageNav from './Components/Nav/PageNav';
