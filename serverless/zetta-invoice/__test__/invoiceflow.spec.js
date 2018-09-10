@@ -59,6 +59,18 @@ describe('Invoices', () => {
     });
   });
 
+  it('list the group', async () => {
+    const result = await request({
+      host,
+      path: 'invoice/group',
+      payload: {
+        method: 'get',
+      },
+    });
+
+    expect({ ...result['0'] }).toEqual(invoiceGroup);
+  });
+
   it('invoices have correct attributes after creation', async () => {
     invoice = {
       invoiceRows: [

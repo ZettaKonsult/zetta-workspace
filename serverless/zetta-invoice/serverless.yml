@@ -165,6 +165,14 @@ functions:
           path: /invoice/lock
           method: put
           cors: true
+
+  listGroups:
+    handler: src/lambda/invoice.listGroups
+    events:
+      - http:
+          path: /invoice/group
+          method: get
+          cors: true
   createGroup:
     handler: src/lambda/invoice.createGroup
     events:

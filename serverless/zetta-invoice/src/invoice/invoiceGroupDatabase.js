@@ -9,8 +9,8 @@ const defaultGroup = {
 
 export default database => TableName => companyCustomerId => {
   return {
-    list: async locked => {
-      return (await database('query', {
+    list: async () => {
+      const result = await database('query', {
         TableName,
         KeyConditionExpression: '#companyCustomerId = :companyCustomerId',
         ExpressionAttributeNames: {
@@ -19,7 +19,8 @@ export default database => TableName => companyCustomerId => {
         ExpressionAttributeValues: {
           ':companyCustomerId': companyCustomerId,
         },
-      })).Items;
+      });
+      return result.Items;
     },
 
     remove: async id => {

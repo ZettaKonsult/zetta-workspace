@@ -137,3 +137,15 @@ export const removeGroup = async (event: AWSEvent, context: AWSContext) => {
     return failure(`Could not remove invoice group ${id}`);
   }
 };
+
+export const listGroups = async (event: AWSEvent, context: AWSContext) => {
+  const companyCustomerId = event.requestContext.identity.cognitoIdentityId;
+
+  try {
+    const result = await databaseInvoiceGroup(companyCustomerId).list();
+    return success(result);
+  } catch (err) {
+    console.error(err);
+    return failure(`Could not remove invoice group ${id}`);
+  }
+};
