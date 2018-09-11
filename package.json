@@ -23,21 +23,15 @@
     "lint-staged": "3.3.1",
     "prettier": "^1.8.2"
   },
-  "workspaces": [
-    "packages/*"
-  ],
+  "workspaces": ["packages/*"],
   "scripts": {
-    "precommit": "lint-staged",
     "lint": "eslint --fix",
     "update": "sh ./scripts/update.sh",
-    "prettier": "prettier --write --loglevel silent \"{,!(node_modules)/**/}*.js\""
+    "prettier":
+      "prettier --write --loglevel silent \"{,!(node_modules)/**/}*.js\""
   },
   "lint-staged": {
-    "*.js": [
-      "eslint --fix",
-      "prettier --write",
-      "git add"
-    ]
+    "*.js": ["eslint --fix", "prettier --write", "git add"]
   },
   "prettier": {
     "singleQuote": true,
