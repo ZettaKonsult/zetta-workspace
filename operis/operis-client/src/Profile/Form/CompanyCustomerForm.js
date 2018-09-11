@@ -18,7 +18,7 @@ let CompanyCustomerForm = ({ isLoading, error, ...props }) => (
     <Field name="zipcode" component={Input} placeholder="Zipcode" />
     <Field name="company" component={Input} placeholder="Company" />
     <Field name="vat" component={Input} placeholder="VAT" />
-    <Field name="bank" component={Input} placeholder="Bank" />
+    <Field name="giro" component={Input} placeholder="Bankgiro" />
     <Divider />
     {error && <strong>{error}</strong>}
     <div>

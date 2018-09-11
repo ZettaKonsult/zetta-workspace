@@ -36,15 +36,16 @@ export default database => TableName => {
         id: Item.id,
       },
       UpdateExpression: `SET
-      address = :address,
-      city = :city,
-      email = :email,
-      firstName = :firstName,
-      lastName = :lastName,
-      mobile = :mobile,
-      zipcode = :zipcode,
-      company = :company,
-      vat = :vat
+        address = :address,
+        city = :city,
+        email = :email,
+        firstName = :firstName,
+        lastName = :lastName,
+        mobile = :mobile,
+        zipcode = :zipcode,
+        company = :company,
+        vat = :vat,
+        giro = :giro
       `,
       ExpressionAttributeValues: {
         ':address': Item.address || null,
@@ -56,6 +57,7 @@ export default database => TableName => {
         ':zipcode': Item.zipcode || null,
         ':company': Item.company || null,
         ':vat': Item.vat || null,
+        ':giro': Item.giro || null,
       },
       ReturnValues: 'ALL_NEW',
     });
