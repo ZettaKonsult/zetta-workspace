@@ -7,12 +7,9 @@ export const TextArea = ({
   meta: { touched, error, warning },
   ...rest
 }) => (
-  <div>
-    <Form.Field error={!!touched && !!error}>
-      <label>{placeholder}</label>
-      <Text autoHeight {...input} {...rest} placeholder={placeholder} />
-      {!!touched &&
-        !!error && <span style={{ color: '#ae5856' }}>{error}</span>}
-    </Form.Field>
-  </div>
+  <Form.Field error={!!touched && !!error}>
+    <label>{placeholder}</label>
+    <Text autoHeight {...input} {...rest} placeholder={placeholder} />
+    {!!touched && !!error && <span style={{ color: '#ae5856' }}>{error}</span>}
+  </Form.Field>
 );

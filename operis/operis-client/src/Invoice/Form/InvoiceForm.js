@@ -1,8 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { reduxForm, Field, FieldArray } from 'redux-form';
-import { Form, Button, Divider } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
+import { Form, Button, Divider, List } from 'semantic-ui-react';
 
 import validate from './InvoiceFormValidation';
 import { TextArea } from '../../Components/Form/TextArea';
@@ -14,8 +14,8 @@ let renderInvoiceRow = ({
   meta: { error, submitFailed },
   ...props
 }) => (
-  <ul style={{ listStyle: 'none' }}>
-    <li>
+  <React.Fragment>
+    <Form.Group>
       <Button
         disabled={props.disabled}
         type="button"
@@ -23,16 +23,16 @@ let renderInvoiceRow = ({
       >
         + Add row
       </Button>
-    </li>
+    </Form.Group>
     {submitFailed && error && <span>{error}</span>}
     {fields.map((invoiceRow, index) => (
-      <li style={{ display: 'flex' }} key={index}>
+      <Form.Group widths="4" fluid unstackable key={index}>
         <Field
           name={`${invoiceRow}.unit`}
           disabled={props.disabled}
           component={Input}
           type="number"
-          placeholder="unit"
+          placeholder="Unit"
         />
         <Field
           name={`${invoiceRow}.price`}
@@ -44,25 +44,26 @@ let renderInvoiceRow = ({
         <Field
           name={`${invoiceRow}.description`}
           disabled={props.disabled}
-          component={TextArea}
+          component={Input}
           placeholder="Description"
         />
         <Field
           name={`${invoiceRow}.tax`}
           disabled={props.disabled}
           component={Input}
-          placeholder="tax rate"
+          placeholder="Tax"
         />
         <Button
+          icon
           disabled={props.disabled}
           type="button"
           onClick={() => fields.remove(index)}
         >
           X
         </Button>
-      </li>
+      </Form.Group>
     ))}
-  </ul>
+  </React.Fragment>
 );
 
 let ReportForm = props => (
@@ -91,7 +92,7 @@ let ReportForm = props => (
       component={renderInvoiceRow}
     />
     <Divider />
-    <Button disabled={props.disabled} type="submit">
+    <Button primary disabled={props.disabled} type="submit">
       Save report
     </Button>
     <Button as={Link} to={`/report`} content="Cancel" />

@@ -10,9 +10,9 @@ const PageNav = ({ match, isAuthenticated }) => (
     <NavLink to="/invoice">Invoice</NavLink>
     <NavLink to="/profile">Register</NavLink>
     {isAuthenticated ? (
-      <NavLink to="/logout">logout</NavLink>
+      <NavLink to="/logout">Logout</NavLink>
     ) : (
-      <NavLink to="/login">login</NavLink>
+      <NavLink to="/login">Login</NavLink>
     )}
   </Menu>
 );

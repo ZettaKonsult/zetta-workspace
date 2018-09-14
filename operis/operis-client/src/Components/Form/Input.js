@@ -8,12 +8,11 @@ export const Input = ({
   meta: { touched, error, warning },
   ...rest
 }) => (
-  <div>
-    <Form.Field error={!!touched && !!error}>
-      <label>{placeholder}</label>
-      <input {...input} {...rest} placeholder={placeholder} />
-      {!!touched &&
-        !!error && <span style={{ color: '#ae5856' }}>{error}</span>}
-    </Form.Field>
-  </div>
+  <Form.Input
+    {...input}
+    {...rest}
+    error={error}
+    label={placeholder}
+    placeholder={placeholder}
+  />
 );

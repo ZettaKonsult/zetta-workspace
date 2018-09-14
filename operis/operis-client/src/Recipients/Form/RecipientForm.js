@@ -19,7 +19,7 @@ let PlaceForm = ({ isLoading, error, ...props }) => (
     <Divider />
     {error && <strong>{error}</strong>}
     <div>
-      <Button loading={isLoading} disabled={isLoading} type="submit">
+      <Button primary loading={isLoading} disabled={isLoading} type="submit">
         Save
       </Button>
       <Button
