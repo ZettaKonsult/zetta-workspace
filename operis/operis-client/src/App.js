@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
-import { Divider } from 'semantic-ui-react';
+
+import {
+  Divider,
+} from 'semantic-ui-react'
 
 import ErrorBoundary from './Components/error';
 import AuthHandler from './authHandler';
@@ -12,6 +15,7 @@ import Profile from './Profile';
 import Home from './Container/Home/Home';
 import PageNotFound from './Container/PageNotFound/PageNotFound';
 import PageNav from './Components/Nav/PageNav';
+import Footer from './Components/Footer';
 
 class App extends Component {
   render() {
@@ -30,6 +34,7 @@ class App extends Component {
           <Route path="/profile" component={Profile} />
           <Route component={PageNotFound} />
         </Switch>
+<Footer/>
       </ErrorBoundary>
     );
   }
