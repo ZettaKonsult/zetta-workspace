@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import LoginForm from './LoginForm'
+import LoginForm from './LoginForm';
 import { signIn } from '../../state/appReducer';
 
 class Login extends React.PureComponent {
@@ -26,7 +26,12 @@ class Login extends React.PureComponent {
   };
 
   render() {
-    return <LoginForm />
+    return (
+      <LoginForm
+        handleChange={this.handleChange}
+        handleSubmit={this.handleSubmit}
+      />
+    );
   }
 }
 

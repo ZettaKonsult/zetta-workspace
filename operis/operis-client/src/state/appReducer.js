@@ -13,7 +13,7 @@ const unsafe_signIn = () => ({
 });
 
 export const signIn = (email = '', password = '') => async dispatch => {
-  dispatch({ type: SIGNIN_REQUEST });
+  dispatch({ type: SIGNIN_REQUEST, payload: { email, password } });
   try {
     if (email.length > 1 && password.length > 1) {
       await Auth.signIn(email, password);
