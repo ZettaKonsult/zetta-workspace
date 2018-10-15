@@ -20,7 +20,7 @@
     "validator": "^10.7.1"
   },
   "devDependencies": {
-    "react-scripts": "1.1.5",
+    "react-scripts": "2.0.5",
     "redux-devtools-extension": "^2.13.5"
   },
   "scripts": {
@@ -40,5 +40,11 @@
       "git add",
       "jest --color --bail --findRelatedTests"
     ]
-  }
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
 }
