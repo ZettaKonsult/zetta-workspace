@@ -22,10 +22,7 @@ describe('companyCustomer E2E', () => {
         zipcode: '12345',
         company: 'zetta konsult',
         vat: '91050400356',
-        bank: {
-          giro: '123-4567',
-          name: 'MoneyBank',
-        },
+        giro: '123-4567',
       },
     };
 
